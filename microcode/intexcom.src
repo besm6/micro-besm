@@ -1,0 +1,1568 @@
+*NАМЕ ПРЕРЫВАНИЯ+ЭКСТРАКОДЫ
+*TIME:01.00
+*DISC:664/SYSTEM,microb
+*FILE:arc,30,W
+*file:lib,67,r
+*LIBRA:23,25
+*CALL ficMEMORY
+*PERSO:67
+*NО LIST
+*CALL MICROB
+;
+;СПИСОК ВОЗМОЖНЫХ ЗНАЧЕНИЙ ПОЛЕЙ:
+;--------------------------------
+;
+FLIST SQI=JZ,CJS,JМАР,CJP,PUSH,JSRP,CJV,JRP,RFCT,RРСТ,CRTN,CJPP,LDCT,LООР,
+      CONT,TWB
+FLIST МАР=РЕ,GRP,МЕ
+FLIST ALUD=Q,NО,ВА,В,RSBQ,RSB,LSBQ,LSB
+FLIST FUNC=ADD,SUBR,SUBS,OR,AND,NOTRS,EXOR,EXNOR
+FLIST ALUS=AQ,АВ,ZQ,ZВ,ZА,DА,DQ,DZ
+FLIST RА=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST RВ=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST CI=CI0,CI1,CIX,CIC
+FLIST SHMUX=LSLSL,NSNSL,ASLLS,NDNS,CDLDL,ADNDL,LDLD,LDLND,RSLRSL,RSSRSS,
+      RSRS,IDCS,RDSRDS,RDLRDL,VDCD,RDRD
+FLIST SТОРС=NС,NN,NZ,NV,/NС,/NN,/NZ,/NV,МС,MN,MZ,MV,/МС,/MN,/MZ,/MV,
+      IС,IN,IZ,IV,/IС,/IN,/IZ,/IV,SETNC,SETNN,SETNZ,SETNV,
+      УТОМ,MTON,SЕТМ,SETN,MCN,NСМ,CLRM,CLRN,INVM,CLRNC,CLRNN,CLRNZ,CLRNV
+FLIST MNSA=U,IRA,МР
+FLIST MODNM=М0,М1,М2,М3,М4,М5,М6,М7,М8,М9,М10,М11,М12,М13,М14,SР,С,RR,
+      RRR,SPRADR,СТТ,ACL,ACR,YCL,YCR,РСС,РССС,CTL,CTR,SVFA,PROCNC,MREZ
+FLIST DSRC=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MULRZ1,MULRZ2,СОМА,SHIFT,ОРС,
+      LOS,PROM
+FLIST RTIME=RТ
+FLIST WTIME=WТ
+FLIST YDST=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MUL1,MUL2,ADRREG,PSHIFT,CCLR,BTRCLR
+FLIST SHF=CICL,LOG,ARIPH,EMULF
+FLIST ARBI=CCRD,CCWR,DCRD,DCWR,FЕТСН,DRD,DWR,RDMWR,BTRWR,BTRRD,BICLR,BIRD
+FLIST CYSTR=NТ3,NТ4,NТ5,NТ6,NТ7,NТ8,NТ9,NТ10
+FLIST BRA=RG0,RG1,RG2,RG3
+FLIST ARA=RG0,RG1,RG2,RG3
+FLIST YDEV=PHYSAD,RADRR,PSMEM,МРМЕМ,SТОРМ0,SТОРМ1
+FLIST YDEVT=ECBTAG
+FLIST DDEV=ВВ,MODB,CLRCD,STATUS,РРМЕМ0,РРМЕМ1
+FLIST YDTIM=CTIME
+FLIST FFCNT=LOGGRP,MULGRP,ADDGRP,SЕТС,CLRRCB,SETRCB,CLRJMP,SETJMP,
+      SETEI,CLREI,CLRTR0,SETTR0,CLRTR1,SETTR1,CLRCT,CLRCTT,CLRTKK,SЕТТКК,
+      STRTLD,СНТКК,SETHLT,CLRINT,CLRRUN,LDCPMP,PRGINT,EXTINT,SETNR,SETER
+FLIST MPADR=ADRB1,ADRB2,ADRB3,ADRB4,DАТАВ1,DАТАВ2,DАТАВ3,DАТАВ4,
+      DАТАВ5,DАТАВ6,DАТАВ7,DАТАВ8,INFB1,INFB2,FМР,FСР
+FLIST COND=YES,NORMB,RNDB,OVRIB,BNB,OVRFTB,DRG,EMLRG,RСВ,СВ,CEMLRG,
+      СТ,TR1,INTSTP,RUN,NMLRDY,INT,FULMEM,ARBRDY,СРМР,IR15,ТККВ
+;
+;СПИСОК ОШИБОЧНЫХ КОМБИНАЦИЙ ПОЛЕЙ
+;---------------------------------
+;
+;ШИНА D:
+;-------
+;
+;ИСТОЧНИКИ: DSRC
+;           CSM-WЕМ
+;           ЕСА-WRA
+;           DDEV-WRD
+;
+СНЕСК DSRC+CSM-WЕМ
+СНЕСК DSRC+ЕСА-WRA
+СНЕСК DSRC+DDEV-WRD
+СНЕСК CSM-WЕМ+ЕСА-WRA
+СНЕСК CSM-WЕМ+DDEV-WRD
+СНЕСК ЕСА-WRA+DDEV-WRD
+;
+;ШИНА У:
+;-------
+;
+;ИСТОЧНИКИ: YDEVT-WRB
+;           ALU
+;           ЕСВ-WRB
+;           YDEV-WRY
+;           YDTIM+RTIME
+;
+СНЕСК YDEVT-WRB+ALU
+СНЕСК YDEVT-WRB+ЕСВ-WRB
+СНЕСК YDEVT-WRB+YDEV-WRY
+СНЕСК YDEVT-WRB+YDTIM+RTIME
+СНЕСК ALU+ЕСВ-WRB
+СНЕСК ALU+YDEV-WRY
+СНЕСК ALU+YDTIM+RTIME
+СНЕСК ЕСВ-WRB+YDEV-WRY
+СНЕСК ЕСВ-WRB+YDTIM+RTIME
+СНЕСК YDEV-WRY+YDTIM+RTIME
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ ТЕСТОВ
+;     ==================
+;
+MACRO TN DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=EXPN,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO Т DSRC=PROM,ALUS=DZ,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO TIK ALUS=ZВ,RВ=MANT,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO TIK3 ALUS=ZВ,RВ=WR3,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO CLRTYP ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=INTR,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO ТУРЕ ALUS=ZВ,RВ=INTR,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO С3 ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR3,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ КОМАНД
+;     ==================
+;
+MACRO МА CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO MAWF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO ARF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,FUNC=SUBS,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO SSPRG ЕСВ,WRB,BRA=RG3
+MACRO PHAW YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
+MACRO PHAR YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DRD
+MACRO RСА DSRC=СОМА,ALUS=DZ,ALUD=Q
+MACRO WА МАР=РЕ,COND=ARBRDY,IСС
+MACRO SPRG ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=SР
+MACRO АС CSM,MNSA=МР,MODNM=С,ALUS=DQ,FUNC=ADD,ALUD=Q
+MACRO TRSH DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG
+MACRO R МАР=РЕ,COND=RСВ
+MACRO М МАР=МЕ,COND=ТККВ,DDEV=CLRCD,WRD,ISE
+MACRO MED МАР=МЕ,COND=ТККВ,LЕТС,ISE
+MACRO ML МАР=МЕ,DDEV=CLRCD,WRD,ISE
+MACRO МЕ МАР=МЕ,LЕТС
+MACRO MI МАР=МЕ,COND=ТККВ,DDEV=CLRC,WRD
+;
+;
+INT/RЕ:PROG 8;
+;     I=========================I
+;     I  РЕАКЦИЯ НА ПРЕРЫВАНИЯ  I
+;     I=========================I
+;
+;===== МИКРОПРОГРАММА ВХОДА В ПРЕРЫВАНИЕ; НАХОДИТСЯ В ОЗУ МК, НАЧИНАЯ С АДР.F00
+;
+EXTERNAL LCWPH,CTTWR,CTTRD,CTWR,CTRD,RGTOMP,CTTSTP,SAVRG,ACTRG
+CJV
+;
+; ТИПЫ ПРЕРЫВАНИЙ И ИХ ОБРАБОТКА:
+; - ВНУТРЕННИЕ ПРЕРЫВАНИЯ:
+;   1,5,7-13,15-23,26,29,33-38
+; - ПРЕРЫВАНИЯ, УСТАНАВЛИВАЮЩИЕ ФЛАГ ПП (2 РГ.БОПП) И ЖДУЩИЕ УСТАНОВКИ ТГ."ПУСК"
+;   2,3,4,6,25,28 + ПОП=1 И ЛЮБОЕ ВНУТРЕННЕЕ;
+; - ПСЕВДОПРЕРЫВАНИЯ, ОТРАБАТЫВАЕМЫЕ НА МИКРОПРОГРАММНОМ УРОВНЕ:
+;   14,24,30,31,32;
+; - ВНЕШНИЕ ПРЕРЫВАНИЯ: ЧТЕНИЕ И СБРОС ИЗ МП, ПОТОМ - КАК ВНУТРЕННЕЕ: 27.
+;
+; РАЗРЯДЫ 2 РГ.БОПП (FСР), УСТАНАВЛИВАЕМЫЕ ИЗ МП, И ИХ ЗНАЧЕНИЕ:
+;   1Р.= 1 - ОСТАНОВ, УСТАНОВЛЕННЫЙ ПП;
+;   2Р.= 1 - КОМАНДА "ОСТАНОВ";
+;   3Р.= 1 - ПРЕРЫВАНИЕ В ПРЕРЫВАНИИИ (ПОП=1 И ЛЮБОЕ ВНУТРЕННЕЕ ИЛИ ВНЕШНЕЕ);
+;   4Р.= 1 - "TIME-OUT" ОЗУ (INT3);
+;   5Р.= 1 - "TIME-OUT" ШИНЫ (INT4);
+;   6Р.= 1 - МНОГОКРАТНАЯ ОШИБКА (INT2);
+;   7Р.= 1 - ОСТАНОВ ПО АДРЕСУ ИЛИ ОТСУТСТВУЮЩЕЕ ПРЕРЫВАНИЕ (INT6,25);
+;   8Р.= 1 - СООБЩЕНИЕ ОТ ЦП ПУЛЬТОВОМУ (КОМАНДА WMOD).
+;
+; ЗАМЕЧАНИЯ:
+; - В 0-Й РЕГИСТР БОПП ПИШЕТСЯ N ПРЕРЫВАНИЯ В 2-Х СЛУЧАЯХ:
+;   ПРИ INT6,25, ЧТОБ ОТЛИЧИТЬ ИХ ДРУГ ОТ ДРУГА,Т.К.ДЛЯ НИХ В БОПП 1 РАЗРЯД;
+;   И ПРИ ЛЮБОМ ВНУТРЕННЕМ И ВНЕШНЕМ ПРЕРЫВАНИИ И ПОП = 1.
+; - НА КАЖДОЕ ПРЕРЫВАНИЕ - 2 МК: ЗАГРУЗКА N ПРЕРЫВАНИЯ ИЛИ ТИПА + П/У;
+; - ВНУТРЕННИЕ: П/У НА ОСТАНОВ, ЕСЛИ СТОИТ ПОП, ИНАЧЕ - НА ОБРАБОТКУ!
+; - ПСЕВДОПРЕРЫВАНИЯ - ВСЕ ОТРАБАТЫВАЕМ СРАЗУ.
+; - INT31,32 - ПРЕРЫВАНИЯ ПО ЧАСАМ И ТАЙМЕРУ СВ ДЕЛАЕМ ТИПА "ПСЕВДО", ВЫЧИТАЯ 1
+;   ИЗ СТАРШЕЙ ПОЛОВИНЫ В ОЗУ МОДИФИКАТОРОВ, ЧТОБ ИХ НЕ КАСКАДИРОВАТЬ!
+;
+;        ПРЕРЫВАНИЯ                  ТИП          ВХОД ПНА    ВЫХОД ПНА
+;                                                 (ВЕКТОР)   (АДРЕС МП)
+; 1.ОТСУТСТВУЮЩИЙ БЛОК ПАМЯТИ      ВНУТРЕННЕЕ         00        F01
+; 2.МНОГОКРАТНАЯ ОШИБКА         ФЛАГ ПП + ОСТАНОВ     01        F03
+; 3."TIME OUT" ПРИ ОБР.К ОЗУ    ФЛАГ ПП + ОСТАНОВ     02        F05
+; 4."TIME OUT" ПРИ ОБР.К ШИНЕ   ФЛАГ ПП + ОСТАНОВ     03        F07
+; 5.ПРОГРАММНОЕ ПРЕРЫВАНИЕ         ВНУТРЕННЕЕ         04        F09
+; 6.РЕЗЕРВ                      ФЛАГ ПП + ОСТАНОВ     05        F0В
+; 7.ОТСУТСТВ.АДРЕС ПАМЯТИ В НР     ВНУТРЕННЕЕ         06        F0D
+; 8.ОТРИЦАТ.N СТРАНИЦЫ У КОМАНДЫ   ВНУТРЕННЕЕ         07        F0F
+; 9.ОТРИЦАТ.N СТРАНИЦЫ У ОПЕРАНДА  ВНУТРЕННЕЕ         08        F11
+;10.ПРОГР.ИНТЕРПР.ТЕГА КОМАНДЫ     ВНУТРЕННЕЕ         09        F13
+;11.ПРОГР.ИНТЕРПР.ТЕГА ОПЕРАНДА    ВНУТРЕННЕЕ         0А        F15
+;12.ЗАЩИТА АДРЕСА ПРИ ЧТЕНИИ       ВНУТРЕННЕЕ         0В        F17
+;13.КОНТРОЛЬ КОМАНДЫ               ВНУТРЕННЕЕ         0С        F19
+;14.МАТ.АДРЕС = 0               ПСЕВДОПРЕРЫВАНИЕ      0D        F1В
+;15.ЧУЖОЙ РП ПРИ ЧТ/ЗП ОПЕРАНДА    ВНУТРЕННЕЕ         0Е        F1D
+;16.ЧУЖОЙ РП ПРИ ВЫБОРКЕ КОМАНДЫ   ВНУТРЕННЕЕ         0F        F1F
+;17.ЗАЩИТА СТРАНИЦЫ ПРИ ОБРАЩЕНИИ  ВНУТРЕННЕЕ         10        F21
+;18.ЗАЩИТА СТРАНИЦЫ ПРИ ЗАПИСИ     ВНУТРЕННЕЕ         11        F23
+;19.ЗАЩИТА ВЫБОРКИ КОМАНДЫ         ВНУТРЕННЕЕ         12        F25
+;20.ЗАЩИТА ПЕРЕДАЧИ УПРАВЛЕНИЯ     ВНУТРЕННЕЕ         13        F27
+;21.ЗАЩИТА АДРЕСА ПРИ ЗАПИСИ       ВНУТРЕННЕЕ         14        F29
+;22.ЧУЖОЙ СУММАТОР                 ВНУТРЕННЕЕ         15        F2В
+;23.ЧУЖОЙ ОПЕРАНД                  ВНУТРЕННЕЕ         16        F2D
+;24.ЗАПРОС МОДИФ.ПРИОРИТЕТОВ СТР.    ПСЕВДО           17        F2F
+;25.ОСТАНОВ ПО АДРЕСУ           ФЛАГ ПП + ОСТАНОВ     18        F31
+;26."TIME-OUT" ПРИ БВП             ВНУТРЕННЕЕ         19        F33
+;27.ВНЕШНИЕ ПРЕРЫВАНИЯ               ВНЕШНИЕ          1А        F35
+;28.ОСТАНОВ (HALT)              ФЛАГ ПП + ОСТАНОВ     1В        F37
+;29.ШАГОВОЕ ПРЕРЫВАНИЕ             ВНУТРЕННЕЕ         1С        F39
+;30.ЧТ/ЗП РЕГИСТРОВ ОТ ПП            ПСЕВДО           1D        F3В
+;31.ЧАСЫ СЧЕТНОГО ВРЕМЕНИ            ПСЕВДО           1Е        F3D
+;32.ТАЙМЕР СЧЕТНОГО ВРЕМЕНИ = 0      ПСЕВДО           1F        F3F
+;
+;===== ПЕРЕКЛЮЧАТЕЛЬ ДЛЯ ПРЕРЫВАНИЙ:
+;
+;F01: 1 - ОТСУТСТВУЮЩИЙ БЛОК ПАМЯТИ - ВНУТРЕННЕЕ
+;PROM:2000
+CONT А=С1,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F03: 2 - МНОГОКРАТНАЯ ОШИБКА - ФЛАГ ПП + ОСТАНОВ
+;PROM:2001
+CONT А=В6,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR5,YDST=CCLR
+CJP А=INTMP,МАР=РЕ
+;F05: 3 - "TIME-OUT" ОЗУ - ФЛАГ ПП + ОСТАНОВ
+;PROM:2002
+CONT А=В4,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR5,YDST=CCLR
+CJP А=INTMP,МАР=РЕ
+;F07: 4 - "TIME-OUT" ШИНЫ - ФЛАГ ПП + ОСТАНОВ
+;PROM:2003
+CONT А=В5,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR5,YDST=CCLR
+CJP А=INTMP,МАР=РЕ
+;F09: 5 - ПРОГРАММНОЕ - ВНУТРЕННЕЕ ПО ОБРАБОТКЕ, ВНЕШНЕЕ - ПО СУТИ.
+;PROM:2004
+CONT А=С5,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F0В: 6 - ОТСУТСТВУЮЩЕЕ ПРЕРЫВАНИЕ - ОШИБКА: ФЛАГ ПП + ОСТАНОВ
+;PROM:2005
+CONT А=С6,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=ORINT,МАР=РЕ
+;F0D: 7 - ОТСУТСТВУЮЩИЙ АДРЕС ПАМЯТИ - ВНУТРЕННЕЕ
+;PROM:2006
+CONT А=С7,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F0F: 8 - ОТРИЦ.НОМЕР СТРАНИЦЫ У КОМАНДЫ - ВНУТРЕННЕЕ
+;PROM:2007
+CONT А=С8,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F11: 9 - ОТРИЦ. НОМЕР СТРАНИЦЫ У ОПЕРАНДА - ВНУТРЕННЕЕ
+;PROM:2008
+CONT А=С9,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F13: 10 - ПРОГР.ИНТЕРПРЕТ.ТЕГА КОМАНДЫ - ВНУТРЕННЕЕ
+;PROM:2009
+CONT А=С10,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F15: 11 - ПРОГР.ИНТЕРПРЕТ.ТЕГА ОПЕРАНДА - ВНУТРЕННЕЕ
+;PROM:200А
+CONT А=С11,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F17: 12 - ЗАЩИТА АДРЕСА ПРИ ЧТЕНИИ - ВНУТРЕННЕЕ
+;PROM:200В
+CONT А=С12,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F19: 13 - КОНТОРОЛЬ КОМАНДЫ - ВНУТРЕННЕЕ
+;PROM:200С
+CONT А=С13,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F1В: 14 - 0 МАТ.АДРЕС - ПСЕВДОПРЕРЫВАНИЕ
+;PROM:200D
+CONT А=С15,DSRC=PROM,ALUS=DZ,Н,ALUD=ВА,RА=РССОРУ,RВ=РССОРУ,ALU,CSM,WЕМ,MNSA=МР
+>,MODNM=ACR
+CJP А=INT14,МАР=РЕ,DSRC=ARBOPC,ALUS=DА,RА=РССОРУ,FUNC=AND,Н,ALUD=В,RВ=РССОРУ
+;F1D: 15 - ЧУЖОЙ РП ПРИ ЧТ/ЗП ОПЕРАНДА - ВНУТРЕННЕЕ
+;PROM:200Е
+CONT А=С15,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F1F: 16 - ЧУЖОЙ РП ПРИ ВЫБОРКЕ КОМАНДЫ - ВНУТРЕННЕЕ
+;PROM:200F
+CONT А=С16,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F21: 17 - ЗАЩИТА СТРАНИЦЫ ПРИ ОБРАЩЕНИИ - ВНУТРЕННЕЕ
+;PROM:2010
+CONT А=С17,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F23: 18 - ЗАЩИТА СТРАНИЦЫ ПРИ ЗАПИСИ - ВНУТРЕННЕЕ
+;PROM:2011
+CONT А=С18,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F25: 19 - ЗАЩИТА ВЫБОРКИ КОМАНДЫ - ВНУТРЕННЕЕ
+;PROM:2012
+CONT А=С19,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F27: 20 - ЗАЩИТА ПЕРЕДАЧИ УПРАВЛЕНИЯ - ВНУТРЕННЕЕ
+;PROM:2013
+CONT А=С20,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F29: 21 - ЗАЩИТА АДРЕСА ПРИ ЗАПИСИ - ВНУТРЕННЕЕ
+;PROM:2014
+;ЗАПРЕТ ЗАПИСИ: Т.К.ЭТО ВЫЯСНЯЕТСЯ ТОЛЬКО ПРИ ЗАПИСИ В ОЗУ, Т.Е.УЖЕ
+;ПОСЛЕ ЗАПИСИ В КЭШ, НАДО СРОЧНО СБРАСЫВАТЬ КЭШ! ИНАЧЕ ПРИ ЧТЕНИИ ПО ЭТОМУ
+;АДРЕСУ БУДЕТ ЧТЕНИЕ ИЗ КЭША, Т.Е.ТОГО, ЧТО НА САМОМ ДЕЛЕ В ОЗУ НЕ ЗАПИСАЛОСЬ!
+CONT А=С21,DSRC=PROM,ALUS=DZ,Н,ALUD=Q,YDST=CCLR
+CJP А=INTINT,МАР=РЕ
+;F2В: 22 - ЧУЖОЙ СУММАТОР - ВНУТРЕННЕЕ
+;PROM:2015
+CONT А=С22,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F2D: 23 - ЧУЖОЙ ОПЕРАНД - ВНУТРЕННЕЕ
+;PROM:2016
+CONT А=С23,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F2F: 24 - ЗАПРОС МОДИФИКАЦИИ ПРИОРИТЕТОВ СТРАНИЦ - ПСЕВДОПРЕРЫВАНИЕ
+;PROM:2017
+CONT DSRC=PHYSPG,ALUS=DZ,ALU,CSM,WЕМ,MNSA=МР,MODNM=ACR
+CJP А=INT24,МАР=РЕ,DDEV=РРМЕМ0,ALUS=DZ,ALU,CSM,WЕМ,MNSA=МР,MODNM=ACL
+;F31: 25 - ОСТАНОВ ПО АДРЕСУ: ФЛАГ ПП + ОСТАНОВ
+;PROM:2018
+CONT А=С25,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=ORINT,МАР=РЕ
+;F33: 26 - "TIME-OUT" ПРИ БВП - ВНУТРЕННЕЕ
+;PROM:2019
+CONT А=С26,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;F35: 27 - ВНЕШНИЕ ПРЕРЫВАНИЯ
+;PROM:201А
+CONT А=С27,DSRC=PROM,ALUS=DZ,Н,ALUD=ВА,RА=РС,RВ=WR1,ALU,YDST=ADRREG
+CJP А=INT27,МАР=РЕ,YDEV=PHYSAD,ARBI=BIRD,ALUS=ZА,RА=WR1,Н,ALUD=Q
+;F37: 28 - ОСТАНОВ ПО ЗАПРОСУ ПП - РАЗРЕШАЕМ, ЕСЛИ ПК; ЛК - ТОЛЬКО ПОСЛЕ ВКС
+;PROM:201В
+CJP А=INT28,МАР=РЕ,YDEV=MPMEM,IOMP,MPADR=1,%TRSH%,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=B,RB=WR6,CEN
+CONT
+;F39: 29 - ШАГОВОЕ ПРЕРЫВАНИЕ - ВНУТРЕННЕЕ; ЗАПРЕЩАЕМ, ЕСЛИ TR1=1 (ДО ИСП.KОМ.)
+;PROM:201С
+CJP А=INT29,МАР=РЕ,COND=TR1,IСС,FFCNT=CLRINT
+CJP А=RETRTN,МАР=РЕ,FFCNT=CLRTR1
+;F3В: 30 - ЧТ/ЗП РЕГИСТРОВ ЦП ПО ЗАПРОСУ ПП - ПСЕВДОПРЕРЫВАНИЕ
+;PROM:201D
+CONT YDEV=МРМЕМ,IОМР,MPADR=FМР,DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG
+>,ALUS=DА,RА=ВУТЕ,FUNC=AND,ALUD=В,RВ=WR5,CEN
+CJP А=INT30,МАР=РЕ,YDEV=МРМЕМ,IОМР,MPADR=ADRB4,DSRC=SHIFT,MPS
+>,PSHF=SН0-56,SHF=LOG,ALUS=DZ,Н,ALUD=В,RВ=WR1
+;F3D: 31 - АППАРАТНАЯ ЧАСТЬ ЧАСОВ СВ = 0 - ПСЕВДОПРЕРЫВАНИЕ
+;PROM:201Е
+CONT ALUS=ZА,RА=HALF,ALUD=В,RВ=WR5,CSM,MNSA=МР,MODNM=CTL,ЕСА
+>,WRA,ARA=RG2,FFCNT=CLRCT
+CJPP А=INT31,МАР=РЕ,CSM,MNSA=МР,MODNM=CTR,ALUS=DА,RА=HALF,FUNC=AND,Н,ALUD=В
+>,RВ=WR1
+;F3F: 32 - ТАЙМЕР СВ=0: ПСЕВДОПРЕРЫВАНИЕ С УСТАНОВКОЙ ПРОГР.ПРЕРЫВАНИЯ ИЛИ БЕЗ
+;PROM:201F
+;
+;===== 32: 16-РАЗРЯДНЫЙ АППАРАТНЫЙ ТАЙМЕР СЧЕТНОГО ВРЕМЕНИ РАВЕН 0
+;   ПРОВЕРЯЕМ НА "0" СТАРШУЮ ПОЛОВИНУ ТАЙМЕРА СВ ИЗ ОЗУ МОД.(МЛАДШАЯ=0,Т.К.INT!)
+; ЕСЛИ В РЕЗУЛЬТАТЕ ПОЛУЧИЛСЯ "0":
+;   - УСТАНАВЛИВАЕМ В "1" 40 РАЗРЯД ГРП, СООТВЕТСТВУЮЩИЙ ТАЙМЕРУ СЧ. ВРЕМЕНИ,
+;   - УСТАНАВЛИВАЕМ ПРОГРАММНОЕ ПРЕРЫВАНИЕ, FF - В ТАЙМЕР СВ В ОЗУ МОД.,32РАЗР.
+;   - ТАЙМЕР НЕ ОСТАНАВЛИВАЕМ, Т.К.ЭТО ПРИВЕДЕТ К НЕПРАВИЛЬНОМУ ЧТЕНИЮ!
+;     ТАЙМЕР БУДЕТ СЧИТАТЬ ДАЛЬШЕ!
+; ЕСЛИ НЕ "0":
+;   - ВЫЧИТАЕМ В17 ИЗ СТ.ПОЛОВИНЫ ТАЙМЕРА, ПИШЕМ ОБРАТНО В ОЗУ МОД.
+; INT32(31) М.Б.ДО ВКС, ПОСЛЕ И МЕЖДУ КОМАНДАМИ! ТУДА И ДЕЛАЕМ П/У.
+;   ПО АДРЕСУ СТЕКА НЕ ВОЗВРАЩАЕМСЯ, Т.К. В INT ПОЛЬЗУЕМСЯ РАБОЧИМИ РЕГИСТРАМИ!
+;   2 РАЗА ПРОТАЛКИВАЕМ СТЕК СУАМ. Д.Б.ДОСТАТОЧНО, Т.К. ПРЕРЫВАНИЕ ПО ПМИ.
+;
+CONT А=MNQ,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR2
+CONT CSM,MNSA=МР,MODNM=СТТ,ALUS=DА,RА=WR2,FUNC=AND,ALUD=В,RВ=WR2,CEN
+CJPP А=NZCTT,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;ТАЙМЕР = "0": ДОБАВЛЯЕМ РАЗРЯД В ГРП, УСТАНАВЛИВАЕМ ПРОГРАММНОЕ ПРЕРЫВАНИЕ
+CONT А=В40,DSRC=PROM,ALUS=DА,RА=INTR,FUNC=OR,Н,ALUD=В,RВ=INTR
+>,FFCNT=PRGINT
+;"0" - В ТАЙМЕР СВ В ОЗУ МОД.
+CJPP А=RETINT,МАР=РЕ,ALUS=ZA,RA=HALF,ALU,CSM,WЕМ,MNSA=МР,MODNM=СТТ,FFCNT=CLRCTT
+;ТАЙМЕР НЕ "0": УМЕНЬШАЕМ НА 1 В 17 РАЗРЯДЕ
+NZCTT:CONT А=В17,DSRC=PROM,ALUS=DА,RА=WR2,FUNC=SUBR,CI,ALUD=В,RВ=WR2,ALU
+>,CSM,WЕМ,MNSA=МР,MODNM=СТТ,FFCNT=CLRCTT
+;
+;ВОЗВРАТ ИЗ ПСЕВДОПРЕРЫВАНИЯ: ИСПОРЧЕНЫ РЕГИСТРЫ! ВОЗВРАТ - ЧЕРЕЗ П/У ПО АДР.
+RETINT:CJPP %МЕ%,COND=RСВ,%RСА%,FFCNT=SETEI
+CJPP %МЕ%,COND=TR1
+CJPP А=LCWPH,МАР=РЕ,ALUS=ZА,RА=РС,ALU,YDST=ADRREG
+;
+;
+;===== ПРЕРЫВАНИЕ HALT ПОСЛЕ ИСПОЛНЕНИЯ ЛК,ПК ИЛИ ВКС
+INT28:CJP A=EVENT,MAP=PE,COND=CT,STOPC=/NZ,ALUS=DZ,FUNC=AND,H,ALUD=LSB
+>,RB=WR5,SHMUX=NDNS,FFCNT=CLRINT
+;
+;===== 1РГ.БОПП=0: ОСТАНОВ ПО ЗАПРОСУ ПП (ТГ.HALT УСТАНАВЛИВАЕТ I8080)
+;ЗАПРЕЩАЕМ ОСТАНОВ, ЕСЛИ ОН ПРОИЗОШЕЛ НА ЛК ДО ВКС! (ППК=ЛК + TR1=0)
+CJP A=INTMPH,MAP=PE,COND=RCB
+CJP А=INTMPH,МАР=РЕ,COND=TR1
+;ВОЗВРАТ ИЗ ПСЕВДОПРЕРЫВАНИЯ ПО АДРЕСУ СТЕКА
+RETRTN:CRTN FFCNT=SETEI
+;
+;===== А ПРИ КАКОМ УСЛОВИИ ОСТАНОВ?
+EVENT:CONT А=В8,DSRC=PROM,ALUS=DА,RА=WR6,FUNC=AND,CEN
+CJP А=TEST,МАР=РЕ,COND=СТ,SТОРС=/NZ,FFCNT=CLRINT
+;ОСТАНОВ ТОЛЬКО В ЗАДАННОМ ПРОЦЕССЕ! ПРОВЕРЯЕМ, ВЫБРАНО ЛИ КОМ. СЛОВО
+CJP A=ISCW,MAP=PE,COND=RCB
+CJP A=RETRTN,MAP=PE,COND=TR1,ICC
+;ПРОВЕРЯЕМ РЕЖИМ ОСТАНОВА
+ISCW:CONT А=В7,DSRC=PROM,ALUS=DА,RА=WR6,FUNC=AND,CEN
+;ЕСЛИ В7=1 - РЕЖИМ ЛЮБОЙ!
+CJP А=PRO,МАР=РЕ,COND=СТ,SТОРС=/NZ,CSM,MNSA=МР,MODNM=RR,ALUS=DZ,ALUD=Q
+;РЕЖИМ ОСТАНОВА - ТОЛЬКО МАТЕМАТИЧЕСКИЙ! ПРОВЕРЯЕМ РД В РР
+CONT А=В13,DSRC=PROM,ALUS=DQ,FUNC=AND,CEN
+CJPP А=RETHLT,МАР=РЕ,COND=СТ,SТОРС=/NZ,FFCNT=SETEI
+;ПРОВЕРЯЕМ НОМЕР ПРОЦЕССА: ТОТ ЛИ?
+PRO:CONT А=H3F,DSRC=PROM,ALUS=DА,RА=WR6,FUNC=AND,ALUD=В,RВ=WR6
+CONT DSRC=PROCN,ALUS=DА,RА=WR6,FUNC=EXOR,ALUD=В,RВ=WR6
+CONT ALUS=АВ,RА=ВУТЕ,RВ=WR6,FUNC=AND,CEN
+CJPP А=RETHLT,МАР=РЕ,COND=СТ,SТОРС=/NZ,FFCNT=SETEI
+CJP А=INTMPH,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=LSB,RВ=WR5,SHMUX=NDNS
+;
+;===== 8Р.1РГ.БОПП=1 - ОТЛАДОЧНЫЙ РЕЖИМ; ОСТАНОВ М.Б. И ДО ВКС, ЕСЛИ НАДО!
+TEST:CONT A=H80,DSRC=PROM,ALUS=DA,RA=WR6,FUNC=EXOR,CEN
+CJP A=MOD0,MAP=PE,COND=CT,STOPC=NZ
+;
+;ЗДЕСЬ МОЖНО ВСТАВИТЬ ЛЮБУЮ ДОПОЛНИТЕЛЬНУЮ ПРОВЕРКУ!
+;ВОЗВРАТ, ЕСЛИ НЕ ТО
+;CJPP A=RETINT,MAP=PE,COND=CT,STOPC=/NZ
+;ОТЛОВИЛИ! ПОСЫЛАЕМ СООБЩЕНИЕ ПП: 0-Й РГ.БОПП = 1
+;CJP A=ISEV,MAP=PE,ALUS=DZ,FUNC=AND,H,ALUD=LSB,RB=WR5,SHMUX=NDNS
+;
+;ПРОВЕРЯЕМ 0-Й МОДИФИКАТОР НА 0; EСЛИ ДА, 0-Й РГ.БОПП = 0
+MOD0:CONT CSM,MNSA=МР,MODNM=М0,ALUS=DZ,CEN
+CJPP А=RETINT,МАР=РЕ,COND=СТ,SТОРС=NZ,FFCNT=SETEI
+;ИМЕЕТ МЕСТО ЭТО "СОБЫТИЕ", ПОСЫЛАЕМ СООБЩЕНИЕ ПП: В8=1 - BO 2 РГ.БОПП
+CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=WR5
+ISEV:CJP А=ISEV,МАР=РЕ,COND=СРМР,IСС
+CONT YDEV=МРМЕМ,IОМР,MPADR=FСР,%TRSH%,ALUS=DZ,ALUD=В,RВ=WR6
+CONT А=В8,DSRC=PROM,ALUS=DА,RА=WR6,FUNC=OR,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=FСР
+CONT FFCNT=LDCPMP
+CONT ALUS=ZA,RA=WR5,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=INFB1
+OUTEV:CJP А=OUTEV,МАР=РЕ,COND=СРМР,IСС
+CJP А=INTMPH,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=LSB,RВ=WR5,SHMUX=NDNS
+;
+;
+;===== 2,3,4,6,25,28 + ПОП=1: ПРЕРЫВАНИЯ, УСТАНАВЛИВАЮЩИЕ ФЛАГ ПП+ОСТАНОВ
+;   ВО ВРЕМЯ ОСТАНОВА ВОЗМОЖНЫ ОБРАЩЕНИЯ ПП НА ЧТ/ЗП РЕГИСТРОВ.
+; ИСПОЛЬЗУЮТСЯ РГ.:N,АИСП (АДРЕС),WR6 (СДВИГ ПРИ ЗАПИСИ В БОПП),Q(N ПРЕР);
+;   CONST ДЛЯ СООБЩЕНИЯ ПП О ТИПЕ ПРЕРЫВАНИИЯ - "1" В СООТВЕТСТВУЮЩЕМ РАЗРЯДЕ -
+;   ЧИТАЕТСЯ В WR5 ЗАРАНЕЕ (ТАМ, ГДЕ РЕАКЦИЯ НА КОНКРЕТНОЕ ПРЕРЫВАНИЕ).
+;   ЗДЕСЬ ДОБАВЛЯЕМ ЭТУ CONST КО 2 РГ.БОПП (FСР);
+;   СБРАСЫВАЕМ ТГ."RUN" И ЖДЕМ ЕГО УСТАНОВКИ.
+; ПОСЛЕ УСТАНОВКИ ИЗ ПП ТГ."RUN" ИСПОЛНЕНИЕ МИКРОПРОГРАММЫ ПРОДОЛЖАЕТСЯ
+;   В ЛК И ПК -  С ЧТЕНИЯ АДРЕСА КОМАНДЫ И ПЕРЕХОДА ПО КОП КОМАНДЫ,
+;   Т.К.СЧИТАЕМ, ЧТО ОСТАНОВ ПРОИСХОДИТ ВСЕГДА ПЕРЕД КОМАНДОЙ (ОНА УЖЕ В RG1!)
+; ПРИ ЭТОМ ПРОБЛЕМА: ОСТАНОВ ПО АДРЕСУ ПРИ ВКС - ПЕРЕД ВКС! КОМАНДЫ В RG1 НЕТ!
+;   ПОКА ЭТО "ИСПРАВЛЯЕТ" ПП, ДЕЛАЯ ЗАПИСЬ В РС ТОГО ЖЕ АДРЕСА И СНЯВ ОСТАНОВ.
+INTMP:CONT FFCNT=SETHLT
+;ПРИВОДИМ В СООТВЕТСТВИЕ ТКК, Т.К.ЗДЕСЬ НЕ ВСЕ ПРЕРЫВАНИЯ СТРОБИРУЮТСЯ!
+INTMPH:CJP А=MERC,МАР=РЕ,COND=RСВ,FFCNT=SЕТТКК
+CONT FFCNT=CLRTKK
+;ТИП ОСТАНОВА - ВО 2 РГ.БОПП (FСР)
+MERC:CONT YDEV=МРМЕМ,IОМР,MPADR=FСР,DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG,ALUS=DА
+>,RА=WR5,FUNC=OR,Н,ALUD=В,RВ=WR5
+CONT ALUS=ZА,RА=WR5,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=FСР
+;СБРАСЫВАЕМ ПРЕРЫВАНИЯ И ТГ."ПУСК"
+CONT FFCNT=CLRRUN
+CONT FFCNT=CLRINT
+;РАЗРЕШАЕМ ПРЕРЫВАНИЯ (НА СЛУЧАЙ ЧТЕНИЯ РЕГИСТРОВ И ВООБЩЕ)
+CJPP А=WRUN,МАР=РЕ,FFCNT=SETEI
+;ЖДЕМ УСТАНОВКИ ТГ."ПУСК"
+WRUN:CJPP А=WRUN,МАР=РЕ,COND=RUN,IСС
+;===== ВЫХОД ИЗ ОСТАНОВА  П Е Р Е Д  КОМАНДОЙ, КОТОРАЯ УЖЕ ВЫБРАНА В РГ.КОМАНД!
+RETHLT:CJP %МЕ%,%RСА%,FFCNT=CLRTR1
+;
+;
+;===== 1,5,7-13,15-23,26,29,33-38:
+; ВНУТРЕННИЕ И ВНЕШНИЕ ПРЕРЫВАНИЯ.
+;   ПРОИСХОДИТ УПРЯТЫВАНИЕ РЕГИСТРОВ ТЕКУЩЕГО ПРОЦЕССА В ОЗУ МОДИФИКАТОРОВ
+;   И ПЕРЕХОД НА 0 ГРУППУ РЕГИСТРОВ (ГРУППУ ОБРАБОТКИ ПРЕРЫВАНИЯ).
+;   N ТЕК.ГРУППЫ РЕГИСТРОВ НА 0 НЕ ПРОВЕРЯЕМ, СМОТРИМ ТОЛЬКО ПОП!
+; ИСПОЛЬЗУЕМЫЕ РЕГИСТРЫ:
+;   WR1 - РРР; WR6 - РР;
+;   WR4 - РАБОЧИЙ, НУЖЕН В П/П ЧТЕНИЯ ЧАСОВ;
+;   WR5 - РЕЗУЛЬТАТ ЧТЕНИЯ ЧАСОВ И ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ ПРОЦЕССА;
+;   ПОСЛЕ ЧТЕНИЯ ЧАСОВ В WR5 - РНГ; Q - НОМЕР ПРЕРЫВАНИЯ.
+; В ГРУППУ ОБРАБОТКИ ПРЕРЫВАНИЯ ИЗ ПРЕРВАННОГО ПРОЦЕССА ПЕРЕДАЕМ:
+;   14 - ИАОП (СОДЕРЖИМОЕ РГ. НА МОМЕНТ ПРЕРЫВАНИЯ)
+;   13 - СЧАС
+;   12 - ФИЗ.АДРЕС (СОДЕРЖИМОЕ RG0 НА МОМЕНТ ПРЕРЫВАНИЯ)
+;   11 - РНП
+;   10,9 - РР,РРР
+;   8 - СОДЕРЖИМОЕ РНГ В 6-10 РАЗР. (ТОЛЬКО 5 РАЗРЯДОВ, БЕЗ 6-ОГО!)
+;   7 - КОП АРБИТРА, 6 - ТЕГ КОМАНДЫ, 5 - ОПЕРАНДА
+;   4 - ПРАВАЯ ПОЛОВИНА КОМАНДНОГО СЛОВА, 3 - ЛЕВАЯ
+;
+;ПРОВЕРЯЕМ ПОП, ЧИТАЕМ ТГ.ПРИЗНАКОВ, СПАСАЕМ СЧАС
+INTINT:CJP А=PSINTI,МАР=РЕ,COND=INTSTP,IСС,DSRC=CNT,ALUS=DZ,ALUD=ВА,RА=РС
+>,RВ=WR5,ALU,CSM,WЕМ,MNSA=МР,MODNM=РСС
+;ПОП=1, ОСТАНОВ!
+;ЖДЕМ ОСВОБОЖДЕНИЯ КАНАЛА "ЦП->ПП", ЗАТЕМ ПИШЕМ N ПРЕРЫВАНИЯ В 0-Й РГ.БОПП
+FREE:CJP А=FREE,МАР=РЕ,COND=СРМР,IСС
+;ЧИТАЕМ "1" В 3 РАЗРЯДЕ ДЛЯ 2 РГ.БОПП (FСР) - ФЛАГ ЦП - В WR5
+CONT А=В3,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR5,FFCNT=LDCPMP
+CJP А=INTMP,МАР=РЕ,ALUS=ZQ,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=INFB1
+;
+;===== УПРЯТЫВАЕМ РЕГИСТРЫ В ОЗУ МОДИФИКАТОРОВ
+;СПАСАЕМ РОП, СОБИРАЕМ В WR6 РР (В П/П), ПЕРЕПИСЫВАЕМ В ОЗУ МОД.
+PSINTI:CONT CSM,MNSA=МР,MODNM=RR,ALUS=DZ,ALUD=В,RВ=WR6
+CJS А=SAVRG,МАР=РЕ,SТОРС=32,DDEV=STATUS,ALUS=DZ,ALUD=ВА,RА=РССОРУ,RВ=WR4,ALU
+>,CSM,WЕМ,MNSA=МР,MODNM=РССС
+;ЧИТАЕМ РРР, СПАСАЕМ А,У
+CONT CSM,MNSA=МР,MODNM=RRR,ALUS=DZ,ALUD=В,RВ=WR1
+;ПАР-Р СДВИГА НА 32 ВПРАВО - В РПС
+CONT А=SR32,DSRC=PROM,ALUS=DZ,ALU,YDST=PSHIFT
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=ACR,DSRC=SHIFT
+>,SHF=LOG
+CONT ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=ACL
+CONT ALUS=DZ,Н,ALUD=ВА,RА=У,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=YCR,DSRC=SHIFT
+>,SHF=LOG
+;
+;ЧИТАЕМ, СКОЛЬКО "НАТИКАЛО" В АППАРАТНЫХ ЧАСАХ СЧЕТНОГО ВРЕМЕНИ (В РГ.WR5)
+CJS А=CTRD,МАР=РЕ,ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=YCL
+;ЧИТАЕМ ИЗ ОЗУ МОД.,ЧТО БЫЛО, ОБ'ЕДИНЯЕМ, ПИШЕМ ОБРАТНО
+CONT А=MNQ,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR2
+CONT CSM,MNSA=МР,MODNM=CTR,ALUS=DА,RА=WR2,FUNC=AND,ALUD=В,RВ=WR4
+;ЧИТАЕМ АППАРАТНЫЙ ТАЙМЕР - В WR5, МИКРОПРОГРАММНЫЙ - В WR4, ОБ'ЕДИНЯЕМ
+CJS А=CTTRD,МАР=РЕ,ALUS=АВ,RА=WR4,RВ=WR5,FUNC=OR,ALU,CSM,WЕМ,MNSA=МР,MODNM=CTR
+CONT CSM,MNSA=МР,MODNM=СТТ,ALUS=DА,RА=WR2,FUNC=AND,ALUD=В,RВ=WR4
+CJPP А=N1,МАР=РЕ,ALUS=АВ,RА=WR4,RВ=WR5,FUNC=OR,ALU,CSM,WЕМ,MNSA=МР,MODNM=СТТ
+;ЧИТАЕМ РНГ, УБИРАЕМ МУСОР
+N1:CJPP А=N2,МАР=РЕ,DSRC=MODGN,ALUS=DZ,ALUD=В,RВ=WR5
+N2:CONT А=MGN,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=AND,Н,ALUD=В,RВ=WR5
+;
+;===== ПЕРЕХОДИМ НА 0 ГРУППУ РЕГИСТРОВ
+;ЗАПИСЫВАЕМ В МОДИФИКАТОРЫ 0-Й ГРУППЫ ВСЕ,ЧТО НАДО О ПРЕРВАННОМ ПРОЦЕССЕ
+;0 - В РНГ
+CJPP А=N3,МАР=РЕ,ALUS=DZ,FUNC=AND,ALU,YDST=MODGN
+;ИАОП - В 14ИР, КОП АРБИТРА - В 7ИР, ВСЕ ОСТАЛЬНОЕ ПЕРЕПИСЫВАЕМ В П/П
+N3:CJS А=ACTRG,МАР=РЕ,DSRC=ARBOPC,ALUS=DZ,ALUD=ВА,RА=DADR,RВ=WR2
+>,ALU,CSM,WЕМ,MNSA=МР,MODNM=М14
+CONT А=С15,DSRC=PROM,ALUS=DА,RА=WR2,FUNC=AND,ALU,CSM,WЕМ,MNSA=МР
+>,MODNM=М7
+;
+;===== ВОССТАНАВЛИВАЕМ РЕГИСТРЫ "0" ГРУППЫ, УСТАНАВЛИВАЕМ НР
+;РРР: ОБ'ЕДИНЯЕМ СТАРЫЙ РНГ (N ПРЕДЫД.), N РЕЗЕРВНОЙ И ДЕЖУРНЫЙ ТЕГ (0); ПИШЕМ
+CJPP А=N4,МАР=РЕ,CSM,MNSA=МР,MODNM=RRR,ALUS=DZ,ALUD=В,RВ=WR4,FFCNT=SETNR
+N4:CONT А=МВ3,DSRC=PROM,ALUS=DА,RА=WR4,FUNC=AND,ALUD=В,RВ=WR4
+;СДВИГАЕМ СТАРЫЙ РНГ НА МЕСТО ПРЕДЫД.ГРУППЫ ДЛЯ РРР
+CJPP А=N5,МАР=РЕ,ALUS=DZ,ALUD=ВА,RА=WR5,RВ=WR5,ALU,DSRC=SHIFT,MPS,PSHF=SН0-3
+>,SHF=LOG
+;ОСТАНАВЛИВАЕМ ТАЙМЕР СВ, СБРАСЫВАЕМ ПРЕРЫВАНИЯ ОТ ТАЙМЕРА СВ (B CTTSTP)
+N5:CJS А=CTTSTP,МАР=РЕ,ALUS=АВ,RА=WR5,RВ=WR4,FUNC=OR,ALU,CSM,WЕМ,MNSA=МР
+>,MODNM=RRR,YDEVT=ECBTAG,WRB,BRA=RG3,FFCNT=CLRTR1
+;ЧАСЫ СВ: ПРОВЕРЯЕМ МЛ.16 РАЗРЯДОВ: ЕСЛИ = 0, ВЫЧИТАЕМ В17, А В ЧАСЫ ПИШЕМ FFFF!
+CJS А=INICT,МАР=РЕ,CSM,MNSA=МР,MODNM=CTR,ALUS=DА,RА=HALF,FUNC=AND,Н,ALUD=В
+>,RВ=WR5
+;РНП; ПОСЛЕ ЗАПИСИ РГ.WR5 В ЧАСЫ СВ СБРАСЫВАЕМ ОТ НИХ ПРЕРЫВАНИЕ (B CTWR)
+CJS А=CTWR,МАР=РЕ,CSM,MNSA=МР,MODNM=PROCNC,ALUS=DZ,ALU,YDST=PROCN
+>,FFCNT=CLRINT
+;РР: БПНП=РД=РОА=БЗО=БЧОП=БПТЗ=БЗЗ=ПОП=БВП=ГЛ=1; ОСТАЛЬНЫЕ РАЗРЯДЫ = 0
+NRINT:CONT А=CINT,DSRC=PROM,ALUS=DZ,ALUD=В,RВ=WR5,ALU,YDST=CNT,CSM,WЕМ
+>,MNSA=МР,MODNM=RR,DDEV=STATUS,WRD,SТОРС=0,СЕМ
+LDCT А=LCWPH,МАР=РЕ,ALUS=ZQ,FUNC=SUBR,Н,ALUD=В,RВ=WR5,FFCNT=CLRTKK
+;НОВЫЙ АДРЕС - В РС, АИСП (В ЗАВИСИМОСТИ ОТ НОМЕРА ПРЕРЫВАНИЯ); И НА ВКС!
+JRP А=JMPI,IСС,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=ADD,Н,ALUD=В,RВ=РС,ALU
+>,YDST=ADRREG,FFCNT=SETEI
+;
+INICT:ENTRY
+CONT А=MQ,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=AND,CEN
+CRTN COND=СТ,SТОРС=/NZ,CSM,MNSA=МР,MODNM=CTL,ЕСА,WRA,ARA=RG3
+CONT ЕСВ,BRA=RG3,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG,ALUS=DА,RА=WR5,FUNC=OR
+>,Н,ALUD=В,RВ=WR5
+;ВЫЧИТАЕМ В17 ИЗ ВСЕХ 64 РАЗРЯДОВ
+CONT А=В17,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=SUBR,Н,CI,ALUD=В,RВ=WR5,ALU,CSM,WЕМ
+>,MNSA=МР,MODNM=CTR
+;ПИШЕМ РЕЗ-Т В ОЗУ МОД., FFFF - В WR5 ДЛЯ ЗАПИСИ В АППАРАТНУЮ ЧАСТЬ
+CONT ALUS=ZА,RА=WR5,Н,ALU,DSRC=SHIFT,MPS,PSHF=SН0+32,SHF=LOG,ЕСА,WRA,ARA=RG3
+CRTN ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=CTL,ALUS=ZА,RА=HALF,ALUD=В,RВ=WR5
+;
+;
+;===== 14: МАТ.АДРЕС = 0
+; Т.К. "0 МАТ.АДРЕС" М.Б. В ЛЮБОЙ КОМАНДЕ ОБРАЩЕНИЯ К ПАМЯТИ, НАДО:
+; - ПРИ ЧТЕНИИ ОПЕРАНДА - ПОДСТАВЛЯТЬ "0" В RG2;
+; - ПРИ ВКС - ОШИБКА, П/У НА INT38.
+; - ВСЕ ОСТАЛЬНОЕ НЕ ПРОВЕРЯЕМ (ПРОСТО ВОЗВРАТ).
+;   ВНИМАНИЕ!!!!!
+;   СРАВНИВАТЬ КОП АРБИТРА ДЛЯ ОПРЕДЕЛЕНИЯ СИТУАЦИИ МОЖЕМ ТОЛЬКО В МПС И СУСС,
+;   Т.Е.ПРИДЕТСЯ ПОРТИТЬ ОДИН РЕГИСТР МПС И РГ. СУСС. РГ.N М.БЫТЬ ЗАНЯТ
+;   В ОСНОВНОЙ ПРОГРАММЕ, ЕГО ТОЖЕ НЕЛЬЗЯ ИСПОЛЬЗОВАТЬ БЕЗ ВОССТАНОВЛЕНИЯ.
+;   БУДЕМ ИСПОЛЬЗОВАТЬ РГ.РССОРУ И РГ.М СУСС,
+;   ПРЕДВАРИТЕЛЬНО ЗАПИСАВ ИХ СОДЕРЖИМОЕ В ОЗУ МОД.В ОБЛАСТЬ УПРЯТЫВАНИЯ,
+;   С ПОСЛЕДУЮЩИМ ВОССТАНОВЛЕНИЕМ.
+;
+;ПРОЧИТАЛИ КОП АРБИТРА, СКОПИРОВАВ РССОРУ; УПРЯТЫВАЕМ РГ.М
+INT14:CJP А=I14ЕМ,МАР=РЕ,COND=EMLRG,SТОРС=32,DDEV=STATUS,ALUS=DZ,ALU
+>,CSM,WЕМ,MNSA=МР,MODNM=ACL
+;СРАВНИВАЕМ:
+CONT А=С9,DSRC=PROM,ALUS=DА,RА=РССОРУ,FUNC=EXOR,СЕМ
+CJP А=NOPR,МАР=РЕ,COND=СТ,SТОРС=/MZ
+;ЧТЕНИЕ ОПЕРАНДА В НР: ПОДСТАВЛЯЕМ 0 В WR2
+CJP А=PSINT14,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALU,ЕСВ,WRB,BRA=RG2
+;МАТ.АДРЕС = "0" В РЭ!
+I14ЕМ:CONT А=С9,DSRC=PROM,ALUS=DА,RА=РССОРУ,FUNC=EXOR,СЕМ
+CJP А=NOPR,МАР=РЕ,COND=СТ,SТОРС=/MZ
+;ЕСЛИ НЕТ ББЧ, ДЕЛАЕМ, КАК В НР!
+CJP А=PSINT14,МАР=РЕ,COND=BNB,IСС,ALUS=DZ,FUNC=AND,Н,ALU,ЕСВ,WRB,BRA=RG2
+;ИНАЧЕ ПИШЕМ "0" С ДЫРОЙ В ПОРЯДКЕ
+CONT А=MD,DSRC=PROM,ЕСА,WRA,ARA=RG2
+;ВОССТАНАВЛИВАЕМ РЕГИСТРЫ РССОРУ И М, СБРОС ПРЕРЫВАНИЙ И МАСКИ, ВОЗВРАТ
+PSINT14:CONT CSM,MNSA=МР,MODNM=ACR,ALUS=DZ,ALUD=В,RВ=РССОРУ,FFCNT=CLRINT
+RI14:CRTN CSM,MNSA=МР,MODNM=ACL,ALUS=DZ,ALU,DDEV=STATUS,WRD,SТОРС=0,СЕМ
+>,FFCNT=SETEI
+;
+;ПРОВЕРЯЕМ ДАЛЬШЕ
+NOPR:CONT А=С8,DSRC=PROM,ALUS=DА,RА=РССОРУ,FUNC=EXOR,СЕМ
+;ЕСЛИ НЕ ВКС, ВОССТАНАВЛИВАЕМ РЕГИСТРЫ И ВОЗВРАТ, Т.Е.НИЧЕГО НЕ ДЕЛАЕМ
+CJP А=RI14,МАР=РЕ,COND=СТ,SТОРС=/MZ,CSM,MNSA=МР,MODNM=ACR,ALUS=DZ
+>,ALUD=В,RВ=РССОРУ,FFCNT=CLRINT
+;ИНАЧЕ - ИДЕМ НА INT38
+CJP А=INT38,МАР=РЕ,CSM,MNSA=МР,MODNM=ACL,ALUS=DZ,ALU,DDEV=STATUS,WRD
+>,SТОРС=0,СЕМ
+;
+;
+;===== 24: ЗАПРОС МОДИФИКАЦИИ ПРИОРИТЕТОВ СТРАНИЦ
+;   NР - НОМЕР ФИЗ.СТРАНИЦЫ, ВЫЗВАВШЕЙ ПРЕРЫВАНИЕ
+;   NС - ПРЕДЫДУЩИЙ NР
+;   U  - UPPER - ПРЕДШЕСТВУЮЩИЙ
+;   L  - LOWER - СЛЕДУЮЩИЙ
+;
+;            ОЗУ ПС0   ОЗУ ПС1
+; СТРАНИЦЫ  ПРЕДШЕСТВ.СЛЕДУЮЩИЕ
+;       0 I   MINP   I   МАХР   I
+;       1 I  NС->NР  I          I
+;         I          I          I ВСТАВЛЯЕМ В НОВЫЙ СПИСОК NР ПОСЛЕ NС:
+;      NС I          I LNC->NР  I У NС СЛЕДУЮЩАЯ - NР,
+;     LNC I  NС->NР  I          I У LNC ПРЕДШЕСТВУЮЩАЯ - NР (ВМЕСТО NС)
+;         I          I          I
+;      NР I UNP->NС  I LNP->LNC I У NР ПРЕДШЕСТВУЮЩАЯ - NС, СЛЕДУЮЩАЯ - LNC
+;         I          I          I
+;     UNP I          I  NР->LNP I ИЗВЛЕКАЕМ NР ИЗ "СТАРОГО" СПИСКА ПРИОРИТЕТОВ,
+;     LNP I  NР->UNP I          I "СКЛЕИВАЕМ" ЕГО БЕЗ NР
+;         I          I          I
+;   ЕСЛИ NС=0, СПИСОК СОСТАВЛЯЕТСЯ СНАЧАЛА:
+;   САМОЙ АКТИВНОЙ СЧИТАЕТСЯ СТРАНИЦА, К КОТОРОЙ РАНЬШЕ ВСЕХ ОБРАТИЛИСЬ
+;   ПОСЛЕ ЗАПРОСА ПЕРЕСЧЕТА ПРИОРИТЕТОВ СТРАНИЦ (УСТАНОВКИ БМСП В 1).
+;   РАБОТАЕТ ТОТ ЖЕ АЛГОРИТМ: МАХР->NР И Т.Д.
+;
+;   РГ.МПС ИСПОЛЬЗОВАТЬ НЕЛЬЗЯ, Т.К.ПРЕРЫВАНИЕ НЕ СТРОБИРУЕТСЯ ПМИ.
+;   ОБХОДИМСЯ РГ.ИЗ ОБЛАСТИ УПРЯТЫВАНИЯ В ОЗУ МОДИФИКАТОРОВ.
+;
+;ПРОЧИТАЛИ NР ИЗ РФС - В ACR; ЗАПОМИН.ИЗ СТАРОГО СПИСКА UNP - В ACL; LNP - В YCR
+INT24:CONT DDEV=РРМЕМ1,ALUS=DZ,ALU,CSM,WЕМ,MNSA=МР,MODNM=YCR
+;
+;"СКЛЕИВАЕМ" СТАРЫЙ СПИСОК: НА МЕСТО NР В КАЧЕСТВЕ ПРЕДШЕСТВУЮЩЕЙ - UNP
+;LNP ИЗ YCR - В РФС
+CONT CSM,MNSA=МР,MODNM=YCR,ALUS=DZ,ALU,YDST=PHYSPG
+;UNP ИЗ ACL - В ОЗУ ПС0
+CONT CSM,MNSA=МР,MODNM=ACL,ALUS=DZ,ALU,DDEV=РРМЕМ0,WRD
+;
+;НА МЕСТО NР В КАЧЕСТВЕ СЛЕДУЮЩЕЙ - LNP
+;UNP ИЗ ACL - В РФС
+CONT CSM,MNSA=МР,MODNM=ACL,ALUS=DZ,ALU,YDST=PHYSPG
+;LNP ИЗ YCR - ОЗУ ПС1
+CONT CSM,MNSA=МР,MODNM=YCR,ALUS=DZ,ALU,DDEV=РРМЕМ1,WRD
+;
+;ЧИТАЕМ NС, ЗАМЕНЯЕМ ЕЕ НА NР
+;1 СТР. - В РФС
+CONT А=1,DSRC=PROM,ALUS=DZ,ALU,YDST=PHYSPG
+;NС ИЗ ОЗУ ПС0 - В ACL
+CONT DDEV=РРМЕМ0,ALUS=DZ,ALU,CSM,WЕМ,MNSA=МР,MODNM=ACL
+;NР ИЗ ACR - В ОЗУ ПС0
+CONT CSM,MNSA=МР,MODNM=ACR,ALUS=DZ,ALU,DDEV=РРМЕМ0,WRD
+;
+;ВСТАВЛЯЕМ NР В КАЧЕСТВЕ СЛЕДУЮЩЕЙ ПОСЛЕ NС, ЧИТАЕМ LNC
+;NС ИЗ ACL - В РФС
+CONT CSM,MNSA=МР,MODNM=ACL,ALUS=DZ,ALU,YDST=PHYSPG
+;LNC ИЗ ОЗУ ПС1 - В YCR
+CONT DDEV=РРМЕМ1,ALUS=DZ,ALU,CSM,WЕМ,MNSA=МР,MODNM=YCR
+;NР ИЗ ACR - В ОЗУ ПС1
+CONT CSM,MNSA=МР,MODNM=ACR,ALUS=DZ,ALU,DDEV=РРМЕМ1,WRD
+;
+;ВСТАВЛЯЕМ NР В КАЧЕСТВЕ ПРЕДШЕСТВУЮЩЕЙ У LNC
+;LNC ИЗ YCR - В РФС
+CONT CSM,MNSA=МР,MODNM=YCR,ALUS=DZ,ALU,YDST=PHYSPG
+;NР ИЗ ACR - ОЗУ ПС0
+CONT CSM,MNSA=МР,MODNM=ACR,ALUS=DZ,ALU,DDEV=РРМЕМ0,WRD
+;
+;ПРОСТАВЛЯЕМ УКАЗАТЕЛИ У NР: NС - ПРЕДШЕСТСВУЮЩАЯ, LNC - СЛЕДУЮЩАЯ
+;NР ИЗ ACR - В РФС
+CONT CSM,MNSA=МР,MODNM=ACR,ALUS=DZ,ALU,YDST=PHYSPG
+;NС ИЗ ACL - В ОЗУ ПС0, СБРОС ПРЕРЫВАНИЙ
+CONT CSM,MNSA=МР,MODNM=ACL,ALUS=DZ,ALU,DDEV=РРМЕМ0,WRD,FFCNT=CLRINT
+;LNC ИЗ YCR - В ОЗУ ПС1, СБРОС МАСКИ
+CRTN CSM,MNSA=МР,MODNM=YCR,ALUS=DZ,ALU,DDEV=РРМЕМ1,WRD,FFCNT=SETEI
+;
+;
+;===== 25: ОСТАНОВ; 6: ОШИБОЧНОЕ ПРЕРЫВАНИЕ: ФЛАГ ПП + ОСТАНОВ
+;ЖДЕМ ОСВОБОЖДЕНИЯ КАНАЛА "ЦП->ПП", ЗАТЕМ ПИШЕМ N ПРЕРЫВАНИЯ В 0-Й РГ.БОПП
+ORINT:CJP А=ORINT,МАР=РЕ,COND=СРМР,IСС
+CONT ALUS=ZQ,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=INFB1
+;ЧИТАЕМ "1" В 7 РАЗРЯДЕ ДЛЯ ЗАПИСИ ВО 2 РГ.БОПП; И НА ОСТАНОВ
+CONT А=В7,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR5,FFCNT=LDCPMP
+CJP А=INTMP,МАР=РЕ
+;
+;
+;===== 27: ВНЕШНИЕ ПРЕРЫВАНИЯ
+;   ЧИТАЕМ ПРЕРЫВАНИЯ С ШИНЫ, ДОБАВЛЯЕМ ИХ В ГРП, СБРАСЫВАЕМ.
+;   ДАЛЬШЕ ОБРАБАТЫВАЕМ ТАКЖЕ, КАК ВУТРЕННЕЕ.
+;
+;ЧИТАЕМ ПРЕРЫВАНИЯ С ШИНЫ В ГРП (В АИСП. ЗАПИСАЛИ РС, ЧТОБ НЕ БЫЛО INT ОТ Ф.А.!)
+INT27:CJP А=INT27,%WА%
+CONT ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=WR1,ALU,ЕСВ,WRB,BRA=RG3
+;СБРАСЫВАЕМ ПРЕРЫВАНИЯ НА ШИНЕ, МАСКИРУЕМ РАЗРЯДЫ, КОТОРЫЕ ЗАДЕЙСТВОВАНЫ (40,41)
+PUSH А=PROGR,YDEV=PHYSAD,ARBI=BICLR,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=NOTRS,Н
+>,ALUD=В,RВ=WR1
+LООР COND=ARBRDY
+CJP А=INTINT,МАР=РЕ,ALUS=АВ,RА=WR1,RВ=INTR,FUNC=OR,Н,ALUD=В
+;
+;
+;===== 29: ШАГОВОЕ ПРЕРЫВАНИЕ
+;ИДЕМ НА ОБРАБОТКУ, Т.К. INT ПОСЛЕ ИСПОЛНЕНИЯ КОМАНДЫ (TR=0)
+INT29:CONT А=С29,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;
+;
+;===== 30: ЧТ/ЗП РЕГИСТРОВ И ПАМЯТИ ПО ЗАПРОСУ ПП
+;   ПИШЕМ ТОЛЬКО ЧАСТЬ, СООТВЕТСТВУЮЩУЮ ДАННОМУ ПРЕРЫВАНИЮ.
+;   ЗАКАНЧИВАТЬ ОБРАБОТКУ ПРЕРЫВАНИЯ ТОЛЬКО ВОЗВРАТОМ ПО АДРЕСУ СТЕКА!
+;   (Т.К. ВОЗВРАТ Д.БЫТЬ В "ОСТАНОВ").
+;   ЕСЛИ ЕСТЬ ПРЕРЫВАНИЯ ОТ ПП - ТОРОПИТЬСЯ НЕКУДА,
+;   ПОЭТОМУ ПРОЧИТАЕМ СРАЗУ ВСЕ 64 РАЗРЯДА ИЗ БОПП В РГ.WR6 ДЛЯ ЗАПИСИ В РГ.
+;   А ПРИ ПЕРЕСЫЛКЕ РЕГИСТРА В ПП - ЧИТАЕМ ЕГО В РАБОЧИЙ (НАПР.,ТОТ ЖЕ WR6)
+;   И ДЕЛАЕМ ПЕРЕХОД НА ОБЩУЮ ЧАСТЬ,
+;   ГДЕ ТОЖЕ ПЕРЕПИСЫВАЕМ  ВСЕ 64 РАЗРЯДА В БОПП (ДЛЯ ЭКОНОМИИ ПАМЯТИ МК).
+;   ПОСЛЕ ЧТЕНИЯ ВО 2 РГ.БОПП УСТАНАВЛИВАЕМ ПРИЗНАК, ЧТО ОЗУ ПП->ЦП ПРОЧИТАНО.
+;   И СБРАСЫВАЕМ ПРЕРЫВАНИЯ, ЧТОБ В КОРОТКИХ МП НЕ ТРАТИТЬ НА ЭТО КОМАНДЫ.
+;   В МП ЗАПИСИ В РЕГИСТР ОСТАЕТСЯ ТОЛЬКО УБРАТЬ МАСКУ!
+;   ПРИ ЧТЕНИИ РГ.В БОПП В ОБЩЕЙ ЧАСТИ (ГДЕ ПЕРЕПИСЬ В БОПП) УСТАНАВЛИВАЕМ
+;   ПРИЗНАК "В ОЗУ ПП->ЦП ЕСТЬ ИНФОРМАЦИЯ" И УБИРАЕМ МАСКУ ПРЕРВАНИЙ!
+;   СЛ.0 = 0 (ЧТЕНИЕ); = 1 (ЗАПИСЬ)
+;   СЛ.1 = 1
+;
+;ПРОЧИТАЛИ 3 РГ.БОПП ДЛЯ ОПРЕДЕЛЕНИЯ НАПРАВЛЕНИЯ ПЕРЕДАЧИ ДАННЫХ: 0 - ЗАПИСЬ;
+;ЧИТАЕМ 4(!) БАЙТА АДРЕСА, ОБ'ЕДИНЯЕМ, ПИШЕМ В АИСП. И WR1;
+;ДЛЯ МИКРОКОМАНДЫ ЧТЕНИЯ РГ.В ПП ЗАГРУЖАЕМ АДРЕС ОБЩЕЙ П/П В РГ/СЧ
+INT30:CONT ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0+8,SHF=LOG
+CONT YDEV=МРМЕМ,IОМР,MPADR=ADRB3,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DА,RА=WR1,FUNC=OR,Н,ALUD=В,RВ=WR1
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+CONT YDEV=МРМЕМ,IОМР,MPADR=ADRB2,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DА,RА=WR1,FUNC=OR,Н,ALUD=В,RВ=WR1
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+>,FFCNT=CLRINT
+LDCT А=RGTOMP,МАР=РЕ,YDEV=МРМЕМ,IОМР,MPADR=ADRB1,DSRC=SHIFT,MPS,PSHF=SН0-56
+>,SHF=LOG,ALUS=DА,RА=WR1,FUNC=OR,Н,ALUD=В,RВ=WR1
+CJP А=RDR,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1
+>,ALU,DSRC=SHIFT,MPS,PSHF=SН0+32,SHF=LOG,FFCNT=SETTR1
+;ЗАПИСЬ В РЕГИСТР: СЛ.0 = 1, АДРЕС - В АИСП.
+CONT ALUS=ZА,RА=WR1,ALU,YDST=ADRREG,FFCNT=SETTR0
+;
+;ЧТЕНИЕ DАТАВ1-DАТАВ8 РГ.БОПП (64 РАЗРЯДА) - В РГ.WR6
+CONT YDEV=МРМЕМ,IОМР,MPADR=DАТАВ8,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DZ,Н,ALUD=В,RВ=WR6
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+CONT YDEV=МРМЕМ,IОМР,MPADR=DАТАВ7,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DА,RА=WR6,FUNC=OR,Н,ALUD=В,RВ=WR6
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+CONT YDEV=МРМЕМ,IОМР,MPADR=DАТАВ6,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DА,RА=WR6,FUNC=OR,Н,ALUD=В,RВ=WR6
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+CONT YDEV=МРМЕМ,IОМР,MPADR=DАТАВ5,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DА,RА=WR6,FUNC=OR,Н,ALUD=В,RВ=WR6
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+CONT YDEV=МРМЕМ,IОМР,MPADR=DАТАВ4,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DА,RА=WR6,FUNC=OR,Н,ALUD=В,RВ=WR6
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+CONT YDEV=МРМЕМ,IОМР,MPADR=DАТАВ3,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DА,RА=WR6,FUNC=OR,Н,ALUD=В,RВ=WR6
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+CONT YDEV=МРМЕМ,IОМР,MPADR=DАТАВ2,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DА,RА=WR6,FUNC=OR,Н,ALUD=В,RВ=WR6
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+CONT YDEV=МРМЕМ,IОМР,MPADR=DАТАВ1,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DА,RА=WR6,FUNC=OR,Н,ALUD=В,RВ=WR6
+;2 РАЗРЯД 3 РГ.БОПП УСТАНАВЛИВАЕМ В "1": ПРОЧИТАНО СОДЕРЖИМОЕ БОПП!
+JМАР А=В2,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=OR,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=FМР
+;
+;ЧТЕНИЕ РЕГИСТРА: СЛ.0 = 0
+RDR:CONT ALUS=ZА,RА=WR1,ALU,YDST=ADRREG,FFCNT=CLRTR0
+JМАР
+;
+;
+;===== 31: 16-РАЗРЯДНАЯ АППАРАТНАЯ ЧАСТЬ СЧЕТНОГО ВРЕМЕНИ РАВНА 0
+;   В АППАРАТНУЮ ЧАСТЬ ЧАСОВ СВ ПИШЕМ FFFF
+;   ЧИТАЕМ ЧАСЫ СВ ИЗ ОЗУ МОД., ВЫЧИТАЕМ "1" В 17 РАЗРЯДЕ, ПИШЕМ ОБРАТНО;
+;   В АППАРАТНУЮ ЧАСТЬ ЧАСОВ СВ ПИШЕМ FFFF, ЧТОБ БЫЛО СООТВЕТСТВИЕ,
+;   ЕСЛИ УСТАНОВЯТ HLT И БУДУТ ЧИТАТЬ ЧАСЫ! (Т.К. - В17 УЖЕ СДЕЛАНО!).
+;   ВОЗВРАТ ПО АДРЕСУ СТЕКА НЕ ДЕЛАЕМ, Т.К. МОГУТ БЫТЬ ИСПОРЧЕНЫ РАБ.РЕГИСТРЫ!
+;   2 РАЗА ПРОТАЛКИВАЕМ СТЕК СУАМ. Д.Б.ДОСТАТОЧНО, Т.К. ПРЕРЫВАНИЕ ПО ПМИ.
+;
+;ЧИТАЕМ ЧАСЫ СВ ИЗ ОЗУ МОД., ВЫЧИТАЕМ В17, ПИШЕМ ОБРАТНО
+INT31:CONT ЕСВ,BRA=RG2,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+>,ALUS=DА,RА=WR1,FUNC=OR,Н,ALUD=В,RВ=WR1
+CONT А=В17,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=SUBR,Н,CI,ALUD=В,RВ=WR1,ALU
+>,CSM,WЕМ,MNSA=МР,MODNM=CTR
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR2,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0+32,SHF=LOG
+CJP А=RETINT,МАР=РЕ,ALUS=ZА,RА=WR2,ALU,CSM,WЕМ,MNSA=МР,MODNM=CTL
+;
+;
+INT33:ENTRY
+;===== 33: ПЕРЕПОЛНЕНИЕ ПОРЯДКА
+;   УСТАНАВЛИВАЕМ ИНДИКАТОР ПЕРЕПОЛНЕНИЯ В РГ.М СУСС;
+;   ЕСЛИ ПРЕРЫВАНИЕ ПО ПЕРЕПОЛНЕНИЮ БЛОКИРОВАНО (БПП=1), ВОЗВРАТ;
+;   ЕСЛИ УСТАНОВЛЕН ПОП=1, ДЕЛАЕМ ОСТАНОВ (INT32);
+;   ИНАЧЕ ПИШЕМ N ПРЕРЫВАНИЯ В Q И ИДЕМ НА ОБРАБОТКУ ВНУТРЕННЕГО ПРЕРЫВАНИЯ.
+CONT SТОРС=MCN,CEN
+CONT SТОРС=SETNV,CEN
+CRTN А=С33,COND=OVRIB,DSRC=PROM,ЕСА,WRA,ARA=RG3,SТОРС=MCN,СЕМ
+CJP А=INTINT,МАР=РЕ,ЕСА,ARA=RG3,ALUS=DZ,Н,ALUD=Q
+;
+INT34:ENTRY
+;===== 34: ПЕРЕПОЛНЕНИЕ ПОРЯДКА БЭСМ-6: АНАЛОГИЧНО INT33
+CONT SТОРС=MCN,CEN
+CONT SТОРС=SETNV,CEN
+CRTN А=С34,COND=OVRIB,DSRC=PROM,ЕСА,WRA,ARA=RG3,SТОРС=MCN,СЕМ
+CJP А=INTINT,МАР=РЕ,ЕСА,ARA=RG3,ALUS=DZ,Н,ALUD=Q
+;
+INT35:ENTRY
+;===== 35: ДЕЛЕНИЕ НА "0"
+CONT А=С35,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;
+INT36:ENTRY
+;===== 36: ПЕРЕПОЛНЕНИЕ ПОЛЯ УПРЯТЫВАНИЯ
+CONT А=С36,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;
+INT37:ENTRY
+;===== 37: НЕЗАКОННЫЙ ОПЕРАНД
+CONT А=С37,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+;
+INT38:ENTRY
+;===== 38: ВЫБОРКА КОМАНДНОГО СЛОВА ПО "0"-ОМУ АДРЕСУ
+CONT А=С38,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+CJP А=INTINT,МАР=РЕ
+ENDINT:ENTRY
+END
+IJP:PROG;
+;     I=========I
+;     I  I J Р  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-FD
+;PROM:0FD,2FD
+;===== ВОЗВРАТ ИЗ ПРЕРЫВАНИЯ. ПРИВИЛЕГИРОВАННАЯ КОМАНДА: ЕСЛИ НЕ РД - ЭКСТРАКОД!
+;   ПРОИЗВОДИТСЯ ВОССТАНОВЛЕНИЕ РЕГИСТРОВ И ПЕРЕХОД НА ОЧЕРЕДНУЮ КОМАНДУ.
+;   ЕСЛИ 6-11Р.АИСП.= 0, N ГРУППЫ БЕРЕМ ИЗ РРР, ИНАЧЕ N ГРУППЫ В АИСП.В 6-10Р.
+;
+EXTERNAL LCWPH,EXTDR,CTRD,CTWR,CTTWR,INICT
+;"УПРЯТЫВАЕМ" ЧАСЫ СЧЕТНОГО ВРЕМЕНИ ПРОЦЕССА ОБРАБОТКИ ПРЕРЫВАНИЯ
+CJP А=EXTDR,МАР=РЕ,COND=DRG,IСС
+>,CSM,MNSA=МР,MODNM=CTR,ALUS=DZ,ALUD=В,RВ=WR1
+CONT А=MNQ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=AND,ALUD=В,RВ=WR1
+;ПРОВЕРЯЕМ 6-11 РАЗР.АИСП.НА 0
+CJS А=CTRD,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR
+>,ALU,ЕСВ,WRB,BRA=RG2
+CONT А=MGN,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=AND,CEN
+CJP А=AIS,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=АВ,RА=WR1,RВ=WR5,FUNC=OR,ALU,CSM,WЕМ
+>,MNSA=МР,MODNM=CTR
+CONT CSM,MNSA=МР,MODNM=RRR,ALUS=DZ,ALUD=В,RВ=WR2
+CONT ALUS=ZА,RА=WR2,ALU,DSRC=SHIFT,MPS,PSHF=SН0+3,SHF=LOG,ЕСА,WRA,ARA=RG2
+;ВОССТАНАВЛИВАЕМ РНГ
+AIS:CONT ЕСВ,BRA=RG2,YDST=MODGN
+;ВОССТАНАВЛИВАЕМ РЕГИСТРЫ: РР
+CONT CSM,MNSA=МР,MODNM=RR,ALUS=DZ,ALU,YDST=CNT,DDEV=STATUS,WRD,SТОРС=0,СЕМ
+;ЧИТАЕМ РРР, ПИШЕМ ТЕГ НА МЕСТО
+CONT CSM,MNSA=МР,MODNM=RRR,ALUS=DZ,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
+;СУММАТОР
+CONT CSM,MNSA=МР,MODNM=ACR,ALUS=DА,RА=HALF,FUNC=AND,Н,ALUD=Q
+CONT CSM,MNSA=МР,MODNM=ACL,ALUS=DZ,ALUD=В,RВ=WR1
+CONT ALUS=DQ,FUNC=OR,Н,ALUD=ВА,RА=WR1,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0-32
+>,SHF=LOG
+;РМР, РССОРУ
+CONT CSM,MNSA=МР,MODNM=YCR,ALUS=DА,RА=HALF,FUNC=AND,Н,ALUD=Q
+CONT CSM,MNSA=МР,MODNM=YCL,ALUS=DZ,ALUD=В,RВ=WR1
+;
+;ЧАСЫ СВ: ПРОВЕРЯЕМ МЛ.16 РАЗРЯДОВ: ЕСЛИ = 0, ВЫЧИТАЕМ В17, А В ЧАСЫ ПИШЕМ FFFF!
+CJS А=INICT,МАР=РЕ,CSM,MNSA=МР,MODNM=CTR,ALUS=DА,RА=HALF,FUNC=AND,Н,ALUD=В
+>,RВ=WR5
+CJS А=CTWR,МАР=РЕ,ALUS=DQ,FUNC=OR,Н,ALUD=ВА,RА=WR1,RВ=У,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0-32,SHF=LOG
+;
+;ЕСЛИ ТАЙМЕР СВ=0: В40 - В ГРП + ПРОГР.INT; ЕСЛИ МЛ.16Р.= 0: ВЫЧИТАЕМ В17!
+CJS А=CTTWR,МАР=РЕ,CSM,MNSA=МР,MODNM=СТТ,ALUS=DZ,ALUD=В,RВ=WR5,CEN
+CJP А=NPRGI,МАР=РЕ,COND=СТ,SТОРС=/NZ,CSM,MNSA=МР,MODNM=РССС,ALUS=DZ
+>,ALUD=В,RВ=РССОРУ
+;ВСЕ 32Р.ТАЙМЕРА = 0: В40 - В ГРП, УСТ.ПРОГРАММНОЕ ПРЕРЫВАНИЕ, F...F->B CTT
+CONT А=В40,DSRC=PROM,ALUS=DА,RА=INTR,FUNC=OR,Н,ALUD=В,RВ=INTR,FFCNT=PRGINT
+CJP А=PSRET,МАР=РЕ,ALUS=ZA,RA=HALF,ALU,CSM,WEM,MNSA=MP,MODNM=CTT
+>,FFCNT=CLRCTT
+;
+NPRGI:CONT А=MQ,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=AND,CEN
+CJP А=PSRET,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;ВЫЧИТАЕМ В17 ИЗ СТАРШЕЙ ПОЛОВИНЫ, РЕЗ-Т - В ОЗУ МОД.
+CONT А=В17,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=SUBR,CI,ALU,CSM,WЕМ,MNSA=МР,MODNM=СТТ
+;
+;РНП; ВЫЯСНЯЕМ ППК, ЧТОБ ПРИВЕСТИ В СООТВЕТСТВИЕ ТКК
+PSRET:CJP А=RCR,%R%,CSM,MNSA=МР,MODNM=PROCNC,ALUS=DZ,ALU,YDST=PROCN
+;ЛЕВАЯ, ТКК=0; ВОССТАНАВЛИВАЕМ РС; ИДЕМ НА ВКС
+CJP А=LCWPH,МАР=РЕ,CSM,MNSA=МР,MODNM=РСС,ALUS=DZ,ALUD=В,RВ=РС,ALU
+>,YDST=ADRREG,FFCNT=CLRTKK
+;ПРАВАЯ, ТКК=1
+RCR:CJP А=LCWPH,МАР=РЕ,CSM,MNSA=МР,MODNM=РСС,ALUS=DZ,ALUD=В,RВ=РС,ALU
+>,YDST=ADRREG,FFCNT=SЕТТКК
+END
+CTWR:PROG
+;===== П/П ЗАПИСИ РГ.WR5 В АППАРАТНУЮ ЧАСТЬ ЧАСОВ СВ, 16 РАЗРЯДОВ, РЕЖИМ 0
+;   ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ К СТАРШЕМУ И МЛАДШЕМУ БАЙТАМ!
+;   ИСПОЛЬЗУЮТСЯ РЕГИСТРЫ: WR4,RG3 - РАБОЧИЕ, WR5 - ДАННЫЕ ДЛЯ ЗАПИСИ;
+; ВНИМАНИЕ! ПРИ ВОЗВРАТЕ ИЗ ПРЕРЫВАНИЯ ОС Д.ПОВЕРИТЬ 40 Р.ГРП, ЧТОБ
+;   НЕ ПОТЕРЯТЬ ПРОЦЕСС, У КОТОРОГО "ЛОПНУЛ" ТАЙМЕР,
+;   Т.К.В ОЗУ МОДИФИКАТОРОВ ТАЙМЕР ЭТОГО ПРОЦЕССА НЕ 0 (ОН ПРОДОЛЖАЛ СЧИТАТЬ!).
+;
+EXTERNAL LCW
+;ПИШЕМ В ЧАСЫ КОМАНДНОЕ СЛОВО: NN ОО RRR D = 00 11 000 0 = 30Н
+;NN=00: N КАНАЛА 0 (МЛАДШИЕ 32 РАЗРЯДА ЧАСОВ)
+;ОО=11: ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ
+;RRR=000: РЕЖИМ 0
+;D=0: ДВОИЧНЫЙ СЧЕТ
+;
+CONT А=R0СН0,DSRC=PROM,ALUS=DZ,ALUD=В,RВ=WR4
+CONT ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+CONT ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=3
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+RFCT
+;
+;ПИШЕМ 1-8 РАЗРЯДЫ В ЧАСЫ, А1,А0=00
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=0
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=0
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=0
+RFCT ALUS=DZ,Н,ALUD=ВА,RА=WR5,RВ=WR4,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+>,FFCNT=CLRCT
+;ПИШЕМ СТАРШИЙ БАЙТ, 9-16 РАЗРЯДЫ
+CONT ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=0
+LDCT А=LCW,МАР=РЕ,ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=0
+CRTN ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=0
+;
+;
+CTRD:ENTRY
+;===== П/П ЧТЕНИЯ АППАРАТНОЙ ЧАСТИ РГ.СЧЕТНОГО ВРЕМЕНИ (16 РАЗРЯДОВ) - В РГ.WR5
+;   СЧИТАЕМ, ЧТО ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ К СТАРШЕМУ И МЛАДШЕМУ БАЙТАМ
+;   ЗАДАНО ВО ВРЕМЯ ЗАПИСИ ДАННЫХ (ВСЕ РАВНО ДРУГОГО ПУТИ НЕТ).
+;   ПИШЕМ ТОЛЬКО КОМАНДНОЕ СЛОВО НА КОПИРОВАНИЕ
+;   РГ.WR5 - ТО, ЧТО ПРОЧИТАЛИ; РГ.WR4,RG3 - РАБОЧИЕ;
+;
+;ПИШЕМ КОМАНДНОЕ СЛОВО НА КОПИРОВАНИЕ 0 КАНАЛА (РАВНО N КАНАЛА, Т.Е.0)
+CONT ALUS=ZА,FUNC=AND,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+CONT ALUS=ZА,FUNC=AND,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=3
+PUSH А=1,МАР=РЕ,ALUS=ZА,FUNC=AND,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+RFCT
+;ЧИТАЕМ 1-8 РАЗРЯДЫ В РГ.WR5, А1,А0=00
+CONT YDTIM=CTIME,IОМР,FFCNT=0
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=0
+PUSH А=1,МАР=РЕ,YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=0,ЕСВ,WRB,BRA=RG3,ЕСА,ARA=RG3
+>,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=WR5
+RFCT
+;
+;ЧИТАЕМ 9-16 РАЗРЯДЫ, ОБ'ЕДИНЯЕМ
+CONT YDTIM=CTIME,IОМР,FFCNT=0
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=0
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=0,ЕСВ,WRB,BRA=RG3,ЕСА,ARA=RG3
+>,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=WR4
+LDCT А=LCW,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0-8,SHF=LOG
+CRTN ALUS=АВ,RА=WR4,RВ=WR5,FUNC=OR,Н,ALUD=В
+;
+;
+CTTWR:ENTRY
+;===== П/П ЗАПИСИ РГ.WR5 В ТАЙМЕР СЧЕТНОГО ВРЕМЕНИ (16 РАЗРЯДОВ), РЕЖИМ 0!
+;   ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ К СТАРШЕМУ И МЛАДШЕМУ БАЙТАМ, КАНАЛ 2
+;   WR4,RG3 - РАБОЧИЕ; WR5 - ЧТО ПИШЕМ;
+;   ВНИМАНИЕ! ЗАМЕЧАНИЕ О РЕЖИМЕ - СМ.П/П CTWR!
+;
+;ПИШЕМ В ТАЙМЕР КОМАНДНОЕ СЛОВО: NN ОО RRR D = 10 11 000 0 = В0Н
+;NN=10: N КАНАЛА 2
+;ОО=11: ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ
+;RRR=000: РЕЖИМ 0 (ГЕНЕРАЦИЯ ЗАДЕРЖАННОГО СИГНАЛА ПРЕРЫВАНИЯ)
+;D=0: ДВОИЧНЫЙ СЧЕТ
+;
+CONT А=R0СН2,DSRC=PROM,ALUS=DZ,ALUD=В,RВ=WR4
+CONT ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+CONT ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=3
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+RFCT
+;ПИШЕМ 1-8 РАЗРЯДЫ, А1,А0=10
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=2
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=2
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=2
+RFCT ALUS=DZ,Н,ALUD=ВА,RА=WR5,RВ=WR4,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+>,FFCNT=CLRCTT
+;
+;ПИШЕМ СТАРШИЙ БАЙТ, 9-16 РАЗРЯДЫ
+CONT ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=2
+LDCT А=LCW,МАР=РЕ,ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=2
+CRTN ALUS=ZА,RА=WR4,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=2
+;
+;
+CTTRD:ENTRY
+;===== П/П ЧТЕНИЯ ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ (16 РАЗРЯДОВ) - В РГ.WR5
+;   СЧИТАЕМ, ЧТО ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ К СТАРШЕМУ И МЛАДШЕМУ БАЙТАМ
+;   ЗАДАНО ВО ВРЕМЯ ЗАПИСИ ДАННЫХ (ВСЕ РАВНО ДРУГОГО ПУТИ НЕТ).
+;   ПИШЕМ ТОЛЬКО КОМАНДНОЕ СЛОВО НА КОПИРОВАНИЕ ( = НОМЕРУ КАНАЛА)
+;   WR5 - ЧТО ЧИТАЕМ, WR4,RG3 - РАБОЧИЕ
+;
+;КОМ.СЛОВО НА КОПИРОВАНИЕ 2 КАНАЛА
+CONT А=СОРС2,DSRC=PROM,ALUS=DZ,ALUD=В,RВ=WR5
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=3
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+RFCT
+;ЧИТАЕМ 1-8 РАЗРЯДЫ В РГ.WR5, А1,А0=10
+CONT YDTIM=CTIME,IОМР,FFCNT=2
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=2
+PUSH А=1,МАР=РЕ,YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=2,ЕСВ,WRB,BRA=RG3,ЕСА,ARA=RG3
+>,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=WR5
+RFCT
+;
+;ЧИТАЕМ 9-16 РАЗРЯДЫ, ОБ'ЕДИНЯЕМ
+CONT YDTIM=CTIME,IОМР,FFCNT=2
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=2
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=2,ЕСВ,WRB,BRA=RG3,ЕСА,ARA=RG3
+>,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=WR4
+LDCT А=LCW,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0-8,SHF=LOG
+CRTN ALUS=АВ,RА=WR4,RВ=WR5,FUNC=OR,Н,ALUD=В
+;
+;
+CTTSTP:ENTRY
+;===== П/П ОСТАНОВА ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ
+;   ЗАДАЕМ ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ К СТАРШЕМУ И МЛАДШЕМУ БАЙТАМ, КАНАЛ 2,
+;   А ЗАПИСЫВАЕМ ТОЛЬКО ОДИН БАЙТ!!! ИСПОЛЬЗУЕТСЯ РГ.WR5
+;
+;ПИШЕМ В ТАЙМЕР КОМАНДНОЕ СЛОВО: NN ОО RRR D = 10 11 000 0 = В0Н
+;NN=10: N КАНАЛА 2
+;ОО=11: ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ
+;RRR=000: РЕЖИМ 0 (ГЕНЕРАЦИЯ ЗАДЕРЖАННОГО СИГНАЛА ПРЕРЫВАНИЯ)
+;D=0: ДВОИЧНЫЙ СЧЕТ
+;
+CONT А=R0СН2,DSRC=PROM,ALUS=DZ,ALUD=В,RВ=WR5
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=3
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+RFCT
+;ПИШЕМ 1 БАЙТ=0! А1,А0=10
+CONT ALUS=DZ,FUNC=AND,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=2
+LDCT А=LCW,МАР=РЕ,ALUS=DZ,FUNC=AND,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=2
+CONT ALUS=DZ,FUNC=AND,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=2
+CRTN FFCNT=CLRCTT
+END
+SС00:PROG А;
+CONT
+END
+SЕ00:PROG 9;
+CONT
+END
+SF00:PROG 8;
+CONT
+END
+SЕ80:PROG 7;
+CONT
+END
+SЕС0:PROG 6;
+CONT
+END
+SЕЕ0:PROG 5;
+CONT
+END
+SЕЕ8:PROG 3;
+CONT
+END
+SЕЕС/0:PROG 2;
+END
+SF80:PROG 7;
+CONT
+END
+SFC0:PROG 6;
+CONT
+END
+SFE0:PROG 5;
+CONT
+END
+SFF0:PROG 4;
+CONT
+END
+SFF8:PROG 3;
+CONT
+END
+SFFC:PROG 2;
+CONT
+END
+/CONT1:PROG 5;
+CONT
+END
+/CONT2:PROG;
+CONT
+END
+/CONT3:PROG;
+CONT
+END
+/CONT4:PROG;
+CONT
+END
+/CONT5:PROG;
+CONT
+END
+/CONT6:PROG;
+CONT
+END
+/CONT7:PROG;
+CONT
+END
+/CONT8:PROG;
+CONT
+END
+/CONT9:PROG;
+CONT
+END
+/CONTA:PROG;
+CONT
+END
+/S4:PROG 4;
+END
+ADDC:PROG 1;
+;РЭ:0-1,15ИР:0-1,ПИА:1,КОП:0-FF,ОСНОВНОЙ И ДОПОЛНИТ.ФОРМАТ
+;PROM:100-1FF,300-3FF,500-5FF,700-7FF
+;PROM:900-9FF,В00-BFF,D00-DFF,F00-FFF
+;===== ПИА=1: АК + Q - В Q, ПЕРЕХОД ПО КОП ЕЩЕ РАЗ!
+;   СБРОС ПИА ДЕЛАЕТСЯ В КАЖДОЙ КОМАНДЕ ПОСЛЕ ПРОХОЖДЕНИЯ ЭТАПА,
+;   ВЫЗЫВАЮЩЕГО ПРЕРЫВАНИЯ!
+CJP МАР=МЕ,CSM,MNSA=МР,MODNM=С,ALUS=DQ,FUNC=ADD,ALUD=Q
+END
+INT/IN:PROG;
+;===== АППАРАТНОЫЙ ВХОД В ПРЕРЫВАНИЕ (АДРЕС FFF):
+EXTERN INT/RЕ
+;ЗАПОМИНАЕМ АДРЕС ПРЕРВАННОЙ МИКРОПРОГРАММЫ В СТЕКЕ, ИДЕМ НА П/П ПО АДР. F00!
+CJS А=INT/RЕ,МАР=РЕ,FFCNT=CLREI
+END
+ЕХТ/:PROG;
+;     I====================I
+;     I  ВХОД В ЭКСТРАКОД  I
+;     I====================I
+;
+;===== ЭКСТРАКОДЫ В НР
+;   РАЗНЫЕ ЭКСТРАКОДЫ ОТЛИЧАЮТСЯ АДРЕСОМ ПЕРЕДАЧИ УПРАВЛЕНИЯ.
+;   "ВЕКТОР" ЭКСТРАКОДА ЗАНОСИТСЯ В РГ.DADR (КОТОРЫЙ ВСЕ РАВНО НЕ ИСПОЛЬЗУЕТСЯ!)
+;   НА ВХОДЕ В ЭКСТРАКОД И ДОБАВЛЯЕТСЯ К АДРЕСУ ПЕРЕКЛЮЧАТЕЛЯ:
+;   ЕХТ/: FFF8 0050 - НОВЫЕ ЭКСТРАКОДЫ МКБ-8601
+;   ЕХТ6: FFF8 0051 - СТАРЫЕ ЭКСТРАКОДЫ БЭСМ-6
+;   ЕХТС: FFF8 0052 - ЭКСТРАКОДЫ СВС (ЭЛЬБРУС-Б) И КОМАНДЫ, КОТОРЫЕ В МП СЛОЖНО
+;                     СДЕЛАТЬ ИЛИ ДЛЯ КОТОРЫХ НЕТ МЕСТА (РЕДКО ИСПОЛЬЗУЕМЫЕ)
+;   EXTDR:FFF8 0053 - ЗАПРЕЩЕННЫЕ (ПРИВИЛЕГИР.НЕ В РД) И ОТСУТСТВУЮЩИЕ КОМАНДЫ
+;
+EXTERNAL LCWPH,INT36
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:80
+;PROM:080,280
+CJP А=PSEXT,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=DADR
+;
+ЕХТ6:ENTRY
+;РЭ:1,15ИР:0-1,ПИА:0,КОП:28-3F
+;PROM:428-43F,628-63F
+;===== ВХОД ДЛЯ "СТАРЫХ" ЭКСТРАКОДОВ БЭСМ-6
+CJP А=PSEXT,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=LSB,RВ=DADR,SHMUX=NDNS
+;
+ЕХТС:ENTRY
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:00,ДОП.ФОРМАТ
+;PROM:800,А00
+;===== ЭКСТРАКОДЫ ИЛИ КОМАНДЫ СВС (ЭЛЬБРУС-Б)
+CONT А=С2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+CJP А=PSEXT,МАР=РЕ
+;
+EXTDR:ENTRY
+;===== ЗАПРЕЩЕННЫЕ ИЛИ ПРИВИЛЕГИРОВАННЫЕ КОМАНДЫ НЕ В РД, ОСНОВНОЙ ФОРМАТ!
+CONT А=С3,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;
+;===== МП ВХОДА В ЭКСТРАКОД
+; ПРОВЕРЯЕМ НОМЕР РЕЗЕРВНОЙ ГРУППЫ:
+;   0 - УПРЯТЫВАНИЕ В ПАМЯТЬ, НЕ 0 - УПРЯТЫВАНИЕ В ОЗУ МОДИФИКАТОРОВ;
+;   ПРИЗНАКИ ПИА,ППК(ТКК) И РГ.СЧАС ИЗМЕНЯЮТСЯ В МП ВОЗВРАТА ИЗ ЭКСТРАКОДА!
+;   ПРИЗНАК ППУ - В МП ВХОДА В ЭКСТРАКОД (ЧТОБ БЫСТРЕЙ).
+; ИСПОЛЬЗУЕМЫЕ РЕГИСТРЫ:
+;   DADR - "ВЕКТОР" ЭКСТРАКОДА (ОТНОСИТЕЛЬНЫЙ АДРЕС ПЕДЕДАЧИ УПРАВЛЕНИЯ)
+;   WR1  - РРР
+;   WR2  - НОМЕР РЕЗЕРВНОЙ ГРУППЫ
+;   WR3  - РАПУ
+;   WR6  - РР
+;   Q    - ИСПОЛНИТЕЛЬНЫЙ АДРЕС ЭКСТРАКОДА
+;   RG1  - РЕГИСТР КОМАНД
+; ПРИ УПРЯТЫВАНИИ В ПАМЯТЬ:     В ОЗУ МОДИФИКАТОРОВ:
+;   WR4  - РАБОЧИЙ                  РАВ
+;   WR5  - ТГ.ПРИЗНАКОВ;М;РНГ       РНГ
+;   RG0  - АДРЕС ПО ПАМЯТИ          СТТ
+;   RG2  - РАБОЧИЙ                  CTR
+;   RG3  - ДАННЫЕ ДЛЯ ОЗУ           CTL
+; В РАБОЧИЕ РЕГИСТРЫ ЭКСТРАКОДА ПЕРЕПИСЫВАЕМ:
+;   М15 (SР) - РАПУ-6
+;   М14 - ИСПОЛНИТ.АДРЕС ЭКСТРАКОДА
+;   М13 - БЫВШИЙ СЧАС
+;   М12 - RG0       М7 - КОД ОПЕРАЦИИ ЭКСТРАКОДА
+;   М11 - РНП       М6 - ТЕГ КОМАНДЫ
+;   М10 - РР        М5 - ТЕГ ОПЕРАНДА
+;   М9  - РРР       М4 - ПРАВАЯ ПОЛОВИНА КОМАНДНОГО СЛОВА
+;   М8  - РНГ       М3 - ЛЕВАЯ
+;   Т.К.СУММАТОР НЕ УПРЯТЫВАЕТСЯ, М.ИСПОЛЬЗОВАТЬ РГ.ACL,ACR КАК РАБОЧИЕ!
+;
+;   ВНИМАНИЕ! НА ВРЕМЯ УПРЯТЫВАНИЯ РГ.В ПАМЯТЬ В РР УСТАНАВЛИВАЕТСЯ БПТЗ,
+;   А ЗАПИСЬ ИДЕТ С ТЕГОМ "ЗАЩИТА ЗАПИСИ", Т.К.ИНАЧЕ BTR НЕ МОЖЕТ!
+;   ЗАТЕМ БПТЗ СНИМАЕТСЯ.
+;
+;СРАЗУ ВЫЧИСЛЯЕМ АИСП., УПРЯТЫВАЕМ КОП ЭКСТРАКОДА В ACL, ДЕЛАЕМ НР!
+PSEXT:CONT CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=Q
+CONT DSRC=ОРС,ALUS=DZ,ALU,CSM,WЕМ,MNSA=МР,MODNM=ACL
+;ЧИТАЕМ РРР, ПРОВЕРЯЕМ НА "0" НОМЕР РЕЗЕРВНОЙ ГРУППЫ (17-24 РАЗРЯДЫ РРР)
+CONT CSM,MNSA=МР,MODNM=RRR,ALUS=DА,RА=HALF,FUNC=AND,Н,ALUD=В,RВ=WR1
+>,FFCNT=CLRJMP
+CONT А=МВ3,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=AND,Н,ALUD=В,RВ=WR2,CEN,FFCNT=SETNR
+;ЧИТАЕМ "ПОСТОЯННУЮ ЧАСТЬ" РР ИЗ ОЗУ МОД. И ТГ.ПРИЗНАКОВ; ПЕРЕПИСЫВАЕМ СЧАС
+CONT DSRC=CNT,ALUS=DZ,ALUD=ВА,RА=РС,RВ=WR5,ALU,CSM,WЕМ,MNSA=МР,MODNM=РСС
+CJP А=SMOD,МАР=РЕ,COND=СТ,SТОРС=/NZ,CSM,MNSA=МР,MODNM=RR,ALUS=DZ
+>,ALUD=В,RВ=WR6
+;
+;===== НОМЕР РЕЗ.ГРУППЫ = 0, УПРЯТЫВАНИЕ В ПАМЯТЬ
+;ФОРМИРУЕМ НОВЫЙ РР, РАПУ - В АИСП, УПАКОВЫВАЕМ МОДИФИКАТОРЫ ПО 2 И
+;ПИШЕМ В ПАМЯТЬ. СТАРЫЙ РР "СОБИРАЕМ" МЕЖДУ ДЕЛОМ.
+;НОВЫЙ РР: ОСТАВЛЯЕМ ТОЛЬКО БППУ,ПОП И БВП ОТ СТАРОГО ЗНАЧЕНИЯ РР
+CONT А=CTS,DSRC=PROM,ALUS=DА,RА=WR6,FUNC=AND,ALUD=В,RВ=WR4
+;ОБ'ЕДИНЯЕМ СО ЗАЧЕНИЕМ РР ДЛЯ ЭКСТРАКОДА, ПИШЕМ НА МЕСТО В ТГ.И РР,
+;КРОМЕ РГ.М, КОТОРЫЙ ЕЩЕ НЕ ПРОЧИТАЛИ! ТКК СБРАСЫВАЕМ ПОТОМ ПОСЛЕ ЧТЕНИЯ КОП.
+;ППУ=РОА=БЧОП=РД=ГЛ=1; БППУ,ПОП,БВП - СТАРЫЕ; ОСТАЛЬНЫЕ РАЗРЯДЫ = 0
+;БПТЗ=1 НА ВРЕМЯ ЗАПИСИ РЕГИСТРОВ! ПОТОМ - УБИРАЕМ.
+CONT А=CEXTW,DSRC=PROM,ALUS=DА,RА=WR4,FUNC=OR,ALU,YDST=CNT
+>,CSM,WЕМ,MNSA=МР,MODNM=RR
+;АДРЕС УПРЯТЫВАНИЯ ИЗ РАПУ
+CONT CSM,MNSA=МР,MODNM=SVFA,ALUS=DА,RА=HALF,FUNC=AND,Н,ALUD=В,RВ=WR3,ALU
+>,YDST=ADRREG
+;ТЕГ С ЗАЩИТОЙ ЗАПИСИ - В БОИ ТЕГА НА ВРЕМЯ ЗАПИСИ РЕГИСТРОВ
+CONT А=В4,DSRC=PROM,ALUS=DZ,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
+;
+;ПЕРЕПИСЫВАЕМ МОДИФИКАТОРЫ 1 И 2 В ПАМЯТЬ
+CONT CSM,MNSA=МР,MODNM=М1,ЕСА,WRA,ARA=RG2
+CONT CSM,MNSA=МР,MODNM=М2,ALUS=DА,RА=HALF,FUNC=AND,Н,ALUD=В,RВ=WR4
+CONT ЕСВ,BRA=RG2,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+>,ALUS=DА,RА=WR4,FUNC=OR,Н,ALUD=В,RВ=WR4
+;ЧИТАЕМ ПОПУТНО 2 СЛЕДУЮЩИХ
+CONT CSM,MNSA=МР,MODNM=М3,ЕСА,WRA,ARA=RG2,ALUS=ZА,RА=WR4,Н,ALU,ЕСВ,WRB,BRA=RG3
+CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=BTRWR,CSM,MNSA=МР,MODNM=М4,ALUS=DА
+>,RА=HALF,FUNC=AND,Н,ALUD=В,RВ=WR4
+;
+;1-Я ЗАПИСЬ В РЕЖИМЕ BTR-ДОЛГО, ПОЭТОМУ ПОКА УБИРАЕМ "УСТАРЕВШИЕ" РАЗРЯДЫ РР
+CONT А=MCRR,DSRC=PROM,ALUS=DА,RА=WR6,FUNC=AND,Н,ALUD=В,RВ=WR6
+;ПРОЧИЩАЕМ ТГ.ПРИЗНАКОВ
+CONT А=MFLFL,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=AND,ALUD=В,RВ=WR5
+;
+;ПИШЕМ МОДИФИКАТОРЫ 3,4 В ПАМЯТЬ; ГОТОВИМ 5,6 МОДИФИКАТОРЫ
+W3:CJP А=W3,%WА%,ЕСВ,BRA=RG2,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+>,ALUS=DА,RА=WR4,FUNC=OR,Н,ALUD=В,RВ=WR4
+CONT CSM,MNSA=МР,MODNM=М5,ЕСА,WRA,ARA=RG2,ALUS=ZА,RА=WR4,Н,ALU,ЕСВ,WRB,BRA=RG3
+CONT YDEV=PHYSAD,ARBI=BTRWR,CSM,MNSA=МР,MODNM=М6,ALUS=DА
+>,RА=HALF,FUNC=AND,Н,ALUD=В,RВ=WR4
+;
+;ОБ'ЕДИНЯЕМ РР И ТГ.ПРИЗНАКОВ  (ПОКА БЕЗ РГ.М)
+CONT ALUS=АВ,RА=WR5,RВ=WR6,FUNC=OR,ALUD=В
+;
+;ПИШЕМ МОДИФИКАТОРЫ 5,6 В ПАМЯТЬ, ЧИТАЕМ 7,8
+W5:CJP А=W5,%WА%,ЕСВ,BRA=RG2,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+>,ALUS=DА,RА=WR4,FUNC=OR,Н,ALUD=В,RВ=WR4
+CONT CSM,MNSA=МР,MODNM=М7,ЕСА,WRA,ARA=RG2,ALUS=ZА,RА=WR4,Н,ALU,ЕСВ,WRB,BRA=RG3
+CONT YDEV=PHYSAD,ARBI=BTRWR,CSM,MNSA=МР,MODNM=М8,ALUS=DА
+>,RА=HALF,FUNC=AND,Н,ALUD=В,RВ=WR4
+;
+;ПИШЕМ МОДИФИКАТОРЫ 7,8, ЧИТАЕМ 9,10
+W7:CJP А=W7,%WА%,ЕСВ,BRA=RG2,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+>,ALUS=DА,RА=WR4,FUNC=OR,Н,ALUD=В,RВ=WR4
+CONT CSM,MNSA=МР,MODNM=М9,ЕСА,WRA,ARA=RG2,ALUS=ZА,RА=WR4,Н,ALU,ЕСВ,WRB,BRA=RG3
+CONT YDEV=PHYSAD,ARBI=BTRWR,CSM,MNSA=МР,MODNM=М10,ALUS=DА
+>,RА=HALF,FUNC=AND,Н,ALUD=В,RВ=WR4
+;
+;ПИШЕМ МОДИФИКАТОРЫ 9,10, ЧИТАЕМ 11,12
+W9:CJP А=W9,%WА%,ЕСВ,BRA=RG2,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+>,ALUS=DА,RА=WR4,FUNC=OR,Н,ALUD=В,RВ=WR4
+CONT CSM,MNSA=МР,MODNM=М11,ЕСА,WRA,ARA=RG2,ALUS=ZА,RА=WR4,Н,ALU,ЕСВ,WRB,BRA=RG3
+CONT YDEV=PHYSAD,ARBI=BTRWR,CSM,MNSA=МР,MODNM=М12,ALUS=DА
+>,RА=HALF,FUNC=AND,Н,ALUD=В,RВ=WR4
+;
+;ПИШЕМ МОДИФИКАТОРЫ 11,12, ЧИТАЕМ 13,14
+W11:CJP А=W11,%WА%,ЕСВ,BRA=RG2,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+>,ALUS=DА,RА=WR4,FUNC=OR,Н,ALUD=В,RВ=WR4
+CONT CSM,MNSA=МР,MODNM=М13,ЕСА,WRA,ARA=RG2,ALUS=ZА,RА=WR4,Н,ALU,ЕСВ,WRB,BRA=RG3
+CONT YDEV=PHYSAD,ARBI=BTRWR,CSM,MNSA=МР,MODNM=М14,ALUS=DА
+>,RА=HALF,FUNC=AND,Н,ALUD=В,RВ=WR4
+;
+;ПИШЕМ МОДИФИКАТОРЫ 13,14, ЧИТАЕМ 15(SР),РАВ(SPRADR)
+W13:CJP А=W13,%WА%,ЕСВ,BRA=RG2,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+>,ALUS=DА,RА=WR4,FUNC=OR,Н,ALUD=В,RВ=WR4
+CONT CSM,MNSA=МР,MODNM=SР,ЕСА,WRA,ARA=RG2,ALUS=ZА,RА=WR4,Н,ALU,ЕСВ,WRB,BRA=RG3
+CONT YDEV=PHYSAD,ARBI=BTRWR,CSM,MNSA=МР,MODNM=SPRADR,ALUS=DА
+>,RА=HALF,FUNC=AND,Н,ALUD=В,RВ=WR4
+;
+;ПИШЕМ SР,SPRADR (РГ.С НЕ УПРЯТЫВАЕМ, ЭТО БЕСПОЛЕЗНО)
+W15:CJP А=W15,%WА%,ЕСВ,BRA=RG2,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+>,ALUS=DА,RА=WR4,FUNC=OR,Н,ALUD=В,RВ=WR4
+;"СОБИРАЕМ" РР ОКОНЧАТЕЛЬНО: ДОБАВЛЯЕМ ЕЩЕ РГ.М (ИНДИКАТОРЫ)
+CONT SТОРС=32,DDEV=STATUS,ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR5,ALU,ЕСВ,WRB,BRA=RG3
+CONT А=MIND,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=AND,ALUD=В,RВ=WR5,YDEV=PHYSAD
+>,ARBI=BTRWR
+;
+;ПИШЕМ СЧАС,РОП
+CONT ALUS=АВ,RА=HALF,RВ=РССОРУ,FUNC=AND,Н,ALUD=В
+WРС:CJP А=WРС,%WА%,ALUS=DZ,Н,ALUD=ВА,RА=РС,RВ=WR4,ALU
+>,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+CONT ALUS=АВ,RА=РССОРУ,RВ=WR4,FUNC=OR,Н,ALU,ЕСВ,WRB,BRA=RG3
+CONT YDEV=PHYSAD,ARBI=BTRWR,ALUS=АВ,RА=WR5,RВ=WR6,FUNC=OR,Н,ALUD=В
+;
+;ПИШЕМ РР (ИЗ WR6), РРР (ИЗ WR1); ВЫЧИСЛЯЕМ ИСП.АДРЕС
+WRR:CJP А=WRR,%WА%,ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR4,ALU
+>,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+CONT ALUS=АВ,RА=WR4,RВ=WR1,FUNC=OR,Н,ALU,ЕСВ,WRB,BRA=RG3
+CONT YDEV=PHYSAD,ARBI=BTRWR,CSM,MNSA=МР,MODNM=RR,ALUS=DZ,ALUD=В,RВ=WR4
+WR:CJP А=WR,%WА%,DSRC=MODGN,ALUS=DZ,ALUD=В,RВ=WR5
+;СБРОС BTR. УБИРАЕМ БПТЗ !!!!!
+CONT YDEV=PHYSAD,ARBI=0
+CONT А=В19,DSRC=PROM,ALUS=DА,RА=WR4,FUNC=NOTRS,ALU,YDST=CNT
+>,CSM,WЕМ,MNSA=МР,MODNM=RR
+;
+;===== УСТАНАВЛИВАЕМ В РАБОЧЕЙ ГРУППЕ ЭКСТРАКОДА:
+;СНАЧАЛА - РАЗЛИЧИЯ ПРИ УПРЯТЫВАНИИ В ПАМЯТЬ:
+;РРР И ТЕГ СУММАТОРА: N РЕЗЕРВНОЙ, N ПРЕДЫДУЩЕЙ ГРУППЫ И ТЕГ = 0; РГ.М = 0
+CONT ALUS=DZ,FUNC=AND,ALU,YDEVT=ECBTAG,WRB,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=RRR
+>,SТОРС=CLRM,СЕМ
+;
+;===== ПРОДОЛЖЕНИЕ УСТАНОВКИ РЕГИСТРОВ В РАБОЧЕЙ ГРУППЕ ЭКСТРАКОДА, ОБЩАЯ ЧАСТЬ
+;РАПУ+10 (+16-6) - В SР (РАБОЧАЯ ОБЛАСТЬ ЭКСТРАКОДА)
+ENDE:CONT А=С10,DSRC=PROM,ALUS=DА,RА=WR3,FUNC=ADD,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР
+;РАПУ+16 - В РАПУ (НОВОЕ ЗНАЧЕНИЕ РАПУ)
+CONT А=С16,DSRC=PROM,ALUS=DА,RА=WR3,FUNC=ADD,ALUD=В,RВ=WR3,ALU
+>,CSM,WЕМ,MNSA=МР,MODNM=SVFA
+;АИСП.- В 14 РГ.; ПЕРЕХОД НА П/П
+CJS А=ACTRG,МАР=РЕ,ALUS=ZQ,ALU,CSM,WЕМ,MNSA=МР,MODNM=М14
+;НОВЫЙ АДРЕС - В РС, АИСП (В ЗАВИСИМОСТИ ОТ ГРУППЫ ЭКСТРАКОДА!)
+CONT А=JМРЕХТ,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=ADD,Н,ALUD=В,RВ=РС,ALU,YDST=ADRREG
+>,FFCNT=CLRTKK
+;П/У НА ВКС, ЕСЛИ ЕСТЬ БППУ; КОП - В 7 РГ. (ОСНОВНОЙ, ДОПОЛНИТЕЛЬНЫЙ ИЛИ РЭ)
+;ISE ЗДЕСЬ НЕ НАДО,Т.К.ЭТО - ВХОД В ЭКСТРАКОД = 1-АЯ ПОЛОВИНА КОМАНДЫ-ЭКСТРАКОДА
+CONT CSM,MNSA=МР,MODNM=ACL,ЕСА,WRA,ARA=RG3
+CJP А=LCWPH,МАР=РЕ,COND=OVRFTB,ЕСА,ARA=RG3,ALUS=DА,RА=ВУТЕ,FUNC=AND,ALU
+>,CSM,WЕМ,MNSA=МР,MODNM=М7
+;ПРОВЕРЯЕМ МЛ.10 РАЗРЯДОВ РАПУ НА 0
+CONT А=MWN,DSRC=PROM,ALUS=DА,RА=WR3,FUNC=AND,CEN
+;ЕСЛИ = 0, INT36 - ПЕРЕПОЛНЕНИЕ ПОЛЯ УПРЯТЫВАНИЯ
+JRP А=INT36,МАР=РЕ,COND=СТ,SТОРС=NZ
+;
+;===== НОМЕР РЕЗ.ГРУППЫ НЕ РАВЕН 0, УПРЯТЫВАНИЕ В ОЗУ МОДИФИКАТОРОВ
+;
+;КОПИРУЕМ РОП, В П/П "СОБИРАЕМ" РР
+SMOD:CJS А=SAVRG,МАР=РЕ,SТОРС=32,DDEV=STATUS,ALUS=DZ,ALUD=ВА,RА=РССОРУ
+>,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=РССС
+;
+;ИЗВЛЕКАЕМ ИЗ СТАРОЙ ГРУППЫ, ЧТО ЕЩЕ МОЖЕТ ПОНАДОБИТЬСЯ: РАПУ
+CONT CSM,MNSA=МР,MODNM=SVFA,ALUS=DZ,ALUD=В,RВ=WR3
+;ЧИТАЕМ МИКРОПРОГРАММНУЮ ЧАСТЬ ТАЙМЕРА И ЧАСОВ СВ ДЛЯ ПЕРЕПИСИ В ДР.ГРУППУ
+CONT CSM,MNSA=МР,MODNM=СТТ,ЕСА,WRA,ARA=RG0
+CONT CSM,MNSA=МР,MODNM=CTR,ЕСА,WRA,ARA=RG2
+CONT CSM,MNSA=МР,MODNM=CTL,ЕСА,WRA,ARA=RG3
+;ЧИТАЕМ СТАРЫЙ РНГ (6-11Р.)
+CONT DSRC=MODGN,ALUS=DZ,ALUD=В,RВ=WR5
+;РГ.АДРЕСОВ ВОЗВРАТА ИЗ П/П (КОПИРУЕМ В СЛЕД.ГРУППУ)
+CONT CSM,MNSA=МР,MODNM=SPRADR,ALUS=DZ,ALUD=В,RВ=WR4
+;
+;СДВИГАЕМ НОМЕР РЕЗ.ГРУППЫ ИЗ 17-24Р. - В 6-11Р., ПИШЕМ В РНГ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR2,RВ=WR2,ALU,DSRC=SHIFT,MPS,PSHF=SН0+11
+>,SHF=LOG
+;ЧИТАЕМ КОП ЭКСТРАКОДА ИЗ ACL ЭТОЙ ГРУППЫ И ПИШЕМ В ДРУГУЮ! (МОЖНО БЫ И ПО-ДР.!)
+CONT CSM,MNSA=МР,MODNM=ACL,ALUS=DZ,ALU,YDST=ADRREG
+CONT ALUS=ZА,RА=WR2,ALU,YDST=MODGN
+CONT YDEV=RADRR,CSM,WЕМ,MNSA=МР,MODNM=ACL
+;
+;ГОТОВИМ НОВУЮ ГРУППУ РЕГИСТРОВ: ПИШЕМ РГ.АДРЕСОВ ВОЗВРАТА ИЗ П/П
+CONT ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=SPRADR
+;РРР: ОБ'ЕДИНЯЕМ СТАРЫЙ РНГ + НОМЕР РЕЗ.ГРУППЫ ИЗ РР + ТЕГ (0); ПИШЕМ ТАЙМЕР СВ
+CONT CSM,MNSA=МР,MODNM=RRR,ALUS=DZ,ALUD=В,RВ=WR4
+CONT А=МВ3,DSRC=PROM,ALUS=DА,RА=WR4,FUNC=AND,Н,ALUD=В,RВ=WR4,ЕСВ,BRA=RG0
+>,CSM,WЕМ,MNSA=МР,MODNM=СТТ
+CONT А=MGN,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=AND,Н,ALUD=В,RВ=WR5,ALU,ЕСВ,WRB,BRA=RG0
+CONT ЕСВ,BRA=RG0,DSRC=SHIFT,MPS,PSHF=SН0-3,SHF=LOG,ALUS=DА,RА=WR4,FUNC=OR
+>,ALUD=В,RВ=WR4
+CONT ALUS=ZА,RА=WR4,ALU,YDEVT=ECBTAG,WRB,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=RRR
+;
+;РР:ОСТАВЛЯЕМ ТОЛЬКО БППУ,БВП И ПОП ОТ СТАРОГО ЗНАЧЕНИЯ РР; ПИШЕМ ЧАСЫ СВ
+CONT А=CTS,DSRC=PROM,ALUS=DА,RА=WR6,FUNC=AND,ALUD=В,RВ=WR4
+>,ЕСВ,BRA=RG2,CSM,WЕМ,MNSA=МР,MODNM=CTR
+;ОБ'ЕДИНЯЕМ СО ЗНАЧЕНИЕМ РР ДЛЯ ЭКСТР.,ПИШЕМ НА МЕСТО В ТГ,РР,РГ.М
+;ППУ=РОА=БЧОП=РД=ГЛ=1; БППУ,ПОП,БВП - СТАРЫЕ; ОСТАЛЬНЫЕ РАЗРЯДЫ = 0
+;БПТЗ НЕ УСТАНАВЛИВАЕМ И НЕ СБРАСЫВАЕМ!
+CONT А=СЕХТ,DSRC=PROM,ALUS=DА,RА=WR4,FUNC=OR,ALU,YDST=CNT
+>,CSM,WЕМ,MNSA=МР,MODNM=RR,SТОРС=CLRM,СЕМ
+CJP А=ENDE,МАР=РЕ,ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=CTL
+;
+SAVRG:ENTRY
+;===== П/П "СБОРКИ" РР И ЗАПИСИ В ОЗУ МОДИФИКАТОРОВ
+;ОДИНАКОВАЯ ДЛЯ ПРЕРЫВАНИЙ И ЭКСТРАКОДОВ ПРИ УПРЯТЫВАНИИ В ОЗУ МОД.
+;РР: ПРОЧИЩАЕМ ТГ.ПРИЗНАКОВ, УБИРАЕМ "УСТАРЕВШИЕ" РАЗРЯДЫ РР, ОБ'ЕДИНЯЕМ
+CONT А=MCRR,DSRC=PROM,ALUS=DА,RА=WR6,FUNC=AND,Н,ALUD=В,RВ=WR6
+CONT А=MFLFL,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=AND,ALUD=В,RВ=WR5
+;ОБ'ЕДИНЯЕМ ПОСТОЯННУЮ ЧАСТЬ РР И ТГ.ПРИЗНАКОВ
+CONT ALUS=АВ,RА=WR5,RВ=WR6,FUNC=OR,ALUD=В
+;ДОБАВЛЯЕМ РГ.М (ИНДИКАТОРЫ), ПИШЕМ В WR6 И В ОЗУ МОД.; ВОЗВРАТ
+CONT А=MIND,DSRC=PROM,ALUS=DА,RА=WR4,FUNC=AND,ALUD=В,RВ=WR4
+CRTN ALUS=АВ,RА=WR4,RВ=WR6,FUNC=OR,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=RR
+;
+ACTRG:ENTRY
+;===== П/П ПЕРЕЗАПИСИ ДОП.ИНФОРМАЦИИ В МОДИФИКАТОРЫ ПРИ ЭКСТР.И ПРЕРЫВАНИЯХ
+;В РЭ В 13,14ИР (СЧАС И ИАОП) ЗАПИСЫВАЕМ ТОЛЬКО МЛ.15 РАЗРЯДОВ!
+CONT YDEVT=ECBTAG,BRA=RG1,%TRSH%,ALUS=DА,RА=ВУТЕ,FUNC=AND,ALUD=В,RВ=WR4
+CONT А=В2,DSRC=PROM,ALUS=DА,RА=WR4,FUNC=AND,CEN
+;ТЕГ КОМАНДЫ - В 6 РГ.; ОБНУЛЯЕМ 16-32 РАЗРЯДЫ ИАОП И СЧАС, ЕСЛИ РЭ!
+CJP А=NRWR,МАР=РЕ,COND=СТ,SТОРС=NZ,ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М6
+CONT CSM,MNSA=МР,MODNM=М14,ALUS=DZ,ALUD=В,RВ=WR4
+CONT А=М15,DSRC=PROM,ALUS=DА,RА=WR4,FUNC=AND,ALU,CSM,WЕМ,MNSA=МР,MODNM=М14
+CONT А=М15,DSRC=PROM,ALUS=DА,RА=РС,FUNC=AND,ALUD=В,RВ=РС
+;СЧАС - В 13 РГ; RG0 (20 РАЗРЯДОВ) - В 12 РГ.
+NRWR:CONT А=MADR,DSRC=PROM,ALUS=DZ,ALUD=ВА,RА=РС,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР
+>,MODNM=М13
+CONT ЕСА,ARA=RG0,ALUS=DА,RА=WR4,FUNC=AND,ALU,CSM,WЕМ,MNSA=МР,MODNM=М12
+;РНП - В 11 РГ.
+CONT DSRC=PROCN,ALUS=DА,RА=ВУТЕ,FUNC=AND,ALU,CSM,WЕМ,MNSA=МР,MODNM=М11
+;РР - В 10; РРР - В 9 РГ.
+CONT ALUS=ZА,RА=WR6,ALU,CSM,WЕМ,MNSA=МР,MODNM=М10
+CONT ALUS=ZА,RА=WR1,ALU,CSM,WЕМ,MNSA=МР,MODNM=М9
+;РНГ В 6-10 РАЗРЯДАХ ИЗ WR5 - В 8 РГ.
+CONT А=MGN5,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=AND,ALU,CSM,WЕМ,MNSA=МР,MODNM=М8
+;ТЕГ ОПЕРАНДА - В 6 РГ.
+CONT YDEVT=ECBTAG,BRA=RG2,%TRSH%,ALUS=DА,RА=ВУТЕ,FUNC=AND,ALUD=В,RВ=WR4
+LDCT А=LCWPH,МАР=РЕ,ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М5
+;КОМ.СЛОВО - В 4,3 РГ.
+CONT ЕСА,ARA=RG1,ALUS=DZ,Н,ALUD=В,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М4
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,DSRC=SHIFT,MPS,PSHF=SН0+32,SHF=LOG
+CRTN ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М3
+END
+RЕТ:PROG;
+;     I=========I
+;     I  R Е Т  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:FЕ,ДОП.ФОРМАТ
+;PROM:8FE,AFE
+;===== ВОЗВРАТ ИЗ ЭКСТРАКОДА. ПРИВИЛЕГИРОВАННАЯ КОМАНДА;
+;   ЕСЛИ НЕ РД, ДЕЛАЕМ П/У НА ЭКСТРАКОД!
+;   ПРОИЗВОДИТСЯ ВОССТАНОВЛЕНИЕ РЕГИСТРОВ И ПЕРЕДАЧА УПРАВЛЕНИЯ
+;   НА СЛЕДУЮЩУЮ ПОСЛЕ ЭКСТРАКОДА КОМАНДУ.
+;   ЕСЛИ N ПРЕДЫДУЩЕЙ ГРУППЫ = 0, РЕГИСТРЫ ВОССТАНАВЛИВАЮТСЯ ИЗ ПАМЯТИ.
+;
+EXTERNAL LCWPH,EXTDR
+;ПРОВЕРЯЕМ N ПРЕДЫДУЩЕЙ ГРУППЫ (9-16Р.РРР)
+CJP А=EXTDR,МАР=РЕ,COND=DRG,IСС
+>,CSM,MNSA=МР,MODNM=RRR,ALUS=DА,RА=HALF,FUNC=AND,Н,ALUD=В,RВ=WR1
+CONT А=МВ2,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=AND,Н,ALUD=В,RВ=WR2,CEN
+;СДВИГАЕМ НОМЕР ГРУППЫ В 6-11 РАЗРЯДЫ ДЛЯ ВОССТАНОВЛЕНИЯ ИЗ ОЗУ МОД.
+CJP А=SMOD,МАР=РЕ,COND=СТ,SТОРС=/NZ
+>,ALUS=DZ,ALUD=ВА,RА=WR2,RВ=WR2,ALU,DSRC=SHIFT,MPS,PSHF=SН0+3,SHF=LOG
+;
+;===== НОМЕР ПРЕДЫДУЩЕЙ ГРУППЫ = 0, ВОССТАНОВЛЕНИЕ ИЗ ПАМЯТИ
+;
+;ЧИТАЕМ ИЗ ОЗУ ПО АДР.В РАПУ СО СТАРЫМ РР; ТАМ ВСЕ, ЧТО НАДО, Д.БЫТЬ УСТАНОВЛЕНО
+CONT CSM,MNSA=МР,MODNM=SVFA,ALUS=DZ,ALUD=В,RВ=WR3
+;АДРЕС УПРЯТЫВАНИЯ ИЗ РАПУ-16 - В АИСП, В WR3
+CONT А=С16,DSRC=PROM,ALUS=DА,RА=WR3,FUNC=SUBR,Н,CI,ALUD=В,RВ=WR3,ALU
+>,YDST=ADRREG,CSM,WЕМ,MNSA=МР,MODNM=SVFA
+;
+;УСТАНАВЛИВАЕМ РЕЖИМ BTR, ЧИТАЕМ МОДИФИКАТОРЫ 1,2 ИЗ ПАМЯТИ
+;ЗАПИСЫВАЕМ ПАРАМЕТР СДВИГА В РПС, ЧТОБ МОЖНО БЫЛО ПИСАТЬ В ОЗУ МОД.И СДВИГАТЬ
+PUSH YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=BTRRD
+LООР А=SR32,COND=ARBRDY,DSRC=PROM,ALUS=DZ,ALU,YDST=PSHIFT
+;
+;ЧИТАЕМ М3,4 ИЗ ПАМЯТИ, ВОССТАНАВЛИВАЕМ СОДЕРЖИМЕОЕ РГ.М1,2 В ОЗУ МОД.
+CONT YDEV=PHYSAD,ARBI=BTRRD,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=WR4
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М2,DSRC=SHIFT
+>,SHF=LOG
+W3:CJP А=W3,%WА%,ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М1
+;
+;ЧИТАЕМ МОДИФИКАТОРЫ 5,6; ПИШЕМ 3,4
+CONT YDEV=PHYSAD,ARBI=BTRRD,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=WR4
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М4,DSRC=SHIFT
+>,SHF=LOG
+W5:CJP А=W5,%WА%,ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М3
+;
+;ЧИТАЕМ МОДИФИКАТОРЫ 7,8; ПИШЕМ 5,6
+CONT YDEV=PHYSAD,ARBI=BTRRD,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=WR4
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М6,DSRC=SHIFT
+>,SHF=LOG
+W7:CJP А=W7,%WА%,ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М5
+;
+;ЧИТАЕМ МОДИФИКАТОРЫ 9,10; ПИШЕМ 7,8
+CONT YDEV=PHYSAD,ARBI=BTRRD,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=WR4
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М8,DSRC=SHIFT
+>,SHF=LOG
+W9:CJP А=W9,%WА%,ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М7
+;
+;ЧИТАЕМ МОДИФИКАТОРЫ 11,12; ПИШЕМ 9,10
+CONT YDEV=PHYSAD,ARBI=BTRRD,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=WR4
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М10,DSRC=SHIFT
+>,SHF=LOG
+W11:CJP А=W11,%WА%,ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М9
+;
+;ЧИТАЕМ МОДИФИКАТОРЫ 13,14; ПИШЕМ 11,12
+CONT YDEV=PHYSAD,ARBI=BTRRD,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=WR4
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М12,DSRC=SHIFT
+>,SHF=LOG
+W13:CJP А=W13,%WА%,ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М11
+;
+;ЧИТАЕМ SР,SPRADR; ПИШЕМ 13,14
+CONT YDEV=PHYSAD,ARBI=BTRRD,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=WR4
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М14,DSRC=SHIFT
+>,SHF=LOG
+WSP:CJP А=WSP,%WА%,ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=М13
+;
+;ЧИТАЕМ СЧАС,РОП; ПИШЕМ SР,SPRADR
+CONT YDEV=PHYSAD,ARBI=BTRRD,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=WR4
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=SPRADR,DSRC=SHIFT
+>,SHF=LOG
+WР:CJP А=WР,%WА%,ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР
+;
+;ЧИТАЕМ РР,РРР; ПИШЕМ РС,РССОРУ
+CONT YDEV=PHYSAD,ARBI=BTRRD,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=РССОРУ
+WR:CJP А=WR,%WА%
+>,ALUS=DZ,Н,ALUD=ВА,RА=РССОРУ,RВ=РС,ALU,DSRC=SHIFT,MPS,PSHF=SН0+32,SHF=LOG
+;
+;ПИШЕМ НА МЕСТО РРР, СБРАСЫВАЕМ РЕЖИМ BTR
+CONT YDEV=PHYSAD,ARBI=0,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=WR4
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR4,RВ=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=RRR,YDEVT=ECBTAG
+>,WRB,BRA=RG3,DSRC=SHIFT,SHF=LOG
+;ПИШЕМ РР; МЕНЯЕМ ППК, А ТО ПРИ ВКС ВОЗМОЖНЫ ПРЕРЫВАНИЯ!
+;ПОП,БППУ И БВП "ОБРАТНО" НЕ КОПИРУЮТСЯ, А ВОССТАНАВЛИВАЮТСЯ ИЗ СТАРОЙ ГРУППЫ!!!
+CONT А=В29,DSRC=PROM,ALUS=DА,RА=WR4,FUNC=EXOR,ALU,YDST=CNT,CSM
+>,WЕМ,MNSA=МР,MODNM=RR,DDEV=STATUS,WRD,SТОРС=0,СЕМ
+CJP А=LС,%R%,IСС
+;ПЕРЕХОД НА ПРАВУЮ КОМАНДУ
+CJP А=LCWPH,МАР=РЕ,ALUS=ZА,RА=РС,ALU,YDST=ADRREG,DDEV=CLRCD,FFCNT=SЕТТКК
+;НА ЛЕВУЮ
+LС:CJP А=LCWPH,МАР=РЕ,ALUS=ZВ,RВ=РС,CI,ALUD=В,ALU,YDST=ADRREG,DDEV=CLRCD
+>,FFCNT=CLRTKK
+;
+;===== НОМЕР ПРЕДЫД.ГРУППЫ НЕ РАВЕН 0, ВОССТАНОВЛЕНИЕ ИЗ ОЗУ МОДИФИКАТОРОВ
+;
+;   РАПУ (УМЕНЬШЕННОЕ НА 16), РРР (НОМЕРА ГРУПП), УК-ЛЬ АДР.ВОЗВРАТА ИЗ П/П
+;   В ПРЕЖНЕЙ ГРУППЕ ТАКИЕ, КАК Д.БЫТЬ! ИХ НЕ ВОССТАНАВЛИВАЕМ.
+;   ЧАСЫ И ТАЙМЕР ПЕРЕПИСЫВАЕМ ИЗ ГРУППЫ ЭКСТРАКОДА В ПРЕДЫДУЩУЮ!
+;
+;ЧИТАЕМ ИЗ СТАРОЙ ГРУППЫ ЧАСЫ И ТАЙМЕР
+SMOD:CONT CSM,MNSA=МР,MODNM=СТТ,ALUS=DZ,ALUD=В,RВ=WR4
+CONT CSM,MNSA=МР,MODNM=CTR,ALUS=DZ,ALUD=В,RВ=WR5
+CONT CSM,MNSA=МР,MODNM=CTL,ALUS=DZ,ALUD=В,RВ=WR6
+;ВОССТАНАВЛИВАЕМ РНГ
+CONT ALUS=ZА,RА=WR2,ALU,YDST=MODGN
+;ПИШЕМ ЧАСЫ И ТАЙМЕР
+CONT ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=МР,MODNM=СТТ
+CONT ALUS=ZА,RА=WR5,ALU,CSM,WЕМ,MNSA=МР,MODNM=CTR
+CONT ALUS=ZА,RА=WR6,ALU,CSM,WЕМ,MNSA=МР,MODNM=CTL
+;
+;ПИШЕМ РР, МЕНЯЕМ ППК, А ТО ПРИ ВКС ВОЗМОЖНЫ ПРЕРЫВАНИЯ!
+CONT CSM,MNSA=МР,MODNM=RR,ALUS=DZ,ALUD=В,RВ=WR3
+CONT А=В29,DSRC=PROM,ALUS=DА,RА=WR3,FUNC=EXOR,ALUD=В,RВ=WR3,ALU,YDST=CNT
+>,CSM,WЕМ,MNSA=МР,MODNM=RR,DDEV=STATUS,WRD,SТОРС=0,СЕМ
+;ЧИТАЕМ РРР, ПИШЕМ ТЕГ НА МЕСТО
+CONT CSM,MNSA=МР,MODNM=RRR,ALUS=DZ,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
+;РССОРУ,РС; ПЕРЕХОД НА СЛЕДУЮЩУЮ КОМАНДУ
+CJP А=LСМ,%R%,IСС,CSM,MNSA=МР,MODNM=РССС,ALUS=DZ,ALUD=В,RВ=РССОРУ
+CJP А=LCWPH,МАР=РЕ,CSM,MNSA=МР,MODNM=РСС,ALUS=DZ,ALUD=В,RВ=РС
+>,ALU,YDST=ADRREG,DDEV=CLRCD,WRD,FFCNT=SЕТТКК
+;НА ЛЕВУЮ
+LСМ:CJP А=LCWPH,МАР=РЕ,CSM,MNSA=МР,MODNM=РСС,ALUS=DZ,CI,ALUD=В,RВ=РС
+>,ALU,YDST=ADRREG,DDEV=CLRCD,WRD,FFCNT=CLRTKK
+END
+*END
+*END F
+*END FILE
