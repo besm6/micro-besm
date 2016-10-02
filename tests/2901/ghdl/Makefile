@@ -29,16 +29,6 @@ $(PROG):        $(OBJ)
 view:
 		gtkwave $(PROG).vcd databus.gtkw
 
-# Using Cadence UIS
-ius:
-		ncvhdl -v93 ../types.vhd
-		ncvhdl -v93 ../MVL7_functions.vhd
-		ncvhdl -v93 ../synthesis_types.vhd
-		ncvhdl -v93 ../funct_blocks_alg_beh/funct_block_alg_beh2901.vhdl
-		ncvhdl -v93 ../test_vectors_2901.vhdl
-		ncelab testbench
-		ncsim testbench
-
 types.o: ../types.vhd
 		$(GHDL) -a $(GHDLFLAGS) $<
 
