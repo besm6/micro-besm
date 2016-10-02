@@ -1,11 +1,11 @@
 --***************************************************************************
 --              VHDL BIT_VECTOR Operations for MVL7 type
---                                                                         
---         Copyright (c) 1990   UCI CADLAB, Dept. of ICS                  
---         Author :  Sanjiv Narayan (narayan@ics.uci.edu)                
 --
---         Updated 7/8/91 by Sanjiv and Frank 
--- 
+--         Copyright (c) 1990   UCI CADLAB, Dept. of ICS
+--         Author :  Sanjiv Narayan (narayan@ics.uci.edu)
+--
+--         Updated 7/8/91 by Sanjiv and Frank
+--
 --         updated by Champaka Ramachandran 16/10/92
 --
 --***************************************************************************
@@ -37,7 +37,7 @@ package MVL7_functions is
    function "*" ( x1 :  MVL7_VECTOR ;  x2 :  MVL7_VECTOR ) return MVL7_VECTOR;
 
 -- truth table for "WiredOr" function
-   constant tbl_WIREDOR: MVL7_TABLE := 
+   constant tbl_WIREDOR: MVL7_TABLE :=
 --  -----------------------------------------------
 --  |  X    0    1    Z    W    L    H |          |
 --  -----------------------------------------------
@@ -230,7 +230,7 @@ package body MVL7_functions is
    begin
       v1 := x1;
       v2 := x2;
-      assert v1'length = v2'length 
+      assert v1'length = v2'length
          report "MVL7 vector -: operands of unequal lengths" severity FAILURE;
       SUM := I2B(B2I(v1) - B2I(v2),SUM'length);
       return (SUM);
@@ -253,8 +253,8 @@ package body MVL7_functions is
    begin
       v1 := x1;
       v2 := x2;
-      assert v1'length = v2'length 
-         report "MVL7vector carry add:operands of unequal lengths" 
+      assert v1'length = v2'length
+         report "MVL7vector carry add:operands of unequal lengths"
          severity FAILURE;
       SUM := I2B(B2I(v1) + B2I(v2),SUM'length);
       return (SUM);
@@ -268,7 +268,7 @@ package body MVL7_functions is
    begin
       v1 := x1;
       v2 := x2;
-      assert v1'length = v2'length 
+      assert v1'length = v2'length
          report "MVL7 vector +: operands of unequal lengths" severity FAILURE;
       SUM := I2B(B2I(v1) + B2I(v2),SUM'length);
       return (SUM);
@@ -342,7 +342,7 @@ package body MVL7_functions is
    begin
       v1 := x1;
       v2 := x2;
-      assert v1'length = v2'length 
+      assert v1'length = v2'length
          report "MVL7 vector MUL: operands of unequal lengths" severity FAILURE;
       PROD := I2B(B2I(v1) * B2I(v2),PROD'length);
       return (PROD);
@@ -350,15 +350,15 @@ package body MVL7_functions is
 
 --***************************************************************************
 
-function WiredOr (V: MVL7_VECTOR) return MVL7 is
-  variable result: MVL7;
-begin
-  result := 'Z';
-  for i in V'range loop
-    result := tbl_WIREDOr(result, V(i));
-    exit when result = '1';
-  end loop;
-  return result;
-end WiredOr;
+--function WiredOr (V: MVL7_VECTOR) return MVL7 is
+--  variable result: MVL7;
+--begin
+--  result := 'Z';
+--  for i in V'range loop
+--    result := tbl_WIREDOr(result, V(i));
+--    exit when result = '1';
+--  end loop;
+--  return result;
+--end WiredOr;
 --***************************************************************************
 end;
