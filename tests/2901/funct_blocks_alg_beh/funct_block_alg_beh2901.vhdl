@@ -21,20 +21,21 @@ use work.types.all;  -- some MVL7 functions
 use work.MVL7_functions.all;  -- some MVL7 functions
 use work.synthesis_types.all; -- some data types ( hints for synthesis)
 
-entity a2901 is 
+entity a2901 is
 	port (
-		I : in MVL7_vector(8 downto 0); 
+		I : in MVL7_vector(8 downto 0);
 		Aadd, Badd : in integer range 15 downto 0;
 		D : in MVL7_vector(3 downto 0);
 		Y : out MVL7_vector(3 downto 0);
-		RAM0, RAM3, Q0, Q3 : inout MVL7; 
-		CLK : in clock; 
- 		C0 : in MVL7;  
+		RAM0, RAM3, Q0, Q3 : in MVL7;
+		RAM0out, RAM3out, Q0out, Q3out : out MVL7;
+		CLK : in clock;
+ 		C0 : in MVL7;
 		OEbar : in MVL7;
 		C4, Gbar, Pbar, OVR, F3, F30 : out MVL7);
 end a2901;
 
-architecture a2901 of a2901 is 
+architecture a2901 of a2901 is
 
         signal RAM : Memory(15 downto 0);
         signal RE,S : MVL7_vector(3 downto 0);
@@ -75,11 +76,11 @@ signal R_ext,S_ext,result,temp_p,temp_g : MVL7_vector(4 downto 0);
 
 begin
 
---   TO FACILITATE COMPUTATION OF CARRY-OUT "C4", WE EXTEND THE CHOSEN 
---   ALU OPERANDS "RE" AND "S" (4 BIT OPERANDS) BY 1 BIT IN THE MSB POSITION. 
+--   TO FACILITATE COMPUTATION OF CARRY-OUT "C4", WE EXTEND THE CHOSEN
+--   ALU OPERANDS "RE" AND "S" (4 BIT OPERANDS) BY 1 BIT IN THE MSB POSITION.
 
 --   THUS THE EXTENDED OPERANDS "R_EXT" AND "S_EXT" (5 BIT OPERANDS) ARE
---   FORMED AND ARE USED IN THE ALU OPERATION. THE EXTRA BIT IS SET TO '0' 
+--   FORMED AND ARE USED IN THE ALU OPERATION. THE EXTRA BIT IS SET TO '0'
 --   INITIALLY. THE ALU'S EXTENDED OUTPUT ( 5 BITS LONG) IS "result".
 
 R_ext <= '0' & not(RE) when I(5 downto 3) = "001" else
@@ -107,7 +108,7 @@ with I(5 downto 3) select
 
 --  FROM EXTENDED OUTPUT "result" ( 5 BITS), WE OBTAIN THE NORMAL ALU OUTPUT,
 --  "F" (4 BITS) BY LEAVING OUT THE MSB ( WHICH CORRESPONDS TO CARRY-OUT
---  "C4"). 
+--  "C4").
 
 --  TO FACILITATE COMPUTATION OF CARRY LOOKAHEAD TERMS "Pbar" AND "Gbar", WE
 --  COMPUTE INTERMEDIATE TERMS "temp_p" AND "temp_g".
@@ -119,8 +120,8 @@ C4 <= result(4);
 temp_p <= R_ext or S_ext;          -- R or S may get
 temp_g <= R_ext and S_ext;         -- inverted (sub)
 Pbar <= not(temp_p(0) and temp_p(1) and temp_p(2) and temp_p(3));
-Gbar <= not( temp_g(3) or 
-             (temp_p(3) and temp_g(2)) or 
+Gbar <= not( temp_g(3) or
+             (temp_p(3) and temp_g(2)) or
              (temp_p(3) and temp_p(2) and temp_g(1)) or
              (temp_p(3) and temp_p(2) and temp_p(1) and temp_g(0))
            );
@@ -135,9 +136,9 @@ mem : block ( (not clk'stable) and (clk = '1') )
 
 begin
 
--- WRITE TO RAM WITH/WITHOUT SHIFTING. RAM DESTINATIONS ARE 
+-- WRITE TO RAM WITH/WITHOUT SHIFTING. RAM DESTINATIONS ARE
 -- ADDRESSED BY "Badd".
-        
+
 RAM(Badd) <= guarded F when ((not(I(8)) and I(7)) = '1') else
              RAM3 & F(3 downto 1) when ((I(8) and not(I(7))) = '1') else
              F(2 downto 0) & RAM0 when ((I(8) and I(7)) = '1') else
@@ -151,8 +152,8 @@ Q_reg : block ( (not clk'stable) and (clk = '1') )
 
 begin
 
--- WRITE TO Q REGISTER WITH/WITHOUT SHIFTING. 
-        
+-- WRITE TO Q REGISTER WITH/WITHOUT SHIFTING.
+
 Q <= guarded F when (I(8 downto 6) = "000")  else
              Q3 & Q(3 downto 1) when (I(8 downto 6) = "100") else
              Q(2 downto 0) & Q0 when (I(8 downto 6) = "110") else
@@ -166,34 +167,26 @@ output_and_shifter : block
 
 begin
 
--- GENERATE DATA OUTPUT "Y" 
-   
+-- GENERATE DATA OUTPUT "Y"
+
 Y <= A when (( I(8 downto 6) = "010") and ( OEbar = '0')) else
      F when (not(( I(8 downto 6) = "010")) and ( OEbar = '0')) else
      "ZZZZ";
 
 -- GENERATE BIDIRECTIONAL SHIFTER SIGNALS.
 
-RAM0 <= F(0) when ( I(8) = '1') and ( I(7) = '0' ) else 
-       'Z';             
-RAM3 <= F(3) when ( I(8) = '1') and ( I(7) = '1' ) else
-         'Z';           
+RAM0out <= F(0) when ( I(8) = '1') and ( I(7) = '0' ) else
+       'Z';
+RAM3out <= F(3) when ( I(8) = '1') and ( I(7) = '1' ) else
+         'Z';
 
-Q3 <= Q(3) when ( I(8) = '1') and ( I(7) = '1') else
-          'Z';         
-Q0 <= Q(0) when ( I(8) = '1') and ( I(7) = '0') else
-          'Z';         
+Q3out <= Q(3) when ( I(8) = '1') and ( I(7) = '1') else
+          'Z';
+Q0out <= Q(0) when ( I(8) = '1') and ( I(7) = '0') else
+          'Z';
 
 end block output_and_shifter;
 
 -------------------------------------------------------------------------
 
 end a2901;
-
-
-
-
-
-
-
-

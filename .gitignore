@@ -1,1 +1,6 @@
+*.o
+*.vcd
+*.log
+work-obj93.cf
+testbench
 .DS_Store

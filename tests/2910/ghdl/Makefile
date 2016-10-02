@@ -1,8 +1,10 @@
 PROG            = am2910
+RTL             = alg_beh2910
+#RTL             = funct_block_alg_beh2910
 OBJ             = types.o \
                   MVL7_functions.o \
                   synthesis_types.o \
-                  funct_block_alg_beh2910.o \
+                  $(RTL).o \
                   test_vectors_2910.o
 
 GHDL            = ghdl
@@ -15,16 +17,16 @@ vpath %.vhd ../rtl
 all:            $(PROG)
 
 clean:
-	rm -rf *.o *.lst *.vcd work-obj93.cf work transcript vsim.wlf INCA_libs ncsim.key ncvhdl.log ncelab.log ncsim.log $(PROG)
+	rm -rf *.o testbench *.lst *.vcd work-obj93.cf work transcript vsim.wlf INCA_libs ncsim.key ncvhdl.log ncelab.log ncsim.log $(PROG)
 
 run:
-	$(GHDL) -r $(GHDLFLAGS) E --vcd=$(PROG).vcd --stop-time=140ms --ieee-asserts=disable 2>&1 | tee run.log
+	$(GHDL) -r $(GHDLFLAGS) testbench --vcd=$(PROG).vcd --stop-time=140ms --ieee-asserts=disable 2>&1 | tee run.log
 
 runrun:
-	$(GHDL) -r $(GHDLFLAGS) E --ieee-asserts=disable
+	$(GHDL) -r $(GHDLFLAGS) testbench --ieee-asserts=disable
 
 $(PROG):        $(OBJ)
-	$(GHDL) -e $(GHDLFLAGS) E
+	$(GHDL) -e $(GHDLFLAGS) testbench
 
 view:
 	gtkwave $(PROG).vcd databus.gtkw
@@ -37,7 +39,7 @@ modelsim:
 	$(MODELSIM)/vcom ../synthesis_types.vhd
 	$(MODELSIM)/vcom ../funct_block_alg_beh/funct_block_alg_beh2910.vhdl
 	$(MODELSIM)/vcom ../test_vectors_2910.vhdl
-	$(MODELSIM)/vsim -c -do 'run 100000us; quit' E
+	$(MODELSIM)/vsim -c -do 'run 100000us; quit' testbench
 
 # Using Cadence UIS
 ius:
@@ -46,8 +48,8 @@ ius:
 	ncvhdl -v93 ../synthesis_types.vhd
 	ncvhdl -v93 ../funct_block_alg_beh/funct_block_alg_beh2910.vhdl
 	ncvhdl -v93 ../test_vectors_2910.vhdl
-	ncelab E
-	ncsim E
+	ncelab testbench
+	ncsim testbench
 
 types.o: ../types.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
@@ -59,6 +61,9 @@ synthesis_types.o: ../synthesis_types.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
 
 funct_block_alg_beh2910.o: ../funct_block_alg_beh/funct_block_alg_beh2910.vhdl types.o MVL7_functions.o synthesis_types.o
+	$(GHDL) -a $(GHDLFLAGS) $<
+
+alg_beh2910.o: ../alg_beh/alg_beh2910.vhdl types.o MVL7_functions.o synthesis_types.o
 	$(GHDL) -a $(GHDLFLAGS) $<
 
 test_vectors_2910.o: ../test_vectors_2910.vhdl types.o MVL7_functions.o synthesis_types.o
