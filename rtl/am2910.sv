@@ -14,7 +14,7 @@ module am2910(
     output logic        nFULL       // stack full flag
 );
 
-bit [2:0] sp;
+logic [2:0] sp;
 logic R_sel,D_sel,uPC_sel,stack_sel,decr,load,Rzero_bar,clear,push,pop;
 logic [11:0] Y_temp,RE,uPC;
 logic [11:0] reg_file[5:0];
@@ -46,7 +46,7 @@ always @(posedge clk) begin
         uPC <= Y_temp + CI;
 end
 
-bit [2:0] write_address;
+logic [2:0] write_address;
 
 always @(posedge clk) begin
     if (pop && sp != 0)
