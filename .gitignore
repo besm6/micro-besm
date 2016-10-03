@@ -8,4 +8,5 @@ testbench
 .DS_Store
 xsim.dir
 tests/*/gen-test-vectors
+tests/*/modelsim/work/
 tests/*/vhdl/modelsim/work/

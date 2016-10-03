@@ -4,9 +4,8 @@
 #RTL             = alg_beh/alg_beh2901.vhdl
 RTL             = funct_blocks_alg_beh/funct_block_alg_beh2901.vhdl
 
+# Altera Quartus toolchain
 MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
-
-vpath %.vhd ../rtl
 
 all:            work
 

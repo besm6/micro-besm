@@ -8,8 +8,6 @@ RTL             = alg_beh/alg_beh2910.vhdl
 NC              = x
 NCSIM           = /opt/Xilinx/Vivado/2016.2/bin/$(NC)
 
-vpath %.vhd ../rtl
-
 all:            $(NC)sim.dir
 
 clean:

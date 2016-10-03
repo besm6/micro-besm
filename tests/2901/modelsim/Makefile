@@ -1,8 +1,6 @@
 #
 # Using Mentor ModelSim
 #
-#RTL             = alg_beh/alg_beh2910.vhdl
-RTL             = funct_block_alg_beh/funct_block_alg_beh2910.vhdl
 
 # Altera Quartus toolchain
 MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
@@ -14,11 +12,8 @@ clean:
 
 work:
 		$(MODELSIM)/vlib work
-		$(MODELSIM)/vcom ../types.vhd
-		$(MODELSIM)/vcom ../MVL7_functions.vhd
-		$(MODELSIM)/vcom ../synthesis_types.vhd
-		$(MODELSIM)/vcom ../$(RTL)
-		$(MODELSIM)/vcom ../test_vectors_2910.vhdl
+		$(MODELSIM)/vlog -sv ../../../rtl/am2901.sv
+		$(MODELSIM)/vlog -sv ../test_2901.sv
 
 run:            work
 		$(MODELSIM)/vsim -c -l run.log -do 'run 100000us; quit' testbench
