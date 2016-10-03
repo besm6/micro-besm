@@ -10,7 +10,7 @@ module testbench();
     logic        PLbar, VECTbar,  MAPbar, FULLbar;
 
     // Device under test
-    a2910 dut (
+    am2910 dut (
         I, CCENbar, CCbar, RLDbar, CI, OEbar, clk, D,
         Y, PLbar, VECTbar, MAPbar, FULLbar
     );

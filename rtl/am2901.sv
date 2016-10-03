@@ -1,12 +1,12 @@
-module a2901(
+module am2901(
 	input  logic [8:0] i,
 	input  logic [3:0] Aadd, Badd,
 	input  logic [3:0] d,
 	output logic [3:0] y,
 	input  logic       ram0, ram3, q0, q3,
 	output logic       ram0out, ram3out, q0out, q3out,
-	input  logic       clk, c0, OEbar,
-	output logic       c4, Gbar, Pbar, ovr, f3, f30
+	input  logic       clk, c0, nOE,
+	output logic       c4, nG, nP, ovr, f3, f30
 );
 
 logic [3:0] ram[15:0];
@@ -40,7 +40,7 @@ logic [4:0] R_ext,S_ext,result,temp_p,temp_g;
 
 //   THUS THE EXTENDED OPERANDS "R_EXT" AND "S_EXT" (5 BIT OPERANDS) ARE
 //   FORMED AND ARE USED IN THE ALU OPERATION. THE EXTRA BIT IS SET TO '0'
-//   INITIALLY. THE ALU'S EXTENDED OUTPUT ( 5 BITS LONG) IS "result".
+//   INITIALLY. THE ALU'S EXTENDED OUTPUT (5 BITS LONG) IS "result".
 
 assign R_ext = i[5:3] == 'b001 ? {1'b0, ~re} : {1'b0, re};
 assign S_ext = i[5:3] == 'b010 ? {1'b0, ~s} : {1'b0, s};
@@ -48,7 +48,7 @@ assign S_ext = i[5:3] == 'b010 ? {1'b0, ~s} : {1'b0, s};
 // SELECT THE FUNCTION FOR ALU.
 
 //   IN THE ADD/SUBTRACT OPERATIONS, THE CARRY-INPUT "C0" (1 BIT) IS EXTENDED
-//   BY 4 BITS ( ALL '0') IN THE MORE SIGNIFICANT BITS TO MATCH ITS LENGTH TO
+//   BY 4 BITS (ALL '0') IN THE MORE SIGNIFICANT BITS TO MATCH ITS LENGTH TO
 //   THAT OF "R_ext" AND "S_ext". THEN, THESE THREE OPERANDS ARE ADDED.
 
 //   ADD/SUBTRACT OPERATIONS ARE DONE ON 2'S COMPLEMENT OPERANDS.
@@ -65,11 +65,10 @@ endcase
 
 // EVALUATE OTHER ALU OUTPUTS.
 
-//  FROM EXTENDED OUTPUT "result" ( 5 BITS), WE OBTAIN THE NORMAL ALU OUTPUT,
-//  "F" (4 BITS) BY LEAVING OUT THE MSB ( WHICH CORRESPONDS TO CARRY-OUT
-//  "C4").
+//  FROM EXTENDED OUTPUT "result" (5 BITS), WE OBTAIN THE NORMAL ALU OUTPUT,
+//  "F" (4 BITS) BY LEAVING OUT THE MSB (WHICH CORRESPONDS TO CARRY-OUT "C4").
 
-//  TO FACILITATE COMPUTATION OF CARRY LOOKAHEAD TERMS "Pbar" AND "Gbar", WE
+//  TO FACILITATE COMPUTATION OF CARRY LOOKAHEAD TERMS "nP" AND "nG", WE
 //  COMPUTE INTERMEDIATE TERMS "temp_p" AND "temp_g".
 
 assign f = result[3:0];
@@ -77,8 +76,8 @@ assign ovr = R_ext[3] == S_ext[3] && R_ext[3] != result[3];
 assign c4 = result[4];
 assign temp_p = R_ext | S_ext;
 assign temp_g = R_ext & S_ext;
-assign Pbar = temp_p != 'b1111;
-assign Gbar = !(temp_g[3] ||
+assign nP = temp_p != 'b1111;
+assign nG = !(temp_g[3] ||
              (temp_p[3] && temp_g[2]) ||
              (temp_p[3] && temp_p[2] && temp_g[1]) ||
              (temp_p[3] && temp_p[2] && temp_p[1] && temp_g[0])
@@ -109,7 +108,7 @@ endcase
 end
 
 // GENERATE DATA OUTPUT "Y"
-assign y = OEbar ? 'z : i[8:6] == 'b010 ? a : f;
+assign y = nOE ? 'z : i[8:6] == 'b010 ? a : f;
 
 // GENERATE BIDIRECTIONAL SHIFTER SIGNALS.
 assign ram0out = i[8:7] == 'b10 ? f[0] : 'z;

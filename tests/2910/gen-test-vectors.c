@@ -68,7 +68,7 @@ int main(int argc, char **argv)
     fprintf(outfptr, "    logic        PLbar, VECTbar,  MAPbar, FULLbar;\n\n");
 
     fprintf(outfptr, "    // Device under test\n");
-    fprintf(outfptr, "    a2910 dut (\n");
+    fprintf(outfptr, "    am2910 dut (\n");
     fprintf(outfptr, "        I, CCENbar, CCbar, RLDbar, CI, OEbar, clk, D,\n");
     fprintf(outfptr, "        Y, PLbar, VECTbar, MAPbar, FULLbar\n");
     fprintf(outfptr, "    );\n\n");

@@ -69,7 +69,7 @@ int main(int argc, char **argv)
     fprintf(outfptr, "    logic       C4, Gbar, Pbar, OVR, F3, F30;\n\n");
 
     fprintf(outfptr, "    // Device under test\n");
-    fprintf(outfptr, "    a2901 dut (\n");
+    fprintf(outfptr, "    am2901 dut (\n");
     fprintf(outfptr, "        I,\n");
     fprintf(outfptr, "        Aadd, Badd,\n");
     fprintf(outfptr, "        D,\n");

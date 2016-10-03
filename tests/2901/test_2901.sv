@@ -13,7 +13,7 @@ module testbench();
     logic       C4, Gbar, Pbar, OVR, F3, F30;
 
     // Device under test
-    a2901 dut (
+    am2901 dut (
         I,
         Aadd, Badd,
         D,
