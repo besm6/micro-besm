@@ -85,7 +85,20 @@ int main(int argc, char **argv)
     fprintf(outfptr, "        C4, Gbar, Pbar, OVR, F3, F30\n");
     fprintf(outfptr, "    );\n\n");
 
-    fprintf(outfptr, "initial begin\n\n");
+    fprintf(outfptr, "    // Status\n");
+    fprintf(outfptr, "    bit fail;\n\n");
+
+    fprintf(outfptr, "    // Read value from the variable.\n");
+    fprintf(outfptr, "    task verify(input check, input string message);\n");
+    fprintf(outfptr, "        if (!check) begin\n");
+    fprintf(outfptr, "            $display (\"%%s\", message);\n");
+    fprintf(outfptr, "            fail = 1;\n");
+    fprintf(outfptr, "        end\n");
+    fprintf(outfptr, "    endtask\n\n");
+
+    fprintf(outfptr, "initial begin\n");
+    fprintf(outfptr, "$display(\"------------------------\");\n");
+    fprintf(outfptr, "fail = 0;\n\n");
 
     /* Initialize counters */
 
@@ -198,11 +211,11 @@ int main(int argc, char **argv)
                         if (var[0] != '-') {
                             /* If the item is NOT marked blank in this line */
 
-                            fprintf(outfptr, "if (%s !== %s%s) $display",
+                            fprintf(outfptr, "verify(%s === %s%s, ",
                                 ports[field_cnt].name,
                                 ports[field_cnt].data_type[0] == '"' && var[0]!='Z' ? "'b" : "",
                                 var[0]=='Z' ? "'z" : var);
-                            fprintf(outfptr, "(\"Assert %i : < %s !== %s%s >\");",
+                            fprintf(outfptr, "\"Assert %i : < %s !== %s%s >\");",
                                 assert_cnt, ports[field_cnt].name,
                                 ports[field_cnt].data_type[0] == '"' && var[0]!='Z' ? "'b" : "",
                                 var[0]=='Z' ? "'z" : var);
@@ -232,10 +245,17 @@ int main(int argc, char **argv)
         line_cnt++;
     }
 
-    fprintf(outfptr, "//------------------------\n\n");
+    fprintf(outfptr, "if (fail) begin\n");
+    fprintf(outfptr, "    $display(\"Test FAIL\");\n");
+    fprintf(outfptr, "    $display(\"------------------------\");\n");
+    fprintf(outfptr, "    $finish(1);\n");
+    fprintf(outfptr, "end\n");
     fprintf(outfptr, "$display(\"Test PASS\");\n");
+    fprintf(outfptr, "$display(\"------------------------\");\n");
     fprintf(outfptr, "$finish;\n\n");
+
     fprintf(outfptr, "end\n\n");
+
     fprintf(outfptr, "endmodule\n");
     return 0;
 }

@@ -1,8 +1,11 @@
 *.o
 *.vcd
 *.log
+*.jou
+*.pb
 work-obj93.cf
 testbench
 .DS_Store
+xsim.dir
 tests/*/gen-test-vectors
 tests/*/vhdl/modelsim/work/
