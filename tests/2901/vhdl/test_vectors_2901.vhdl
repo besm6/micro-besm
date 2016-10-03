@@ -21,9 +21,9 @@
 --  Functionality     yes     Champaka Ramachandran  16 Sept,92    ZYCAD
 --------------------------------------------------------------------------------
 
-library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
+use work.types.all;
+use work.MVL7_functions.all;	--some binary functions
+use work.synthesis_types.all;	--hints for synthesis
 
 entity testbench is
 end;
@@ -31,29 +31,29 @@ end;
 architecture A of testbench is
 	 component AM2901
 	  port (
-		I : in std_logic_vector(8 downto 0);
-		Aadd, Badd : std_logic_vector(3 downto 0);
-		D :  in std_logic_vector(3 downto 0);
-		Y : out std_logic_vector(3 downto 0);
-		RAM0, RAM3, Q0, Q3 : in std_logic;
-		RAM0out, RAM3out, Q0out, Q3out : out std_logic;
-		CLK : in std_logic;
-		C0 : in std_logic;
-		OEbar : in std_logic;
-		C4, Gbar, Pbar, OVR, F3, F30 : out std_logic
+		I : in MVL7_vector(8 downto 0);
+		Aadd, Badd : in integer range 0 to 15;
+		D :  in MVL7_vector(3 downto 0);
+		Y : out MVL7_vector(3 downto 0);
+		RAM0, RAM3, Q0, Q3 : in MVL7;
+		RAM0out, RAM3out, Q0out, Q3out : out MVL7;
+		CLK : in clock;
+		C0 : in MVL7;
+		OEbar : in MVL7;
+		C4, Gbar, Pbar, OVR, F3, F30 : out MVL7
 	  );
 	 end component;
 
-		signal I : std_logic_vector(8 downto 0);
-		signal Aadd, Badd : std_logic_vector(3 downto 0);
-		signal D : std_logic_vector(3 downto 0);
-		signal Y : std_logic_vector(3 downto 0);
-		signal RAM0, RAM3, Q0, Q3 : std_logic;
-		signal RAM0out, RAM3out, Q0out, Q3out : std_logic;
-		signal CLK : std_logic;
-		signal C0 : std_logic;
-		signal OEbar : std_logic;
-		signal C4, Gbar, Pbar, OVR, F3, F30 : std_logic;
+		signal I : MVL7_vector(8 downto 0);
+		signal Aadd, Badd : integer range 0 to 15;
+		signal D : MVL7_vector(3 downto 0);
+		signal Y : MVL7_vector(3 downto 0);
+		signal RAM0, RAM3, Q0, Q3 : MVL7;
+		signal RAM0out, RAM3out, Q0out, Q3out : MVL7;
+		signal CLK : clock;
+		signal C0 : MVL7;
+		signal OEbar : MVL7;
+		signal C4, Gbar, Pbar, OVR, F3, F30 : MVL7;
 
 for all : AM2901 use entity work.a2901(a2901);
 
@@ -3774,7 +3774,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -3793,7 +3793,7 @@ clk <= '1'; --	 Cycle No: 111
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -3819,7 +3819,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -3838,7 +3838,7 @@ clk <= '1'; --	 Cycle No: 113
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -3864,7 +3864,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -3883,7 +3883,7 @@ clk <= '1'; --	 Cycle No: 115
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -3909,7 +3909,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -3928,7 +3928,7 @@ clk <= '1'; --	 Cycle No: 117
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -3954,7 +3954,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -3973,7 +3973,7 @@ clk <= '1'; --	 Cycle No: 119
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(1, 4)) ;
+Aadd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -3999,7 +3999,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4018,7 +4018,7 @@ clk <= '1'; --	 Cycle No: 121
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4044,7 +4044,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4063,7 +4063,7 @@ clk <= '1'; --	 Cycle No: 123
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(1, 4)) ;
+Aadd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4089,7 +4089,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4108,7 +4108,7 @@ clk <= '1'; --	 Cycle No: 125
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4134,7 +4134,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(2, 4)) ;
+Badd <=  2 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4153,7 +4153,7 @@ clk <= '1'; --	 Cycle No: 127
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(2, 4)) ;
+Aadd <=  2 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4179,7 +4179,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(2, 4)) ;
+Badd <=  2 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4198,7 +4198,7 @@ clk <= '1'; --	 Cycle No: 129
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(2, 4)) ;
+Badd <=  2 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4224,7 +4224,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(2, 4)) ;
+Badd <=  2 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4243,7 +4243,7 @@ clk <= '1'; --	 Cycle No: 131
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(2, 4)) ;
+Aadd <=  2 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4269,7 +4269,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(2, 4)) ;
+Badd <=  2 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4288,7 +4288,7 @@ clk <= '1'; --	 Cycle No: 133
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(2, 4)) ;
+Badd <=  2 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4314,7 +4314,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(3, 4)) ;
+Badd <=  3 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4333,7 +4333,7 @@ clk <= '1'; --	 Cycle No: 135
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(3, 4)) ;
+Aadd <=  3 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4359,7 +4359,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(3, 4)) ;
+Badd <=  3 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4378,7 +4378,7 @@ clk <= '1'; --	 Cycle No: 137
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(3, 4)) ;
+Badd <=  3 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4404,7 +4404,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(3, 4)) ;
+Badd <=  3 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4423,7 +4423,7 @@ clk <= '1'; --	 Cycle No: 139
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(3, 4)) ;
+Aadd <=  3 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4449,7 +4449,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(3, 4)) ;
+Badd <=  3 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4468,7 +4468,7 @@ clk <= '1'; --	 Cycle No: 141
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(3, 4)) ;
+Badd <=  3 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4494,7 +4494,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(4, 4)) ;
+Badd <=  4 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4513,7 +4513,7 @@ clk <= '1'; --	 Cycle No: 143
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(4, 4)) ;
+Aadd <=  4 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4539,7 +4539,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(4, 4)) ;
+Badd <=  4 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4558,7 +4558,7 @@ clk <= '1'; --	 Cycle No: 145
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(4, 4)) ;
+Badd <=  4 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4584,7 +4584,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(4, 4)) ;
+Badd <=  4 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4603,7 +4603,7 @@ clk <= '1'; --	 Cycle No: 147
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(4, 4)) ;
+Aadd <=  4 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4629,7 +4629,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(4, 4)) ;
+Badd <=  4 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4648,7 +4648,7 @@ clk <= '1'; --	 Cycle No: 149
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(4, 4)) ;
+Badd <=  4 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4674,7 +4674,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(5, 4)) ;
+Badd <=  5 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4693,7 +4693,7 @@ clk <= '1'; --	 Cycle No: 151
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(5, 4)) ;
+Aadd <=  5 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4719,7 +4719,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(5, 4)) ;
+Badd <=  5 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4738,7 +4738,7 @@ clk <= '1'; --	 Cycle No: 153
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(5, 4)) ;
+Badd <=  5 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4764,7 +4764,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(5, 4)) ;
+Badd <=  5 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4783,7 +4783,7 @@ clk <= '1'; --	 Cycle No: 155
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(5, 4)) ;
+Aadd <=  5 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4809,7 +4809,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(5, 4)) ;
+Badd <=  5 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4828,7 +4828,7 @@ clk <= '1'; --	 Cycle No: 157
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(5, 4)) ;
+Badd <=  5 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4854,7 +4854,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(6, 4)) ;
+Badd <=  6 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4873,7 +4873,7 @@ clk <= '1'; --	 Cycle No: 159
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(6, 4)) ;
+Aadd <=  6 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4899,7 +4899,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(6, 4)) ;
+Badd <=  6 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4918,7 +4918,7 @@ clk <= '1'; --	 Cycle No: 161
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(6, 4)) ;
+Badd <=  6 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4944,7 +4944,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(6, 4)) ;
+Badd <=  6 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4963,7 +4963,7 @@ clk <= '1'; --	 Cycle No: 163
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(6, 4)) ;
+Aadd <=  6 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -4989,7 +4989,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(6, 4)) ;
+Badd <=  6 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5008,7 +5008,7 @@ clk <= '1'; --	 Cycle No: 165
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(6, 4)) ;
+Badd <=  6 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5034,7 +5034,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(7, 4)) ;
+Badd <=  7 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5053,7 +5053,7 @@ clk <= '1'; --	 Cycle No: 167
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(7, 4)) ;
+Aadd <=  7 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5079,7 +5079,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(7, 4)) ;
+Badd <=  7 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5098,7 +5098,7 @@ clk <= '1'; --	 Cycle No: 169
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(7, 4)) ;
+Badd <=  7 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5124,7 +5124,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(7, 4)) ;
+Badd <=  7 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5143,7 +5143,7 @@ clk <= '1'; --	 Cycle No: 171
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(7, 4)) ;
+Aadd <=  7 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5169,7 +5169,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(7, 4)) ;
+Badd <=  7 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5188,7 +5188,7 @@ clk <= '1'; --	 Cycle No: 173
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(7, 4)) ;
+Badd <=  7 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5214,7 +5214,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(8, 4)) ;
+Badd <=  8 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5233,7 +5233,7 @@ clk <= '1'; --	 Cycle No: 175
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(8, 4)) ;
+Aadd <=  8 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5259,7 +5259,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(8, 4)) ;
+Badd <=  8 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5278,7 +5278,7 @@ clk <= '1'; --	 Cycle No: 177
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(8, 4)) ;
+Badd <=  8 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5304,7 +5304,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(8, 4)) ;
+Badd <=  8 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5323,7 +5323,7 @@ clk <= '1'; --	 Cycle No: 179
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(8, 4)) ;
+Aadd <=  8 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5349,7 +5349,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(8, 4)) ;
+Badd <=  8 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5368,7 +5368,7 @@ clk <= '1'; --	 Cycle No: 181
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(8, 4)) ;
+Badd <=  8 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5394,7 +5394,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(9, 4)) ;
+Badd <=  9 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5413,7 +5413,7 @@ clk <= '1'; --	 Cycle No: 183
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(9, 4)) ;
+Aadd <=  9 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5439,7 +5439,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(9, 4)) ;
+Badd <=  9 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5458,7 +5458,7 @@ clk <= '1'; --	 Cycle No: 185
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(9, 4)) ;
+Badd <=  9 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5484,7 +5484,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(9, 4)) ;
+Badd <=  9 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5503,7 +5503,7 @@ clk <= '1'; --	 Cycle No: 187
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(9, 4)) ;
+Aadd <=  9 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5529,7 +5529,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(9, 4)) ;
+Badd <=  9 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5548,7 +5548,7 @@ clk <= '1'; --	 Cycle No: 189
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(9, 4)) ;
+Badd <=  9 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5574,7 +5574,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(10, 4)) ;
+Badd <=  10 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5593,7 +5593,7 @@ clk <= '1'; --	 Cycle No: 191
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(10, 4)) ;
+Aadd <=  10 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5619,7 +5619,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(10, 4)) ;
+Badd <=  10 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5638,7 +5638,7 @@ clk <= '1'; --	 Cycle No: 193
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(10, 4)) ;
+Badd <=  10 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5664,7 +5664,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(10, 4)) ;
+Badd <=  10 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5683,7 +5683,7 @@ clk <= '1'; --	 Cycle No: 195
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(10, 4)) ;
+Aadd <=  10 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5709,7 +5709,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(10, 4)) ;
+Badd <=  10 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5728,7 +5728,7 @@ clk <= '1'; --	 Cycle No: 197
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(10, 4)) ;
+Badd <=  10 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5754,7 +5754,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(11, 4)) ;
+Badd <=  11 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5773,7 +5773,7 @@ clk <= '1'; --	 Cycle No: 199
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(11, 4)) ;
+Aadd <=  11 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5799,7 +5799,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(11, 4)) ;
+Badd <=  11 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5818,7 +5818,7 @@ clk <= '1'; --	 Cycle No: 201
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(11, 4)) ;
+Badd <=  11 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5844,7 +5844,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(11, 4)) ;
+Badd <=  11 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5863,7 +5863,7 @@ clk <= '1'; --	 Cycle No: 203
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(11, 4)) ;
+Aadd <=  11 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5889,7 +5889,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(11, 4)) ;
+Badd <=  11 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5908,7 +5908,7 @@ clk <= '1'; --	 Cycle No: 205
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(11, 4)) ;
+Badd <=  11 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5934,7 +5934,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(12, 4)) ;
+Badd <=  12 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5953,7 +5953,7 @@ clk <= '1'; --	 Cycle No: 207
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(12, 4)) ;
+Aadd <=  12 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5979,7 +5979,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(12, 4)) ;
+Badd <=  12 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -5998,7 +5998,7 @@ clk <= '1'; --	 Cycle No: 209
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(12, 4)) ;
+Badd <=  12 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6024,7 +6024,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(12, 4)) ;
+Badd <=  12 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6043,7 +6043,7 @@ clk <= '1'; --	 Cycle No: 211
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(12, 4)) ;
+Aadd <=  12 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6069,7 +6069,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(12, 4)) ;
+Badd <=  12 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6088,7 +6088,7 @@ clk <= '1'; --	 Cycle No: 213
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(12, 4)) ;
+Badd <=  12 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6114,7 +6114,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(13, 4)) ;
+Badd <=  13 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6133,7 +6133,7 @@ clk <= '1'; --	 Cycle No: 215
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(13, 4)) ;
+Aadd <=  13 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6159,7 +6159,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(13, 4)) ;
+Badd <=  13 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6178,7 +6178,7 @@ clk <= '1'; --	 Cycle No: 217
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(13, 4)) ;
+Badd <=  13 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6204,7 +6204,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(13, 4)) ;
+Badd <=  13 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6223,7 +6223,7 @@ clk <= '1'; --	 Cycle No: 219
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(13, 4)) ;
+Aadd <=  13 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6249,7 +6249,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(13, 4)) ;
+Badd <=  13 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6268,7 +6268,7 @@ clk <= '1'; --	 Cycle No: 221
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(13, 4)) ;
+Badd <=  13 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6294,7 +6294,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(14, 4)) ;
+Badd <=  14 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6313,7 +6313,7 @@ clk <= '1'; --	 Cycle No: 223
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(14, 4)) ;
+Aadd <=  14 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6339,7 +6339,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(14, 4)) ;
+Badd <=  14 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6358,7 +6358,7 @@ clk <= '1'; --	 Cycle No: 225
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(14, 4)) ;
+Badd <=  14 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6384,7 +6384,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(14, 4)) ;
+Badd <=  14 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6403,7 +6403,7 @@ clk <= '1'; --	 Cycle No: 227
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(14, 4)) ;
+Aadd <=  14 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6429,7 +6429,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(14, 4)) ;
+Badd <=  14 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6448,7 +6448,7 @@ clk <= '1'; --	 Cycle No: 229
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(14, 4)) ;
+Badd <=  14 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6474,7 +6474,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(15, 4)) ;
+Badd <=  15 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6493,7 +6493,7 @@ clk <= '1'; --	 Cycle No: 231
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(15, 4)) ;
+Aadd <=  15 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6519,7 +6519,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(15, 4)) ;
+Badd <=  15 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6538,7 +6538,7 @@ clk <= '1'; --	 Cycle No: 233
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(15, 4)) ;
+Badd <=  15 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6564,7 +6564,7 @@ wait for 1 ns;
 
 I <= "010000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(15, 4)) ;
+Badd <=  15 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6583,7 +6583,7 @@ clk <= '1'; --	 Cycle No: 235
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(15, 4)) ;
+Aadd <=  15 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6609,7 +6609,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(15, 4)) ;
+Badd <=  15 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6628,7 +6628,7 @@ clk <= '1'; --	 Cycle No: 237
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned(15, 4)) ;
+Badd <=  15 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6655,7 +6655,7 @@ wait for 1 ns;
 
 I <= "100000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 RAM0 <= 'Z';
@@ -6681,7 +6681,7 @@ clk <= '1'; --	 Cycle No: 239
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6707,7 +6707,7 @@ wait for 1 ns;
 
 I <= "100000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 RAM0 <= 'Z';
@@ -6733,7 +6733,7 @@ clk <= '1'; --	 Cycle No: 241
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6759,7 +6759,7 @@ wait for 1 ns;
 
 I <= "101000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 RAM0 <= 'Z';
@@ -6785,7 +6785,7 @@ clk <= '1'; --	 Cycle No: 243
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6811,7 +6811,7 @@ wait for 1 ns;
 
 I <= "101000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 RAM0 <= 'Z';
@@ -6837,7 +6837,7 @@ clk <= '1'; --	 Cycle No: 245
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned(0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6863,7 +6863,7 @@ wait for 1 ns;
 
 I <= "110000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 RAM0 <= '1';
@@ -6889,7 +6889,7 @@ clk <= '1'; --	 Cycle No: 247
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6915,7 +6915,7 @@ wait for 1 ns;
 
 I <= "110000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 RAM0 <= '0';
@@ -6941,7 +6941,7 @@ clk <= '1'; --	 Cycle No: 249
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -6967,7 +6967,7 @@ wait for 1 ns;
 
 I <= "111000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 RAM0 <= '1';
@@ -6993,7 +6993,7 @@ clk <= '1'; --	 Cycle No: 251
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7019,7 +7019,7 @@ wait for 1 ns;
 
 I <= "111000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 RAM0 <= '0';
@@ -7045,7 +7045,7 @@ clk <= '1'; --	 Cycle No: 253
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7461,7 +7461,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7480,7 +7480,7 @@ clk <= '1'; --	 Cycle No: 272
 wait for 1 ns;
 
 I <= "001000000";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7530,7 +7530,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7549,7 +7549,7 @@ clk <= '1'; --	 Cycle No: 275
 wait for 1 ns;
 
 I <= "001000000";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7581,7 +7581,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7601,7 +7601,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7620,8 +7620,8 @@ clk <= '1'; --	 Cycle No: 278
 wait for 1 ns;
 
 I <= "001000001";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 1, 4)) ;
+Aadd <=  0 ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7652,7 +7652,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7672,7 +7672,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7691,8 +7691,8 @@ clk <= '1'; --	 Cycle No: 281
 wait for 1 ns;
 
 I <= "001000001";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 1, 4)) ;
+Aadd <=  0 ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7821,7 +7821,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7840,7 +7840,7 @@ clk <= '1'; --	 Cycle No: 287
 wait for 1 ns;
 
 I <= "001000011";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7871,7 +7871,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7890,7 +7890,7 @@ clk <= '1'; --	 Cycle No: 289
 wait for 1 ns;
 
 I <= "001000011";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7922,7 +7922,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7941,7 +7941,7 @@ clk <= '1'; --	 Cycle No: 291
 wait for 1 ns;
 
 I <= "001000100";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7972,7 +7972,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -7991,7 +7991,7 @@ clk <= '1'; --	 Cycle No: 293
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -8023,7 +8023,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -8043,7 +8043,7 @@ wait for 1 ns;
 
 I <= "001000101";
 D <= "1111";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -8074,7 +8074,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -8094,7 +8094,7 @@ wait for 1 ns;
 
 I <= "001000101";
 D <= "0000";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -8433,7 +8433,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -8452,7 +8452,7 @@ clk <= '1'; --	 Cycle No: 311
 wait for 1 ns;
 
 I <= "010000111";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -8478,7 +8478,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -8497,7 +8497,7 @@ clk <= '1'; --	 Cycle No: 313
 wait for 1 ns;
 
 I <= "010000111";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -8523,7 +8523,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -8542,7 +8542,7 @@ clk <= '1'; --	 Cycle No: 315
 wait for 1 ns;
 
 I <= "010000111";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '1';
 
@@ -8955,7 +8955,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -8993,7 +8993,7 @@ clk <= '1'; --	 Cycle No: 333
 wait for 1 ns;
 
 I <= "000011000";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9037,7 +9037,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9075,7 +9075,7 @@ clk <= '1'; --	 Cycle No: 337
 wait for 1 ns;
 
 I <= "000100000";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9120,7 +9120,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9140,7 +9140,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9159,8 +9159,8 @@ clk <= '1'; --	 Cycle No: 341
 wait for 1 ns;
 
 I <= "000011001";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 1, 4)) ;
+Aadd <=  0 ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9204,7 +9204,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9224,7 +9224,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9243,8 +9243,8 @@ clk <= '1'; --	 Cycle No: 345
 wait for 1 ns;
 
 I <= "000100001";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 1, 4)) ;
+Aadd <=  0 ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9412,7 +9412,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9431,7 +9431,7 @@ clk <= '1'; --	 Cycle No: 354
 wait for 1 ns;
 
 I <= "000011011";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9475,7 +9475,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9494,7 +9494,7 @@ clk <= '1'; --	 Cycle No: 357
 wait for 1 ns;
 
 I <= "000011011";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9539,7 +9539,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9558,7 +9558,7 @@ clk <= '1'; --	 Cycle No: 360
 wait for 1 ns;
 
 I <= "000011100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9602,7 +9602,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9621,7 +9621,7 @@ clk <= '1'; --	 Cycle No: 363
 wait for 1 ns;
 
 I <= "000011100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9666,7 +9666,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9686,7 +9686,7 @@ wait for 1 ns;
 
 I <= "000011101";
 D <= "0000";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9730,7 +9730,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -9750,7 +9750,7 @@ wait for 1 ns;
 
 I <= "000100101";
 D <= "1111";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10009,7 +10009,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10047,8 +10047,8 @@ clk <= '1'; --	 Cycle No: 383
 wait for 1 ns;
 
 I <= "011011000";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10067,7 +10067,7 @@ clk <= '1'; --	 Cycle No: 384
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10093,7 +10093,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10131,8 +10131,8 @@ clk <= '1'; --	 Cycle No: 387
 wait for 1 ns;
 
 I <= "011100000";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10151,7 +10151,7 @@ clk <= '1'; --	 Cycle No: 388
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10178,7 +10178,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10198,7 +10198,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10217,8 +10217,8 @@ clk <= '1'; --	 Cycle No: 391
 wait for 1 ns;
 
 I <= "011011001";
-Aadd <=  std_logic_vector(to_unsigned( 1, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  1 ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10237,7 +10237,7 @@ clk <= '1'; --	 Cycle No: 392
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10263,7 +10263,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10283,7 +10283,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 1, 4)) ;
+Badd <=  1 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10302,8 +10302,8 @@ clk <= '1'; --	 Cycle No: 395
 wait for 1 ns;
 
 I <= "011100001";
-Aadd <=  std_logic_vector(to_unsigned( 1, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  1 ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10322,7 +10322,7 @@ clk <= '1'; --	 Cycle No: 396
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10367,7 +10367,7 @@ clk <= '1'; --	 Cycle No: 398
 wait for 1 ns;
 
 I <= "011011010";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10386,7 +10386,7 @@ clk <= '1'; --	 Cycle No: 399
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10430,7 +10430,7 @@ clk <= '1'; --	 Cycle No: 401
 wait for 1 ns;
 
 I <= "011011010";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10449,7 +10449,7 @@ clk <= '1'; --	 Cycle No: 402
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10476,7 +10476,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10495,7 +10495,7 @@ clk <= '1'; --	 Cycle No: 404
 wait for 1 ns;
 
 I <= "011011011";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10514,7 +10514,7 @@ clk <= '1'; --	 Cycle No: 405
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10540,7 +10540,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10559,7 +10559,7 @@ clk <= '1'; --	 Cycle No: 407
 wait for 1 ns;
 
 I <= "011011011";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10578,7 +10578,7 @@ clk <= '1'; --	 Cycle No: 408
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10605,7 +10605,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10624,8 +10624,8 @@ clk <= '1'; --	 Cycle No: 410
 wait for 1 ns;
 
 I <= "011011100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10644,7 +10644,7 @@ clk <= '1'; --	 Cycle No: 411
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10670,7 +10670,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10689,8 +10689,8 @@ clk <= '1'; --	 Cycle No: 413
 wait for 1 ns;
 
 I <= "011011100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10709,7 +10709,7 @@ clk <= '1'; --	 Cycle No: 414
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10736,7 +10736,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10756,8 +10756,8 @@ wait for 1 ns;
 
 I <= "011011101";
 D <= "0000";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10776,7 +10776,7 @@ clk <= '1'; --	 Cycle No: 417
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10802,7 +10802,7 @@ wait for 1 ns;
 
 I <= "011000111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10822,8 +10822,8 @@ wait for 1 ns;
 
 I <= "011100101";
 D <= "1111";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10842,7 +10842,7 @@ clk <= '1'; --	 Cycle No: 420
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10888,7 +10888,7 @@ wait for 1 ns;
 
 I <= "011011110";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10907,7 +10907,7 @@ clk <= '1'; --	 Cycle No: 423
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10952,7 +10952,7 @@ wait for 1 ns;
 
 I <= "011100110";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10971,7 +10971,7 @@ clk <= '1'; --	 Cycle No: 426
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -10998,7 +10998,7 @@ wait for 1 ns;
 
 I <= "011011111";
 D <= "0000";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -11017,7 +11017,7 @@ clk <= '1'; --	 Cycle No: 428
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -11043,7 +11043,7 @@ wait for 1 ns;
 
 I <= "011011111";
 D <= "1111";
-Badd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Badd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
@@ -11062,7 +11062,7 @@ clk <= '1'; --	 Cycle No: 430
 wait for 1 ns;
 
 I <= "001000100";
-Aadd <=  std_logic_vector(to_unsigned( 0, 4)) ;
+Aadd <=  0 ;
 C0 <= '0';
 OEbar <= '0';
 
