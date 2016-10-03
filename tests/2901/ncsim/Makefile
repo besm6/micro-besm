@@ -22,5 +22,5 @@ view:
 
 $(NC)sim.dir:
 		$(NCSIM)vlog --nolog --sv ../../../rtl/am2901.sv
-		$(NCSIM)vhdl --nolog ../test_vectors_2901.vhdl
+		$(NCSIM)vlog --nolog --sv ../test_2901.sv
 		$(NCSIM)elab --nolog testbench

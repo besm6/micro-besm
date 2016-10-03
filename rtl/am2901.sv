@@ -1,12 +1,13 @@
 module a2901(
-	input logic [8:0] i,
-	input bit [3:0] Aadd, Badd,
-	input logic [3:0] d,
+	input  logic [8:0] i,
+	input  logic [3:0] Aadd, Badd,
+	input  logic [3:0] d,
 	output logic [3:0] y,
-	input ram0, ram3, q0, q3,
-	output ram0out, ram3out, q0out, q3out,
-	input logic clk, c0, OEbar,
-	output logic c4, Gbar, Pbar, ovr, f3, f30);
+	input  logic       ram0, ram3, q0, q3,
+	output logic       ram0out, ram3out, q0out, q3out,
+	input  logic       clk, c0, OEbar,
+	output logic       c4, Gbar, Pbar, ovr, f3, f30
+);
 
 logic [3:0] ram[15:0];
 logic [3:0] re, s;
@@ -59,6 +60,7 @@ always_comb unique case(i[5:3])
 'b101: result = ~R_ext & S_ext;
 'b110: result = R_ext ^ S_ext;
 'b111: result = ~(R_ext ^ S_ext);
+default: ;
 endcase
 
 // EVALUATE OTHER ALU OUTPUTS.
