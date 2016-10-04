@@ -1,17 +1,20 @@
+//
+// Am2910 - Microprogram Controller
+//
 module am2910(
-    input         [3:0] I,          // 2910 instruction
-    input               nCCEN,      // condition code enable input bit
-    input               nCC,        // condition code input bit
-    input               nRLD,       // R register load
-    input               CI,         // carry in
-    input               nOE,        // tri-state driver
-    input               clk,        // clock
-    input        [11:0] D,          // direct inputs
-    output logic [11:0] Y,          // output instruction word
-    output logic        nPL,        //
-    output logic        nVECT,      //
-    output logic        nMAP,       //
-    output logic        nFULL       // stack full flag
+    input         [3:0] I,          // Four-bit instruction
+    input               nCCEN,      // Conditional Code Enable bit
+    input               nCC,        // Conditional Code Bit
+    input               nRLD,       // Unconditional load bit for register/counter
+    input               CI,         // Carry-in bit for microprogram counter
+    input               nOE,        // Tri-state driver control bit
+    input               clk,        // Clock
+    input        [11:0] D,          // 12-bit data input to chip
+    output logic [11:0] Y,          // 12-bit data output from chip
+    output logic        nPL,        // Pipeline register output enable
+    output logic        nVECT,      // Vector output enable
+    output logic        nMAP,       // Mapping PROM output enable
+    output logic        nFULL       // Stack full flag
 );
 
 logic [2:0] sp;
