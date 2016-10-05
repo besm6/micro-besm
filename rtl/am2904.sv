@@ -2,32 +2,20 @@
 // Am2904 - Status and Shift Control Unit
 //
 module am2904(
+    input [12:0] I,         // Instruction
+
+    input        clk,       // Clock
     input        nCEm,      // Machine status register enable
     input        nCEu,      // Micro status register enable
-    output logic Co,        // Carry multiplexer out
-    input        clk,       // Clock
-    output logic CT,        // Conditional test
-    input        Cx,        // Carry multiplexer in
-    input        nEz,       // Zero status enable
-    input        nEc,       // Carry status enable
-    input        nEn,       // Sign status enable
-    input        nEovr,     // Overflow status enable
-    input [12:0] I,         // Instruction
+    input        nOEy,      // Y output enable
     input        Ic,        // Carry status from ALU
     input        Iovr,      // Overflow status from ALU
     input        In,        // Sign status from ALU
     input        Iz,        // Zero status from ALU
-    input        nOEct,     // CT output enable
-    input        nOEy,      // Y output enable
-    input        nSE,       // Shift enable
-    input        SIO0,      // Serial shift, RAM0 of least significant slice
-    input        SIOn,      // Serial shift, RAM3 of most significant slice
-    input        QIO0,      // Serial shift, QIO0 of least significant slice
-    input        QIOn,      // Serial shift, QIO3 of most significant slice
-    output logic oSIO0,     // Output direction of the above signals
-    output logic oSIOn,     // --//--
-    output logic oQIO0,     // --//--
-    output logic oQIOn,     // --//--
+    input        nEz,       // Zero status enable
+    input        nEc,       // Carry status enable
+    input        nEn,       // Sign status enable
+    input        nEovr,     // Overflow status enable
     input        Yz,        // Zero status bus input
     input        Yc,        // Carry status bus input
     input        Yn,        // Sign status bus input
@@ -36,12 +24,29 @@ module am2904(
     output logic oYc,       // --//--
     output logic oYn,       // --//--
     output logic oYovr,     // --//--
+
+    input        nOEct,     // CT output enable
+    output logic CT,        // Conditional test
+
+    input        Cx,        // Carry multiplexer in
+    output logic Co,        // Carry multiplexer out
+
+    input        nSE,       // Shift enable
+    input        SIO0,      // Serial shift, RAM0 of least significant slice
+    input        SIOn,      // Serial shift, RAM3 of most significant slice
+    input        QIO0,      // Serial shift, QIO0 of least significant slice
+    input        QIOn,      // Serial shift, QIO3 of most significant slice
+    output logic oSIO0,     // Output direction of the above signals
+    output logic oSIOn,     // --//--
+    output logic oQIO0,     // --//--
+    output logic oQIOn      // --//--
 );
 
 //------------------------------------------------------
 // Micro Status Register
 //
 logic [3:0] uSR;
+logic [3:0] MSR;
 logic [3:0] uSR_new;
 logic uZ, uC, uN, uOVR;
 
@@ -58,14 +63,14 @@ end
 always_comb case (I[5:0])
 
 // Bit operations: ---- OVR - N - C - Z
-     'o10: uSR_new = {uOVR, uN, uC, 0};         // reset zero bit
-     'o11: uSR_new = {uOVR, uN, uC, 1};         // set zero bit
-     'o12: uSR_new = {uOVR, uN, 0,  uZ};        // reset carry bit
-     'o13: uSR_new = {uOVR, uN, 1,  uZ};        // set carry bit
-     'o14: uSR_new = {uOVR, 0,  uC, uZ};        // reset sign bit
-     'o15: uSR_new = {uOVR, 1,  uC, uZ};        // set sign bit
-     'o16: uSR_new = {0,    uN, uC, uZ};        // reset overflow bit
-     'o17: uSR_new = {1,    uN, uC, uZ};        // set overflow bit
+     'o10: uSR_new = {uOVR, uN,   uC,   1'b0};  // reset zero bit
+     'o11: uSR_new = {uOVR, uN,   uC,   1'b1};  // set zero bit
+     'o12: uSR_new = {uOVR, uN,   1'b0, uZ};    // reset carry bit
+     'o13: uSR_new = {uOVR, uN,   1'b1, uZ};    // set carry bit
+     'o14: uSR_new = {uOVR, 1'b0, uC,   uZ};    // reset sign bit
+     'o15: uSR_new = {uOVR, 1'b1, uC,   uZ};    // set sign bit
+     'o16: uSR_new = {1'b0, uN,   uC,   uZ};    // reset overflow bit
+     'o17: uSR_new = {1'b1, uN,   uC,   uZ};    // set overflow bit
 
 // Register operations
      'o00: uSR_new = MSR;                       // load MSR to uSR
@@ -84,21 +89,18 @@ endcase
 //------------------------------------------------------
 // Machine Status Register
 //
-logic [3:0] MSR;
 logic [3:0] MSR_new;
 logic MZ, MC, MN, MOVR;
+logic MC_override, MC_new;
 
-assign MZ   = MSR[0];
-assign MC   = MSR[1];
-assign MN   = MSR[2];
-assign MOVR = MSR[3];
+assign MSR = {MOVR, MN, MC, MZ};
 
 always @(posedge clk) begin
     if (!nCEm & !nEz)
         MZ <= MSR_new[0];
 
     if (MC_override)
-        MC <= MC_new;   // override from shift operation
+        MC <= MC_new;           // override from shift operation
     else if (!nCEm & !nEc)
         MC <= MSR_new[1];
 
@@ -118,7 +120,7 @@ always_comb case (I[5:0])
      'o03: MSR_new = 4'b0000;                   // reset MSR
      'o05: MSR_new = ~MSR;                      // invert MSR
 
-// Load operations: --- OVR - N - C --- Z
+// Load operations: - OVR - N - C --- Z
      'o04: MSR_new = {MC,   In, MOVR, Iz};      // load for shift through overflow
 'o10,'o11,
 'o30,'o31,
@@ -204,57 +206,103 @@ always_comb case (I[5:0])
   default: ;
 endcase
 
-assign CT = nOEct ? 'z : C_new;
+assign CT = nOEct ? 'z : CT_new;
 
 //------------------------------------------------------
 // Shift Linkage Multiplexer
 //
-logic SIO0_new, SIOn_new, QIO0_new, QIOn_new;
-logic MC_override, MC_new;
+logic shift_op[5:0];
 
-assign oSIO0 = nSE ? 'z : SIO0_new;
-assign oSIOn = nSE ? 'z : SIOn_new;
-assign oQIO0 = nSE ? 'z : QIO0_new;
-assign oQIOn = nSE ? 'z : QIOn_new;
+assign oSIO0 = nSE ? 'z : shift_op[5];
+assign oSIOn = nSE ? 'z : shift_op[4];
+assign oQIO0 = nSE ? 'z : shift_op[3];
+assign oQIOn = nSE ? 'z : shift_op[2];
 
-//TODO: add brief description of each shift
+assign MC_override = shift_op[1];
+assign MC_new      = shift_op[0];
+
 always_comb case (I[10:6])
-// Down shifts
-   'o00: begin SIO0_new = 'z; SIOn_new = 0;       QIO0_new = 'z; QIOn_new = 0;    MC_override = 0; MC_new = 0;    end
-   'o01: begin SIO0_new = 'z; SIOn_new = 1;       QIO0_new = 'z; QIOn_new = 1;    MC_override = 0; MC_new = 0;    end
-   'o02: begin SIO0_new = 'z; SIOn_new = 0;       QIO0_new = 'z; QIOn_new = MN;   MC_override = 1; MC_new = SIO0; end
-   'o03: begin SIO0_new = 'z; SIOn_new = 1;       QIO0_new = 'z; QIOn_new = SIO0; MC_override = 0; MC_new = 0;    end
-   'o04: begin SIO0_new = 'z; SIOn_new = MC;      QIO0_new = 'z; QIOn_new = SIO0; MC_override = 0; MC_new = 0;    end
-   'o05: begin SIO0_new = 'z; SIOn_new = MN;      QIO0_new = 'z; QIOn_new = SIO0; MC_override = 0; MC_new = 0;    end
-   'o06: begin SIO0_new = 'z; SIOn_new = 0;       QIO0_new = 'z; QIOn_new = SIO0; MC_override = 0; MC_new = 0;    end
-   'o07: begin SIO0_new = 'z; SIOn_new = 0;       QIO0_new = 'z; QIOn_new = SIO0; MC_override = 1; MC_new = QIO0; end
-   'o10: begin SIO0_new = 'z; SIOn_new = SIO0;    QIO0_new = 'z; QIOn_new = QIO0; MC_override = 1; MC_new = SIO0; end
-   'o11: begin SIO0_new = 'z; SIOn_new = MC;      QIO0_new = 'z; QIOn_new = QIO0; MC_override = 1; MC_new = SIO0; end
-   'o12: begin SIO0_new = 'z; SIOn_new = SIO0;    QIO0_new = 'z; QIOn_new = QIO0; MC_override = 0; MC_new = 0;    end
-   'o13: begin SIO0_new = 'z; SIOn_new = IC;      QIO0_new = 'z; QIOn_new = SIO0; MC_override = 0; MC_new = 0;    end
-   'o14: begin SIO0_new = 'z; SIOn_new = MC;      QIO0_new = 'z; QIOn_new = SIO0; MC_override = 1; MC_new = QIO0; end
-   'o15: begin SIO0_new = 'z; SIOn_new = QIO0;    QIO0_new = 'z; QIOn_new = SIO0; MC_override = 1; MC_new = QIO0; end
-   'o16: begin SIO0_new = 'z; SIOn_new = In^Iovr; QIO0_new = 'z; QIOn_new = SIO0; MC_override = 0; MC_new = 0;    end
-   'o17: begin SIO0_new = 'z; SIOn_new = QIO0;    QIO0_new = 'z; QIOn_new = SIO0; MC_override = 0; MC_new = 0;    end
+// Down shifts ----- SIO0  SIOn --- QIO0  QIOn  ov MC
+   'o00: shift_op = {1'bz, 0,       1'bz, 0,    0, 0};      // 0──>RAM──>    0──>Q──>
 
-// Up shifts
-   'o20: begin SIO0_new = 0;    SIOn_new = 'z; QIO0_new = 0;    QIOn_new = 'z; MC_override = 1; MC_new = SIOn; end
-   'o21: begin SIO0_new = 1;    SIOn_new = 'z; QIO0_new = 1;    QIOn_new = 'z; MC_override = 1; MC_new = SIOn; end
-   'o22: begin SIO0_new = 0;    SIOn_new = 'z; QIO0_new = 0;    QIOn_new = 'z; MC_override = 0; MC_new = 0;    end
-   'o23: begin SIO0_new = 1;    SIOn_new = 'z; QIO0_new = 1;    QIOn_new = 'z; MC_override = 0; MC_new = 0;    end
-   'o24: begin SIO0_new = QIOn; SIOn_new = 'z; QIO0_new = 0;    QIOn_new = 'z; MC_override = 1; MC_new = SIOn; end
-   'o25: begin SIO0_new = QIOn; SIOn_new = 'z; QIO0_new = 1;    QIOn_new = 'z; MC_override = 1; MC_new = SIOn; end
-   'o26: begin SIO0_new = QIOn; SIOn_new = 'z; QIO0_new = 0;    QIOn_new = 'z; MC_override = 0; MC_new = 0;    end
-   'o27: begin SIO0_new = QIOn; SIOn_new = 'z; QIO0_new = 1;    QIOn_new = 'z; MC_override = 0; MC_new = 0;    end
-   'o30: begin SIO0_new = SIOn; SIOn_new = 'z; QIO0_new = QIOn; QIOn_new = 'z; MC_override = 1; MC_new = SIOn; end
-   'o31: begin SIO0_new = MC;   SIOn_new = 'z; QIO0_new = QIOn; QIOn_new = 'z; MC_override = 1; MC_new = SIOn; end
-   'o32: begin SIO0_new = SIOn; SIOn_new = 'z; QIO0_new = QIOn; QIOn_new = 'z; MC_override = 0; MC_new = 0;    end
-   'o33: begin SIO0_new = MC;   SIOn_new = 'z; QIO0_new = 0;    QIOn_new = 'z; MC_override = 0; MC_new = 0;    end
-   'o34: begin SIO0_new = QIOn; SIOn_new = 'z; QIO0_new = MC;   QIOn_new = 'z; MC_override = 1; MC_new = SIOn; end
-   'o35: begin SIO0_new = QIOn; SIOn_new = 'z; QIO0_new = SIOn; QIOn_new = 'z; MC_override = 1; MC_new = SIOn; end
-   'o36: begin SIO0_new = QIOn; SIOn_new = 'z; QIO0_new = MC;   QIOn_new = 'z; MC_override = 0; MC_new = 0;    end
-   'o37: begin SIO0_new = QIOn; SIOn_new = 'z; QIO0_new = SIOn; QIOn_new = 'z; MC_override = 0; MC_new = 0;    end
+   'o01: shift_op = {1'bz, 1,       1'bz, 1,    0, 0};      // 1──>RAM──>    1──>Q──>
 
+   'o02: shift_op = {1'bz, 0,       1'bz, MN,   1, SIO0};   // MC<──────┐
+                                                            // 0───>RAM─┘   MN──>Q──>
+
+   'o03: shift_op = {1'bz, 1,       1'bz, SIO0, 0, 0};      // 1───>RAM────────>Q───>
+
+   'o04: shift_op = {1'bz, MC,      1'bz, SIO0, 0, 0};      // MC──>RAM────────>Q───>
+
+   'o05: shift_op = {1'bz, MN,      1'bz, SIO0, 0, 0};      // MN──>RAM────────>Q───>
+
+   'o06: shift_op = {1'bz, 0,       1'bz, SIO0, 0, 0};      // 0───>RAM────────>Q───>
+
+   'o07: shift_op = {1'bz, 0,       1'bz, SIO0, 1, QIO0};   // MC<──────────────────┐
+                                                            // 0───>RAM────────>Q───┘
+
+   'o10: shift_op = {1'bz, SIO0,    1'bz, QIO0, 1, SIO0};   //     ┌───────┐ ┌──────┐
+                                                            // MC<─┴─>RAM──┘ └──>Q──┘
+
+   'o11: shift_op = {1'bz, MC,      1'bz, QIO0, 1, SIO0};   // v─────────┐   ┌──────┐
+                                                            // MC──>RAM──┘   └──>Q──┘
+
+   'o12: shift_op = {1'bz, SIO0,    1'bz, QIO0, 0, 0};      // ┌────────┐   ┌───────┐
+                                                            // └──>RAM──┘   └──>Q───┘
+
+   'o13: shift_op = {1'bz, Ic,      1'bz, SIO0, 0, 0};      // Iс──>RAM────────>Q───>
+
+   'o14: shift_op = {1'bz, MC,      1'bz, SIO0, 1, QIO0};   // v────────────────────┐
+                                                            // MC──>RAM────────>Q───┘
+
+   'o15: shift_op = {1'bz, QIO0,    1'bz, SIO0, 1, QIO0};   //      ┌───────────────┐
+                                                            // MC<──┴──>RAM────>Q───┘
+
+   'o16: shift_op = {1'bz, In^Iovr, 1'bz, SIO0, 0, 0};      // In^Iovr───>RAM───>Q──>
+
+   'o17: shift_op = {1'bz, QIO0,    1'bz, SIO0, 0, 0};      // ┌────────────────────┐
+                                                            // └───>RAM──────>Q─────┘
+
+// Up shifts ------- SIO0  SIOn --- QIO0  QIOn  ov MC
+   'o20: shift_op = {0,    1'bz,    0,    1'bz, 1, SIOn};   // MC<──RAM<──0  <──Q<──0
+
+   'o21: shift_op = {1,    1'bz,    1,    1'bz, 1, SIOn};   // MC<──RAM<──1  <──Q<──1
+
+   'o22: shift_op = {0,    1'bz,    0,    1'bz, 0, 0};      // <───RAM<───0  <──Q<──0
+
+   'o23: shift_op = {1,    1'bz,    1,    1'bz, 0, 0};      // <───RAM<───1  <──Q<──1
+
+   'o24: shift_op = {QIOn, 1'bz,    0,    1'bz, 1, SIOn};   // MC<──RAM<───────Q<───0
+
+   'o25: shift_op = {QIOn, 1'bz,    1,    1'bz, 1, SIOn};   // MC<──RAM<───────Q<───1
+
+   'o26: shift_op = {QIOn, 1'bz,    0,    1'bz, 0, 0};      // <───RAM<────────Q<───0
+
+   'o27: shift_op = {QIOn, 1'bz,    1,    1'bz, 0, 0};      // <───RAM<────────Q<───1
+
+   'o30: shift_op = {SIOn, 1'bz,    QIOn, 1'bz, 1, SIOn};   //     ┌───────┐ ┌──────┐
+                                                            // MC<─┴─RAM<──┘ └──Q<──┘
+
+   'o31: shift_op = {MC,   1'bz,    QIOn, 1'bz, 1, SIOn};   // ┌─────────┐  ┌───────┐
+                                                            // MC<──RAM<─┘  └──Q<───┘
+
+   'o32: shift_op = {SIOn, 1'bz,    QIOn, 1'bz, 0, 0};      // ┌───────┐   ┌────────┐
+                                                            // └──RAM<─┘   └───Q<───┘
+
+   'o33: shift_op = {MC,   1'bz,    0,    1'bz, 0, 0};      // MC──────┐
+                                                            // <──RAM<─┘   <───Q<───0
+
+   'o34: shift_op = {QIOn, 1'bz,    MC,   1'bz, 1, SIOn};   // ┌────────────────────┐
+                                                            // MC<──RAM<──────Q<────┘
+
+   'o35: shift_op = {QIOn, 1'bz,    SIOn, 1'bz, 1, SIOn};   //      ┌───────────────┐
+                                                            // MC<──┴──RAM<────Q<───┘
+
+   'o36: shift_op = {QIOn, 1'bz,    MC,   1'bz, 0, 0};      // MC───────────────────┐
+                                                            // <───RAM<───────Q<────┘
+
+   'o37: shift_op = {QIOn, 1'bz,    SIOn, 1'bz, 0, 0};      // ┌────────────────────┐
+                                                            // └───RAM<───────Q<────┘
 default: ;
 endcase
 
