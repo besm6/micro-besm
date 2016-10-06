@@ -139,7 +139,7 @@ always_comb case (I[5:4])
 'b00,'b01: Y_new = uSR;
      'b10: Y_new = MSR;
      'b11: Y_new = {Iovr, In, Ic, Iz};
-  default: Y_new = 'z;
+  default: ;
 endcase
 
 assign oYz   = nOEy ? 'z : Y_new[0];
