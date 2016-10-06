@@ -136,10 +136,10 @@ logic [3:0] Y_new;
 logic CT_new;
 
 always_comb case (I[5:4])
-   'b0x: Y_new = uSR;
-   'b10: Y_new = MSR;
-   'b11: Y_new = {Iovr, In, Ic, Iz};
-default: Y_new = 'z;
+'b00,'b01: Y_new = uSR;
+     'b10: Y_new = MSR;
+     'b11: Y_new = {Iovr, In, Ic, Iz};
+  default: Y_new = 'z;
 endcase
 
 assign oYz   = nOEy ? 'z : Y_new[0];
@@ -310,24 +310,24 @@ endcase
 // Carry-In Control Multiplexer
 //
 
-//assign Co = (I[12] == 0) ? I[11] :
-//            (I[11] == 0) ? Cx :
-//            (I[5]  == 0) ? ((I[3:1] == 4) ? ~uC : uC) :
-//                           ((I[3:1] == 4) ? ~MC : MC);
+assign Co = (I[12] == 0) ? I[11] :
+            (I[11] == 0) ? Cx :
+            (I[5]  == 0) ? ((I[3:1] == 4) ? ~uC : uC) :
+                           ((I[3:1] == 4) ? ~MC : MC);
 
-always_comb case ({I[12:11], I[5], I[3:1]})
-'b00xxxx: Co = 0;
-'b01xxxx: Co = 1;
-'b10xxxx: Co = Cx;
-'b1100xx,
-'b110x1x,
-'b110xx1: Co = uC;
-'b110100: Co = ~uC;
-'b1110xx,
-'b111x1x,
-'b111xx1: Co = MC;
-'b111100: Co = ~MC;
- default: ;
-endcase
+//always_comb case ({I[12:11], I[5], I[3:1]})
+//'b00xxxx: Co = 0;
+//'b01xxxx: Co = 1;
+//'b10xxxx: Co = Cx;
+//'b1100xx,
+//'b110x1x,
+//'b110xx1: Co = uC;
+//'b110100: Co = ~uC;
+//'b1110xx,
+//'b111x1x,
+//'b111xx1: Co = MC;
+//'b111100: Co = ~MC;
+// default: ;
+//endcase
 
 endmodule

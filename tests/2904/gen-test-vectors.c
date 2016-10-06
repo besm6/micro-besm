@@ -1,8 +1,6 @@
 /*
- * Generate Verilog sources for Am2910 test vectors.
+ * Generate Verilog sources for Am2904 test vectors.
  * Read "bits" format and create Verilog sources.
- *
- * Based on VHDL version by Indraneel Ghosh.
  */
 #include <stdio.h>
 #include <string.h>
@@ -97,7 +95,10 @@ int main(int argc, char **argv)
 
     fprintf(outfptr, "initial begin\n");
     fprintf(outfptr, "$display(\"------------------------\");\n");
-    fprintf(outfptr, "fail = 0;\n\n");
+    fprintf(outfptr, "$dumpfile(\"test.vcd\");\n");
+    fprintf(outfptr, "$dumpvars();\n");
+    fprintf(outfptr, "fail = 0;\n");
+    fprintf(outfptr, "clk = 0;\n\n");
 
     /* Initialize counters */
 
@@ -268,6 +269,7 @@ int main(int argc, char **argv)
         line_cnt++;
     }
 
+    fprintf(outfptr, "#4;\n");
     fprintf(outfptr, "if (fail) begin\n");
     fprintf(outfptr, "    $display(\"Test FAIL\");\n");
     fprintf(outfptr, "    $display(\"------------------------\");\n");

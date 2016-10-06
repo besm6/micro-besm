@@ -15,8 +15,8 @@ in:in:in:in:in:in:in:in:in:in:in:in:in:in:in:in:in:out:out:out:out:in:out:in:out
 * Micro Status Register  *
 *                        *
 **************************
-* Clear uSR and MSR; nOEy=0; read oY
-00_00000_000011:-:-:-:0:-:-:-:-:-:-:-:-:-:-:-:-:0:0:0:0:-:-:-:-:-:-:-:-:-:-:-:-:-:
+* Clear uSR; nCEu=0; nOEy=0; read oY
+00_00000_000011:-:-:0:0:-:-:-:-:-:-:-:-:-:-:-:-:0:0:0:0:-:-:-:-:-:-:-:-:-:-:-:-:-:
 
 ***************************
 *                         *

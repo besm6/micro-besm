@@ -1,0 +1,66 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Thu Oct  6 04:18:41 2016
+[*]
+[dumpfile] "/local/Besm-6/micro-besm/tests/2904/modelsim/test.vcd"
+[dumpfile_mtime] "Thu Oct  6 04:13:04 2016"
+[dumpfile_size] 3029
+[savefile] "/local/Besm-6/micro-besm/tests/2904/modelsim/test.gtkw"
+[timestart] 0
+[size] 1000 822
+[pos] -902 -420
+*-1.127031 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 235
+[signals_width] 86
+[sst_expanded] 1
+[sst_vpaned_height] 237
+@22
+testbench.I[12:0]
+@28
+testbench.clk
+testbench.nCEm
+testbench.nCEu
+testbench.nOEy
+@200
+-
+@28
+testbench.Ic
+testbench.Iovr
+testbench.In
+testbench.Iz
+testbench.nEz
+testbench.nEc
+testbench.nEn
+testbench.nEovr
+@200
+-
+@28
+testbench.Yz
+testbench.Yc
+testbench.Yn
+testbench.Yovr
+testbench.oYz
+testbench.oYc
+testbench.oYn
+testbench.oYovr
+@200
+-
+@28
+testbench.nOEct
+testbench.CT
+testbench.Cx
+testbench.Co
+@200
+-
+@28
+testbench.nSE
+testbench.QIO0
+testbench.QIOn
+testbench.SIO0
+testbench.SIOn
+testbench.oQIO0
+testbench.oQIOn
+testbench.oSIO0
+testbench.oSIOn
+[pattern_trace] 1
+[pattern_trace] 0

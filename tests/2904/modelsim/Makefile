@@ -20,4 +20,4 @@ run:            work
 		$(MODELSIM)/vsim -c -l run.log -do 'run 100000us; quit' testbench
 
 view:
-		gtkwave testbench.vcd databus.gtkw
+		gtkwave test.vcd test.gtkw &
