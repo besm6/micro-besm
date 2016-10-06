@@ -30,27 +30,49 @@ logic [3:0] ram[15:0];
 logic [3:0] re, s;
 logic [3:0] a, b, q, f;
 
+`ifdef TODO
+// According to datasheet, A and B outputs should have a latch:
+always @(clk, Aadd)
+    if (clk == 1)
+        a = ram[Aadd];
+
+always @(clk, Badd)
+    if (clk == 1)
+        b = ram[Badd];
+`else
+// Simplified variant
 assign a = ram[Aadd];
 assign b = ram[Badd];
+`endif
 
 // Select the source operands for ALU. Selected operands are "re" and "s".
 
 always_comb case (I[2:0])
-'b000, 'b001: re = a;
-'b010, 'b011, 'b100: re = 'b0000;
+  'b000,
+  'b001: re = a;
+
+  'b010,
+  'b011,
+  'b100: re = 'b0000;
+
 default: re = D;
 endcase
 
 always_comb case (I[2:0])
-'b100, 'b101: s = a;
-'b001, 'b011: s = b;
-'b111: s = 'b0000;
+  'b100,
+  'b101: s = a;
+
+  'b001,
+  'b011: s = b;
+
+  'b111: s = 'b0000;
+
 default: s = q;
 endcase
 
 //-----------------------------------------------------------------------
 
-logic [4:0] R_ext,S_ext,result,temp_p,temp_g;
+logic [4:0] R_ext, S_ext, result, temp_p, temp_g;
 
 // To facilitate computation of carry-out "C4", we extend the chosen
 // ALU operands "re" and "s" (4 bit operands) by 1 bit in the MSB position.
@@ -59,8 +81,8 @@ logic [4:0] R_ext,S_ext,result,temp_p,temp_g;
 // formed and are used in the ALU operation. The extra bit is set to '0'
 // initially. The ALU's extended output (5 bits long) is "result".
 
-assign R_ext = I[5:3] == 'b001 ? {1'b0, ~re} : {1'b0, re};
-assign S_ext = I[5:3] == 'b010 ? {1'b0, ~s} : {1'b0, s};
+assign R_ext = (I[5:3] == 'b001) ? {1'b0, ~re} : {1'b0, re};
+assign S_ext = (I[5:3] == 'b010) ? {1'b0, ~s} : {1'b0, s};
 
 // Select the function for ALU.
 
@@ -71,12 +93,19 @@ assign S_ext = I[5:3] == 'b010 ? {1'b0, ~s} : {1'b0, s};
 // Add/subtract operations are done on 2's complement operands.
 
 always_comb unique case(I[5:3])
-'b000, 'b001, 'b010: result = R_ext + S_ext + C0;
-'b011: result = R_ext | S_ext;
-'b100: result = R_ext & S_ext;
-'b101: result = ~R_ext & S_ext;
-'b110: result = R_ext ^ S_ext;
-'b111: result = ~(R_ext ^ S_ext);
+  'b000,
+  'b001,
+  'b010: result = R_ext + S_ext + C0;
+
+  'b011: result = R_ext | S_ext;
+
+  'b100: result = R_ext & S_ext;
+
+  'b101: result = ~R_ext & S_ext;
+
+  'b110: result = R_ext ^ S_ext;
+
+  'b111: result = ~(R_ext ^ S_ext);
 default: ;
 endcase
 
@@ -89,8 +118,7 @@ endcase
 // compute intermediate terms "temp_p" and "temp_g".
 
 assign f = result[3:0];
-assign OVR = (R_ext[3] == S_ext[3] && R_ext[3] != result[3]);
-assign C4 = result[4];
+assign OVR = (R_ext[3] == S_ext[3]) && (R_ext[3] != result[3]);
 assign temp_p = R_ext | S_ext;
 assign temp_g = R_ext & S_ext;
 assign nP = (temp_p != 'b1111);
@@ -102,6 +130,10 @@ assign nG = !(temp_g[3] ||
 
 assign F3 = result[3];
 assign F30 = (result[3:0] == 'b0000);
+
+// TODO: For logical functions, C4 output is a bit more complicated than that.
+// See Figure 9 in Am2901B/Am2901C datasheet.
+assign C4 = result[4];
 
 //-----------------------------------------------------------------------
 
