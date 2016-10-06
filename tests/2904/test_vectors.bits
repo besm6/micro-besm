@@ -1,0 +1,49 @@
+*****************************************************
+*                                                   *
+*   Simulation test vectors (binary format) for     *
+*   the Am2904 status and shift control unit        *
+*                                                   *
+*   Developed on Oct 5, 2016 by Serge Vakulenko     *
+*                                                   *
+*****************************************************
+I:clk:nCEm:nCEu:nOEy:Ic:Iovr:In:Iz:nEz:nEc:nEn:nEovr:Yz:Yc:Yn:Yovr:oYz:oYc:oYn:oYovr:nOEct:CT:Cx:Co:nSE:SIO0:SIOn:QIO0:QIOn:oSIO0:oSIOn:oQIO0:oQIOn:
+in:in:in:in:in:in:in:in:in:in:in:in:in:in:in:in:in:out:out:out:out:in:out:in:out:in:in:in:in:in:out:out:out:out:
+":':':':':':':':':':':':':':':':':':':':':':':':':':':':':':':':':':
+
+**************************
+*                        *
+* Micro Status Register  *
+*                        *
+**************************
+* Clear uSR and MSR; nOEy=0; read oY
+00_00000_000011:-:-:-:0:-:-:-:-:-:-:-:-:-:-:-:-:0:0:0:0:-:-:-:-:-:-:-:-:-:-:-:-:-:
+
+***************************
+*                         *
+* Machine Status Register *
+*                         *
+***************************
+* TODO
+
+******************************
+*                            *
+* Condition Code Multiplexer *
+*                            *
+******************************
+* TODO
+
+******************************
+*                            *
+* Shift Linkage Multiplexer  *
+*                            *
+******************************
+* TODO
+
+********************************
+*                              *
+* Carry-In Control Multiplexer *
+*                              *
+********************************
+* TODO
+
+**************************************************

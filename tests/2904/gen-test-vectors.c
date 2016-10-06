@@ -1,5 +1,5 @@
 /*
- * Generate Verilog sources for Am2904 test vectors.
+ * Generate Verilog sources for Am2910 test vectors.
  * Read "bits" format and create Verilog sources.
  *
  * Based on VHDL version by Indraneel Ghosh.
@@ -7,17 +7,14 @@
 #include <stdio.h>
 #include <string.h>
 
-#define INITIAL_COMMENT_LINES 11
-#define NO_OF_PORTS 22
-
-#define NAME_LINE INITIAL_COMMENT_LINES
-#define DIR_LINE INITIAL_COMMENT_LINES + 1
-#define TYPE_LINE INITIAL_COMMENT_LINES + 2
+#define NO_OF_PORTS             40
+#define MAX_LINE_SIZE           256
+#define MAX_BIT_VECTOR_SIZE     32
 
 struct signal {
-    char name[10];
-    char port_type[4];
-    char data_type[3];
+    char name[16];
+    char port_type[8];
+    char data_type[8];
 };
 
 int main(int argc, char **argv)
@@ -29,10 +26,11 @@ int main(int argc, char **argv)
     char *a;
     char *temp;
 
-    char var[10];
-    char line[100];
+    char var[MAX_BIT_VECTOR_SIZE];
+    char line[MAX_LINE_SIZE];
 
     int line_cnt;
+    int initial_comment_lines;
     int field_cnt;
     int vec_cnt;
     int assert_cnt;
@@ -57,27 +55,33 @@ int main(int argc, char **argv)
     fprintf(outfptr, "module testbench();\n\n");
 
     fprintf(outfptr, "    // Input signals\n");
-    fprintf(outfptr, "    logic [8:0] I;\n");
-    fprintf(outfptr, "    logic [3:0] Aadd, Badd;\n");
-    fprintf(outfptr, "    logic [3:0] D;\n");
-    fprintf(outfptr, "    logic       RAM0, RAM3, Q0, Q3;\n");
-    fprintf(outfptr, "    logic       clk, C0, OEbar;\n\n");
+    fprintf(outfptr, "    logic [12:0] I;\n");
+    fprintf(outfptr, "    logic        clk, nCEm, nCEu, nOEy;\n");
+    fprintf(outfptr, "    logic        Ic, Iovr, In, Iz;\n");
+    fprintf(outfptr, "    logic        nEz, nEc, nEn, nEovr;\n");
+    fprintf(outfptr, "    logic        Yz, Yc, Yn, Yovr;\n");
+    fprintf(outfptr, "    logic        nOEct;\n");
+    fprintf(outfptr, "    logic        Cx;\n");
+    fprintf(outfptr, "    logic        nSE, SIO0, SIOn, QIO0, QIOn;\n\n");
 
     fprintf(outfptr, "    // Output signals\n");
-    fprintf(outfptr, "    logic [3:0] Y;\n");
-    fprintf(outfptr, "    logic       RAM0out, RAM3out, Q0out, Q3out;\n");
-    fprintf(outfptr, "    logic       C4, Gbar, Pbar, OVR, F3, F30;\n\n");
+    fprintf(outfptr, "    logic        oYz, oYc, oYn, oYovr;\n");
+    fprintf(outfptr, "    logic        CT;\n");
+    fprintf(outfptr, "    logic        Co;\n");
+    fprintf(outfptr, "    logic        oSIO0, oSIOn, oQIO0, oQIOn;\n\n");
 
     fprintf(outfptr, "    // Device under test\n");
     fprintf(outfptr, "    am2904 dut (\n");
     fprintf(outfptr, "        I,\n");
-    fprintf(outfptr, "        Aadd, Badd,\n");
-    fprintf(outfptr, "        D,\n");
-    fprintf(outfptr, "        Y,\n");
-    fprintf(outfptr, "        RAM0, RAM3, Q0, Q3,\n");
-    fprintf(outfptr, "        RAM0out, RAM3out, Q0out, Q3out,\n");
-    fprintf(outfptr, "        clk, C0, OEbar,\n");
-    fprintf(outfptr, "        C4, Gbar, Pbar, OVR, F3, F30\n");
+    fprintf(outfptr, "        clk, nCEm, nCEu, nOEy,\n");
+    fprintf(outfptr, "        Ic, Iovr, In, Iz,\n");
+    fprintf(outfptr, "        nEz, nEc, nEn, nEovr,\n");
+    fprintf(outfptr, "        Yz, Yc, Yn, Yovr,\n");
+    fprintf(outfptr, "        oYz, oYc, oYn, oYovr,\n");
+    fprintf(outfptr, "        nOEct, CT,\n");
+    fprintf(outfptr, "        Cx, Co,\n");
+    fprintf(outfptr, "        nSE, SIO0, SIOn, QIO0, QIOn,\n");
+    fprintf(outfptr, "        oSIO0, oSIOn, oQIO0, oQIOn\n");
     fprintf(outfptr, "    );\n\n");
 
     fprintf(outfptr, "    // Status\n");
@@ -101,15 +105,26 @@ int main(int argc, char **argv)
     assert_cnt = 0;
     vec_cnt = 0;
     instr_cnt = 0;
+    initial_comment_lines = 1;
 
     /* Start line-by-line processing */
 
-    while ((c = fgets(line, 100, infptr)) != NULL) { /* while not EOF, get a line */
+    while ((c = fgets(line, sizeof(line), infptr)) != NULL) { /* while not EOF, get a line */
 
-        /* Ignore the first few comment lines */
+        /* Skip comments */
+        if (line[0] == '\n' || line[0] == '#')
+            continue;
 
-        if (line_cnt < (INITIAL_COMMENT_LINES + 3) &&
-            line_cnt >= INITIAL_COMMENT_LINES) {
+        /* Process the initial comment lines */
+        if (initial_comment_lines && line[0] == '*') {
+
+            /* If the line is a comment line, print it verbatim */
+            fprintf(outfptr, "// %s", line);
+            continue;
+        }
+        initial_comment_lines = 0;
+
+        if (line_cnt < 3) {
 
             /* Initialize port name(line0), port dir(line1), port type(line2) */
 
@@ -122,28 +137,28 @@ int main(int argc, char **argv)
                 /* copy next item into "var". Make "line" point to */
                 /* the item after that.                            */
 
-                temp = a;          /* copy pointer to next ":" */
-                temp++;            /* take pointer to next location after ":" */
-                *a = '\0';         /* write "end of string" in place of ":" */
-                strcpy(var,line);  /* copy the portion before ":" into "var" */
-                strcpy(line,temp); /* copy the portion after ":" into "line" */
+                temp = a;           /* copy pointer to next ":" */
+                temp++;             /* take pointer to next location after ":" */
+                *a = '\0';          /* write "end of string" in place of ":" */
+                strcpy(var, line);  /* copy the portion before ":" into "var" */
+                strcpy(line, temp); /* copy the portion after ":" into "line" */
 
                 switch (line_cnt) {
-                case NAME_LINE:
-                    strcpy(ports[field_cnt].name,var); /* port names */
+                case 0:
+                    strcpy(ports[field_cnt].name, var);         /* port names */
                     break;
-                case DIR_LINE:
-                    strcpy(ports[field_cnt].port_type,var); /* port dir */
+                case 1:
+                    strcpy(ports[field_cnt].port_type, var);    /* port dir */
                     break;
-                case TYPE_LINE:
-                    strcpy(ports[field_cnt].data_type,var); /* port type */
+                case 2:
+                    strcpy(ports[field_cnt].data_type, var);    /* port type */
                 default:
                     break;
                 }
 
                 field_cnt++;
             }
-        } else if (line_cnt >= (INITIAL_COMMENT_LINES + 3)) {
+        } else {
 
             /* Process the actual test vector lines */
             if (line[0] == '*') {
@@ -152,6 +167,7 @@ int main(int argc, char **argv)
                 fprintf(outfptr, "// %s", line);
 
             } else {
+                fprintf(outfptr, "// %s", line);
 
                 /* Reset the boolean variable to show that vec_no */
                 /* has not yet been printed for this line         */
@@ -159,29 +175,27 @@ int main(int argc, char **argv)
                 printed_vec_no = 0;
 
                 /* Print some initial statements for each test vector */
-
                 fprintf(outfptr, "//------------------------\n\n");
-                fprintf(outfptr, "clk <= 1;\t\t// Cycle No: %i\n", instr_cnt);
-                instr_cnt++;
-                fprintf(outfptr, "#1;\n\n");
+                fprintf(outfptr, "#2;\n");
 
+                instr_cnt++;
                 field_cnt = 0;
 
                 /* Start processing each item in the line, separated by ":" */
                 /* Each item is a signal value (in or out) */
 
-                while ((a = strchr(line, ':')) != NULL) {
+                a = line;
+                while ((temp = strchr(a, ':')) != NULL) {
 
-                    /* copy next item into "var". Make "line" point to */
+                    /* copy next item into "var". Make "temp" point to */
                     /* the item after that.                            */
 
-                    temp = a;           /* copy pointer to next : */
-                    temp++;             /* take pointer to next location after : */
-                    *a = '\0';          /* write "end of string" in place of : */
-                    strcpy(var, line);  /* copy the portion before : into "var" */
-                    strcpy(line ,temp); /* copy the portion after : into "line") */
+                    *temp = '\0';   /* write "end of string" in place of : */
+                    strcpy(var, a); /* copy the portion before : into "var" */
+                    *temp = ':';    /* restore : */
+                    a = temp+1;
 
-                    if (strcmp(ports[field_cnt].port_type,"in") == 0 ) {
+                    if (strcmp(ports[field_cnt].port_type, "in") == 0) {
                         /* If its an input port */
 
                         if (var[0] != '-') {
@@ -192,15 +206,28 @@ int main(int argc, char **argv)
                                 ports[field_cnt].data_type[0] == '"' ? "'b" : "",
                                 var[0]=='Z' ? "'z" : var);
                         }
+                    }
 
-                        if (strcmp(ports[field_cnt+1].port_type,"out") == 0) {
-                            /* If its the last input port in this line */
+                    field_cnt++;
+                }
 
-                            fprintf(outfptr, "#4;\n\n");
-                            fprintf(outfptr, "clk <= 0;\n");
-                            fprintf(outfptr, "#4;\n\n");
-                        }
-                    } else {
+                fprintf(outfptr, "#2;\n");
+                fprintf(outfptr, "clk <= 1;\t\t// Cycle No: %i\n", instr_cnt);
+                fprintf(outfptr, "#2;\n\n");
+
+                field_cnt = 0;
+                a = line;
+                while ((temp = strchr(a, ':')) != NULL) {
+
+                    /* copy next item into "var". Make "temp" point to */
+                    /* the item after that.                            */
+
+                    *temp = '\0';   /* write "end of string" in place of : */
+                    strcpy(var, a); /* copy the portion before : into "var" */
+                    *temp = ':';    /* restore : */
+                    a = temp+1;
+
+                    if (strcmp(ports[field_cnt].port_type, "out") == 0) {
                         /* If its an output port */
 
                         if (var[0] != '-') {
@@ -233,7 +260,8 @@ int main(int argc, char **argv)
                 }
 
                 /* Print ending statements for test vector */
-                fprintf(outfptr, "#1;\n\n");
+                fprintf(outfptr, "#2;\n");
+                fprintf(outfptr, "clk <= 0;\n\n");
             }
         }
 

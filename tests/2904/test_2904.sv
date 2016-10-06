@@ -1,27 +1,33 @@
 module testbench();
 
     // Input signals
-    logic [8:0] I;
-    logic [3:0] Aadd, Badd;
-    logic [3:0] D;
-    logic       RAM0, RAM3, Q0, Q3;
-    logic       clk, C0, OEbar;
+    logic [12:0] I;
+    logic        clk, nCEm, nCEu, nOEy;
+    logic        Ic, Iovr, In, Iz;
+    logic        nEz, nEc, nEn, nEovr;
+    logic        Yz, Yc, Yn, Yovr;
+    logic        nOEct;
+    logic        Cx;
+    logic        nSE, SIO0, SIOn, QIO0, QIOn;
 
     // Output signals
-    logic [3:0] Y;
-    logic       RAM0out, RAM3out, Q0out, Q3out;
-    logic       C4, Gbar, Pbar, OVR, F3, F30;
+    logic        oYz, oYc, oYn, oYovr;
+    logic        CT;
+    logic        Co;
+    logic        oSIO0, oSIOn, oQIO0, oQIOn;
 
     // Device under test
     am2904 dut (
         I,
-        Aadd, Badd,
-        D,
-        Y,
-        RAM0, RAM3, Q0, Q3,
-        RAM0out, RAM3out, Q0out, Q3out,
-        clk, C0, OEbar,
-        C4, Gbar, Pbar, OVR, F3, F30
+        clk, nCEm, nCEu, nOEy,
+        Ic, Iovr, In, Iz,
+        nEz, nEc, nEn, nEovr,
+        Yz, Yc, Yn, Yovr,
+        oYz, oYc, oYn, oYovr,
+        nOEct, CT,
+        Cx, Co,
+        nSE, SIO0, SIOn, QIO0, QIOn,
+        oSIO0, oSIOn, oQIO0, oQIOn
     );
 
     // Status
@@ -39,94 +45,62 @@ initial begin
 $display("------------------------");
 fail = 0;
 
-// ************************
-// *                      *
-// * TEST VECTORS FOR ALU *
-// *                      *
-// ************************
-// ******** ADDITION  R + S ********
+// *****************************************************
+// *                                                   *
+// *   Simulation test vectors (binary format) for     *
+// *   the Am2904 status and shift control unit        *
+// *                                                   *
+// *   Developed on Oct 5, 2016 by Serge Vakulenko     *
+// *                                                   *
+// *****************************************************
+// **************************
+// *                        *
+// * Micro Status Register  *
+// *                        *
+// **************************
+// * Clear uSR and MSR; nOEy=0; read oY
+// 00_00000_000011:-:-:-:0:-:-:-:-:-:-:-:-:-:-:-:-:0:0:0:0:-:-:-:-:-:-:-:-:-:-:-:-:-:
 //------------------------
 
-clk <= 1;		// Cycle No: 0
-#1;
-
-I <= 'b000000111;
-D <= 'b0000;
-C0 <= 0;
-OEbar <= 0;
-#4;
-
-clk <= 0;
-#4;
-
-#1;
-
-//------------------------
-
+#2;
+I <= 'b00_00000_000011;
+nOEy <= 0;
+#2;
 clk <= 1;		// Cycle No: 1
-#1;
+#2;
 
-I <= 'b001000110;
-D <= 'b0000;
-C0 <= 0;
-OEbar <= 0;
-#4;
-
-clk <= 0;
-#4;
-
-verify(Y === 'b0000, "Assert 0 : < Y !== 'b0000 >");	// Vector No: 0
-verify(C4 === 0, "Assert 1 : < C4 !== 0 >");
-verify(Gbar === 1, "Assert 2 : < Gbar !== 1 >");
-verify(Pbar === 1, "Assert 3 : < Pbar !== 1 >");
-verify(OVR === 0, "Assert 4 : < OVR !== 0 >");
-verify(F3 === 0, "Assert 5 : < F3 !== 0 >");
-verify(F30 === 1, "Assert 6 : < F30 !== 1 >");
-#1;
-
-// ************************
-//------------------------
-
-clk <= 1;		// Cycle No: 2
-#1;
-
-I <= 'b000000111;
-D <= 'b0000;
-C0 <= 0;
-OEbar <= 0;
-#4;
+verify(oYz === 0, "Assert 0 : < oYz !== 0 >");	// Vector No: 0
+verify(oYc === 0, "Assert 1 : < oYc !== 0 >");
+verify(oYn === 0, "Assert 2 : < oYn !== 0 >");
+verify(oYovr === 0, "Assert 3 : < oYovr !== 0 >");
+#2;
 
 clk <= 0;
-#4;
-
-#1;
-
-//------------------------
-
-clk <= 1;		// Cycle No: 3
-#1;
-
-I <= 'b001000110;
-D <= 'b0000;
-C0 <= 1;
-OEbar <= 0;
-#4;
-
-clk <= 0;
-#4;
-
-verify(Y === 'b0001, "Assert 7 : < Y !== 'b0001 >");	// Vector No: 1
-verify(C4 === 0, "Assert 8 : < C4 !== 0 >");
-verify(Gbar === 1, "Assert 9 : < Gbar !== 1 >");
-verify(Pbar === 1, "Assert 10 : < Pbar !== 1 >");
-verify(OVR === 0, "Assert 11 : < OVR !== 0 >");
-verify(F3 === 0, "Assert 12 : < F3 !== 0 >");
-verify(F30 === 0, "Assert 13 : < F30 !== 0 >");
-#1;
-
-//TODO
-
-// ************************
+// ***************************
+// *                         *
+// * Machine Status Register *
+// *                         *
+// ***************************
+// * TODO
+// ******************************
+// *                            *
+// * Condition Code Multiplexer *
+// *                            *
+// ******************************
+// * TODO
+// ******************************
+// *                            *
+// * Shift Linkage Multiplexer  *
+// *                            *
+// ******************************
+// * TODO
+// ********************************
+// *                              *
+// * Carry-In Control Multiplexer *
+// *                              *
+// ********************************
+// * TODO
+// **************************************************
 if (fail) begin
     $display("Test FAIL");
     $display("------------------------");
