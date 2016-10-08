@@ -3,9 +3,7 @@
 #
 # Translate Micro-BESM microcode sources into binary files.
 #
-#from tables import *
-#from helpers import *
-import sys, codecs, re
+import sys, re, json
 
 # Check parameters.
 if len(sys.argv) != 2:
@@ -25,16 +23,8 @@ def main(filename):
     a = map(do_field, a)
     a = map(do_const, a)
     a = map(do_equ, a)
-    a = map(do_flist, a)
-    a = map(do_check, a)
-    a = map(do_macro, a)
-    #print "Fields:", field
-    #print "Constants:", const
-    #translate(a)
-    #write_results()
-    print "--- Unknown instructions:"
-    for s in a:
-        if s: print s
+    translate(a)
+    write_results("define.json")
 
 #
 # Process an input line;
@@ -174,79 +164,31 @@ def do_equ(op):
     #print name, equ[name]
     return ''
 
-#
-# Process FLIST instruction.
-#
-def do_flist(op):
-    #TODO
-    return op
-
-#
-# Process CHECK instruction.
-#
-def do_check(op):
-    #TODO
-    return op
-
-#
-# Process MACRO instruction.
-#
-def do_macro(op):
-    #TODO
-    return op
-
 def translate(a):
-    #TODO
-    return
+    for op in a:
+        if op == '':
+            continue
+        if op[0] == "DEFINE" and op[1] == "PROG":
+            print "Instruction width:", op[2]
+            print "Max field width:", op[3]
+            continue
+        if op[0] == "END":
+            continue
+        print "Fatal error: Unknown instruction", op
+        sys.exit(1)
 
-def make_atable(a):
-    start = 16 #start address for symbolic variables
-    for i in a: # add to symbols table
-        if is_a_command(i): #A_Command
-            val = i[1:]
-            if try_parse_int(val) is not None:
-                atable[i] = to_b(int(val))
-            elif val in predef_table.keys(): #not int, variable
-                atable[i] = to_b(predef_table[val])
-            elif i in atable.keys():
-                continue
-            else:
-                atable[i] = to_b(start)
-                start += 1
-
-def make_ctable(a):
-    for i in a:
-        if is_c_command(i):
-            semi = i.find(';')
-            equa = i.find('=')
-
-            if equa != -1 and semi != -1: #dest=comp;jump
-                dest = i[:equa]
-                comp = i[equa+1:semi]
-                jump = i[semi+1:]
-                abit = set_abit(comp)
-                ctable[i] = first + abit + comp_table[comp] + dest_table[dest] + jump_table[jump]
-
-            if equa == -1 and semi != -1: #comp;jump
-                comp = i[:semi]
-                jump = i[semi+1:]
-                abit = set_abit(comp)
-                ctable[i] = first + abit + comp_table[comp] + dest_table["null"] + jump_table[jump]
-
-            if equa != -1 and semi == -1: #dest=comp
-                dest = i[:equa]
-                comp = i[equa+1:]
-                abit = set_abit(comp)
-                ctable[i] = first + abit + comp_table[comp] + dest_table[dest] + jump_table["null"]
-
-def write_results():
-    #name = filename + ".hack"
-    #file = open(name,'w')
-    #for i in a:
-    #    file.write(i+"\n")
-    #file.close()
-    #TODO
-    return
+def write_results(filename):
+    #print "Fields:", field
+    #print "Constants:", const
+    #print "Equivalences:", equ
+    file = open(filename, 'w')
+    json.dump(field, file)
+    json.dump(const, file)
+    json.dump(equ, file)
+    file.close()
+    print "Defines saved to file '"+filename+"'"
+    print "Total %d fields, %d constants, %d equivalences" % \
+        (len(field), len(const), len(equ))
 
 if __name__ == "__main__":
     main(sys.argv[1])
