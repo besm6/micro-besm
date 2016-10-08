@@ -3,6 +3,8 @@
 *.log
 *.jou
 *.pb
+*.json
+*.pyc
 work-obj93.cf
 testbench
 .DS_Store

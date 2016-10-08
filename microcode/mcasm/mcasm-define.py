@@ -1,13 +1,13 @@
 #!/usr/bin/python
-# -*- encoding: utf-8 -*-
 #
 # Translate Micro-BESM microcode sources into binary files.
 #
-import sys, re, json
+from readsrc import read_sources
+import sys, json
 
 # Check parameters.
 if len(sys.argv) != 2:
-    print "Usage: mcasm file"
+    print "Usage: mcasm-define file.src"
     sys.exit(1)
 
 field = {}                      # Field declarations
@@ -19,87 +19,12 @@ const_index = 0                 # ROM index of next constant
 # Process the input file.
 #
 def main(filename):
-    a = prepare_file(filename)
+    a = read_sources(filename)
     a = map(do_field, a)
     a = map(do_const, a)
     a = map(do_equ, a)
     translate(a)
     write_results("define.json")
-
-#
-# Process an input line;
-# strip out comments and monitor instructions.
-#
-def remove_comments(s):
-    if s[0] == ';' or s[0] == '*':
-        return ''
-    idx = s.find(";")
-    if idx >= 0:
-        s = s[:idx]
-    return s
-#
-# Replace cyrillic letters with latin.
-#
-def replace_char(c):
-    if c == u"А": return "A"
-    if c == u"В": return "B"
-    if c == u"Е": return "E"
-    if c == u"К": return "K"
-    if c == u"М": return "M"
-    if c == u"Н": return "H"
-    if c == u"О": return "O"
-    if c == u"Р": return "P"
-    if c == u"С": return "C"
-    if c == u"Т": return "T"
-    if c == u"У": return "Y"
-    if c == u"Х": return "X"
-    return c
-
-#
-# Process an input line;
-# replace cyrillic letters with latin.
-#
-def convert_encoding(s):
-    s = s.strip()
-    s = unicode(s, "utf-8")
-    s = ''.join(map(replace_char, s))
-    s = s.encode("ascii")
-    return s
-
-#
-# Join continuation lines
-#
-def join_continuations(a):
-    i = 1
-    while i < len(a):
-        if a[i][0] == ">":
-            a[i-1].extend(a[i][1:])
-            del a[i]
-        else:
-            i += 1
-    return a
-
-#
-# Read the contents of the input file.
-# Remove comments.
-#
-def prepare_file(filename):
-    file = open(filename)
-    a = file.readlines()
-    a = map(remove_comments, a)
-
-    # Convert encoding, strip white space.
-    a = map(convert_encoding, a)
-
-    # Remove empty lines.
-    a = filter(lambda x : x != '', a)
-
-    # Split instruction lines.
-    a = [ re.split("[: ,]", i) for i in [ x for x in a ] ]
-
-    # Join continuation lines
-    a = join_continuations(a)
-    return a
 
 #
 # Process FIELD instruction.
@@ -182,9 +107,9 @@ def write_results(filename):
     #print "Constants:", const
     #print "Equivalences:", equ
     file = open(filename, 'w')
-    json.dump(field, file)
-    json.dump(const, file)
-    json.dump(equ, file)
+    json.dump([field, const, equ], file)
+    #json.dump(const, file)
+    #json.dump(equ, file)
     file.close()
     print "Defines saved to file '"+filename+"'"
     print "Total %d fields, %d constants, %d equivalences" % \
