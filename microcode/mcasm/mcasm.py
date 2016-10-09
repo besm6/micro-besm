@@ -62,9 +62,9 @@ def load_defines(filename):
         print "Fatal error: Cannot load file '" + filename + "'"
         sys.exit(1)
 
-    print "Defines loaded from file '"+filename+"':",
-    print "%d fields, %d constants, %d symbols" % \
-        (len(field), len(const), len(equ))
+    #print "Defines loaded from file '"+filename+"':",
+    #print "%d fields, %d constants, %d symbols" % \
+    #    (len(field), len(const), len(equ))
     #print "Fields:", field
     #print "Constants:", const
     #print "Equivalences:", equ
@@ -209,17 +209,32 @@ def expand_macro(list):
 #
 # Get value of equ or const.
 #
-def get_value(name):
+def symbol_value(name):
+    if name in equ.keys():
+        return equ[name]
+    if name in const.keys():
+        return const[name]['index']
+    return -1
+
+#
+# Get value of expression.
+#
+def get_value(expr):
     try:
-        value = int(name)
+        # Integer constant
+        value = int(expr)
         return value
     except:
-        if name in equ.keys():
-            return equ[name]
-        if name in const.keys():
-            return const[name]['index']
-        #TODO: implement simple expressions
-    return -1
+        # Name, or name+int, or name-int.
+        pair = expr.split('+')
+        if len(pair) > 1:
+            offset = int(pair[1])
+            return offset + symbol_value(pair[0])
+        pair = expr.split('-')
+        if len(pair) > 1:
+            offset = int(pair[1])
+            return -offset + symbol_value(pair[0])
+        return symbol_value(expr)
 
 def generate_code(op, args):
     #print "--- Compile", op, args
