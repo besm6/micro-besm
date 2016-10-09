@@ -191,7 +191,6 @@ def write_results():
     file.close()
     print "%s: %d symbols, %d externals, %d instructions" % \
         (prog_name, len(label_defined), len(label_external), len(code))
-    return
 
 def expand_macro(list):
     i = 0
@@ -253,6 +252,7 @@ def generate_code(op, args):
                     ref = pair[1]
                 else:
                     print "--- Unresolved reference:", name, "=", pair[1]
+                value = 0
             lower = field[name]['lower']
             upper = field[name]['upper']
         else:

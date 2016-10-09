@@ -8,8 +8,8 @@ clean:
 define.json:    mcdef.py ../define.src
 		./mcdef.py ../define.src
 
-microcode.out:  mclink.py ../loadcom.src $(OBJ)
-		./mclink.py ../loadcom.src
+microcode.out:  mclink.py ../loadcom2.src $(OBJ)
+		./mclink.py ../loadcom2.src [%-Z]*.json
 
 ATX.json:       mcasm.py ../b6com.src define.json
 		./mcasm.py ../b6com.src
