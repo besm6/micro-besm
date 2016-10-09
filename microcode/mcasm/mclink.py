@@ -96,7 +96,7 @@ def link(obj):
 
     # Merge undefined externals
     for name in obj[1]:
-        if not name in symtab.keys():
+        if not name in symtab.keys() and not name in undefined:
             #print "--- Merge", name
             undefined.append(name)
 

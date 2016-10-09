@@ -15,7 +15,8 @@ LD/СОМ:PROG;
 ;      I  П З У  I
 ;      ===========
 ;
-EXTERNAL JMPRAM
+;EXTERNAL JMPRAM - у нас нет RAM, только PROM. Заменяем на JINIC
+EXTERNAL JINIC
 EXTERNAL АТХ,SТХ,XTS,ХТА
 EXTERNAL ААХ,АЕХ,ARX,АОХ,АРХ,AUX,АСХ,ANX,ASX,ASN
 EXTERNAL ATI,IТА,MTJ,JDM,WТС,VТМ,UТМ
