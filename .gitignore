@@ -5,6 +5,7 @@
 *.pb
 *.json
 *.pyc
+microcode.out
 work-obj93.cf
 testbench
 .DS_Store

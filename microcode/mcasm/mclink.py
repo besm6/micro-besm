@@ -101,8 +101,15 @@ def relocate(obj):
     # Relocate code
     for s in obj[2]:
         #print "--- Code", s
-        code.append(s[0])
-        #TODO
+        opcode = s[0]
+        if len(s) > 1:
+            name = s[1]
+            if name in symtab:
+                opcode |= symtab[name] << 96
+            else:
+                print "Fatal error: Symbol", name, "undefined"
+                #sys.exit(1)
+        code.append(opcode)
 
 #
 # Delete a name from undefined list.
