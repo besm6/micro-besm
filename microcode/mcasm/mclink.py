@@ -103,7 +103,12 @@ def link(obj):
     # Copy the code
     for s in obj[2]:
         #print "--- Code", s
-        code.append(s)
+        op = s[0]
+        if len(s) > 1:
+            arg = s[1]
+        else:
+            arg = ''
+        code.append([s[0], arg])
 
 #
 # Relocate the code.
@@ -114,14 +119,14 @@ def relocate():
     for s in code:
         #print "--- Relocate", s
         opcode = s[0]
-        if len(s) > 1:
-            name = s[1]
-            if name in symtab:
-                opcode |= symtab[name] << 96
-            else:
+        name = s[1]
+        if name:
+            if not name in symtab:
                 print "Fatal error: Relocation needs undefined symbol", name
                 sys.exit(1)
-        relocated.append(opcode)
+            opcode |= symtab[name] << 96
+            s[0] = opcode
+        relocated.append(s)
     code = relocated
 
 #
@@ -140,10 +145,9 @@ def delete_undefined(name):
 def annotate():
     for name in symtab.keys():
         addr = symtab[name]
-        if type(code[addr]) is list:
-            code[addr].append(name)
-        else:
-            code[addr] = [code[addr], name]
+        if len(code[addr]) < 2:
+            code[addr].append('')
+        code[addr].append(name)
 
 #
 # Write the resulting PROM contents.
@@ -151,15 +155,17 @@ def annotate():
 def write_results(filename):
     file = open(filename, 'w')
     offset = 0
-    for i in code:
-        if type(i) is list:
+    for s in code:
+        op = s[0]
+        ref = s[1]
+        if len(s) > 2:
             # Print label(s)
-            op = i[0]
-            for label in i[1:]:
+            for label in s[2:]:
                 file.write("// %s\n" % label)
-        else:
-            op = i
-        file.write("112'h%028x,      // %d\n" % (op, offset))
+        file.write("112'h%028x,      // %d" % (op, offset))
+        if ref:
+            file.write(" ref " + ref)
+        file.write("\n")
         offset += 1
     file.close()
     print "%s: %d words" % (filename, len(code))
