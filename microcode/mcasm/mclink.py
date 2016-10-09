@@ -51,6 +51,7 @@ def main(filenames):
         sys.exit(1)
 
     relocate()
+    annotate()
     write_results("microcode.out")
 
 #
@@ -134,13 +135,31 @@ def delete_undefined(name):
         return
 
 #
+# Add labels to the code.
+#
+def annotate():
+    for name in symtab.keys():
+        addr = symtab[name]
+        if type(code[addr]) is list:
+            code[addr].append(name)
+        else:
+            code[addr] = [code[addr], name]
+
+#
 # Write the resulting PROM contents.
 #
 def write_results(filename):
     file = open(filename, 'w')
     offset = 0
     for i in code:
-        file.write("112'h%028x,      // %d\n" % (i, offset))
+        if type(i) is list:
+            # Print label(s)
+            op = i[0]
+            for label in i[1:]:
+                file.write("// %s\n" % label)
+        else:
+            op = i
+        file.write("112'h%028x,      // %d\n" % (op, offset))
         offset += 1
     file.close()
     print "%s: %d words" % (filename, len(code))
