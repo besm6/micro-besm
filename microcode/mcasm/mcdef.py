@@ -98,8 +98,8 @@ def translate(a):
         if op == '':
             continue
         if op[0] == "DEFINE" and op[1] == "PROG":
-            print "Instruction width:", op[2]
-            print "Constant width:", op[3]
+            #print "Instruction width:", op[2]
+            #print "Constant width:", op[3]
             continue
         if op[0] == "END":
             continue
@@ -118,8 +118,8 @@ def write_results(filename):
     #json.dump(const, file)
     #json.dump(equ, file)
     file.close()
-    print "Defines saved to file '"+filename+"'"
-    print "Total %d fields, %d constants, %d equivalences" % \
+    print "Create file '"+filename+"':",
+    print "%d fields, %d constants, %d symbols" % \
         (len(field), len(const), len(equ))
 
 #

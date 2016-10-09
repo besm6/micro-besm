@@ -62,8 +62,8 @@ def load_defines(filename):
         print "Fatal error: Cannot load file '" + filename + "'"
         sys.exit(1)
 
-    print "Defines loaded from file '"+filename+"'"
-    print "Total %d fields, %d constants, %d equivalences" % \
+    print "Defines loaded from file '"+filename+"':",
+    print "%d fields, %d constants, %d symbols" % \
         (len(field), len(const), len(equ))
     #print "Fields:", field
     #print "Constants:", const
@@ -189,7 +189,7 @@ def write_results():
     json.dump([label_defined, label_external, code], file,
         indent=4, sort_keys=True)
     file.close()
-    print "%s: Total %d defines, %d externals, %d instructions" % \
+    print "%s: %d symbols, %d externals, %d instructions" % \
         (prog_name, len(label_defined), len(label_external), len(code))
     return
 
