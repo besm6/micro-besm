@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #
-# Translate Micro-BESM microcode sources into binary files.
+# Translate the defines section of Micro-BESM microcode sources.
+# Save the data in JSON format.
 #
 from readsrc import read_sources
 import sys, json
@@ -89,19 +90,25 @@ def do_equ(op):
     #print name, equ[name]
     return ''
 
+#
+# Process the body: PROG and END instructions.
+#
 def translate(a):
     for op in a:
         if op == '':
             continue
         if op[0] == "DEFINE" and op[1] == "PROG":
             print "Instruction width:", op[2]
-            print "Max field width:", op[3]
+            print "Constant width:", op[3]
             continue
         if op[0] == "END":
             continue
         print "Fatal error: Unknown instruction", op
         sys.exit(1)
 
+#
+# Write the lists of fields, constants and equ to the output file.
+#
 def write_results(filename):
     #print "Fields:", field
     #print "Constants:", const
@@ -115,5 +122,8 @@ def write_results(filename):
     print "Total %d fields, %d constants, %d equivalences" % \
         (len(field), len(const), len(equ))
 
+#
+# Invoke main routine.
+#
 if __name__ == "__main__":
     main(sys.argv[1])

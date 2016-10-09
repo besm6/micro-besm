@@ -1,4 +1,7 @@
 # -*- encoding: utf-8 -*-
+#
+# Read sources of Micro-BESM microcode.
+#
 import re
 
 #
@@ -45,11 +48,15 @@ def convert_encoding(s):
 # Join continuation lines
 #
 def join_continuations(a):
-    i = 1
+    i = 0
     while i < len(a):
-        if a[i][0] == ">":
+        if i>0 and a[i][0] == ">":
             a[i-1].extend(a[i][1:])
             del a[i]
+        elif a[i][0] == "FLIST" and a[i][-1] == '':
+            del a[i][-1]
+            a[i].extend(a[i+1])
+            del a[i+1]
         else:
             i += 1
     return a
