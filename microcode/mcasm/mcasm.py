@@ -21,6 +21,7 @@ default_opcode = 0              # Default opcode when no args
 prog_name = ""                  # Current routine
 label_defined = []              # Labels defined in the current routine
 label_external = []             # External labels for the current routine
+label_local = {}                # Local labels for the current routine
 code = []                       # Accumulated code of current routine
 
 #
@@ -129,6 +130,7 @@ def label_ref(name):
 # Process a microinstruction.
 #
 def do_instruction(op):
+    global label_local
     name = op[0]
     if not name in flist['SQI']:
         # Probably a label. Try next field.
@@ -136,7 +138,9 @@ def do_instruction(op):
             print "Fatal error: Unknown instruction", op
             sys.exit(1)
 
+        # Define local label.
         label_define(name, len(code))
+        label_local[name] = 1
         name = op[1]
         op = op[1:]
     op = op[1:]
@@ -148,16 +152,18 @@ def do_instruction(op):
 # Every routine starts with PROG and ends with END.
 #
 def translate(a):
-    global prog_name, label_defined, label_external, code
+    global prog_name, label_defined, label_external, label_local, code
     for op in a:
         if op == '':
             continue
 
         if op[0] == "END":
             #print "--- Done", prog_name
+            rename_locals()
             write_results()
             label_defined = []
             label_external = []
+            label_local = {}
             code = []
             offset = 0
             continue
@@ -178,6 +184,19 @@ def translate(a):
 
         # Regular microinstruction
         do_instruction(op)
+
+#
+# Rename local symbols: add suffix.
+#
+def rename_locals():
+    global prog_name, label_defined
+    for r in label_defined:
+        if r[0] in label_local.keys():
+            r[0] += "." + prog_name
+
+    for r in code:
+        if len(r) > 1 and r[1] in label_local.keys():
+            r[1] += "." + prog_name
 
 #
 # Write the current routine to a separate JSON file.
