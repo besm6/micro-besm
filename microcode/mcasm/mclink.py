@@ -50,6 +50,7 @@ def main(filenames):
         print "Fatal error: Unknown instruction", op
         sys.exit(1)
 
+    relocate()
     write_results("microcode.out")
 
 #
@@ -61,7 +62,7 @@ def resolve():
         name = undefined[0]
         del undefined[0]
         obj = find_object(name)
-        relocate(obj)
+        link(obj)
 
 #
 # Find object that defines a given name.
@@ -73,13 +74,13 @@ def find_object(name):
             if name == s[0]:
                 del library[i]
                 return obj
-    print "Fatal error: Symbol", name, "undefined"
+    print "Fatal error: Undefined symbol", name
     sys.exit(1)
 
 #
-# Relocate an object.
+# Link an object file.
 #
-def relocate(obj):
+def link(obj):
     base = len(code)
     # Relocate symbols
     for s in obj[0]:
@@ -87,7 +88,7 @@ def relocate(obj):
         value = s[1] + base
         #print "--- Relocate", name, "=", value
         if name in symtab.keys():
-            print "Fatal error: Symbol", name, "redefined"
+            print "Fatal error:", name, "redefined"
             #sys.exit(1)
         symtab[name] = value
         delete_undefined(name)
@@ -98,18 +99,29 @@ def relocate(obj):
             #print "--- Merge", name
             undefined.append(name)
 
-    # Relocate code
+    # Copy the code
     for s in obj[2]:
         #print "--- Code", s
+        code.append(s)
+
+#
+# Relocate the code.
+#
+def relocate():
+    global code
+    relocated = []
+    for s in code:
+        #print "--- Relocate", s
         opcode = s[0]
         if len(s) > 1:
             name = s[1]
             if name in symtab:
                 opcode |= symtab[name] << 96
             else:
-                print "Fatal error: Symbol", name, "undefined"
-                #sys.exit(1)
-        code.append(opcode)
+                print "Fatal error: Relocation needs undefined symbol", name
+                sys.exit(1)
+        relocated.append(opcode)
+    code = relocated
 
 #
 # Delete a name from undefined list.

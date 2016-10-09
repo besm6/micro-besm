@@ -221,7 +221,10 @@ def symbol_value(name):
 def get_value(expr):
     try:
         # Integer constant
-        value = int(expr)
+        if expr[0] == '$':
+            value = int(expr[1:], 16)
+        else:
+            value = int(expr)
         return value
     except:
         # Name, or name+int, or name-int.
