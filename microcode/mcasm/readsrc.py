@@ -77,7 +77,7 @@ def read_sources(filename):
     a = filter(lambda x : x != '', a)
 
     # Split instruction lines.
-    a = [ re.split("[: ,]", i) for i in [ x for x in a ] ]
+    a = [ re.split("[: ,]+", i) for i in [ x for x in a ] ]
 
     # Join continuation lines
     a = join_continuations(a)

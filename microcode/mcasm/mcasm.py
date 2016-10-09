@@ -17,22 +17,41 @@ equ = {}                        # Equivalences
 flist = {}                      # Valid field values
 check = []                      # Semantic checks
 macro = {}                      # Macro operations
+default_opcode = 0              # Default opcode when no args
 prog_name = ""                  # Current routine
 label_defined = []              # Labels defined in the current routine
 label_external = []             # External labels for the current routine
-code = []
+code = []                       # Accumulated code of current routine
 
 #
 # Process the input file.
 #
 def main(filename):
+    global default_opcode
     load_defines("define.json")
+    default_opcode = build_default_opcode()
+    #print "Default opcode: %x" % default_opcode
     a = read_sources(filename)
     a = map(do_flist, a)
     a = map(do_check, a)
     a = map(do_macro, a)
     translate(a)
 
+#
+# Build a value of default microinstruction code when no parameters present.
+#
+def build_default_opcode():
+    opcode = 0
+    for name in field.keys():
+        dflt = field[name]['default']
+        if dflt != 0:
+            lower = field[name]['lower']
+            opcode |= dflt << (lower-1)
+    return opcode
+
+#
+# Load field[], const[] and equ[] from file define.json.
+#
 def load_defines(filename):
     global field, const, equ
     try:
@@ -111,22 +130,18 @@ def label_ref(name):
 #
 def do_instruction(op):
     name = op[0]
-    try:
-        idx = flist['SQI'].index(name)
-    except:
+    if not name in flist['SQI']:
         # Probably a label. Try next field.
-        try:
-            idx = flist['SQI'].index(op[1])
-        except:
+        if not op[1] in flist['SQI']:
             print "Fatal error: Unknown instruction", op
             sys.exit(1)
 
         label_define(name, len(code))
         name = op[1]
         op = op[1:]
-    #TODO
-    #print "--- Compile", op
-    code.append(idx)
+    op = op[1:]
+    op = expand_macro(op)
+    generate_code(name, op)
 
 #
 # Process the list of routines.
@@ -168,13 +183,81 @@ def translate(a):
 # Write the current routine to a separate JSON file.
 #
 def write_results():
-    filename = prog_name + ".json"
+    # Create a safe file name: replace / by %.
+    filename = prog_name.replace('/', '%') + ".json"
     file = open(filename,'w')
-    json.dump([label_defined, label_external, code], file)
+    json.dump([label_defined, label_external, code], file,
+        indent=4, sort_keys=True)
     file.close()
     print "%s: Total %d defines, %d externals, %d instructions" % \
         (prog_name, len(label_defined), len(label_external), len(code))
     return
+
+def expand_macro(list):
+    i = 0
+    while i < len(list):
+        elem = list[i]
+        if elem[0] == "%" and elem[-1] == "%":
+            name = elem.split('%')[1]
+            #print "--- Macro", elem, "expand", name
+            list.extend(macro[name])
+            del list[i]
+        else:
+            i += 1
+    return list
+
+#
+# Get value of equ or const.
+#
+def get_value(name):
+    try:
+        value = int(name)
+        return value
+    except:
+        if name in equ.keys():
+            return equ[name]
+        if name in const.keys():
+            return const[name]['index']
+        #TODO: implement simple expressions
+    return -1
+
+def generate_code(op, args):
+    #print "--- Compile", op, args
+    #TODO: verify flist and check (someday).
+    opcode = default_opcode
+    ref = ''
+    args.append("SQI=" + op)
+    for param in args:
+        pair = param.split('=')
+        if len(pair) > 1:
+            name = pair[0]
+            value = get_value(pair[1])
+            if value < 0:
+                # Must be a local or external symbol
+                if name == "A":
+                    ref = pair[1]
+                else:
+                    print "--- Unresolved reference:", name, "=", pair[1]
+            lower = field[name]['lower']
+            upper = field[name]['upper']
+        else:
+            name = param
+            value = 1
+            lower = field[name]['lower']
+            upper = field[name]['upper']
+            # Treat CI as CI=1 (known issue).
+            if upper != lower and name != "CI":
+                print "Error: Incorect parameter", name, "in command", \
+                    op, "of routine", prog_name + ":",
+                print "Multibit field requires assignment operation"
+                return
+        mask = (1 << (upper-lower+1)) - 1
+        opcode &= ~(mask << (lower-1))
+        opcode |= value << (lower-1)
+    if ref:
+        code.append([opcode, ref])
+    else:
+        code.append([opcode])
 
 if __name__ == "__main__":
     main(sys.argv[1])

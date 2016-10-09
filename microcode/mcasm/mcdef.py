@@ -36,8 +36,8 @@ def do_field(op):
 
     # Store the field description in the global dictionary.
     name = op[0]
-    upper = op[2]
-    lower = op[3]
+    upper = int(op[2])
+    lower = int(op[3])
     try:
         dflt = int(op[4])
     except:
@@ -114,7 +114,7 @@ def write_results(filename):
     #print "Constants:", const
     #print "Equivalences:", equ
     file = open(filename, 'w')
-    json.dump([field, const, equ], file)
+    json.dump([field, const, equ], file, indent=4, sort_keys=True)
     #json.dump(const, file)
     #json.dump(equ, file)
     file.close()
