@@ -1,4 +1,4 @@
-module pipeline(
+module datapath(
     input         [8:0] I,          // Instruction word
     input         [3:0] A,          // Address input to RAM (for read)
     input         [3:0] B,          // Address input to RAM (for read/write)
