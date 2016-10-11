@@ -1,0 +1,199 @@
+!
+!      Это листинг задачи загрузки микропрограмм,
+!      реализующих систему команд МКБ-8601.
+!      Листинг получен непосредственно на МКБ-8601
+
+
+
+
+
+
+-                                             01 ЯHB 90 20.52
+  OИЯИ.       БЭCM-6/0     ШИФP-20
+  MOHИTOPHAЯ CИCTEMA  'Д Y Б H A'  -  20/10/88
+
+
+
+
+
+-             ЖЖ    ЖЖЖ  ЖЖЖЖЖ ЖЖЖЖ  Ж   Ж  ЖЖ   Ж  Ж   ЖЖЖ        Ж  Ж   ЖЖЖ  Ж   Ж  ЖЖЖ  Ж   Ж  ЖЖЖ
+             Ж  Ж  Ж   Ж Ж     Ж   Ж Ж   Ж Ж  Ж  Ж Ж   Ж   Ж       Ж Ж   Ж   Ж ЖЖ ЖЖ Ж   Ж Ж   Ж  Ж Ж
+               Ж   Ж   Ж Ж     Ж   Ж Ж   Ж   Ж   ЖЖ    Ж   Ж       ЖЖ    Ж   Ж Ж Ж Ж Ж   Ж ЖЖЖЖЖ  Ж Ж
+                Ж  Ж   Ж Ж     Ж   Ж  Ж Ж     Ж  Ж Ж   Ж   Ж       Ж Ж   Ж   Ж Ж Ж Ж Ж   Ж Ж   Ж  Ж Ж
+                 Ж Ж   Ж Ж     ЖЖЖЖ    Ж       Ж Ж  Ж  Ж   Ж       Ж  Ж  Ж   Ж Ж   Ж Ж   Ж Ж   Ж  Ж Ж
+             Ж   Ж ЖЖЖЖЖ Ж     Ж       Ж   Ж   Ж Ж   Ж ЖЖЖЖЖ       Ж   Ж Ж   Ж Ж   Ж ЖЖЖЖЖ Ж   Ж ЖЖЖЖЖ
+              ЖЖЖ  Ж   Ж Ж     Ж       Ж    ЖЖЖ  Ж   Ж Ж   Ж       Ж   Ж  ЖЖЖ  Ж   Ж Ж   Ж Ж   Ж Ж   Ж
+
+
+
+
+
+
+-*NAME ЗAГPYЗKA KOMAHД
+ *TIME:01.00
+ *DISC:664/******,******
+ *FILE:ARC,30,W
+ *FILE:LIB,67,R
+ *LIBRA:23,25
+ *CALL FICMEMORY
+ *NO LIST
+ *PERSO:67
+  LIBRARY OT  20/02/90     KOHTPOЛЬHAЯ CYMMA MИKPOПPOГPAMMЫ
+ *CALL MICROB
+ *NO LIST
+ *CALL MICLOA:LD/COM
+        0000: LD/COM                  0000: JMPRAM                        0001: ATX                     0005: ATXF      E
+        0007: PSATXF    E             000A: STX                           0010: RDOPER    E             0013: XTS
+        001C: XTA                     001E: XTAF      E                   001F: PSXTAF    E             0022: AAX
+        0024: AAXF      E             0028: AEX                           002B: AEXF      E             002F: ARX
+        0032: ARXF      E             0037: AOX                           0039: AOXF      E             003D: APX
+        0041: APXC      E             0046: APXF      E                   0049: AUX                     004D: AUXC      E
+        0054: AUXF      E             0057: ACX                           005B: ACXNC     E             0060: ACXF      E
+        0065: ANX                     006E: ANXF      E                   0072: ASX                     007B: ASXF      E
+        0080: ASN                     0087: ATI                           0089: ITA                     008A: PSITA     E
+        008B: MTJ                     008E: JDM                           0091: WTC                     0093: WTCF      E
+        0098: VTM                     0099: JRPCH     E                   009A: UTM                     009B: UZA
+        009E: UIA                     00A1: JAMP                          00A2: VJM                     00A3: JMEQ
+        00A4: JMNE                    00A5: VLM                           00A6: PSVLM     E             00A9: ADU
+        00AA: PSADU     E             00AC: NADR      E                   00AD: ABU                     00AE: PSABU     E
+        00B0: UBA                     00B1: PSUBA     E                   00B3: UTA                     00B4: PSUTA     E
+        00B6: AAU                     00B7: PSAAU     E                   00B9: AEU                     00BA: PSAEU     E
+        00BC: AOU                     00BD: PSAOU     E                   00BF: ACU                     00C2: PSACU     E
+        00C4: ANU                     00CA: UTY                           00CD: UTS                     00D3: XTY
+        00D5: XTYF      E             00D9: YAX                           00DB: YAXF      E             00DF: YEX
+        00E1: YEXF      E             00E5: YOX                           00E7: YOXF      E             00EB: YTX
+        00EF: YTXF      E             00F4: AAY                           00F6: AEY                     00F8: AOY
+        00FA: MCJ                     00FE: MSN                           0102: PSMSN     E             0103: JBM
+        0106: VTMH                    0108: PSVTMH    E                   0109: VTMQ                    010B: VTMB
+        010D: VTMF                    010F: UTCS                          0112: MPAC                    011C: MUNP
+        0125: ADI                     0127: ABI                           0129: IBA                     012B: AAI
+        012D: AEI                     012F: AOI                           0131: JMGE                    0134: JMLT
+        0137: JMLE                    013A: JMGT                          013D: VRM                     0141: UZAS
+        0144: WAUZAS    E             0147: UIAS                          014B: JOVR                    014E: JCRY
+        0151: JAGT                    0154: JAGE                          0157: JALT                    015A: JALE
+        015D: JAEQ                    0160: JANE                          0163: JMPS                    0167: RETS
+        0169: ASNA                    016C: ADL                           016E: ADLF      E             0172: ABL
+        0174: ABLF      E             0178: LBA                           017A: LBAF      E             017E: ATH
+        017F: ATHSTH    E             0184: ATMEM     E                   018F: STH                     0190: HTA
+        0192: RDH       E             019B: HTS                           01A0: ADH                     01A2: ABH
+
+
+
+
+
+
+
+-       01A4: HBAC                    01A6: AAH                           01A8: AEH                     01AA: AOH
+        01AC: ATQ                     01AD: ATQSTQ    E                   01B2: STQ                     01B3: QTA
+        01B5: RDQ       E             01BA: QTS                           01BF: AEQ                     01C1: AAQ
+        01C3: AOQ                     01C5: ATB                           01C6: ATBSTB    E             01CB: STB
+        01CC: BTA                     01CE: RDB       E                   01D3: BTS                     01D8: AEB
+        01DA: AAB                     01DC: AOB                           01DE: ATF                     01DF: ATFSTF    E
+        01E3: STF                     01E4: FTA                           01E6: RDF       E             01EA: RDFRAG    E
+        01ED: FTS                     01F2: AEF                           01F4: AAF                     01F6: AOF
+        01F8: SETF                    01FA: PSSETF    E                   01FC: SETCLR    E             0201: CLRF
+        0204: EXTF                    020A: NTA                           020C: RDN       E             0214: NTSC
+        0219: AEN                     021B: AAN                           021D: AON                     021F: ATD
+        0226: ATDF      E             022E: DTA                           0232: DTAF      E             0237: ATXFE
+        023A: RMOD                    023E: XTAFE                         0240: STI                     024A: STIE
+        0255: ITS                     025A: ITSE                          025F: UTC                     0262: XTR
+        0269: XTRF      E             026E: NTR                           0273: RTE                     027D: AAXE
+        027F: PSAAXE    E             0280: AAXFE     E                   0284: AEXE                    0287: AEXFE     E
+        028C: ARXE                    028E: PSARXE    E                   0291: ARXFE     E             0295: AOXE
+        0297: AOXFE     E             029B: APXE                          02A4: PSAPXE    E             02A5: APXFE     E
+        02A9: AUXE                    02B2: AUXFE     E                   02B6: ACXE                    02BA: PSACXE    E
+        02BC: ACXFE     E             02C0: ANXE                          02C6: ANXFE     E             02CA: ASXE
+        02CB: ASXSE     E             02D5: ASXFE     E                   02D9: ASNE                    02DD: ATIE
+        02E0: ITAE                    02E5: WTCE                          02E8: WTCFE     E             02EC: JMEQE
+        02EE: JMNEE                   02F0: VLME                          02F2: WMOD                    02F6: SETR
+        02F8: CHRR      E             02FE: CLRR                          02FF: PSCLRR    E             0301: SEMR
+        030E: SEMW                    0317: SMON                          0326: CMON                    0337: TTX
+        033D: TTXF      E             0344: TTA                           0349: TTAF      E             034F: HLT
+        0353: FATHLT    E             0800: JOPC      B                   0801: JINIC                   0802: EXT/
+        0803: EXT6      E             0804: EXTC      E                   0806: EXTDR     E             0855: SAVRG     E
+        085A: ACTRG     E             086B: RET                           089F: IJP                     08BA: CTWR
+        08C6: CTRD      E             08D3: CTTWR     E                   08DF: CTTRD     E             08ED: CTTSTP    E
+        08F6: A*U                     08F7: PSA*U     E                   08F9: INTMUL    E             0910: INVWR2    E
+        0914: INVY      E             0917: A*I                           0919: A*L                     091D: A*LF      E
+        0922: A*H                     0924: A/U                           0925: PSA/U     E             0927: INTDIV    E
+        0944: A/I                     0946: A/L                           094A: A/LF      E             094F: A/H
+        0951: ADX                     0952: PSADX     E                   0955: ADXF      E             0956: ADXFE     E
+        095C: RDFLT     E             095F: PSFLT     E                   0979: NORMX     E             0989: PSNOR     E
+        0990: NORND     E             0992: CALCOR    E                   09C9: EMRNOR    E             09CC: BER       E
+        09D7: BERA      E             09DC: DBER      E                   09E7: ABX                     09EC: ABXF      E
+        09ED: ABXFE     E             09F1: XBA                           09F6: XBAF      E             09F7: XBAFE     E
+        09FB: AMX                     0A07: AMXF      E                   0A08: AMXFE     E             0A11: AVX
+        0A13: AVXF      E             0A14: AVXFE     E                   0A18: SUBAVX    E             0A22: NORMA     E
+        0A47: A/X                     0A68: A/XF      E                   0A69: A/XFE     E             0A6D: A*X
+        0A70: ZERMA     E             0A7C: A*XF      E                   0A7D: A*XFE     E             0A81: MDXSUB    E
+        0A90: NORMMD    E             0ABE: EDX                           0AC0: SUBEDX    E             0AC6: EDXF      E
+        0AC7: EDXFE     E             0ACB: EBX                           0ACD: EBXF      E             0ACE: EBXFE     E
+        0AD2: EDN                     0AD4: SUBEDN    E                   0AD7: PSEDN     E             0ADC: EBN
+        0ADE: YTA                     0AE1: YTAD      E                   0AE4: YTAL      E             0AE9: INIC
+        0B01: RCONST    E             0B0A: INIFAT    E                   0B0E: INIMEM    E             0B25: JMPOPC
+        0B96: ENDJOP    E             0B96: NEWTST                        0B96: OCT17     E             0BD3: INOUT
+        0BD3: INITST    E             0BD4: INITSM    E                   0BD6: INII3     E             0BD7: ERRTST    E
+        0BD9: ERRINF    E             0BDB: ERRINH    E                   0BDD: ERRINQ    E             0BDF: ERRDAF    E
+        0BE2: OUTPCH    E             0BE5: OUTEMH    E                   0BE8: OUTAY     E             0BEB: OUTPC     E
+        0BEE: OUTID     E             0BF1: OUTHB     E                   0BF4: OUTEM     E             0BF7: OUTQ5     E
+        0BFA: OUT34     E             0BFD: OUT12     E                   0C00: ERRAY     E             0C03: ERRPC     E
+        0C06: ERRID     E             0C09: ERRHB     E                   0C0C: ERREM     E             0C0F: ERRQ5     E
+        0C12: ERR34     E             0C15: ERR12     E                   0C18: OUTAYH    E             0C1A: ERRAYH    E
+        0C1C: RDDAT     E             0C20: OUTDAT    E                   0C22: ERRDAT    E             0C25: RDADR     E
+        0C27: OUTADR    E             0C28: OUTADH    E                   0C2E: ERRADR    E             0C30: OUT0/7    E
+        0C34: OUT0/3    E             0C38: OUT3/6    E                   0C3C: OUT4/6    E             0C3F: OUT4/7    E
+        0C43: OUTC/F    E             0C47: OUT8/F    E                   0C4B: OUT8/B    E             0C4F: ERRC/F    E
+        0C53: ERR8/F    E             0C5B: RD0/3     E                   0C63: RD3/6     E             0C6B: RD4/6     E
+        0C71: RD4/7     E             0C79: RD0/7     E                   0C88: RD8/B     E             0C90: RD8/F     E
+        0C9F: RETN      E             0CA0: STOP      E                   0D00: RW/IO     8             0D7E: PSRWIO
+        0D7E: WMODIF    E             0D81: WPSMEM    E                   0D83: WBB       E             0D85: WMODB     E
+        0D87: WPPM0     E             0D89: WPPM1     E                   0D8B: PSWRT3    E             0D8E: PSWMP     E
+        0D93: PSWCOR    E             0D98: PSWT      E                   0D9D: PSWTT     E             0DA6: RMODIF    E
+
+
+
+
+
+
+
+-       0DA9: RPSMEM    E             0DAB: RBB       E                   0DAD: RMODB     E             0DAF: RPPM0     E
+        0DB1: RPPM1     E             0DB3: PSRMGN    E                   0DB5: PSRT      E             0DB9: PSRTT     E
+        0DBB: PSRCMP    E             0DBF: MMODIF    E                   0DC4: MPSMEM    E             0DC8: MBB       E
+        0DCC: MMODB     E             0DD0: MPPM0     E                   0DD4: MPPM1     E             0DD8: MCC       E
+        0DE3: MDC       E             0DEA: OUTINP    E                   0DEE: PSIRT3    E             0DF1: PSICNT    E
+        0DF4: PSIN      E             0DF5: PSIMI     E                   0DF8: PSICOR    E             0DFD: PSSS0     E
+        0DFE: PSCS0     E             0DFF: PSSS1     E                   0E00: PSCS1     E             0E01: PSILC     E
+        0E03: PSIRC     E             0E05: PSRUNL    E                   0E08: PSRUNA    E             0E0B: PSPINT    E
+        0E0C: PSIT      E             0E11: PSITT     E                   0E19: PSOADR    E             0E1A: PSOMGN    E
+        0E1B: PSOPHP    E             0E1C: PSOCNT    E                   0E1D: PSOARB    E             0E1E: PSOIND    E
+        0E1F: PSOLOS    E             0E20: PSOT      E                   0E24: PSOTT     E             0E26: RGTOMP    E
+        0E31: ENDPS     E             0E80: SE80      7                   0EC0: SEC0      6             0EC8: SEE8      3
+        0EC9: /CONT2                  0ECA: LOGERG                        0ED0: LOGER     E             0EE2: YTAPNA
+        0EE2: YTAADD    E             0EE2: YTAZER    E                   0EE2: YTAMUL    E             0EE3: YTALOG    E
+        0EE4: LCWPRG                  0EE4: JQ        E                   0EE5: JIQ       E             0EE6: LCWISE    E
+        0EE7: LCWJE     E             0EE9: LCWPH     E                   0EEC: UZAADD    E             0EED: UZAZER    E
+        0EED: JNZ       E             0EEF: LCW       E                   0EF0: UIAADD    E             0EF1: JNNZ      E
+        0EF2: LCWJMP    E             0EF2: UIAZER    E                   0EF3: LCWJ1     E             0EF5: UZAPNA
+        0EF5: UZAMUL    E             0EF6: UZALOG    E                   0EF8: UIAPNA                  0EF8: UIAMUL    E
+        0EF9: UIALOG    E             0EFB: UZSPNA                        0EFB: UZSADD    E             0EFC: UZSZER    E
+        0EFD: UZSMUL    E             0EFF: UZSLOG    E                   0F00: ENDUZS    E             0F00: INT/RE    8
+        0F8F: INICT     E             0FDB: INT33     E                   0FDF: INT34     E             0FE3: INT35     E
+        0FE5: INT36     E             0FE7: INT37     E                   0FE9: INT38     E             0FEB: ENDINT    E
+        0FF0: SFF0      4             0FF8: SFF8      3                   0FFC: SFFC      2             0FFE: ADDC      1
+        0FFF: INT/IN                  1000: CBOБOДHO
+ *CALL MPROM
+
+
+
+
+
+-                                             01 ЯHB 90 21.15
+  ЗAДAЙTE ИMЯ PC-ФAЙЛA >  MPCOMA
+  ФAЙЛ  MPCOMA      CФOPMИPOBAH. ПPИHЯЛИ EГO !   END
+     BCE !
+ *END FILE
+KOHEЦ ЗAДAЧИ.
+  CЧAC:019D5  ИAOП:00000   POП:019A6   PEЖ:00000406   PPP:00240002
+M1-M8: 00000504 00000833 00000B72 0000779A 00000570 00000000 00000000 0000079B
+M9-16: 00000000 000018B1 0000039C 00000243 00000117 000019D5 00007701 0000198B
+CM,MP: 00000000 00000000 00000000 00000000  CЧET:00.07.30
