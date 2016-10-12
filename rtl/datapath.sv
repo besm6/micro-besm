@@ -1,4 +1,4 @@
-module pipeline(
+module datapath(
     input         [8:0] I,          // Instruction word
     input         [3:0] A,          // Address input to RAM (for read)
     input         [3:0] B,          // Address input to RAM (for read/write)
@@ -13,6 +13,7 @@ module pipeline(
 );
     // Internal carry signals
     logic C4, C8, C12, C16, C20, C24, C28, C32, C36, C40, C44, C48, C52, C56, C60;
+    logic Cx1, Cx2, Cx3;
 
     // Internal shift signals
     logic R3, R7, R11, R15, R19, R23, R27, R31, R35, R39, R43, R47, R51, R55, R59;
@@ -25,6 +26,13 @@ module pipeline(
 
     // Shift signals for am2904
     logic PR0, PQ0, PR63, PQ63, oR0, oR63, oQ0, oQ63;
+
+    // Generate and propagate signals for Am2902
+    logic nG0, nG4, nG8, nG12, nG16, nG20, nG24, nG28,
+          nG32, nG36, nG40, nG44, nG48, nG52, nG56, nG60;
+    logic nP0, nP4, nP8, nP12, nP16, nP20, nP24, nP28,
+          nP32, nP36, nP40, nP44, nP48, nP52, nP56, nP60;
+    logic nGx0, nGx1, nGx2, nGx3, nPx0, nPx1, nPx2, nPx3;
 
     // Сигналами I0-I8, А0-А3, В0-В3, /ОЕ, С0 управляет
     // микропрограмма; сигналы D0-D3 поступают с входной шины D ЦП;
@@ -49,13 +57,18 @@ module pipeline(
     am2901 p59_56(I, A, B, D[59:56], Y[59:56], R55, R60, Q55, Q60, R56, R59, Q56, Q59, clk, C56, nOE, C60, nG56, nP56, ,  ,  Z59_56);
     am2901 p63_60(I, A, B, D[63:60], Y[63:60], R59, PR63,Q59, PQ63,R60, oR63,Q60, oQ63,clk, C60, nOE, C,   nG60, nP60, V, N, Z63_60);
 
+    // Global zero flag
     assign Z = !Z3_0   & !Z7_4   & !Z11_8  & !Z15_12 &
                !Z19_16 & !Z23_20 & !Z27_24 & !Z31_28 &
                !Z35_32 & !Z39_36 & !Z43_40 & !Z47_44 &
                !Z51_48 & !Z55_52 & !Z59_56 & !Z63_60;
 
-//TODO: nGi, nPi
-// Use am2902
+    // Carry lookahead
+    am2902 ss0(C0,  nG0,  nP0,  nG4,  nP4,  nG8,  nP8,  nG12, nP12, C4,  C8,  C12, nGx0, nPx0);
+    am2902 ss1(Cx1, nG16, nP16, nG20, nP20, nG24, nP24, nG28, nP28, C20, C24, C28, nGx1, nPx1);
+    am2902 ss2(Cx2, nG32, nP32, nG36, nP36, nG40, nP40, nG44, nP44, C36, C40, C44, nGx2, nPx2);
+    am2902 ss3(Cx3, nG48, nP48, nG52, nP52, nG56, nP56, nG60, nP60, C52, C56, C60, nGx3, nPx3);
+    am2902 ssx(C0,  nGx0, nPx0, nGx1, nPx1, nGx2, nPx2, nGx3, nPx3, C16, C32, C48, ,     );
 
     // Выходы признаков состояния старшей МПС С4, OVR, F3, Z соединены
     // с соответствующими входами признаков состояния СУСС. При этом
@@ -111,3 +124,6 @@ module pipeline(
         PQ0,       //+ output --//--
         PQ63       //+ output --//--
     );
+
+    //TODO
+endmodule
