@@ -1,0 +1,64 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Wed Oct 12 02:53:50 2016
+[*]
+[dumpfile] "/local/Besm-6/micro-besm/tests/k1802bb1/modelsim/test.vcd"
+[dumpfile_mtime] "Wed Oct 12 02:52:38 2016"
+[dumpfile_size] 13418
+[savefile] "/local/Besm-6/micro-besm/tests/k1802bb1/modelsim/test.gtkw"
+[timestart] 0
+[size] 1162 763
+[pos] -834 -231
+*-5.993129 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 235
+[signals_width] 126
+[sst_expanded] 1
+[sst_vpaned_height] 216
+@22
+testbench.nDA[3:0]
+testbench.nDB[3:0]
+testbench.nDC[3:0]
+testbench.nDX[3:0]
+@200
+-
+@28
+testbench.AA[1:0]
+testbench.AB[1:0]
+testbench.AC[1:0]
+testbench.AX[1:0]
+@200
+-
+@28
+testbench.nECA
+testbench.nECB
+testbench.nECC
+testbench.nECX
+@200
+-
+@28
+testbench.nRA
+testbench.nRB
+testbench.nRC
+testbench.nRX
+@200
+-
+@28
+testbench.nWA
+testbench.nWB
+testbench.nWC
+testbench.nWX
+@200
+-
+@22
+testbench.out_nDA[3:0]
+testbench.out_nDB[3:0]
+testbench.out_nDC[3:0]
+testbench.out_nDX[3:0]
+@200
+-
+@28
+testbench.nCI
+testbench.nCO
+testbench.E
+[pattern_trace] 1
+[pattern_trace] 0
