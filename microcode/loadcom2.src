@@ -16,7 +16,11 @@ LD/СОМ:PROG;
 ;      ===========
 ;
 ;EXTERNAL JMPRAM - у нас нет RAM, только PROM. Заменяем на JINIC
-EXTERNAL JINIC
+; Адрес 000 - вход по Reset
+; Адрес 001 - обработчик внешнего прерывания
+; Адрес 002 - обработчик экстракода
+EXTERNAL JINIC,INT/IN,ЕХТ/
+
 EXTERNAL АТХ,SТХ,XTS,ХТА
 EXTERNAL ААХ,АЕХ,ARX,АОХ,АРХ,AUX,АСХ,ANX,ASX,ASN
 EXTERNAL ATI,IТА,MTJ,JDM,WТС,VТМ,UТМ

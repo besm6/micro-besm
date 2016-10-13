@@ -44,12 +44,13 @@ def main(filenames):
                 # Link the symbol.
                 if not name in symtab:
                     #print "--- Link", name
-                    undefined.append(name)
-                    resolve()
+                    obj = find_object(name)
+                    link(obj)
             continue
         print "Fatal error: Unknown instruction", op
         sys.exit(1)
 
+    resolve()
     relocate()
     annotate()
     write_results("microcode.out")
@@ -62,6 +63,7 @@ def resolve():
     while len(undefined) > 0:
         name = undefined[0]
         del undefined[0]
+        #print "--- Link", name
         obj = find_object(name)
         link(obj)
 
