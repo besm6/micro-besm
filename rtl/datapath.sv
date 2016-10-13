@@ -1,25 +1,30 @@
 module datapath(
-    input         [8:0] I,          // Instruction word
-    input         [3:0] A,          // Address input to RAM (for read)
-    input         [3:0] B,          // Address input to RAM (for read/write)
-    input        [63:0] D,          // Data input to chip
-    output logic [63:0] Y,          // Data output from chip
+    // Signals for am2901
     input               clk,        // Clock
+    input         [8:0] Ialu,       // ALU instruction
+    input         [3:0] A,          // Address input to register file (for read)
+    input         [3:0] B,          // Address input to register file (for read/write)
+    input        [63:0] D,          // D bus input
+    output logic [63:0] oYalu,      // Y bus output from ALU
     input               C0,         // Carry input to ALU
-    input               nOE         // Tri-state driver for Y output
-    //TODO: signals for am2904
+    input               mode32      // 32-bit mode flag
+
+    // Signals for am2904
+    input        [12:0] Iss,        // Status/Shift instruction
+    output logic  [3:0] oYss,       // Y bus output from Status/Shift
     input               nCEM,       // Machine status register enable
     input               nCEN,       // Micro status register enable
+    output logic        CT,         // Conditional test output
+    output logic        Co,         // Carry multiplexer out
 );
     // Internal carry signals
-    logic C4, C8, C12, C16, C20, C24, C28, C32, C36, C40, C44, C48, C52, C56, C60;
-    logic Cx1, Cx2, Cx3;
+    logic c4, c8, c12, c16, c20, c24, c28, c32, c36, c40, c44, c48, c52, c56, c60;
 
     // Internal shift signals
-    logic R3, R7, R11, R15, R19, R23, R27, R31, R35, R39, R43, R47, R51, R55, R59;
-    logic R4, R8, R12, R16, R20, R24, R28, R32, R36, R40, R44, R48, R52, R56, R60;
-    logic Q3, Q7, Q11, Q15, Q19, Q23, Q27, Q31, Q35, Q39, Q43, Q47, Q51, Q55, Q59;
-    logic Q4, Q8, Q12, Q16, Q20, Q24, Q28, Q32, Q36, Q40, Q44, Q48, Q52, Q56, Q60;
+    logic r3, r7, r11, r15, r19, r23, r27, r31, r35, r39, r43, r47, r51, r55, r59;
+    logic r4, r8, r12, r16, r20, r24, r28, r32, r36, r40, r44, r48, r52, r56, r60;
+    logic q3, q7, q11, q15, q19, q23, q27, q31, q35, q39, q43, q47, q51, q55, q59;
+    logic q4, q8, q12, q16, q20, q24, q28, q32, q36, q40, q44, q48, q52, q56, q60;
 
     // Status signals for am2904
     logic C, V, N, Z;
@@ -28,11 +33,14 @@ module datapath(
     logic PR0, PQ0, PR63, PQ63, oR0, oR63, oQ0, oQ63;
 
     // Generate and propagate signals for Am2902
-    logic nG0, nG4, nG8, nG12, nG16, nG20, nG24, nG28,
+    logic nG0,  nG4,  nG8,  nG12, nG16, nG20, nG24, nG28,
           nG32, nG36, nG40, nG44, nG48, nG52, nG56, nG60;
-    logic nP0, nP4, nP8, nP12, nP16, nP20, nP24, nP28,
+    logic nP0,  nP4,  nP8,  nP12, nP16, nP20, nP24, nP28,
           nP32, nP36, nP40, nP44, nP48, nP52, nP56, nP60;
     logic nGx0, nGx1, nGx2, nGx3, nPx0, nPx1, nPx2, nPx3;
+
+    // Data signals for am2904
+    logic Yz, Yn, Yovr, Yc, oYz, oYn, oYovr, oYc;
 
     // Сигналами I0-I8, А0-А3, В0-В3, /ОЕ, С0 управляет
     // микропрограмма; сигналы D0-D3 поступают с входной шины D ЦП;
@@ -40,90 +48,72 @@ module datapath(
     // Q0, Q3 передаются на схему управления состоянием и сдвигами
     // К1804ВР2, и далее - на мультиплексор условий; /Р и G
     // используются для формирования ускоренного переноса.
-    am2901 p3_0  (I, A, B, D[3:0],   Y[3:0],   PR0, R4,  PQ0, Q4,  oR0, R3,  oQ0, Q3,  clk, C0,  nOE, C4,  nG0,  nP0,  ,  ,  Z3_0);
-    am2901 p7_4  (I, A, B, D[7:4],   Y[7:4],   R3,  R8,  Q3,  Q8,  R4,  R7,  Q4,  Q7,  clk, C4,  nOE, C8,  nG4,  nP4,  ,  ,  Z7_4);
-    am2901 p11_8 (I, A, B, D[11:8],  Y[11:8],  R7,  R12, Q7,  Q12, R8,  R11, Q8,  Q11, clk, C8,  nOE, C12, nG8,  nP8,  ,  ,  Z11_8);
-    am2901 p15_12(I, A, B, D[15:12], Y[15:12], R11, R16, Q11, Q16, R12, R15, Q12, Q15, clk, C12, nOE, C16, nG12, nP12, ,  ,  Z15_12);
-    am2901 p19_16(I, A, B, D[19:16], Y[19:16], R15, R20, Q15, Q20, R16, R19, Q16, Q19, clk, C16, nOE, C20, nG16, nP16, ,  ,  Z19_16);
-    am2901 p23_20(I, A, B, D[23:20], Y[23:20], R19, R24, Q19, Q24, R20, R23, Q20, Q23, clk, C20, nOE, C24, nG20, nP20, ,  ,  Z23_20);
-    am2901 p27_24(I, A, B, D[27:24], Y[27:24], R23, R28, Q23, Q28, R24, R27, Q24, Q27, clk, C24, nOE, C28, nG24, nP24, ,  ,  Z27_24);
-    am2901 p31_28(I, A, B, D[31:28], Y[31:28], R27, R32, Q27, Q32, R28, R31, Q28, Q31, clk, C28, nOE, C32, nG28, nP28, ,  ,  Z31_28);
-    am2901 p35_32(I, A, B, D[35:32], Y[35:32], R31, R36, Q31, Q36, R32, R35, Q32, Q35, clk, C32, nOE, C36, nG32, nP32, ,  ,  Z35_32);
-    am2901 p39_36(I, A, B, D[39:36], Y[39:36], R35, R40, Q35, Q40, R36, R39, Q36, Q39, clk, C36, nOE, C40, nG36, nP36, ,  ,  Z39_36);
-    am2901 p43_40(I, A, B, D[43:40], Y[43:40], R39, R44, Q39, Q44, R40, R43, Q40, Q43, clk, C40, nOE, C44, nG40, nP40, ,  ,  Z43_40);
-    am2901 p47_44(I, A, B, D[47:44], Y[47:44], R43, R48, Q43, Q48, R44, R47, Q44, Q47, clk, C44, nOE, C48, nG44, nP44, ,  ,  Z47_44);
-    am2901 p51_48(I, A, B, D[51:48], Y[51:48], R47, R52, Q47, Q52, R48, R51, Q48, Q51, clk, C48, nOE, C52, nG48, nP48, ,  ,  Z51_48);
-    am2901 p55_52(I, A, B, D[55:52], Y[55:52], R51, R56, Q51, Q56, R52, R55, Q52, Q55, clk, C52, nOE, C56, nG52, nP52, ,  ,  Z55_52);
-    am2901 p59_56(I, A, B, D[59:56], Y[59:56], R55, R60, Q55, Q60, R56, R59, Q56, Q59, clk, C56, nOE, C60, nG56, nP56, ,  ,  Z59_56);
-    am2901 p63_60(I, A, B, D[63:60], Y[63:60], R59, PR63,Q59, PQ63,R60, oR63,Q60, oQ63,clk, C60, nOE, C,   nG60, nP60, V, N, Z63_60);
+    am2901 p3_0  (I, A, B, D[3:0],   oYalu[3:0],   PR0, r4,  PQ0, q4,  oR0, r3,  oQ0, q3,  clk, c0,  0, c4,  nG0,  nP0,  ,    ,   Z3_0);
+    am2901 p7_4  (I, A, B, D[7:4],   oYalu[7:4],   r3,  r8,  q3,  q8,  r4,  r7,  q4,  q7,  clk, c4,  0, c8,  nG4,  nP4,  ,    ,   Z7_4);
+    am2901 p11_8 (I, A, B, D[11:8],  oYalu[11:8],  r7,  r12, q7,  q12, r8,  r11, q8,  q11, clk, c8,  0, c12, nG8,  nP8,  ,    ,   Z11_8);
+    am2901 p15_12(I, A, B, D[15:12], oYalu[15:12], r11, r16, q11, q16, r12, r15, q12, q15, clk, c12, 0, c16, nG12, nP12, ,    ,   Z15_12);
+    am2901 p19_16(I, A, B, D[19:16], oYalu[19:16], r15, r20, q15, q20, r16, r19, q16, q19, clk, c16, 0, c20, nG16, nP16, ,    ,   Z19_16);
+    am2901 p23_20(I, A, B, D[23:20], oYalu[23:20], r19, r24, q19, q24, r20, r23, q20, q23, clk, c20, 0, c24, nG20, nP20, ,    ,   Z23_20);
+    am2901 p27_24(I, A, B, D[27:24], oYalu[27:24], r23, r28, q23, q28, r24, r27, q24, q27, clk, c24, 0, c28, nG24, nP24, ,    ,   Z27_24);
+    am2901 p31_28(I, A, B, D[31:28], oYalu[31:28], r27, r32, q27, q32, r28, r31, q28, q31, clk, c28, 0, c32, nG28, nP28, v32, n32, Z31_28);
+    am2901 p35_32(I, A, B, D[35:32], oYalu[35:32], r31, r36, q31, q36, r32, r35, q32, q35, clk, c32, 0, c36, nG32, nP32, ,    ,   Z35_32);
+    am2901 p39_36(I, A, B, D[39:36], oYalu[39:36], r35, r40, q35, q40, r36, r39, q36, q39, clk, c36, 0, c40, nG36, nP36, ,    ,   Z39_36);
+    am2901 p43_40(I, A, B, D[43:40], oYalu[43:40], r39, r44, q39, q44, r40, r43, q40, q43, clk, c40, 0, c44, nG40, nP40, ,    ,   Z43_40);
+    am2901 p47_44(I, A, B, D[47:44], oYalu[47:44], r43, r48, q43, q48, r44, r47, q44, q47, clk, c44, 0, c48, nG44, nP44, ,    ,   Z47_44);
+    am2901 p51_48(I, A, B, D[51:48], oYalu[51:48], r47, r52, q47, q52, r48, r51, q48, q51, clk, c48, 0, c52, nG48, nP48, ,    ,   Z51_48);
+    am2901 p55_52(I, A, B, D[55:52], oYalu[55:52], r51, r56, q51, q56, r52, r55, q52, q55, clk, c52, 0, c56, nG52, nP52, ,    ,   Z55_52);
+    am2901 p59_56(I, A, B, D[59:56], oYalu[59:56], r55, r60, q55, q60, r56, r59, q56, q59, clk, c56, 0, c60, nG56, nP56, ,    ,   Z59_56);
+    am2901 p63_60(I, A, B, D[63:60], oYalu[63:60], r59, PR63,q59, PQ63,r60, oR63,q60, oQ63,clk, c60, 0, c64, nG60, nP60, v64, n64, Z63_60);
 
     // Global zero flag
-    assign Z = !Z3_0   & !Z7_4   & !Z11_8  & !Z15_12 &
-               !Z19_16 & !Z23_20 & !Z27_24 & !Z31_28 &
-               !Z35_32 & !Z39_36 & !Z43_40 & !Z47_44 &
-               !Z51_48 & !Z55_52 & !Z59_56 & !Z63_60;
+    assign z32 = !Z3_0   & !Z7_4   & !Z11_8  & !Z15_12 &
+                 !Z19_16 & !Z23_20 & !Z27_24 & !Z31_28;
+    assign z64 = z32 &
+                 !Z35_32 & !Z39_36 & !Z43_40 & !Z47_44 &
+                 !Z51_48 & !Z55_52 & !Z59_56 & !Z63_60;
 
     // Carry lookahead
-    am2902 ss0(C0,  nG0,  nP0,  nG4,  nP4,  nG8,  nP8,  nG12, nP12, C4,  C8,  C12, nGx0, nPx0);
-    am2902 ss1(Cx1, nG16, nP16, nG20, nP20, nG24, nP24, nG28, nP28, C20, C24, C28, nGx1, nPx1);
-    am2902 ss2(Cx2, nG32, nP32, nG36, nP36, nG40, nP40, nG44, nP44, C36, C40, C44, nGx2, nPx2);
-    am2902 ss3(Cx3, nG48, nP48, nG52, nP52, nG56, nP56, nG60, nP60, C52, C56, C60, nGx3, nPx3);
-    am2902 ssx(C0,  nGx0, nPx0, nGx1, nPx1, nGx2, nPx2, nGx3, nPx3, C16, C32, C48, ,     );
+    am2902 ss0(c0,  nG0,  nP0,  nG4,  nP4,  nG8,  nP8,  nG12, nP12, c4,  c8,  c12, nGx0, nPx0);
+    am2902 ss1(c16, nG16, nP16, nG20, nP20, nG24, nP24, nG28, nP28, c20, c24, c28, nGx1, nPx1);
+    am2902 ss2(c32, nG32, nP32, nG36, nP36, nG40, nP40, nG44, nP44, c36, c40, c44, nGx2, nPx2);
+    am2902 ss3(c48, nG48, nP48, nG52, nP52, nG56, nP56, nG60, nP60, c52, c56, c60, nGx3, nPx3);
+    am2902 ssx(c0,  nGx0, nPx0, nGx1, nPx1, nGx2, nPx2, nGx3, nPx3, c16, c32, c48, ,     );
+
+    // Выход кода условия СТ подается
+    // на мультиплексор условий. Входы /OEy, /EZ, /ЕС, /EN, /EV, СХ,
+    // /ОЕСТ заземлены. Управление входом /SE осуществляется инверсным
+    // сигналом I8 МПС, I10 соединяется со входом I7 МПС. Сигналами
+    // /СЕМ и /CEN управляет микропрограмма.
+    am2904 status(
+        Iss, clk, nCEM, nCEN, 0,
+        C, V, N, Z, 0, 0, 0, 0,
+        Yz, Yc, Yn, Yovr, oYz, oYc, oYn, oYovr,
+        0, CT,
+        0, Co,
+        !Ialu[8],
+        oR0, oR63, oQ0, oQ63, PR0, PR63, PQ0,
+        PQ63);
 
     // Выходы признаков состояния старшей МПС С4, OVR, F3, Z соединены
     // с соответствующими входами признаков состояния СУСС. При этом
     // старшей может считаться МПС, содержащая 32-28 или 64-60 разряды
     // в зависимости от типа операций, производимых в АЛУ.
-//TODO: switch C/V/N/Z depending on 32/64 mode
+    assign Z = mode32 ? z32 : z64;
+    assign N = mode32 ? n32 : n64;
+    assign V = mode32 ? v32 : v64;
+    assign C = mode32 ? c32 : c64;
+
     // Двунаправленная шина У (УС, YN, YV, YZ) соединена через ШФ со
     // входной шиной D ЦП для выдачи информации из СУСС, и с выходной
     // шиной У для чтения информации.
-//TODO: connect uY* to D and Y
-    // Выход кода условия СТ подается
-    // на мультиплексор условий. Входы /СЕМ?, /EZ, /ЕС, /EN, /EV, СХ,
-    // /ОЕСТ заземлены. Управление входом /SE осуществляется инверсным
-    // сигналом I8 МПС, I10 соединяется со входом I7 МПС. Сигналами
-    // /СЕМ и /CEN управляет микропрограмма.
-    am2904 status(
-        I,         // input [12:0] Instruction
+    assign Yz =   D[0];
+    assign Yn =   D[1];
+    assign Yovr = D[2];
+    assign Yc =   D[3];
+    assign oYss[0] = oYz;
+    assign oYss[1] = oYn;
+    assign oYss[2] = oYovr;
+    assign oYss[3] = oYc;
 
-        clk,       //+ input  Clock
-        nCEM,      //+ input  Machine status register enable
-        nCEN,      //+ input  Micro status register enable
-        nOEy,      // input  Y output enable
-        C,         //+ input  Carry status from ALU
-        V,         //+ input  Overflow status from ALU
-        N,         //+ input  Sign status from ALU
-        Z,         //+ input  Zero status from ALU
-        0,         //+ input  Zero status enable
-        0,         //+ input  Carry status enable
-        0,         //+ input  Sign status enable
-        0,         //+ input  Overflow status enable
-        Yz,        // input  Zero status bus input
-        Yc,        // input  Carry status bus input
-        Yn,        // input  Sign status bus input
-        Yovr,      // input  Overflow status bus input
-        oYz,       // output Output direction of the above signals
-        oYc,       // output --//--
-        oYn,       // output --//--
-        oYovr,     // output --//--
-
-        0,         //+ input  CT output enable
-        CT,        // output Conditional test
-
-        0,         //+ input  Carry multiplexer in
-        Co,        // output Carry multiplexer out
-
-        nSE,       // input  Shift enable
-        oR0,       //+ input  Serial shift, RAM0 of least significant slice
-        oR63,      //+ input  Serial shift, RAM3 of most significant slice
-        oQ0,       //+ input  Serial shift, QIO0 of least significant slice
-        oQ63,      //+ input  Serial shift, QIO3 of most significant slice
-        PR0,       //+ output Output direction of the above signals
-        PR63,      //+ output --//--
-        PQ0,       //+ output --//--
-        PQ63       //+ output --//--
-    );
-
-    //TODO
+    //TODO: I10 соединяется со входом I7 МПС
 endmodule
