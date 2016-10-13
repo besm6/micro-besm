@@ -1,21 +1,21 @@
 module datapath(
     // Signals for am2901
-    input               clk,        // Clock
-    input         [8:0] Ialu,       // ALU instruction
-    input         [3:0] A,          // Address input to register file (for read)
-    input         [3:0] B,          // Address input to register file (for read/write)
-    input        [63:0] D,          // D bus input
-    output logic [63:0] oYalu,      // Y bus output from ALU
-    input               C0,         // Carry input to ALU
-    input               mode32      // 32-bit mode flag
+    input               clk,    // Clock
+    input         [8:0] Ialu,   // ALU instruction, from ALUD, FUNC and ALUS
+    input         [3:0] A,      // A register address, from RA
+    input         [3:0] B,      // B register address, from RB
+    input        [63:0] D,      // D bus input
+    input               C0,     // Carry input, from CI
+    input               mode32  // 32-bit mode flag, from H
+    output logic [63:0] oYalu,  // Y bus output from ALU
 
     // Signals for am2904
-    input        [12:0] Iss,        // Status/Shift instruction
-    output logic  [3:0] oYss,       // Y bus output from Status/Shift
-    input               nCEM,       // Machine status register enable
-    input               nCEN,       // Micro status register enable
-    output logic        CT,         // Conditional test output
-    output logic        Co,         // Carry multiplexer out
+    input         [9:0] Iss,    // Status/Shift instruction, from SHMUX and STOPC
+    input               nCEM,   // Machine status register enable, from CEM
+    input               nCEN,   // Micro status register enable, from CEN
+    output logic  [3:0] oYss,   // Y bus output from Status/Shift
+    output logic        CT,     // Conditional test output
+    output logic        Css     // Carry multiplexer output
 );
     // Internal carry signals
     logic c4, c8, c12, c16, c20, c24, c28, c32, c36, c40, c44, c48, c52, c56, c60;
@@ -38,6 +38,9 @@ module datapath(
     logic nP0,  nP4,  nP8,  nP12, nP16, nP20, nP24, nP28,
           nP32, nP36, nP40, nP44, nP48, nP52, nP56, nP60;
     logic nGx0, nGx1, nGx2, nGx3, nPx0, nPx1, nPx2, nPx3;
+
+    // Instruction for am2904
+    logic [12:0] Ifull;
 
     // Data signals for am2904
     logic Yz, Yn, Yovr, Yc, oYz, oYn, oYovr, oYc;
@@ -73,11 +76,14 @@ module datapath(
                  !Z51_48 & !Z55_52 & !Z59_56 & !Z63_60;
 
     // Carry lookahead
-    am2902 ss0(c0,  nG0,  nP0,  nG4,  nP4,  nG8,  nP8,  nG12, nP12, c4,  c8,  c12, nGx0, nPx0);
-    am2902 ss1(c16, nG16, nP16, nG20, nP20, nG24, nP24, nG28, nP28, c20, c24, c28, nGx1, nPx1);
-    am2902 ss2(c32, nG32, nP32, nG36, nP36, nG40, nP40, nG44, nP44, c36, c40, c44, nGx2, nPx2);
-    am2902 ss3(c48, nG48, nP48, nG52, nP52, nG56, nP56, nG60, nP60, c52, c56, c60, nGx3, nPx3);
-    am2902 ssx(c0,  nGx0, nPx0, nGx1, nPx1, nGx2, nPx2, nGx3, nPx3, c16, c32, c48, ,     );
+    am2902 s0(c0,  nG0,  nP0,  nG4,  nP4,  nG8,  nP8,  nG12, nP12, c4,  c8,  c12, nGx0, nPx0);
+    am2902 s1(c16, nG16, nP16, nG20, nP20, nG24, nP24, nG28, nP28, c20, c24, c28, nGx1, nPx1);
+    am2902 s2(c32, nG32, nP32, nG36, nP36, nG40, nP40, nG44, nP44, c36, c40, c44, nGx2, nPx2);
+    am2902 s3(c48, nG48, nP48, nG52, nP52, nG56, nP56, nG60, nP60, c52, c56, c60, nGx3, nPx3);
+    am2902 sx(c0,  nGx0, nPx0, nGx1, nPx1, nGx2, nPx2, nGx3, nPx3, c16, c32, c48, ,     );
+
+    // Full instruction for am2904
+    assign Ifull = {1'b1, 1'b1, Ialu[7], Iss};
 
     // Выход кода условия СТ подается
     // на мультиплексор условий. Входы /OEy, /EZ, /ЕС, /EN, /EV, СХ,
@@ -85,7 +91,7 @@ module datapath(
     // сигналом I8 МПС, I10 соединяется со входом I7 МПС. Сигналами
     // /СЕМ и /CEN управляет микропрограмма.
     am2904 status(
-        Iss, clk, nCEM, nCEN, 0,
+        Ifull, clk, nCEM, nCEN, 0,
         C, V, N, Z, 0, 0, 0, 0,
         Yz, Yc, Yn, Yovr, oYz, oYc, oYn, oYovr,
         0, CT,
@@ -110,10 +116,9 @@ module datapath(
     assign Yn =   D[1];
     assign Yovr = D[2];
     assign Yc =   D[3];
+
     assign oYss[0] = oYz;
     assign oYss[1] = oYn;
     assign oYss[2] = oYovr;
     assign oYss[3] = oYc;
-
-    //TODO: I10 соединяется со входом I7 МПС
 endmodule

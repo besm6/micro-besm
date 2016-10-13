@@ -18,26 +18,25 @@ module am2910(
 );
 
 logic [2:0] sp;
-logic R_sel,D_sel,uPC_sel,stack_sel,decr,load,Rzero_bar,clear,push,pop;
-logic [11:0] Y_temp,RE,uPC;
+logic R_sel, D_sel, uPC_sel, stack_sel, decr, load, Rzero_bar, clear, push, pop;
+logic [11:0] Y_temp, RE, uPC;
 logic [11:0] reg_file[5:0];
 
 always_comb case (1'b1)
-R_sel: Y_temp = RE;
-D_sel: Y_temp = D;
-uPC_sel: Y_temp = uPC;
+    R_sel: Y_temp = RE;
+    D_sel: Y_temp = D;
+  uPC_sel: Y_temp = uPC;
 stack_sel: Y_temp = reg_file[sp];
-default: Y_temp = '0;
+  default: Y_temp = '0;
 endcase
 
 assign Y = nOE ? 'z : Y_temp;
 
 always @(posedge clk) begin
-    if (load || !nRLD) begin
+    if (load || !nRLD)
         RE <= D;
-    end else if (decr && nRLD) begin
+    else if (decr && nRLD)
         RE <= RE - 1;
-    end
 end
 
 assign Rzero_bar = RE != 0;
