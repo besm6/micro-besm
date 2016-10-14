@@ -31,11 +31,9 @@ logic SQI[3:0], A[11:0], МАР[1:0], ALU, ALUD[2:0], FUNC[2:0], ALUS[2:0],
 
 // Input signals
 logic  [3:0] control_I;         // Four-bit instruction
-logic        control_nCCEN;     // Conditional Code Enable bit
 logic        control_nCC;       // Conditional Code Bit
 logic        control_nRLD;      // Unconditional load bit for register/counter
 logic        control_CI;        // Carry-in bit for microprogram counter
-logic        control_nOE;       // Tri-state driver control bit
 logic [11:0] control_D;         // 12-bit data input to chip
 
 // Output signals
