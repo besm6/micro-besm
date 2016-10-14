@@ -42,11 +42,11 @@ logic        control_nVE;       // Vector output enable
 logic        control_nME;       // Mapping PROM output enable
 logic        control_nFULL;     // Stack full flag
 
-am2910 control(clk, control_I, 0, control_nCC, control_nRLD, control_CI, 0,
+am2910 control(clk,
+    control_I, 0, control_nCC, control_nRLD, control_CI, 0,
     control_D, control_Y, , control_nVE, control_nME, control_nFULL);
 
 assign control_I    = SQI;      // Four-bit instruction
-assign control_nCC  = cond_mux; // Conditional Code Bit TODO
 assign control_nRLD = RLD;      // Unconditional load bit for register/counter
 
 // Carry-in bit for microprogram counter
@@ -56,7 +56,36 @@ assign control_CI = SCI ? 1 :
 
 // 12-bit data input
 assign control_D = !control_nME & MOD ? pna_mod :   //TODO
-                   !control_nVE       ? pna_irq;    //TODO
+                   !control_nVE       ? pna_irq :   //TODO
+                                        TODO;
+
+// Выбор условия, подлежащего проверке.
+always_comb case (COND)
+      0: control_nCC = 0;       // YES, "да"
+      1: control_nCC = 1;       // NORMB, блокировка нормализации (БНОР)
+      2: control_nCC = 1;       // RNDB, блокировка округления (БОКР)
+      3: control_nCC = 1;       // OVRIB, блокировка прерывания по переполнению (БПП)
+      4: control_nCC = 1;       // BNB, блокировка выхода числа за диапазон БЭСМ-6 (ББЧ)
+      5: control_nCC = 1;       // OVRFTB, блокировка проверки переполнения поля упрятывания (БППУ)
+      6: control_nCC = 1;       // DRG, режим диспетчера
+      7: control_nCC = 1;       // EMLRG, режим эмуляции
+      8: control_nCC = 1;       // RСВ, ППК
+      9: control_nCC = 1;       // СВ, ПИА
+     10: control_nCC = 1;       // CEMLRG, РЭС, 20-й разряд РР (резерв)
+     11: control_nCC = ss_CT;   // СТ, сигнал СТ СУСС
+     12: control_nCC = 1;       // TR1, След1
+     13: control_nCC = 1;       // INTSTP, ПОП
+     14: control_nCC = 1;       // IR15, ИР15
+     15: control_nCC = 1;       // ТККВ, ТКК
+     16: control_nCC = 1;       // RUN, "пуск" от ПП
+     17: control_nCC = 1;       // NMLRDY, отсутствие готовности умножителя
+     19: control_nCC = 1;       // INT, признак наличия прерываний
+     20: control_nCC = 1;       // FULMEM, ОЗУ БМСП единицами заполнено
+     21: control_nCC = 1;       // ARBRDY, готовность арбитра
+     22: control_nCC = 1;       // TR0, След0
+     23: control_nCC = 1;       // СРМР, ОЗУ обмена "ЦП -> ПП" свободно
+default: control_nCC = 1;
+endcase
 
 //--------------------------------------------------------------
 // Microinstruction ROM.
@@ -122,40 +151,45 @@ assign COND  = opcode[6:2];     // Выбор условия, подлежаще
 assign MPS   = opcode[1];       // Выбор источника параметра сдвига
 
 //--------------------------------------------------------------
-datapath alu(
-    // Signals for am2901
-    input               clk,        // Clock
-    input         [8:0] alu_I,      // ALU instruction, from ALUD, FUNC and ALUS
-    input         [3:0] alu_A,      // A register address, from RA
-    input         [3:0] alu_B,      // B register address, from RB
-    input        [63:0] alu_D,      // D bus input
-    input               alu_C0,     // Carry input, from CI
-    input               alu_mode32  // 32-bit mode flag, from H
-    output logic [63:0] alu_oYalu,  // Y bus output from ALU
+// Datapath: register file, ALU and status/shifts
+//
+logic  [8:0] alu_I;             // ALU instruction, from ALUD, FUNC and ALUS
+logic  [3:0] alu_A;             // A register address, from RA
+logic  [3:0] alu_B;             // B register address, from RB
+logic [63:0] alu_D;             // D bus input
+logic        alu_C0;            // Carry input
+logic        alu_mode32;        // 32-bit mode flag, from H
 
-    // Signals for am2904
-    input         [9:0] ss_I,       // Status/Shift instruction, from SHMUX and STOPC
-    input               ss_nCEM,    // Machine status register enable, from CEM
-    input               ss_nCEN,    // Micro status register enable, from CEN
-    output logic  [3:0] ss_oY,      // Y bus output from Status/Shift
-    output logic        ss_CT,      // Conditional test output
-    output logic        ss_C        // Carry multiplexer output
-);
-// ALU:
-// ALUS -> I[2:0]
-// FUNC -> I[5:3]
-// ALUD -> I[8:6]
-// RA -> A
-// RB -> B
-// H  -> mode32
-// CI -> I[12:11]
-// ? -> C0
+logic [63:0] alu_Y,             // Y bus output from ALU
 
-// Status/Shifts:
-// SHMUX -> I[9:6]
-// STOPC -> I[5:0]
-// CEM   -> ~nCEM
-// CEN   -> ~nCEN
+// Signals for status/shift unit
+logic [12:0] ss_I;              // Status/Shift instruction, from SHMUX and STOPC
+logic        ss_nCEM;           // Machine status register enable, from CEM
+logic        ss_nCEN;           // Micro status register enable, from CEN
+
+logic  [3:0] ss_Y;              // Y bus output from Status/Shift
+logic        ss_CT;             // Conditional test output
+logic        ss_CO;             // Carry multiplexer output
+
+datapath alu(clk,
+    alu_I, alu_A, alu_B, alu_D, alu_C0, alu_mode32, alu_Y,
+    ss_I, ss_nCEM, ss_nCEN, ss_Y, ss_CT, ss_CO);
+
+assign alu_I = {ALUD, FUNC, ALUS};
+assign alu_A = RA;
+assign alu_B = RB;
+assign alu_mode32 = H;
+assign alu_C0 = ss_CO;
+
+//assign alu_D = TODO;          // D[63:0] bus input, use MAP field as mux
+
+//TODO: alu_Y                   // Y[63:0] bus output, use ALU bit as enable
+
+assign ss_I = {CI, alu_I[7], SHMUX, STOPC};
+assign ss_nCEM = !CEM;
+assign ss_nCEN = !CEN;
+
+//TODO: ss_Y;                   // Y bus output from Status/Shift
 
 //--------------------------------------------------------------
 extbus boi(

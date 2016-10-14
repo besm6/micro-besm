@@ -10,7 +10,7 @@ module datapath(
     output logic [63:0] oYalu,  // Y bus output from ALU
 
     // Signals for am2904
-    input         [9:0] Iss,    // Status/Shift instruction, from SHMUX and STOPC
+    input        [12:0] Iss,    // Status/Shift instruction, from SHMUX and STOPC
     input               nCEM,   // Machine status register enable, from CEM
     input               nCEN,   // Micro status register enable, from CEN
     output logic  [3:0] oYss,   // Y bus output from Status/Shift
@@ -39,9 +39,6 @@ logic nG0,  nG4,  nG8,  nG12, nG16, nG20, nG24, nG28,
 logic nP0,  nP4,  nP8,  nP12, nP16, nP20, nP24, nP28,
       nP32, nP36, nP40, nP44, nP48, nP52, nP56, nP60;
 logic nGx0, nGx1, nGx2, nGx3, nPx0, nPx1, nPx2, nPx3;
-
-// Instruction for am2904
-logic [12:0] Ifull;
 
 // Data signals for am2904
 logic Yz, Yn, Yovr, Yc, oYz, oYn, oYovr, oYc;
@@ -83,16 +80,13 @@ am2902 s2(c32, nG32, nP32, nG36, nP36, nG40, nP40, nG44, nP44, c36, c40, c44, nG
 am2902 s3(c48, nG48, nP48, nG52, nP52, nG56, nP56, nG60, nP60, c52, c56, c60, nGx3, nPx3);
 am2902 sx(c0,  nGx0, nPx0, nGx1, nPx1, nGx2, nPx2, nGx3, nPx3, c16, c32, c48, ,     );
 
-// Full instruction for am2904
-assign Ifull = {1'b1, 1'b1, Ialu[7], Iss};
-
 // Выход кода условия СТ подается
 // на мультиплексор условий. Входы /OEy, /EZ, /ЕС, /EN, /EV, СХ,
 // /ОЕСТ заземлены. Управление входом /SE осуществляется инверсным
 // сигналом I8 МПС, I10 соединяется со входом I7 МПС. Сигналами
 // /СЕМ и /CEN управляет микропрограмма.
 am2904 status(
-    Ifull, clk, nCEM, nCEN, 0,
+    Iss, clk, nCEM, nCEN, 0,
     C, V, N, Z, 0, 0, 0, 0,
     Yz, Yc, Yn, Yovr, oYz, oYc, oYn, oYovr,
     0, CT,
