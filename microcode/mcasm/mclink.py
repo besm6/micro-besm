@@ -164,9 +164,9 @@ def write_results(filename):
             # Print label(s)
             for label in s[2:]:
                 file.write("// %s\n" % label)
-        file.write("112'h%028x,      // %d" % (op, offset))
+        file.write("%8d: 112'h%028x," % (offset, op))
         if ref:
-            file.write(" ref " + ref)
+            file.write("    // a= " + ref)
         file.write("\n")
         offset += 1
     file.close()

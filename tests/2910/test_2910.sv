@@ -11,7 +11,7 @@ module testbench();
 
     // Device under test
     am2910 dut (
-        I, CCENbar, CCbar, RLDbar, CI, OEbar, clk, D,
+        clk, I, CCENbar, CCbar, RLDbar, CI, OEbar, D,
         Y, PLbar, VECTbar, MAPbar, FULLbar
     );
 
