@@ -77,10 +77,16 @@ alus_name = {
 h_name = {
     0: "-",     1: "H",
 }
-ra_name = {
+rb_name = {
     0: "A",     1: "Y",     2: "INTR",  3: "PC",
     4: "PCCP",  5: "DADR",  6: "HALF",  7: "BYTE",
     8: "EXPN",  9: "MANT",  10: "-",    11: "WR5",
+    12: "WR4",  13: "WR3",  14: "WR2",  15: "WR1",
+}
+ra_name = {
+    0: "-",     1: "Y",     2: "INTR",  3: "PC",
+    4: "PCCP",  5: "DADR",  6: "HALF",  7: "BYTE",
+    8: "EXPN",  9: "MANT",  10: "WR6",  11: "WR5",
     12: "WR4",  13: "WR3",  14: "WR2",  15: "WR1",
 }
 ci_name = {
@@ -300,7 +306,7 @@ def listing_opcode(opcode, ref):
     listing_file.write(" %-5s" % func_name[func])
     listing_file.write(" %-4s" % alus_name[alus])
     listing_file.write(" %-1s" % h_name[h])
-    listing_file.write(" %-4s" % ra_name[rb])
+    listing_file.write(" %-4s" % rb_name[rb])
     listing_file.write(" %-4s" % ra_name[ra])
     listing_file.write(" %-3s" % ci_name[ci])
     listing_file.write(" %-6s" % shmux_name[shmux])
