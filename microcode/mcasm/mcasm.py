@@ -4,6 +4,7 @@
 # Use defines from JSON file, as compiled by mcasm-define.py script.
 #
 from readsrc import read_sources
+from listing import *
 import sys, json
 
 # Check parameters.
@@ -36,6 +37,7 @@ def main(filename):
     a = map(do_flist, a)
     a = map(do_check, a)
     a = map(do_macro, a)
+    listing_start(filename)
     translate(a)
 
 #
@@ -118,6 +120,7 @@ def label_define(name, offset):
     global label_defined
     #print "--- Label", name
     label_defined.append([name, offset])
+    listing_label(name)
 
 #
 # Declare an external label.
@@ -166,6 +169,7 @@ def translate(a):
             label_local = {}
             code = []
             offset = 0
+            listing_hline()
             continue
 
         if len(op) > 1 and op[1] == "PROG":
@@ -293,8 +297,10 @@ def generate_code(op, args):
         opcode |= value << (lower-1)
     if ref:
         code.append([opcode, ref])
+        listing_opcode(opcode, ref)
     else:
         code.append([opcode])
+        listing_opcode(opcode, '')
 
 if __name__ == "__main__":
     main(sys.argv[1])
