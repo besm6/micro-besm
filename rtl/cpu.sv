@@ -1,3 +1,25 @@
+module cpu(
+    input               clk,    // Clock
+    input               reset,  // Global reset
+    //TODO
+);
+
+// Internal registers
+logic MODGN[5:0];               // РНГ: регистр номера группы памяти модификаторов
+logic PROCN[7:0];               // РНП: регистр номера процесса
+logic CNT[31:0];                // регистр режимов и триггеры признаков
+logic PHYSPG[9:0];              // РФС: регистр физической страницы
+logic ARBOPC[3:0];              // код операции арбитра
+logic ADRREG[31:0];             // регистр исполнительного адреса (запись)
+logic PSHIFT[6:0];              // регистр параметра сдвига (только запись)
+logic CCLR;                     // запуск сброса кэша
+
+//TODO:
+logic ОРС[7:0;                  // код операции команды
+logic СОМА[31:0];               // адресная часть команды
+logic SHIFT[63:0];              // результат сдвига
+logic LOS[6:0];                 // результат поиска левой единицы
+
 // Instruction fields
 logic SQI[3:0], A[11:0], МАР[1:0], ALU, ALUD[2:0], FUNC[2:0], ALUS[2:0],
       Н, RВ[3:0], RА[3:0], CI[1:0], SHMUX[3:0], SТОРС[5:0], MOD, PSHF[6:0],
@@ -55,9 +77,15 @@ assign control_CI = SCI ? 1 :
                     ICI ? ~cond_mux : cond_mux;
 
 // 12-bit data input
-assign control_D = !control_nME & MOD ? pna_mod :   //TODO
-                   !control_nVE       ? pna_irq :   //TODO
-                                        TODO;
+assign control_D =
+    (MAP == 0) ? A :            // РЕ, конвейерный регистр
+    (MAP == 1) ? BADDR :        // МЕ, ПНА КОП основного или дополнительного формата
+    (MAP == 2) ? GRADDR :       // GRP, ПНА групп и микропрограммные признаки "След0" И "След1"
+                 '0;            // вход D не используется
+
+//TODO:
+//assign control_D = !control_nME & MOD ? pna_mod :
+//                   !control_nVE       ? pna_irq : x;
 
 // Выбор условия, подлежащего проверке.
 always_comb case (COND)
@@ -94,17 +122,20 @@ logic [111:0] memory[4096] = '{
     `include "../microcode/microcode.v"
     default: '0
 };
-logic [112:1] opcode;               // 112-bit registered opcode
+logic [112:1] opcode;           // 112-bit registered opcode
 
 always @(posedge clk)
-    opcode <= memory[control_Y];
+    if (reset)
+        opcode <= '0;           // Reset state
+    else
+        opcode <= memory[control_Y];
 
 //
 // Microinstruction fields.
 //
 assign SQI   = opcode[112:109]; // Код операции селектора адреса микропрограмм СУАМ
 assign A     = opcode[108:97];  // Адрес следующей микрокоманды или адрес ПЗУ констант
-assign МАР   = opcode[96:95];   // Выбор источника адреса, поступающего на вход D СУАМ
+assign MAP   = opcode[96:95];   // Выбор источника адреса, поступающего на вход D СУАМ
 assign ALU   = opcode[94];      // Разрешение выдачи информации из МПС на шину Y
 assign ALUD  = opcode[93:91];   // Управление приемниками результата АЛУ
 assign FUNC  = opcode[90:88];   // Код операции АЛУ МПС
@@ -151,6 +182,17 @@ assign COND  = opcode[6:2];     // Выбор условия, подлежаще
 assign MPS   = opcode[1];       // Выбор источника параметра сдвига
 
 //--------------------------------------------------------------
+// Constant ROM.
+//
+logic [63:0] const[512] = '{
+    `include "../microcode/constants.v"
+    default: '0
+};
+logic PROM[63:0];               // ПЗУ констант
+
+assign PROM = const[control_Y[8:0]];
+
+//--------------------------------------------------------------
 // Datapath: register file, ALU and status/shifts
 //
 logic  [8:0] alu_I;             // ALU instruction, from ALUD, FUNC and ALUS
@@ -160,7 +202,7 @@ logic [63:0] alu_D;             // D bus input
 logic        alu_C0;            // Carry input
 logic        alu_mode32;        // 32-bit mode flag, from H
 
-logic [63:0] alu_Y,             // Y bus output from ALU
+logic [63:0] alu_Y;             // Y bus output from ALU
 
 // Signals for status/shift unit
 logic [12:0] ss_I;              // Status/Shift instruction, from SHMUX and STOPC
@@ -172,7 +214,7 @@ logic        ss_CT;             // Conditional test output
 logic        ss_CO;             // Carry multiplexer output
 
 datapath alu(clk,
-    alu_I, alu_A, alu_B, alu_D, alu_C0, alu_mode32, alu_Y,
+    alu_I, alu_A, alu_B, alu_D, alu_C0, alu_mode32, Y,
     ss_I, ss_nCEM, ss_nCEN, ss_Y, ss_CT, ss_CO);
 
 assign alu_I = {ALUD, FUNC, ALUS};
@@ -181,9 +223,34 @@ assign alu_B = RB;
 assign alu_mode32 = H;
 assign alu_C0 = ss_CO;
 
-//assign alu_D = TODO;          // D[63:0] bus input, use MAP field as mux
+// Управление источниками информации на шину D.
+assign alu_D =
+    (DSRC == 1)  ? {MODGN, 6'd0} : // регистр номера группы ОЗУ модификаторов
+    (DSRC == 2)  ? PROCN :      // регистр номера процесса
+    (DSRC == 3)  ? CNT :        // регистр режимов и триггеры признаков
+    (DSRC == 4)  ? {PHYSPG, 11'd0} : // регистр физической страницы
+    (DSRC == 5)  ? ARBOPC :     // регистр КОП арбитра
+    (DSRC == 8)  ? СОМА :       // адресная часть команды
+    (DSRC == 9)  ? SHIFT :      // результат сдвига
+    (DSRC == 10) ? ОРС :        // код операции команды
+    (DSRC == 11) ? LOS :        // результат поиска левой единицы
+    (DSRC == 12) ? PROM :       // ПЗУ констант
+                   '0;          // шина D не используется
 
-//TODO: alu_Y                   // Y[63:0] bus output, use ALU bit as enable
+assign Y = ALU ? alu_Y : '0;    // Y bus output from ALU
+
+// Управление приемниками информации с шины Y ЦП.
+always @(posedge clk)
+    case (YDST)
+     1: MODGN  <= Y[11:6];      // регистр номера группы памяти модификаторов
+     2: PROCN  <= Y[7:0];       // регистр номера процесса
+     3: CNT    <= Y[31:0];      // регистр режимов и триггеры признаков
+     4: PHYSPG <= Y[20:11];     // регистр физической страницы
+     5: ARBOPC <= Y[3:0];       // код операции арбитра
+     8: ADRREG <= Y[31:0];      // регистр исполнительного адреса (запись)
+     9: PSHIFT <= Y[6:0];       // регистр параметра сдвига (только запись)
+    endcase
+assign CCLR = (YDST == 10);     // запуск сброса кэша
 
 assign ss_I = {CI, alu_I[7], SHMUX, STOPC};
 assign ss_nCEM = !CEM;
@@ -192,6 +259,7 @@ assign ss_nCEN = !CEN;
 //TODO: ss_Y;                   // Y bus output from Status/Shift
 
 //--------------------------------------------------------------
+`ifdef notdef
 extbus boi(
     input        [71:0] DA,     // A data bus input...
     output logic [71:0] oDA,    // ...and output
@@ -221,3 +289,6 @@ extbus boi(
 arbiter arb(
     //TODO
 );
+`endif
+
+endmodule

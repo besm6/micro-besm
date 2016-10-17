@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
 # Translate Micro-BESM microcode sources.
-# Use defines from JSON file, as compiled by mcasm-define.py script.
+# Use defines from JSON file, as compiled by mcdef.py script.
 #
 from readsrc import read_sources
 from listing import *
