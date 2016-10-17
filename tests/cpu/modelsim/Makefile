@@ -2,6 +2,11 @@
 # Using Mentor ModelSim
 #
 SOURCES         = ../../../rtl/cpu.sv \
+                  ../../../rtl/datapath.sv \
+                  ../../../rtl/am2901.sv \
+                  ../../../rtl/am2902.sv \
+                  ../../../rtl/am2904.sv \
+                  ../../../rtl/am2910.sv \
 		  ../test_cpu.sv
 
 # Altera Quartus toolchain

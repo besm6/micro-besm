@@ -111,7 +111,7 @@ logic        control_nME;       // Mapping PROM output enable
 logic        control_nFULL;     // Stack full flag
 
 am2910 control(clk,
-    control_I, 0, control_nCC, control_nRLD, control_CI, 0,
+    control_I, '0, control_nCC, control_nRLD, control_CI, '0,
     control_D, control_Y, , control_nVE, control_nME, control_nFULL);
 
 assign control_I    = SQI;      // Four-bit instruction
@@ -245,7 +245,7 @@ assign PROM = const_ROM[control_Y[8:0]];
 //
 
 datapath alu(clk,
-    alu_I, alu_A, alu_B, alu_D, alu_C0, alu_mode32, Y,
+    alu_I, alu_A, alu_B, alu_D, alu_C0, alu_mode32, alu_Y,
     ss_I, ss_nCEM, ss_nCEN, ss_Y, ss_CT, ss_CO);
 
 assign alu_I = {ALUD, FUNC, ALUS};
