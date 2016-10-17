@@ -1,0 +1,683 @@
+======== intexcom ========
+
+INT/RE:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CJV  -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 103      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 21       -   -   B    -     DZ   H WR5  -    -   -      -     -   -    -    -     PROM   CCLR   -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTMP    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 19       -   -   B    -     DZ   H WR5  -    -   -      -     -   -    -    -     PROM   CCLR   -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTMP    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 20       -   -   B    -     DZ   H WR5  -    -   -      -     -   -    -    -     PROM   CCLR   -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTMP    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 106      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 107      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  ORINT    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 108      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 109      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 110      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 111      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 112      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 113      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 96       -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 115      -   ALU BA   -     DZ   H PCCP PCCP -   -      -     -   39   MP   ACR   PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INT14    PE  -   B    AND   DA   H PCCP PCCP -   -      -     -   -    -    -     ARBOPC -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 115      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 116      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 117      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 118      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 119      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 120      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 121      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   CCLR   -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 122      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 123      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   39   MP   ACR   PHYSPG -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INT24    PE  ALU -    -     DZ   - -    -    -   -      -     -   40   MP   ACL   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   PPMEM0 -   -    -      -      -
+        CONT 125      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  ORINT    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 126      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 127      -   ALU BA   -     DZ   H WR1  PC   -   -      -     -   -    -    -     PROM   ADRREG -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INT27    PE  -   Q    -     ZA   H -    WR1  -   -      -     -   -    -    -     -      -      -     BIRD  -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+        CJP  INT28    PE  -   B    AND   DA   H -    BYTE -   -      -     -   -    -    -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP INFB2  -      MPS
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INT29    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRINT TR1    -
+        CJP  RETRTN   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
+        CONT -        -   -   B    AND   DA   - WR5  BYTE -   -      -     -   -    -    -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP FMP    -      MPS
+        CJP  INT30    PE  -   B    -     DZ   H WR1  -    -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP ADRB4  -      MPS
+        CONT -        -   -   B    -     ZA   - WR5  HALF -   -      -     -   42   MP   CTL   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   ECA WRA RG2 -      -   -      -   -    CLRCT  -      -
+        CJPP INT31    PE  -   B    AND   DA   H WR1  HALF -   -      -     -   41   MP   CTR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 10       -   -   B    -     DZ   H WR2  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   - WR2  WR2  -   -      -     -   43   MP   CTT   -      -      -     -     -   -    -   -   -   -   -   CEN CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJPP NZCTT    PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
+        CONT 55       -   -   B    OR    DA   H INTR INTR -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    PRGINT -      -
+        CJPP RETINT   PE  ALU -    -     ZA   - -    HALF -   -      -     -   43   MP   CTT   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    CLRCTT -      -
+NZCTT:
+        CONT 32       -   ALU B    SUBR  DA   - WR2  WR2  CI1 -      -     -   43   MP   CTT   PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    CLRCTT -      -
+RETINT:
+        CJPP -        ME  -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   LETC -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETEI  RCB    -
+        CJPP -        ME  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   LETC -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      TR1    -
+        CJPP LCWPH    PE  ALU -    -     ZA   - -    PC   -   -      -     -   -    -    -     -      ADRREG -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+INT28:
+        CJP  EVENT    PE  -   LSB  AND   DZ   H WR5  -    -   NDNS   /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRINT CT     -
+        CJP  INTMPH   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      RCB    -
+        CJP  INTMPH   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      TR1    -
+RETRTN:
+        CRTN -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETEI  -      -
+EVENT:
+        CONT 23       -   -   -    AND   DA   - -    WR6  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  TEST     PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRINT CT     -
+        CJP  ISCW     PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      RCB    -
+        CJP  RETRTN   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      TR1    -
+ISCW:
+        CONT 22       -   -   -    AND   DA   - -    WR6  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  PRO      PE  -   Q    -     DZ   - -    -    -   -      /NZ   -   46   MP   RR    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
+        CONT 28       -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJPP RETHLT   PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETEI  CT     -
+PRO:
+        CONT 163      -   -   B    AND   DA   - -    WR6  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    EXOR  DA   - -    WR6  -   -      -     -   -    -    -     PROCN  -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   -    AND   AB   - -    BYTE -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJPP RETHLT   PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETEI  CT     -
+        CJP  INTMPH   PE  -   LSB  AND   DZ   H WR5  -    -   NDNS   -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+TEST:
+        CONT 294      -   -   -    EXOR  DA   - -    WR6  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  MOD0     PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
+MOD0:
+        CONT -        -   -   -    -     DZ   - -    -    -   -      -     -   63   MP   M0    -      -      -     -     -   -    -   -   -   -   -   CEN CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJPP RETINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETEI  CT     -
+        CONT 1        -   -   B    -     DZ   H WR5  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+ISEV:
+        CJP  ISEV     PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CPMP   -
+        CONT -        -   -   B    -     DZ   - -    -    -   -      -     -   -    -    -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP FCP    -      MPS
+        CONT 23       -   ALU -    OR    DA   - -    WR6  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  WRY -      -   IOMP FCP    -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    LDCPMP -      -
+        CONT -        -   ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  WRY -      -   IOMP INFB1  -      -
+OUTEV:
+        CJP  OUTEV    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CPMP   -
+        CJP  INTMPH   PE  -   LSB  AND   DZ   H WR5  -    -   NDNS   -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+INTMP:
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETHLT -      -
+INTMPH:
+        CJP  MERC     PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETTKK RCB    -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTKK -      -
+MERC:
+        CONT -        -   -   B    OR    DA   H WR5  WR5  -   -      -     -   -    -    -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP FCP    -      MPS
+        CONT -        -   ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  WRY -      -   IOMP FCP    -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRRUN -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRINT -      -
+        CJPP WRUN     PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETEI  -      -
+WRUN:
+        CJPP WRUN     PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      RUN    -
+RETHLT:
+        CJP  -        ME  -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   LETC -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
+INTINT:
+        CJP  PSINTI   PE  ALU BA   -     DZ   - WR5  PC   -   -      -     -   36   MP   PCC   CNT    -      -     -     -   -    -   -   ICC -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      INTSTP -
+FREE:
+        CJP  FREE     PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CPMP   -
+        CONT 18       -   -   B    -     DZ   H WR5  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    LDCPMP -      -
+        CJP  INTMP    PE  ALU -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  WRY -      -   IOMP INFB1  -      -
+PSINTI:
+        CONT -        -   -   B    -     DZ   - -    -    -   -      -     -   46   MP   RR    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJS  SAVRG    PE  ALU BA   -     DZ   - WR4  PCCP -   -      OPC32 -   35   MP   PCCC  -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   STATUS -   -    -      -      -
+        CONT -        -   -   B    -     DZ   - WR1  -    -   -      -     -   45   MP   RRR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 226      -   ALU -    -     DZ   - -    -    -   -      -     -   -    -    -     PROM   PSHIFT -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  -    -   -      -     -   39   MP   ACR   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   40   MP   ACL   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  Y    -   -      -     -   37   MP   YCR   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJS  CTRD     PE  ALU -    -     ZA   - -    WR4  -   -      -     -   38   MP   YCL   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 10       -   -   B    -     DZ   H WR2  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   - WR4  WR2  -   -      -     -   41   MP   CTR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJS  CTTRD    PE  ALU -    OR    AB   - WR5  WR4  -   -      -     -   41   MP   CTR   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   - WR4  WR2  -   -      -     -   43   MP   CTT   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJPP N1       PE  ALU -    OR    AB   - WR5  WR4  -   -      -     -   43   MP   CTT   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+N1:
+        CJPP N2       PE  -   B    -     DZ   - WR5  -    -   -      -     -   -    -    -     MODGN  -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+N2:
+        CONT 220      -   -   B    AND   DA   H WR5  WR5  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJPP N3       PE  ALU -    AND   DZ   - -    -    -   -      -     -   -    -    -     -      MODGN  -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+N3:
+        CJS  ACTRG    PE  ALU BA   -     DZ   - WR2  DADR -   -      -     -   49   MP   M14   ARBOPC -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 115      -   ALU -    AND   DA   - -    WR2  -   -      -     -   56   MP   M7    PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJPP N4       PE  -   B    -     DZ   - WR4  -    -   -      -     -   45   MP   RRR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    SETNR  -      -
+N4:
+        CONT 86       -   -   B    AND   DA   - WR4  WR4  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJPP N5       PE  ALU BA   -     DZ   - WR5  WR5  -   -      -     -   -3   IRA  M2    SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+N5:
+        CJS  CTTSTP   PE  ALU -    OR    AB   - WR4  WR5  -   -      -     -   45   MP   RRR   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   WRB -   -   -   -   ECBTAG -   -      -   -    CLRTR1 -      -
+        CJS  INICT    PE  -   B    AND   DA   H WR5  HALF -   -      -     -   41   MP   CTR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJS  CTWR     PE  ALU -    -     DZ   - -    -    -   -      -     -   33   MP   PROCN -      PROCN  -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRINT -      -
+NRINT:
+        CONT 429      -   ALU B    -     DZ   - WR5  -    -   -      YTOM  -   46   MP   RR    PROM   CNT    -     -     -   -    -   -   -   -   CEM -   CSM WEM -   -   -   -   -   -   -      -   STATUS WRD -    -      -      -
+        LDCT LCWPH    PE  -   B    SUBR  ZQ   H WR5  -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTKK -      -
+        JRP  228      -   ALU B    -     DA   H PC   WR5  -   -      -     -   -    -    -     PROM   ADRREG -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETEI  -      -
+INICT:
+        CONT 9        -   -   -    AND   DA   - -    WR5  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CRTN -        -   -   -    -     -    - -    -    -   -      /NZ   -   42   MP   CTL   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   ECA WRA -   -      -   -      -   -    -      CT     -
+        CONT -        -   -   B    OR    DA   H WR5  WR5  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   ECB -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT 32       -   ALU B    SUBR  DA   H WR5  WR5  CI1 -      -     -   41   MP   CTR   PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   H -    WR5  -   -      -     -   32   MP   -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   ECA WRA -   -      -   -      -   -    -      -      MPS
+        CRTN -        -   -   B    -     ZA   - WR5  HALF -   -      -     -   42   MP   CTL   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM ECB -   -   -   -   -   -      -   -      -   -    -      -      -
+INT14:
+        CJP  I14EM    PE  ALU -    -     DZ   - -    -    -   -      OPC32 -   40   MP   ACL   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   STATUS -   -    -      EMLRG  -
+        CONT 110      -   -   -    EXOR  DA   - -    PCCP -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   CEM -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  NOPR     PE  -   -    -     -    - -    -    -   -      /MZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
+        CJP  PSINT14  PE  ALU -    AND   DZ   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   ECB WRB RG2 -   -   -   -      -   -      -   -    -      -      -
+I14EM:
+        CONT 110      -   -   -    EXOR  DA   - -    PCCP -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   CEM -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  NOPR     PE  -   -    -     -    - -    -    -   -      /MZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
+        CJP  PSINT14  PE  ALU -    AND   DZ   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   ECB WRB RG2 -   -   -   -      -   -      -   -    -      BNB    -
+        CONT 204      -   -   -    -     -    - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   ECA WRA RG2 -      -   -      -   -    -      -      -
+PSINT14:
+        CONT -        -   -   B    -     DZ   - PCCP -    -   -      -     -   39   MP   ACR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRINT -      -
+RI14:
+        CRTN -        -   ALU -    -     DZ   - -    -    -   -      YTOM  -   40   MP   ACL   -      -      -     -     -   -    -   -   -   -   CEM -   CSM -   -   -   -   -   -   -   -      -   STATUS WRD -    SETEI  -      -
+NOPR:
+        CONT 109      -   -   -    EXOR  DA   - -    PCCP -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   CEM -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  RI14     PE  -   B    -     DZ   - PCCP -    -   -      /MZ   -   39   MP   ACR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRINT CT     -
+        CJP  INT38    PE  ALU -    -     DZ   - -    -    -   -      YTOM  -   40   MP   ACL   -      -      -     -     -   -    -   -   -   -   CEM -   CSM -   -   -   -   -   -   -   -      -   STATUS WRD -    -      -      -
+INT24:
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   37   MP   YCR   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   PPMEM1 -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   37   MP   YCR   -      PHYSPG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   40   MP   ACL   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   PPMEM0 WRD -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   40   MP   ACL   -      PHYSPG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   37   MP   YCR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   PPMEM1 WRD -    -      -      -
+        CONT 1        -   ALU -    -     DZ   - -    -    -   -      -     -   -    -    -     PROM   PHYSPG -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   40   MP   ACL   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   PPMEM0 -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   39   MP   ACR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   PPMEM0 WRD -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   40   MP   ACL   -      PHYSPG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   37   MP   YCR   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   PPMEM1 -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   39   MP   ACR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   PPMEM1 WRD -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   37   MP   YCR   -      PHYSPG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   39   MP   ACR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   PPMEM0 WRD -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   39   MP   ACR   -      PHYSPG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   40   MP   ACL   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   PPMEM0 WRD -    CLRINT -      -
+        CRTN -        -   ALU -    -     DZ   - -    -    -   -      -     -   37   MP   YCR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   PPMEM1 WRD -    SETEI  -      -
+ORINT:
+        CJP  ORINT    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CPMP   -
+        CONT -        -   ALU -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  WRY -      -   IOMP INFB1  -      -
+        CONT 22       -   -   B    -     DZ   H WR5  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    LDCPMP -      -
+        CJP  INTMP    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+INT27:
+        CJP  INT27    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CONT -        -   ALU B    -     DZ   H WR1  -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   ECB WRB -   ECA -   RG2 -      -   -      -   -    -      -      -
+        PUSH 425      -   -   B    NOTRS DA   H WR1  WR1  -   -      -     -   -    -    -     PROM   -      -     BICLR -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+        LOOP -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CJP  INTINT   PE  -   B    OR    AB   H INTR WR1  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+INT29:
+        CONT 129      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+INT30:
+        CONT -        -   ALU BA   -     DZ   H WR1  WR1  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   -   B    OR    DA   H WR1  WR1  -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP ADRB3  -      MPS
+        CONT -        -   ALU BA   -     DZ   H WR1  WR1  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   -   B    OR    DA   H WR1  WR1  -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP ADRB2  -      MPS
+        CONT -        -   ALU BA   -     DZ   H WR1  WR1  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRINT -      MPS
+        LDCT RGTOMP   PE  -   B    OR    DA   H WR1  WR1  -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP ADRB1  -      MPS
+        CJP  RDR      PE  ALU BA   -     DZ   H WR1  WR1  -   -      /NZ   -   32   MP   -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETTR1 CT     MPS
+        CONT -        -   ALU -    -     ZA   - -    WR1  -   -      -     -   -    -    -     -      ADRREG -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETTR0 -      -
+        CONT -        -   -   B    -     DZ   H -    -    -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP DATAB8 -      MPS
+        CONT -        -   ALU BA   -     DZ   H -    WR6  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   -   B    OR    DA   H -    WR6  -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP DATAB7 -      MPS
+        CONT -        -   ALU BA   -     DZ   H -    WR6  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   -   B    OR    DA   H -    WR6  -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP DATAB6 -      MPS
+        CONT -        -   ALU BA   -     DZ   H -    WR6  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   -   B    OR    DA   H -    WR6  -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP DATAB5 -      MPS
+        CONT -        -   ALU BA   -     DZ   H -    WR6  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   -   B    OR    DA   H -    WR6  -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP DATAB4 -      MPS
+        CONT -        -   ALU BA   -     DZ   H -    WR6  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   -   B    OR    DA   H -    WR6  -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP DATAB3 -      MPS
+        CONT -        -   ALU BA   -     DZ   H -    WR6  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   -   B    OR    DA   H -    WR6  -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP DATAB2 -      MPS
+        CONT -        -   ALU BA   -     DZ   H -    WR6  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   -   B    OR    DA   H -    WR6  -   -      -     -   -56  U    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  -   -      -   IOMP DATAB1 -      MPS
+        JMAP 17       -   ALU -    OR    DA   - -    WR5  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   MPMEM  WRY -      -   IOMP FMP    -      -
+RDR:
+        CONT -        -   ALU -    -     ZA   - -    WR1  -   -      -     -   -    -    -     -      ADRREG -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR0 -      -
+        JMAP -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+INT31:
+        CONT -        -   -   B    OR    DA   H WR1  WR1  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    -      -      MPS
+        CONT 32       -   ALU B    SUBR  DA   H WR1  WR1  CI1 -      -     -   41   MP   CTR   PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR2  WR1  -   -      -     -   32   MP   -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CJP  RETINT   PE  ALU -    -     ZA   - -    WR2  -   -      -     -   42   MP   CTL   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+INT33:
+        CONT -        -   -   -    -     -    - -    -    -   -      MCN   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      SETNV -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CRTN 133      -   -   -    -     -    - -    -    -   -      MCN   -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   CEM -   -   -   -   -   -   ECA WRA -   -      -   -      -   -    -      OVRIB  -
+        CJP  INTINT   PE  -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   -   -      -   -      -   -    -      -      -
+INT34:
+        CONT -        -   -   -    -     -    - -    -    -   -      MCN   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      SETNV -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CRTN 134      -   -   -    -     -    - -    -    -   -      MCN   -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   CEM -   -   -   -   -   -   ECA WRA -   -      -   -      -   -    -      OVRIB  -
+        CJP  INTINT   PE  -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   -   -      -   -      -   -    -      -      -
+INT35:
+        CONT 135      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+INT36:
+        CONT 136      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+INT37:
+        CONT 137      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+INT38:
+        CONT 138      -   -   Q    -     DZ   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  INTINT   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+ENDINT:
+--------
+IJP:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CJP  EXTDR    PE  -   B    -     DZ   - WR1  -    -   -      -     -   41   MP   CTR   -      -      -     -     -   -    -   -   ICC -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      DRG    -
+        CONT 10       -   -   B    AND   DA   - WR1  WR1  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJS  CTRD     PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB RG2 -   -   -   -      -   -      -   -    -      -      -
+        CONT 220      -   -   -    AND   DA   - -    DADR -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  AIS      PE  ALU -    OR    AB   - WR5  WR1  -   -      /NZ   -   41   MP   CTR   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      CT     -
+        CONT -        -   -   B    -     DZ   - WR2  -    -   -      -     -   45   MP   RRR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR2  -   -      -     -   3    -    PCCC  SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   ECA WRA RG2 -      -   -      -   -    -      -      MPS
+AIS:
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      MODGN  -     -     -   -    -   -   -   -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      YTOM  -   46   MP   RR    -      CNT    -     -     -   -    -   -   -   -   CEM -   CSM -   -   -   -   -   -   -   -      -   STATUS WRD -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   45   MP   RRR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   WRB -   -   -   -   ECBTAG -   -      -   -    -      -      -
+        CONT -        -   -   Q    AND   DA   H -    HALF -   -      -     -   39   MP   ACR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    -     DZ   - WR1  -    -   -      -     -   40   MP   ACL   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU BA   OR    DQ   H A    WR1  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   -   Q    AND   DA   H -    HALF -   -      -     -   37   MP   YCR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    -     DZ   - WR1  -    -   -      -     -   38   MP   YCL   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJS  INICT    PE  -   B    AND   DA   H WR5  HALF -   -      -     -   41   MP   CTR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJS  CTWR     PE  ALU BA   OR    DQ   H Y    WR1  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CJS  CTTWR    PE  -   B    -     DZ   - WR5  -    -   -      -     -   43   MP   CTT   -      -      -     -     -   -    -   -   -   -   -   CEN CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  NPRGI    PE  -   B    -     DZ   - PCCP -    -   -      /NZ   -   35   MP   PCCC  -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
+        CONT 55       -   -   B    OR    DA   H INTR INTR -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    PRGINT -      -
+        CJP  PSRET    PE  ALU -    -     ZA   - -    HALF -   -      -     -   43   MP   CTT   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    CLRCTT -      -
+NPRGI:
+        CONT 9        -   -   -    AND   DA   - -    WR5  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  PSRET    PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
+        CONT 32       -   ALU -    SUBR  DA   - -    WR5  CI1 -      -     -   43   MP   CTT   PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+PSRET:
+        CJP  RCR      PE  ALU -    -     DZ   - -    -    -   -      -     -   33   MP   PROCN -      PROCN  -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      RCB    -
+        CJP  LCWPH    PE  ALU B    -     DZ   - PC   -    -   -      -     -   36   MP   PCC   -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTKK -      -
+RCR:
+        CJP  LCWPH    PE  ALU B    -     DZ   - PC   -    -   -      -     -   36   MP   PCC   -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    SETTKK -      -
+--------
+CTWR:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT 195      -   -   B    -     DZ   - WR4  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FMP    -      -
+        CONT -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  WRD IOMP FMP    -      -
+        PUSH 1        PE  ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FMP    -      -
+        RFCT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP INFB1  -      -
+        CONT -        -   ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  WRD IOMP INFB1  -      -
+        PUSH 1        PE  ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP INFB1  -      -
+        RFCT -        -   ALU BA   -     DZ   H WR4  WR5  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRCT  -      MPS
+        CONT -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP INFB1  -      -
+        LDCT LCW      PE  ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  WRD IOMP INFB1  -      -
+        CRTN -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP INFB1  -      -
+CTRD:
+        CONT -        -   ALU -    AND   ZA   - -    -    -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FMP    -      -
+        CONT -        -   ALU -    AND   ZA   - -    -    -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  WRD IOMP FMP    -      -
+        PUSH 1        PE  ALU -    AND   ZA   - -    -    -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FMP    -      -
+        RFCT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP INFB1  -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     RT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP INFB1  -      -
+        PUSH 1        PE  -   B    AND   DA   H WR5  BYTE -   -      -     -   -    -    -     RT     -      -     -     -   -    -   -   -   -   -   -   -   -   ECB WRB -   ECA -   -   -      -   CTIME  -   IOMP INFB1  -      -
+        RFCT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP INFB1  -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     RT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP INFB1  -      -
+        CONT -        -   -   B    AND   DA   H WR4  BYTE -   -      -     -   -    -    -     RT     -      -     -     -   -    -   -   -   -   -   -   -   -   ECB WRB -   ECA -   -   -      -   CTIME  -   IOMP INFB1  -      -
+        LDCT LCW      PE  ALU BA   -     DZ   H WR4  WR4  -   -      -     -   -8   IRA  M7    SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CRTN -        -   -   B    OR    AB   H WR5  WR4  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+CTTWR:
+        CONT 197      -   -   B    -     DZ   - WR4  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FMP    -      -
+        CONT -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  WRD IOMP FMP    -      -
+        PUSH 1        PE  ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FMP    -      -
+        RFCT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FCP    -      -
+        CONT -        -   ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  WRD IOMP FCP    -      -
+        PUSH 1        PE  ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FCP    -      -
+        RFCT -        -   ALU BA   -     DZ   H WR4  WR5  -   -      -     -   8    -    ACL   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRCTT -      MPS
+        CONT -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FCP    -      -
+        LDCT LCW      PE  ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  WRD IOMP FCP    -      -
+        CRTN -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FCP    -      -
+CTTRD:
+        CONT 194      -   -   B    -     DZ   - WR5  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FMP    -      -
+        CONT -        -   ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  WRD IOMP FMP    -      -
+        PUSH 1        PE  ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FMP    -      -
+        RFCT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FCP    -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     RT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FCP    -      -
+        PUSH 1        PE  -   B    AND   DA   H WR5  BYTE -   -      -     -   -    -    -     RT     -      -     -     -   -    -   -   -   -   -   -   -   -   ECB WRB -   ECA -   -   -      -   CTIME  -   IOMP FCP    -      -
+        RFCT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FCP    -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     RT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FCP    -      -
+        CONT -        -   -   B    AND   DA   H WR4  BYTE -   -      -     -   -    -    -     RT     -      -     -     -   -    -   -   -   -   -   -   -   -   ECB WRB -   ECA -   -   -      -   CTIME  -   IOMP FCP    -      -
+        LDCT LCW      PE  ALU BA   -     DZ   H WR4  WR4  -   -      -     -   -8   IRA  M7    SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CRTN -        -   -   B    OR    AB   H WR5  WR4  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+CTTSTP:
+        CONT 197      -   -   B    -     DZ   - WR5  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FMP    -      -
+        CONT -        -   ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  WRD IOMP FMP    -      -
+        PUSH 1        PE  ALU -    -     ZA   - -    WR5  -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FMP    -      -
+        RFCT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    AND   DZ   - -    -    -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FCP    -      -
+        LDCT LCW      PE  ALU -    AND   DZ   - -    -    -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  WRD IOMP FCP    -      -
+        CONT -        -   ALU -    AND   DZ   - -    -    -   -      -     -   -    -    -     WT     -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CTIME  -   IOMP FCP    -      -
+        CRTN -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRCTT -      -
+--------
+SC00:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SE00:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SF00:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SE80:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SEC0:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SEE0:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SEE8:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SEEC/0:
+--------
+SF80:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SFC0:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SFE0:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SFF0:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SFF8:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+SFFC:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+/CONT1:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+/CONT2:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+/CONT3:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+/CONT4:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+/CONT5:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+/CONT6:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+/CONT7:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+/CONT8:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+/CONT9:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+/CONTA:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+/S4:
+--------
+ADDC:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CJP  -        ME  -   Q    -     DQ   - -    -    -   -      -     -   47   MP   C     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+INT/IN:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CJS  INT/RE   PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLREI  -      -
+--------
+EXT/:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CJP  PSEXT    PE  -   B    AND   DZ   H DADR -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+EXT6:
+        CJP  PSEXT    PE  -   LSB  AND   DZ   H DADR -    -   NDNS   -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+EXTC:
+        CONT 104      -   -   B    -     DZ   H DADR -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  PSEXT    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+EXTDR:
+        CONT 95       -   -   B    -     DZ   H DADR -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+PSEXT:
+        CONT -        -   -   Q    -     DQ   - -    -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   40   MP   ACL   OPC    -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   H WR1  HALF -   -      -     -   45   MP   RRR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP -      -
+        CONT 86       -   -   B    AND   DA   H WR2  WR1  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    SETNR  -      -
+        CONT -        -   ALU BA   -     DZ   - WR5  PC   -   -      -     -   36   MP   PCC   CNT    -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  SMOD     PE  -   B    -     DZ   - -    -    -   -      /NZ   -   46   MP   RR    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
+        CONT 225      -   -   B    AND   DA   - WR4  WR6  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 428      -   ALU -    OR    DA   - -    WR4  -   -      -     -   46   MP   RR    PROM   CNT    -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU B    AND   DA   H WR3  HALF -   -      -     -   34   MP   SVFA  -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 19       -   ALU -    -     DZ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   WRB -   -   -   -   ECBTAG -   -      -   -    -      -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   62   MP   M1    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   ECA WRA RG2 -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   H WR4  HALF -   -      -     -   61   MP   M2    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    OR    DA   H WR4  WR4  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   ALU -    -     ZA   H -    WR4  -   -      -     -   60   MP   M3    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   ECA WRA RG2 -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   H WR4  HALF -   -      -     -   59   MP   M4    -      -      -     BTRWR -   -    -   -   -   -   -   -   CSM -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    -      -      -
+        CONT 213      -   -   B    AND   DA   H -    WR6  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 211      -   -   B    AND   DA   - WR5  WR5  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+W3:
+        CJP  W3       PE  -   B    OR    DA   H WR4  WR4  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   ICC -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    -      ARBRDY MPS
+        CONT -        -   ALU -    -     ZA   H -    WR4  -   -      -     -   58   MP   M5    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   ECA WRA RG2 -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   H WR4  HALF -   -      -     -   57   MP   M6    -      -      -     BTRWR -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+        CONT -        -   -   B    OR    AB   - -    WR5  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+W5:
+        CJP  W5       PE  -   B    OR    DA   H WR4  WR4  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   ICC -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    -      ARBRDY MPS
+        CONT -        -   ALU -    -     ZA   H -    WR4  -   -      -     -   56   MP   M7    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   ECA WRA RG2 -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   H WR4  HALF -   -      -     -   55   MP   M8    -      -      -     BTRWR -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+W7:
+        CJP  W7       PE  -   B    OR    DA   H WR4  WR4  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   ICC -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    -      ARBRDY MPS
+        CONT -        -   ALU -    -     ZA   H -    WR4  -   -      -     -   54   MP   M9    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   ECA WRA RG2 -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   H WR4  HALF -   -      -     -   53   MP   M10   -      -      -     BTRWR -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+W9:
+        CJP  W9       PE  -   B    OR    DA   H WR4  WR4  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   ICC -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    -      ARBRDY MPS
+        CONT -        -   ALU -    -     ZA   H -    WR4  -   -      -     -   52   MP   M11   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   ECA WRA RG2 -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   H WR4  HALF -   -      -     -   51   MP   M12   -      -      -     BTRWR -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+W11:
+        CJP  W11      PE  -   B    OR    DA   H WR4  WR4  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   ICC -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    -      ARBRDY MPS
+        CONT -        -   ALU -    -     ZA   H -    WR4  -   -      -     -   50   MP   M13   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   ECA WRA RG2 -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   H WR4  HALF -   -      -     -   49   MP   M14   -      -      -     BTRWR -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+W13:
+        CJP  W13      PE  -   B    OR    DA   H WR4  WR4  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   ICC -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    -      ARBRDY MPS
+        CONT -        -   ALU -    -     ZA   H -    WR4  -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   ECA WRA RG2 -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   H WR4  HALF -   -      -     -   44   MP   SPRAD -      -      -     BTRWR -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+W15:
+        CJP  W15      PE  -   B    OR    DA   H WR4  WR4  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   ICC -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    -      ARBRDY MPS
+        CONT -        -   ALU BA   -     DZ   H WR5  WR4  -   -      OPC32 -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   ECB WRB -   -   -   -   -      -   STATUS -   -    -      -      -
+        CONT 212      -   -   B    AND   DA   - WR5  WR5  -   -      -     -   -    -    -     PROM   -      -     BTRWR -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   AB   H PCCP HALF -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+WPC:
+        CJP  WPC      PE  ALU BA   -     DZ   H WR4  PC   -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY MPS
+        CONT -        -   ALU -    OR    AB   H WR4  PCCP -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   ECB WRB -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    OR    AB   H -    WR5  -   -      -     -   -    -    -     -      -      -     BTRWR -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+WRR:
+        CJP  WRR      PE  ALU BA   -     DZ   H WR4  WR6  -   -      -     -   -32  IRA  -     SHIFT  -      LOG   -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY MPS
+        CONT -        -   ALU -    OR    AB   H WR1  WR4  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   ECB WRB -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    -     DZ   - WR4  -    -   -      -     -   46   MP   RR    -      -      -     BTRWR -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+WR:
+        CJP  WR       PE  -   B    -     DZ   - WR5  -    -   -      -     -   -    -    -     MODGN  -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   PHYSAD -   -      -   -    -      -      -
+        CONT 34       -   ALU -    NOTRS DA   - -    WR4  -   -      -     -   46   MP   RR    PROM   CNT    -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    AND   DZ   - -    -    -   -      CLRN  -   45   MP   RRR   -      -      -     -     -   -    -   -   -   -   CEM -   CSM WEM -   WRB -   -   -   -   ECBTAG -   -      -   -    -      -      -
+ENDE:
+        CONT 111      -   ALU -    -     DA   - -    WR3  -   -      -     -   48   MP   SP    PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 116      -   ALU B    -     DA   - WR3  WR3  -   -      -     -   34   MP   SVFA  PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJS  ACTRG    PE  ALU -    -     ZQ   - -    -    -   -      -     -   49   MP   M14   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 230      -   ALU B    -     DA   H PC   DADR -   -      -     -   -    -    -     PROM   ADRREG -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTKK -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   40   MP   ACL   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   ECA WRA -   -      -   -      -   -    -      -      -
+        CJP  LCWPH    PE  ALU -    AND   DA   - -    BYTE -   -      -     -   56   MP   M7    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   ECA -   -   -      -   -      -   -    -      OVRFTB -
+        CONT 90       -   -   -    AND   DA   - -    WR3  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        JRP  INT36    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
+SMOD:
+        CJS  SAVRG    PE  ALU BA   -     DZ   - WR4  PCCP -   -      OPC32 -   35   MP   PCCC  -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   STATUS -   -    -      -      -
+        CONT -        -   -   B    -     DZ   - WR3  -    -   -      -     -   34   MP   SVFA  -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   43   MP   CTT   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   ECA WRA RG0 -      -   -      -   -    -      -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   41   MP   CTR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   ECA WRA RG2 -      -   -      -   -    -      -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   42   MP   CTL   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   ECA WRA -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    -     DZ   - WR5  -    -   -      -     -   -    -    -     MODGN  -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    -     DZ   - WR4  -    -   -      -     -   44   MP   SPRAD -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR2  WR2  -   -      -     -   11   -    CTT   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   40   MP   ACL   -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR2  -   -      -     -   -    -    -     -      MODGN  -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   -    -     -    - -    -    -   -      -     -   40   MP   ACL   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   RADRR  -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   44   MP   SPRAD -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    -     DZ   - WR4  -    -   -      -     -   45   MP   RRR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 86       -   -   B    AND   DA   H WR4  WR4  -   -      -     -   43   MP   CTT   PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM ECB -   RG0 -   -   -   -      -   -      -   -    -      -      -
+        CONT 220      -   ALU B    AND   DA   H WR5  WR5  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    OR    DA   - WR4  WR4  -   -      -     -   -3   IRA  M2    SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   ECB -   RG0 -   -   -   -      -   -      -   -    -      -      MPS
+        CONT -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   45   MP   RRR   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   WRB -   -   -   -   ECBTAG -   -      -   -    -      -      -
+        CONT 225      -   -   B    AND   DA   - WR4  WR6  -   -      -     -   41   MP   CTR   PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM ECB -   RG2 -   -   -   -      -   -      -   -    -      -      -
+        CONT 427      -   ALU -    OR    DA   - -    WR4  -   -      CLRN  -   46   MP   RR    PROM   CNT    -     -     -   -    -   -   -   -   CEM -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  ENDE     PE  -   -    -     -    - -    -    -   -      -     -   42   MP   CTL   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM ECB -   -   -   -   -   -      -   -      -   -    -      -      -
+SAVRG:
+        CONT 213      -   -   B    AND   DA   H -    WR6  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 211      -   -   B    AND   DA   - WR5  WR5  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    OR    AB   - -    WR5  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 212      -   -   B    AND   DA   - WR4  WR4  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CRTN -        -   ALU B    OR    AB   - -    WR4  -   -      -     -   46   MP   RR    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+ACTRG:
+        CONT -        -   -   B    AND   DA   - WR4  BYTE -   -      -     -   -    -    -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   RG1 -   -   -   ECBTAG -   -      -   -    -      -      MPS
+        CONT 17       -   -   -    AND   DA   - -    WR4  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  NRWR     PE  ALU -    -     ZA   - -    WR4  -   -      -     -   57   MP   M6    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      CT     -
+        CONT -        -   -   B    -     DZ   - WR4  -    -   -      -     -   49   MP   M14   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 209      -   ALU -    AND   DA   - -    WR4  -   -      -     -   49   MP   M14   PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 209      -   -   B    AND   DA   - PC   PC   -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+NRWR:
+        CONT 97       -   ALU BA   -     DZ   - WR4  PC   -   -      -     -   50   MP   M13   PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    AND   DA   - -    WR4  -   -      -     -   51   MP   M12   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   ECA -   RG0 -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    AND   DA   - -    BYTE -   -      -     -   52   MP   M11   PROCN  -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR6  -   -      -     -   53   MP   M10   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR1  -   -      -     -   54   MP   M9    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 221      -   ALU -    AND   DA   - -    WR5  -   -      -     -   55   MP   M8    PROM   -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    AND   DA   - WR4  BYTE -   -      -     -   -    -    -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   RG2 -   -   -   ECBTAG -   -      -   -    -      -      MPS
+        LDCT LCWPH    PE  ALU -    -     ZA   - -    WR4  -   -      -     -   58   MP   M5    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU B    -     DZ   H WR4  -    -   -      -     -   59   MP   M4    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   ECA -   RG1 -      -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  WR4  -   -      -     -   32   MP   -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
+        CRTN -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   60   MP   M3    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+--------
+RET:
+--------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
+        CJP  EXTDR    PE  -   B    AND   DA   H WR1  HALF -   -      -     -   45   MP   RRR   -      -      -     -     -   -    -   -   ICC -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      DRG    -
+        CONT 173      -   -   B    AND   DA   H WR2  WR1  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CJP  SMOD     PE  ALU BA   -     DZ   - WR2  WR2  -   -      /NZ   -   3    -    PCCC  SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     MPS
+        CONT -        -   -   B    -     DZ   - WR3  -    -   -      -     -   34   MP   SVFA  -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 116      -   ALU B    SUBR  DA   H WR3  WR3  CI1 -      -     -   34   MP   SVFA  PROM   ADRREG -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        PUSH -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     BTRRD -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    -      -      -
+        LOOP 226      -   ALU -    -     DZ   - -    -    -   -      -     -   -    -    -     PROM   PSHIFT -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CONT -        -   -   B    -     DZ   H WR4  -    -   -      -     -   -    -    -     -      -      -     BTRRD -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   RG2 PHYSAD -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  WR4  -   -      -     -   61   MP   M2    SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+W3:
+        CJP  W3       PE  ALU -    -     ZA   - -    WR4  -   -      -     -   62   MP   M1    -      -      -     -     -   -    -   -   ICC -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CONT -        -   -   B    -     DZ   H WR4  -    -   -      -     -   -    -    -     -      -      -     BTRRD -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   RG2 PHYSAD -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  WR4  -   -      -     -   59   MP   M4    SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+W5:
+        CJP  W5       PE  ALU -    -     ZA   - -    WR4  -   -      -     -   60   MP   M3    -      -      -     -     -   -    -   -   ICC -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CONT -        -   -   B    -     DZ   H WR4  -    -   -      -     -   -    -    -     -      -      -     BTRRD -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   RG2 PHYSAD -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  WR4  -   -      -     -   57   MP   M6    SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+W7:
+        CJP  W7       PE  ALU -    -     ZA   - -    WR4  -   -      -     -   58   MP   M5    -      -      -     -     -   -    -   -   ICC -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CONT -        -   -   B    -     DZ   H WR4  -    -   -      -     -   -    -    -     -      -      -     BTRRD -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   RG2 PHYSAD -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  WR4  -   -      -     -   55   MP   M8    SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+W9:
+        CJP  W9       PE  ALU -    -     ZA   - -    WR4  -   -      -     -   56   MP   M7    -      -      -     -     -   -    -   -   ICC -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CONT -        -   -   B    -     DZ   H WR4  -    -   -      -     -   -    -    -     -      -      -     BTRRD -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   RG2 PHYSAD -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  WR4  -   -      -     -   53   MP   M10   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+W11:
+        CJP  W11      PE  ALU -    -     ZA   - -    WR4  -   -      -     -   54   MP   M9    -      -      -     -     -   -    -   -   ICC -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CONT -        -   -   B    -     DZ   H WR4  -    -   -      -     -   -    -    -     -      -      -     BTRRD -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   RG2 PHYSAD -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  WR4  -   -      -     -   51   MP   M12   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+W13:
+        CJP  W13      PE  ALU -    -     ZA   - -    WR4  -   -      -     -   52   MP   M11   -      -      -     -     -   -    -   -   ICC -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CONT -        -   -   B    -     DZ   H WR4  -    -   -      -     -   -    -    -     -      -      -     BTRRD -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   RG2 PHYSAD -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  WR4  -   -      -     -   49   MP   M14   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+WSP:
+        CJP  WSP      PE  ALU -    -     ZA   - -    WR4  -   -      -     -   50   MP   M13   -      -      -     -     -   -    -   -   ICC -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CONT -        -   -   B    -     DZ   H WR4  -    -   -      -     -   -    -    -     -      -      -     BTRRD -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   RG2 PHYSAD -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  WR4  -   -      -     -   44   MP   SPRAD SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+WP:
+        CJP  WP       PE  ALU -    -     ZA   - -    WR4  -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   ICC -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
+        CONT -        -   -   B    -     DZ   H PCCP -    -   -      -     -   -    -    -     -      -      -     BTRRD -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   RG2 PHYSAD -   -      -   -    -      -      -
+WR:
+        CJP  WR       PE  ALU BA   -     DZ   H PC   PCCP -   -      -     -   32   MP   -     SHIFT  -      LOG   -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY MPS
+        CONT -        -   -   B    -     DZ   H WR4  -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   RG2 PHYSAD -   -      -   -    -      -      -
+        CONT -        -   ALU BA   -     DZ   H WR4  WR4  -   -      -     -   45   MP   RRR   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   CSM WEM -   WRB -   -   -   -   ECBTAG -   -      -   -    -      -      -
+        CONT 44       -   ALU -    EXOR  DA   - -    WR4  -   -      YTOM  -   46   MP   RR    PROM   CNT    -     -     -   -    -   -   -   -   CEM -   CSM WEM -   -   -   -   -   -   -      -   STATUS WRD -    -      -      -
+        CJP  LC       PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      RCB    -
+        CJP  LCWPH    PE  ALU -    -     ZA   - -    PC   -   -      -     -   -    -    -     -      ADRREG -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CLRCD  -   -    SETTKK -      -
+LC:
+        CJP  LCWPH    PE  ALU B    -     ZB   - PC   -    CI1 -      -     -   -    -    -     -      ADRREG -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   CLRCD  -   -    CLRTKK -      -
+SMOD:
+        CONT -        -   -   B    -     DZ   - WR4  -    -   -      -     -   43   MP   CTT   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    -     DZ   - WR5  -    -   -      -     -   41   MP   CTR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    -     DZ   - -    -    -   -      -     -   42   MP   CTL   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR2  -   -      -     -   -    -    -     -      MODGN  -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR4  -   -      -     -   43   MP   CTT   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR5  -   -      -     -   41   MP   CTR   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   ALU -    -     ZA   - -    WR6  -   -      -     -   42   MP   CTL   -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT -        -   -   B    -     DZ   - WR3  -    -   -      -     -   46   MP   RR    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
+        CONT 44       -   ALU B    EXOR  DA   - WR3  WR3  -   -      YTOM  -   46   MP   RR    PROM   CNT    -     -     -   -    -   -   -   -   CEM -   CSM WEM -   -   -   -   -   -   -      -   STATUS WRD -    -      -      -
+        CONT -        -   ALU -    -     DZ   - -    -    -   -      -     -   45   MP   RRR   -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   WRB -   -   -   -   ECBTAG -   -      -   -    -      -      -
+        CJP  LCM      PE  -   B    -     DZ   - PCCP -    -   -      -     -   35   MP   PCCC  -      -      -     -     -   -    -   -   ICC -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      RCB    -
+        CJP  LCWPH    PE  ALU B    -     DZ   - PC   -    -   -      -     -   36   MP   PCC   -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   CLRCD  WRD -    SETTKK -      -
+LCM:
+        CJP  LCWPH    PE  ALU B    -     DZ   - PC   -    CI1 -      -     -   36   MP   PCC   -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   CLRCD  WRD -    CLRTKK -      -
+--------
