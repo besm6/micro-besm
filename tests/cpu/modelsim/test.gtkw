@@ -1,26 +1,27 @@
 [*]
 [*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
-[*] Mon Oct 17 05:51:15 2016
+[*] Tue Oct 18 04:56:17 2016
 [*]
-[dumpfile] "/home/vak/Project/micro-besm/tests/cpu/modelsim/test.vcd"
-[dumpfile_mtime] "Mon Oct 17 05:49:53 2016"
-[dumpfile_size] 48561
-[savefile] "/home/vak/Project/micro-besm/tests/cpu/modelsim/test.gtkw"
+[dumpfile] "/local/Besm-6/micro-besm/tests/cpu/modelsim/output.vcd"
+[dumpfile_mtime] "Tue Oct 18 04:54:21 2016"
+[dumpfile_size] 34126933
+[savefile] "/local/Besm-6/micro-besm/tests/cpu/modelsim/test.gtkw"
 [timestart] 0
 [size] 1000 704
-[pos] -1 -1
-*-1.467268 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -785 -240
+*-14.927478 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testbench.
-[sst_width] 225
-[signals_width] 94
+[sst_width] 235
+[signals_width] 150
 [sst_expanded] 1
 [sst_vpaned_height] 197
 @28
 testbench.clk
 testbench.reset
 @23
-testbench.dut.SQI[3:0]
+testbench.cpu.control_D[11:0]
 @22
-testbench.dut.A[11:0]
+testbench.cpu.A[11:0]
+testbench.cpu.alu_D[63:0]
 [pattern_trace] 1
 [pattern_trace] 0
