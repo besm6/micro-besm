@@ -23,7 +23,7 @@ work:           $(SOURCES)
 		$(MODELSIM)/vlog -sv $(SOURCES)
 
 run:            work
-		$(MODELSIM)/vsim -c -l run.log -do 'run 1us;quit' testbench +trace=2 +dump +limit=100
+		$(MODELSIM)/vsim -c -l run.log -do 'run 1us;quit' testbench +trace=2 +dump +limit=500
 
 view:
 		gtkwave output.vcd test.gtkw &

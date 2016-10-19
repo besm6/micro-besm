@@ -118,10 +118,10 @@ assign control_I    = SQI;      // Four-bit instruction
 assign control_nRLD = RLD;      // Unconditional load bit for register/counter
 
 // Carry-in bit for microprogram counter
-assign control_CI = ss_CT;
+assign control_CI = '1;
 //TODO:
-//assign control_CI = SCI ? 1 :
-//                    irq ? 0 :
+//assign control_CI = SCI ? '1 :
+//                    irq ? '0 :
 //                    ICI ? ~cond_mux : cond_mux;
 
 // 12-bit data input
@@ -238,7 +238,7 @@ logic [63:0] const_ROM[512] = '{
 };
 logic [63:0] PROM;              // ПЗУ констант
 
-assign PROM = const_ROM[control_Y[8:0]];
+assign PROM = const_ROM[A[8:0]];
 
 //--------------------------------------------------------------
 // Datapath: register file, ALU and status/shifts

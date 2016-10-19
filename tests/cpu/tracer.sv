@@ -62,6 +62,12 @@ initial begin
                 print_changed_cpu();
 
                 //TODO: печать памяти модификаторов и таблицы приписки
+
+                if (cpu.DSRC == 12) begin
+                    // Чтение ПЗУ констант
+                    $fdisplay(fd, "(%0d) Read Const[%0d] = %h",
+                        $time, cpu.control_Y[8:0], cpu.PROM);
+                end
             end
 
             //TODO: print_insn();               // Print instruction
@@ -343,23 +349,23 @@ task print_changed_2901();
                  cpu.alu.p31_28.q, cpu.alu.p27_24.q, cpu.alu.p23_20.q, cpu.alu.p19_16.q,
                  cpu.alu.p15_12.q, cpu.alu.p11_8.q,  cpu.alu.p7_4.q,   cpu.alu.p3_0.q };
 
-    if (r0  !== old_r0)  begin $fdisplay(fd, "(%0d) alu.R0 = %h",  $time, r0);  old_r0  = r0;  end
-    if (r1  !== old_r1)  begin $fdisplay(fd, "(%0d) alu.R1 = %h",  $time, r1);  old_r1  = r1;  end
-    if (r2  !== old_r2)  begin $fdisplay(fd, "(%0d) alu.R2 = %h",  $time, r2);  old_r2  = r2;  end
-    if (r3  !== old_r3)  begin $fdisplay(fd, "(%0d) alu.R3 = %h",  $time, r3);  old_r3  = r3;  end
-    if (r4  !== old_r4)  begin $fdisplay(fd, "(%0d) alu.R4 = %h",  $time, r4);  old_r4  = r4;  end
-    if (r5  !== old_r5)  begin $fdisplay(fd, "(%0d) alu.R5 = %h",  $time, r5);  old_r5  = r5;  end
-    if (r6  !== old_r6)  begin $fdisplay(fd, "(%0d) alu.R6 = %h",  $time, r6);  old_r6  = r6;  end
-    if (r7  !== old_r7)  begin $fdisplay(fd, "(%0d) alu.R7 = %h",  $time, r7);  old_r7  = r7;  end
-    if (r8  !== old_r8)  begin $fdisplay(fd, "(%0d) alu.R8 = %h",  $time, r8);  old_r8  = r8;  end
-    if (r9  !== old_r9)  begin $fdisplay(fd, "(%0d) alu.R9 = %h",  $time, r9);  old_r9  = r9;  end
-    if (r10 !== old_r10) begin $fdisplay(fd, "(%0d) alu.R10 = %h", $time, r10); old_r10 = r10; end
-    if (r11 !== old_r11) begin $fdisplay(fd, "(%0d) alu.R11 = %h", $time, r11); old_r11 = r11; end
-    if (r12 !== old_r12) begin $fdisplay(fd, "(%0d) alu.R12 = %h", $time, r12); old_r12 = r12; end
-    if (r13 !== old_r13) begin $fdisplay(fd, "(%0d) alu.R13 = %h", $time, r13); old_r13 = r13; end
-    if (r14 !== old_r14) begin $fdisplay(fd, "(%0d) alu.R14 = %h", $time, r14); old_r14 = r14; end
-    if (r15 !== old_r15) begin $fdisplay(fd, "(%0d) alu.R15 = %h", $time, r15); old_r15 = r15; end
-    if (q   !== old_q)   begin $fdisplay(fd, "(%0d) alu.Q = %h",   $time, q);   old_q = q;     end
+    if (r0  !== old_r0)  begin $fdisplay(fd, "(%0d) Write alu.R0 = %h",  $time, r0);  old_r0  = r0;  end
+    if (r1  !== old_r1)  begin $fdisplay(fd, "(%0d) Write alu.R1 = %h",  $time, r1);  old_r1  = r1;  end
+    if (r2  !== old_r2)  begin $fdisplay(fd, "(%0d) Write alu.R2 = %h",  $time, r2);  old_r2  = r2;  end
+    if (r3  !== old_r3)  begin $fdisplay(fd, "(%0d) Write alu.R3 = %h",  $time, r3);  old_r3  = r3;  end
+    if (r4  !== old_r4)  begin $fdisplay(fd, "(%0d) Write alu.R4 = %h",  $time, r4);  old_r4  = r4;  end
+    if (r5  !== old_r5)  begin $fdisplay(fd, "(%0d) Write alu.R5 = %h",  $time, r5);  old_r5  = r5;  end
+    if (r6  !== old_r6)  begin $fdisplay(fd, "(%0d) Write alu.R6 = %h",  $time, r6);  old_r6  = r6;  end
+    if (r7  !== old_r7)  begin $fdisplay(fd, "(%0d) Write alu.R7 = %h",  $time, r7);  old_r7  = r7;  end
+    if (r8  !== old_r8)  begin $fdisplay(fd, "(%0d) Write alu.R8 = %h",  $time, r8);  old_r8  = r8;  end
+    if (r9  !== old_r9)  begin $fdisplay(fd, "(%0d) Write alu.R9 = %h",  $time, r9);  old_r9  = r9;  end
+    if (r10 !== old_r10) begin $fdisplay(fd, "(%0d) Write alu.R10 = %h", $time, r10); old_r10 = r10; end
+    if (r11 !== old_r11) begin $fdisplay(fd, "(%0d) Write alu.R11 = %h", $time, r11); old_r11 = r11; end
+    if (r12 !== old_r12) begin $fdisplay(fd, "(%0d) Write alu.R12 = %h", $time, r12); old_r12 = r12; end
+    if (r13 !== old_r13) begin $fdisplay(fd, "(%0d) Write alu.R13 = %h", $time, r13); old_r13 = r13; end
+    if (r14 !== old_r14) begin $fdisplay(fd, "(%0d) Write alu.R14 = %h", $time, r14); old_r14 = r14; end
+    if (r15 !== old_r15) begin $fdisplay(fd, "(%0d) Write alu.R15 = %h", $time, r15); old_r15 = r15; end
+    if (q   !== old_q)   begin $fdisplay(fd, "(%0d) Write alu.Q = %h",   $time, q);   old_q = q;     end
 endtask
 
 //
@@ -372,8 +378,8 @@ task print_changed_2904();
     assign MSR = cpu.alu.status.MSR;
     assign uSR = cpu.alu.status.uSR;
 
-    if (MSR !== old_MSR) begin $fdisplay(fd, "(%0d) alu.MSR = %b", $time, MSR); old_MSR = MSR; end
-    if (uSR !== old_uSR) begin $fdisplay(fd, "(%0d) alu.uSR = %b", $time, uSR); old_uSR = uSR; end
+    if (MSR !== old_MSR) begin $fdisplay(fd, "(%0d) Write alu.MSR = %b", $time, MSR); old_MSR = MSR; end
+    if (uSR !== old_uSR) begin $fdisplay(fd, "(%0d) Write alu.uSR = %b", $time, uSR); old_uSR = uSR; end
 endtask
 
 // Print changed state of Am2910 chip
@@ -392,12 +398,12 @@ task print_changed_2910();
     assign stack5 = cpu.control.reg_file[5];
 
     if (sp !== old_sp) begin $fdisplay(fd, "(%0d) control.SP = %h", $time, sp); old_sp = sp; end
-    if (stack0 !== old_stack0) begin $fdisplay(fd, "(%0d) control.Stack0 = %h", $time, stack0); old_stack0 = stack0; end
-    if (stack1 !== old_stack1) begin $fdisplay(fd, "(%0d) control.Stack1 = %h", $time, stack1); old_stack1 = stack1; end
-    if (stack2 !== old_stack2) begin $fdisplay(fd, "(%0d) control.Stack2 = %h", $time, stack2); old_stack2 = stack2; end
-    if (stack3 !== old_stack3) begin $fdisplay(fd, "(%0d) control.Stack3 = %h", $time, stack3); old_stack3 = stack3; end
-    if (stack4 !== old_stack4) begin $fdisplay(fd, "(%0d) control.Stack4 = %h", $time, stack4); old_stack4 = stack4; end
-    if (stack5 !== old_stack5) begin $fdisplay(fd, "(%0d) control.Stack5 = %h", $time, stack5); old_stack5 = stack5; end
+    if (stack0 !== old_stack0) begin $fdisplay(fd, "(%0d) Write control.Stack0 = %h", $time, stack0); old_stack0 = stack0; end
+    if (stack1 !== old_stack1) begin $fdisplay(fd, "(%0d) Write control.Stack1 = %h", $time, stack1); old_stack1 = stack1; end
+    if (stack2 !== old_stack2) begin $fdisplay(fd, "(%0d) Write control.Stack2 = %h", $time, stack2); old_stack2 = stack2; end
+    if (stack3 !== old_stack3) begin $fdisplay(fd, "(%0d) Write control.Stack3 = %h", $time, stack3); old_stack3 = stack3; end
+    if (stack4 !== old_stack4) begin $fdisplay(fd, "(%0d) Write control.Stack4 = %h", $time, stack4); old_stack4 = stack4; end
+    if (stack5 !== old_stack5) begin $fdisplay(fd, "(%0d) Write control.Stack5 = %h", $time, stack5); old_stack5 = stack5; end
 endtask
 
 // Print changed state of internal CPU registers
@@ -425,13 +431,13 @@ task print_changed_cpu();
     assign adrreg = cpu.ADRREG;
     assign pshift = cpu.PSHIFT;
 
-    if (modgn  !== old_modgn)  begin $fdisplay(fd, "(%0d) MODGN = %h",  $time, modgn);  old_modgn  = modgn;  end
-    if (procn  !== old_procn)  begin $fdisplay(fd, "(%0d) PROCN = %h",  $time, procn);  old_procn  = procn;  end
-    if (cnt    !== old_cnt)    begin $fdisplay(fd, "(%0d) CNT = %h",    $time, cnt);    old_cnt    = cnt;    end
-    if (physpg !== old_physpg) begin $fdisplay(fd, "(%0d) PHYSPG = %h", $time, physpg); old_physpg = physpg; end
-    if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d) ARBOPC = %h", $time, arbopc); old_arbopc = arbopc; end
-    if (adrreg !== old_adrreg) begin $fdisplay(fd, "(%0d) ADRREG = %h", $time, adrreg); old_adrreg = adrreg; end
-    if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d) PSHIFT = %h", $time, pshift); old_pshift = pshift; end
+    if (modgn  !== old_modgn)  begin $fdisplay(fd, "(%0d) Write MODGN = %h",  $time, modgn);  old_modgn  = modgn;  end
+    if (procn  !== old_procn)  begin $fdisplay(fd, "(%0d) Write PROCN = %h",  $time, procn);  old_procn  = procn;  end
+    if (cnt    !== old_cnt)    begin $fdisplay(fd, "(%0d) Write CNT = %h",    $time, cnt);    old_cnt    = cnt;    end
+    if (physpg !== old_physpg) begin $fdisplay(fd, "(%0d) Write PHYSPG = %h", $time, physpg); old_physpg = physpg; end
+    if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d) Write ARBOPC = %h", $time, arbopc); old_arbopc = arbopc; end
+    if (adrreg !== old_adrreg) begin $fdisplay(fd, "(%0d) Write ADRREG = %h", $time, adrreg); old_adrreg = adrreg; end
+    if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d) Write PSHIFT = %h", $time, pshift); old_pshift = pshift; end
 endtask
 
 endmodule

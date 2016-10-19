@@ -85,6 +85,8 @@ initial begin
     // Run until limit.
     #limit begin
         $display("\n----- Time Limit Exceeded -----");
+        if (trace)
+            $fdisplay(tracefd, "\n----- Time Limit Exceeded -----");
         $finish(1);
     end
 end
