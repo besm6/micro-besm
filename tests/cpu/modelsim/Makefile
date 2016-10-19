@@ -7,6 +7,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/am2902.sv \
                   ../../../rtl/am2904.sv \
                   ../../../rtl/am2910.sv \
+                  ../tracer.sv \
 		  ../test_cpu.sv
 
 # Altera Quartus toolchain
