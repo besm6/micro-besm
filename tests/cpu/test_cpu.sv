@@ -60,7 +60,7 @@ initial begin
     if (trace) begin
         $display("Generate trace file %0S", tracefile);
         tracefd = $fopen(tracefile, "w");
-        $fdisplay(tracefd, "Trace file for %0S", hexfile);
+        $fdisplay(tracefd, "Trace file for %0S\n", hexfile);
     end
 
     // Limit the simulation by specified number of cycles.

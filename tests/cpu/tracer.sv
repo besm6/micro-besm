@@ -9,14 +9,26 @@ module tracer(
 timeunit 1ns;
 timeprecision 10ps;
 
+//
+// Descriptor of output trace file
+//
 int fd;
 assign fd = testbench.tracefd;
 
-initial begin
-    automatic int old_mst = 0;
-    automatic int old_ust = 0;
-    automatic bit old_reset = 0;
+//
+// Last fetch address
+//
+logic [11:0] pc;
+always @(posedge clk)
+    if (reset)
+        pc <= '0;
+    else
+        pc <= cpu.control_Y;
 
+initial begin
+    static bit old_reset = 0;
+
+    // Wait until trace file opened
     wait(fd);
 
     forever begin
@@ -25,28 +37,34 @@ initial begin
 
         if (reset) begin
             if (!old_reset) begin               // Reset
-                $fdisplay(fd, "(%0d) ---- Reset", $time);
+                $fdisplay(fd, "(%0d) *** Reset", $time);
                 old_reset = 1;
             end
         end else begin
             if (old_reset) begin                // Clear reset
-                $fdisplay(fd, "(%0d) ---- End reset", $time);
+                $fdisplay(fd, "(%0d) *** Clear reset", $time);
                 old_reset = 0;
             end
 
             if ($isunknown(cpu.SQI) || $isunknown(cpu.A)) begin
-                $fdisplay(fd, "(%0d) SQI=%b A=%b", $time, cpu.SQI, cpu.A);
-                $display("\n----- Unknown state reached! -----");
-                $fdisplay(fd, "\n----- Unknown state reached! -----");
+                $fdisplay(fd, "(%0d) *** Unknown state: SQI=%b A=%b", $time, cpu.SQI, cpu.A);
+                $display("\n----- Fatal Error! -----");
+                $fdisplay(fd, "\n----- Fatal Error! -----");
                 $finish(1);
             end
 
-            if (testbench.trace > 1)
+            if (testbench.trace > 1) begin
                 print_uop();                    // Print micro-instruction
+                print_changed_2901();           // Print changed state
+                print_changed_2904();
+                print_changed_2910();
+                //print_changed_bb1();
+                print_changed_cpu();
 
-            //TODO: print_insn();
+                //TODO: печать памяти модификаторов и таблицы приписки
+            end
 
-            //TODO: if (old_mst != cpu.mst) print...
+            //TODO: print_insn();               // Print instruction
         end
 
         wait(!clk);
@@ -191,7 +209,7 @@ task print_uop();
         default: "???"
     };
 
-    $fwrite(fd, "(%0d) %-4s", $time, sqi_name[cpu.SQI]);
+    $fwrite(fd, "(%0d) %h: %-4s", $time, pc, sqi_name[cpu.SQI]);
     if (cpu.A != 0)
         $fwrite(fd, " %h", cpu.A);
     else
@@ -244,6 +262,176 @@ task print_uop();
     if (cpu.COND  != 0)  $fwrite(fd, " cond=%0s", cond_name[cpu.COND]);
     if (cpu.MPS   != 0)  $fwrite(fd, " MPS");
     $fdisplay(fd, "");
+endtask
+
+//
+// Print changed state of Am2901 chip
+//
+task print_changed_2901();
+    logic [63:0] r0, r1, r2, r3, r4, r5, r6, r7,
+                 r8, r9, r10, r11, r12, r13, r14, r15, q;
+    static logic [63:0] old_r0, old_r1, old_r2, old_r3, old_r4, old_r5, old_r6, old_r7,
+                        old_r8, old_r9, old_r10, old_r11, old_r12, old_r13, old_r14,
+                        old_r15, old_q;
+
+    assign r0 = { cpu.alu.p63_60.ram[0], cpu.alu.p59_56.ram[0], cpu.alu.p55_52.ram[0], cpu.alu.p51_48.ram[0],
+                  cpu.alu.p47_44.ram[0], cpu.alu.p43_40.ram[0], cpu.alu.p39_36.ram[0], cpu.alu.p35_32.ram[0],
+                  cpu.alu.p31_28.ram[0], cpu.alu.p27_24.ram[0], cpu.alu.p23_20.ram[0], cpu.alu.p19_16.ram[0],
+                  cpu.alu.p15_12.ram[0], cpu.alu.p11_8.ram[0],  cpu.alu.p7_4.ram[0],   cpu.alu.p3_0.ram[0] };
+    assign r1 = { cpu.alu.p63_60.ram[1], cpu.alu.p59_56.ram[1], cpu.alu.p55_52.ram[1], cpu.alu.p51_48.ram[1],
+                  cpu.alu.p47_44.ram[1], cpu.alu.p43_40.ram[1], cpu.alu.p39_36.ram[1], cpu.alu.p35_32.ram[1],
+                  cpu.alu.p31_28.ram[1], cpu.alu.p27_24.ram[1], cpu.alu.p23_20.ram[1], cpu.alu.p19_16.ram[1],
+                  cpu.alu.p15_12.ram[1], cpu.alu.p11_8.ram[1],  cpu.alu.p7_4.ram[1],   cpu.alu.p3_0.ram[1] };
+    assign r2 = { cpu.alu.p63_60.ram[2], cpu.alu.p59_56.ram[2], cpu.alu.p55_52.ram[2], cpu.alu.p51_48.ram[2],
+                  cpu.alu.p47_44.ram[2], cpu.alu.p43_40.ram[2], cpu.alu.p39_36.ram[2], cpu.alu.p35_32.ram[2],
+                  cpu.alu.p31_28.ram[2], cpu.alu.p27_24.ram[2], cpu.alu.p23_20.ram[2], cpu.alu.p19_16.ram[2],
+                  cpu.alu.p15_12.ram[2], cpu.alu.p11_8.ram[2],  cpu.alu.p7_4.ram[2],   cpu.alu.p3_0.ram[2] };
+    assign r3 = { cpu.alu.p63_60.ram[3], cpu.alu.p59_56.ram[3], cpu.alu.p55_52.ram[3], cpu.alu.p51_48.ram[3],
+                  cpu.alu.p47_44.ram[3], cpu.alu.p43_40.ram[3], cpu.alu.p39_36.ram[3], cpu.alu.p35_32.ram[3],
+                  cpu.alu.p31_28.ram[3], cpu.alu.p27_24.ram[3], cpu.alu.p23_20.ram[3], cpu.alu.p19_16.ram[3],
+                  cpu.alu.p15_12.ram[3], cpu.alu.p11_8.ram[3],  cpu.alu.p7_4.ram[3],   cpu.alu.p3_0.ram[3] };
+    assign r4 = { cpu.alu.p63_60.ram[4], cpu.alu.p59_56.ram[4], cpu.alu.p55_52.ram[4], cpu.alu.p51_48.ram[4],
+                  cpu.alu.p47_44.ram[4], cpu.alu.p43_40.ram[4], cpu.alu.p39_36.ram[4], cpu.alu.p35_32.ram[4],
+                  cpu.alu.p31_28.ram[4], cpu.alu.p27_24.ram[4], cpu.alu.p23_20.ram[4], cpu.alu.p19_16.ram[4],
+                  cpu.alu.p15_12.ram[4], cpu.alu.p11_8.ram[4],  cpu.alu.p7_4.ram[4],   cpu.alu.p3_0.ram[4] };
+    assign r5 = { cpu.alu.p63_60.ram[5], cpu.alu.p59_56.ram[5], cpu.alu.p55_52.ram[5], cpu.alu.p51_48.ram[5],
+                  cpu.alu.p47_44.ram[5], cpu.alu.p43_40.ram[5], cpu.alu.p39_36.ram[5], cpu.alu.p35_32.ram[5],
+                  cpu.alu.p31_28.ram[5], cpu.alu.p27_24.ram[5], cpu.alu.p23_20.ram[5], cpu.alu.p19_16.ram[5],
+                  cpu.alu.p15_12.ram[5], cpu.alu.p11_8.ram[5],  cpu.alu.p7_4.ram[5],   cpu.alu.p3_0.ram[5] };
+    assign r6 = { cpu.alu.p63_60.ram[6], cpu.alu.p59_56.ram[6], cpu.alu.p55_52.ram[6], cpu.alu.p51_48.ram[6],
+                  cpu.alu.p47_44.ram[6], cpu.alu.p43_40.ram[6], cpu.alu.p39_36.ram[6], cpu.alu.p35_32.ram[6],
+                  cpu.alu.p31_28.ram[6], cpu.alu.p27_24.ram[6], cpu.alu.p23_20.ram[6], cpu.alu.p19_16.ram[6],
+                  cpu.alu.p15_12.ram[6], cpu.alu.p11_8.ram[6],  cpu.alu.p7_4.ram[6],   cpu.alu.p3_0.ram[6] };
+    assign r7 = { cpu.alu.p63_60.ram[7], cpu.alu.p59_56.ram[7], cpu.alu.p55_52.ram[7], cpu.alu.p51_48.ram[7],
+                  cpu.alu.p47_44.ram[7], cpu.alu.p43_40.ram[7], cpu.alu.p39_36.ram[7], cpu.alu.p35_32.ram[7],
+                  cpu.alu.p31_28.ram[7], cpu.alu.p27_24.ram[7], cpu.alu.p23_20.ram[7], cpu.alu.p19_16.ram[7],
+                  cpu.alu.p15_12.ram[7], cpu.alu.p11_8.ram[7],  cpu.alu.p7_4.ram[7],   cpu.alu.p3_0.ram[7] };
+    assign r8 = { cpu.alu.p63_60.ram[8], cpu.alu.p59_56.ram[8], cpu.alu.p55_52.ram[8], cpu.alu.p51_48.ram[8],
+                  cpu.alu.p47_44.ram[8], cpu.alu.p43_40.ram[8], cpu.alu.p39_36.ram[8], cpu.alu.p35_32.ram[8],
+                  cpu.alu.p31_28.ram[8], cpu.alu.p27_24.ram[8], cpu.alu.p23_20.ram[8], cpu.alu.p19_16.ram[8],
+                  cpu.alu.p15_12.ram[8], cpu.alu.p11_8.ram[8],  cpu.alu.p7_4.ram[8],   cpu.alu.p3_0.ram[8] };
+    assign r9 = { cpu.alu.p63_60.ram[9], cpu.alu.p59_56.ram[9], cpu.alu.p55_52.ram[9], cpu.alu.p51_48.ram[9],
+                  cpu.alu.p47_44.ram[9], cpu.alu.p43_40.ram[9], cpu.alu.p39_36.ram[9], cpu.alu.p35_32.ram[9],
+                  cpu.alu.p31_28.ram[9], cpu.alu.p27_24.ram[9], cpu.alu.p23_20.ram[9], cpu.alu.p19_16.ram[9],
+                  cpu.alu.p15_12.ram[9], cpu.alu.p11_8.ram[9],  cpu.alu.p7_4.ram[9],   cpu.alu.p3_0.ram[9] };
+    assign r10 = { cpu.alu.p63_60.ram[10], cpu.alu.p59_56.ram[10], cpu.alu.p55_52.ram[10], cpu.alu.p51_48.ram[10],
+                   cpu.alu.p47_44.ram[10], cpu.alu.p43_40.ram[10], cpu.alu.p39_36.ram[10], cpu.alu.p35_32.ram[10],
+                   cpu.alu.p31_28.ram[10], cpu.alu.p27_24.ram[10], cpu.alu.p23_20.ram[10], cpu.alu.p19_16.ram[10],
+                   cpu.alu.p15_12.ram[10], cpu.alu.p11_8.ram[10],  cpu.alu.p7_4.ram[10],   cpu.alu.p3_0.ram[10] };
+    assign r11 = { cpu.alu.p63_60.ram[11], cpu.alu.p59_56.ram[11], cpu.alu.p55_52.ram[11], cpu.alu.p51_48.ram[11],
+                   cpu.alu.p47_44.ram[11], cpu.alu.p43_40.ram[11], cpu.alu.p39_36.ram[11], cpu.alu.p35_32.ram[11],
+                   cpu.alu.p31_28.ram[11], cpu.alu.p27_24.ram[11], cpu.alu.p23_20.ram[11], cpu.alu.p19_16.ram[11],
+                   cpu.alu.p15_12.ram[11], cpu.alu.p11_8.ram[11],  cpu.alu.p7_4.ram[11],   cpu.alu.p3_0.ram[11] };
+    assign r12 = { cpu.alu.p63_60.ram[12], cpu.alu.p59_56.ram[12], cpu.alu.p55_52.ram[12], cpu.alu.p51_48.ram[12],
+                   cpu.alu.p47_44.ram[12], cpu.alu.p43_40.ram[12], cpu.alu.p39_36.ram[12], cpu.alu.p35_32.ram[12],
+                   cpu.alu.p31_28.ram[12], cpu.alu.p27_24.ram[12], cpu.alu.p23_20.ram[12], cpu.alu.p19_16.ram[12],
+                   cpu.alu.p15_12.ram[12], cpu.alu.p11_8.ram[12],  cpu.alu.p7_4.ram[12],   cpu.alu.p3_0.ram[12] };
+    assign r13 = { cpu.alu.p63_60.ram[13], cpu.alu.p59_56.ram[13], cpu.alu.p55_52.ram[13], cpu.alu.p51_48.ram[13],
+                   cpu.alu.p47_44.ram[13], cpu.alu.p43_40.ram[13], cpu.alu.p39_36.ram[13], cpu.alu.p35_32.ram[13],
+                   cpu.alu.p31_28.ram[13], cpu.alu.p27_24.ram[13], cpu.alu.p23_20.ram[13], cpu.alu.p19_16.ram[13],
+                   cpu.alu.p15_12.ram[13], cpu.alu.p11_8.ram[13],  cpu.alu.p7_4.ram[13],   cpu.alu.p3_0.ram[13] };
+    assign r14 = { cpu.alu.p63_60.ram[14], cpu.alu.p59_56.ram[14], cpu.alu.p55_52.ram[14], cpu.alu.p51_48.ram[14],
+                   cpu.alu.p47_44.ram[14], cpu.alu.p43_40.ram[14], cpu.alu.p39_36.ram[14], cpu.alu.p35_32.ram[14],
+                   cpu.alu.p31_28.ram[14], cpu.alu.p27_24.ram[14], cpu.alu.p23_20.ram[14], cpu.alu.p19_16.ram[14],
+                   cpu.alu.p15_12.ram[14], cpu.alu.p11_8.ram[14],  cpu.alu.p7_4.ram[14],   cpu.alu.p3_0.ram[14] };
+    assign r15 = { cpu.alu.p63_60.ram[15], cpu.alu.p59_56.ram[15], cpu.alu.p55_52.ram[15], cpu.alu.p51_48.ram[15],
+                   cpu.alu.p47_44.ram[15], cpu.alu.p43_40.ram[15], cpu.alu.p39_36.ram[15], cpu.alu.p35_32.ram[15],
+                   cpu.alu.p31_28.ram[15], cpu.alu.p27_24.ram[15], cpu.alu.p23_20.ram[15], cpu.alu.p19_16.ram[15],
+                   cpu.alu.p15_12.ram[15], cpu.alu.p11_8.ram[15],  cpu.alu.p7_4.ram[15],   cpu.alu.p3_0.ram[15] };
+    assign q = { cpu.alu.p63_60.q, cpu.alu.p59_56.q, cpu.alu.p55_52.q, cpu.alu.p51_48.q,
+                 cpu.alu.p47_44.q, cpu.alu.p43_40.q, cpu.alu.p39_36.q, cpu.alu.p35_32.q,
+                 cpu.alu.p31_28.q, cpu.alu.p27_24.q, cpu.alu.p23_20.q, cpu.alu.p19_16.q,
+                 cpu.alu.p15_12.q, cpu.alu.p11_8.q,  cpu.alu.p7_4.q,   cpu.alu.p3_0.q };
+
+    if (r0  !== old_r0)  begin $fdisplay(fd, "(%0d) alu.R0 = %h",  $time, r0);  old_r0  = r0;  end
+    if (r1  !== old_r1)  begin $fdisplay(fd, "(%0d) alu.R1 = %h",  $time, r1);  old_r1  = r1;  end
+    if (r2  !== old_r2)  begin $fdisplay(fd, "(%0d) alu.R2 = %h",  $time, r2);  old_r2  = r2;  end
+    if (r3  !== old_r3)  begin $fdisplay(fd, "(%0d) alu.R3 = %h",  $time, r3);  old_r3  = r3;  end
+    if (r4  !== old_r4)  begin $fdisplay(fd, "(%0d) alu.R4 = %h",  $time, r4);  old_r4  = r4;  end
+    if (r5  !== old_r5)  begin $fdisplay(fd, "(%0d) alu.R5 = %h",  $time, r5);  old_r5  = r5;  end
+    if (r6  !== old_r6)  begin $fdisplay(fd, "(%0d) alu.R6 = %h",  $time, r6);  old_r6  = r6;  end
+    if (r7  !== old_r7)  begin $fdisplay(fd, "(%0d) alu.R7 = %h",  $time, r7);  old_r7  = r7;  end
+    if (r8  !== old_r8)  begin $fdisplay(fd, "(%0d) alu.R8 = %h",  $time, r8);  old_r8  = r8;  end
+    if (r9  !== old_r9)  begin $fdisplay(fd, "(%0d) alu.R9 = %h",  $time, r9);  old_r9  = r9;  end
+    if (r10 !== old_r10) begin $fdisplay(fd, "(%0d) alu.R10 = %h", $time, r10); old_r10 = r10; end
+    if (r11 !== old_r11) begin $fdisplay(fd, "(%0d) alu.R11 = %h", $time, r11); old_r11 = r11; end
+    if (r12 !== old_r12) begin $fdisplay(fd, "(%0d) alu.R12 = %h", $time, r12); old_r12 = r12; end
+    if (r13 !== old_r13) begin $fdisplay(fd, "(%0d) alu.R13 = %h", $time, r13); old_r13 = r13; end
+    if (r14 !== old_r14) begin $fdisplay(fd, "(%0d) alu.R14 = %h", $time, r14); old_r14 = r14; end
+    if (r15 !== old_r15) begin $fdisplay(fd, "(%0d) alu.R15 = %h", $time, r15); old_r15 = r15; end
+    if (q   !== old_q)   begin $fdisplay(fd, "(%0d) alu.Q = %h",   $time, q);   old_q = q;     end
+endtask
+
+//
+// Print changed state of Am2904 chip
+//
+task print_changed_2904();
+    logic [3:0] MSR, uSR;
+    static logic [3:0] old_MSR, old_uSR;
+
+    assign MSR = cpu.alu.status.MSR;
+    assign uSR = cpu.alu.status.uSR;
+
+    if (MSR !== old_MSR) begin $fdisplay(fd, "(%0d) alu.MSR = %b", $time, MSR); old_MSR = MSR; end
+    if (uSR !== old_uSR) begin $fdisplay(fd, "(%0d) alu.uSR = %b", $time, uSR); old_uSR = uSR; end
+endtask
+
+// Print changed state of Am2910 chip
+task print_changed_2910();
+    logic [2:0] sp;
+    logic [11:0] stack0, stack1, stack2, stack3, stack4, stack5;
+    static logic [2:0] old_sp;
+    static logic [11:0] old_stack0, old_stack1, old_stack2, old_stack3, old_stack4, old_stack5;
+
+    assign sp = cpu.control.sp;
+    assign stack0 = cpu.control.reg_file[0];
+    assign stack1 = cpu.control.reg_file[1];
+    assign stack2 = cpu.control.reg_file[2];
+    assign stack3 = cpu.control.reg_file[3];
+    assign stack4 = cpu.control.reg_file[4];
+    assign stack5 = cpu.control.reg_file[5];
+
+    if (sp !== old_sp) begin $fdisplay(fd, "(%0d) control.SP = %h", $time, sp); old_sp = sp; end
+    if (stack0 !== old_stack0) begin $fdisplay(fd, "(%0d) control.Stack0 = %h", $time, stack0); old_stack0 = stack0; end
+    if (stack1 !== old_stack1) begin $fdisplay(fd, "(%0d) control.Stack1 = %h", $time, stack1); old_stack1 = stack1; end
+    if (stack2 !== old_stack2) begin $fdisplay(fd, "(%0d) control.Stack2 = %h", $time, stack2); old_stack2 = stack2; end
+    if (stack3 !== old_stack3) begin $fdisplay(fd, "(%0d) control.Stack3 = %h", $time, stack3); old_stack3 = stack3; end
+    if (stack4 !== old_stack4) begin $fdisplay(fd, "(%0d) control.Stack4 = %h", $time, stack4); old_stack4 = stack4; end
+    if (stack5 !== old_stack5) begin $fdisplay(fd, "(%0d) control.Stack5 = %h", $time, stack5); old_stack5 = stack5; end
+endtask
+
+// Print changed state of internal CPU registers
+task print_changed_cpu();
+    logic  [5:0] modgn;
+    logic  [7:0] procn;
+    logic [31:0] cnt;
+    logic  [9:0] physpg;
+    logic  [3:0] arbopc;
+    logic [31:0] adrreg;
+    logic  [6:0] pshift;
+    static logic  [5:0] old_modgn;
+    static logic  [7:0] old_procn;
+    static logic [31:0] old_cnt;
+    static logic  [9:0] old_physpg;
+    static logic  [3:0] old_arbopc;
+    static logic [31:0] old_adrreg;
+    static logic  [6:0] old_pshift;
+
+    assign modgn  = cpu.MODGN;
+    assign procn  = cpu.PROCN;
+    assign cnt    = cpu.CNT;
+    assign physpg = cpu.PHYSPG;
+    assign arbopc = cpu.ARBOPC;
+    assign adrreg = cpu.ADRREG;
+    assign pshift = cpu.PSHIFT;
+
+    if (modgn  !== old_modgn)  begin $fdisplay(fd, "(%0d) MODGN = %h",  $time, modgn);  old_modgn  = modgn;  end
+    if (procn  !== old_procn)  begin $fdisplay(fd, "(%0d) PROCN = %h",  $time, procn);  old_procn  = procn;  end
+    if (cnt    !== old_cnt)    begin $fdisplay(fd, "(%0d) CNT = %h",    $time, cnt);    old_cnt    = cnt;    end
+    if (physpg !== old_physpg) begin $fdisplay(fd, "(%0d) PHYSPG = %h", $time, physpg); old_physpg = physpg; end
+    if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d) ARBOPC = %h", $time, arbopc); old_arbopc = arbopc; end
+    if (adrreg !== old_adrreg) begin $fdisplay(fd, "(%0d) ADRREG = %h", $time, adrreg); old_adrreg = adrreg; end
+    if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d) PSHIFT = %h", $time, pshift); old_pshift = pshift; end
 endtask
 
 endmodule
