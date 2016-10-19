@@ -80,7 +80,7 @@ initial begin
     reset = 1;
 
     // Hold reset for a while.
-    #100 reset = 0;
+    #10 reset = 0;
 
     // Run until limit.
     #limit begin
