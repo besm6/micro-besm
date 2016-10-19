@@ -18,15 +18,19 @@ assign fd = testbench.tracefd;
 //
 // Last fetch address
 //
-logic [11:0] pc;
+logic [11:0] pc_f;
 always @(posedge clk)
     if (reset)
-        pc <= '0;
+        pc_f <= '0;
     else
-        pc <= cpu.control_Y;
+        pc_f <= cpu.control_Y;
 
 initial begin
     static bit old_reset = 0;
+    static logic [11:0] pc_x;           // PC address at execute stage
+    static logic [112:1] opcode;        // Opcode at execute stage
+    static logic [63:0] const_value;    // Constant value
+    static logic [8:0] const_addr;      // Constant address
 
     // Wait until trace file opened
     wait(fd);
@@ -40,6 +44,8 @@ initial begin
                 $fdisplay(fd, "(%0d) *** Reset", $time);
                 old_reset = 1;
             end
+            pc_x = '0;
+            opcode = '0;
         end else begin
             if (old_reset) begin                // Clear reset
                 $fdisplay(fd, "(%0d) *** Clear reset", $time);
@@ -54,23 +60,26 @@ initial begin
             end
 
             if (testbench.trace > 1) begin
-                print_uop();                    // Print micro-instruction
-                print_changed_2901();           // Print changed state
+                // Print last executed  micro-instruction
+                print_uop(pc_x, opcode, const_addr, const_value);
+
+                // Print changed state
+                print_changed_2901();
                 print_changed_2904();
                 print_changed_2910();
                 //print_changed_bb1();
                 print_changed_cpu();
 
                 //TODO: печать памяти модификаторов и таблицы приписки
-
-                if (cpu.DSRC == 12) begin
-                    // Чтение ПЗУ констант
-                    $fdisplay(fd, "(%0d) Read Const[%0d] = %h",
-                        $time, cpu.control_Y[8:0], cpu.PROM);
-                end
             end
 
             //TODO: print_insn();               // Print instruction
+
+            // Get data from fetch stage
+            pc_x = pc_f;
+            opcode = cpu.opcode;
+            const_value = cpu.PROM;
+            const_addr = cpu.A[8:0];
         end
 
         wait(!clk);
@@ -80,7 +89,12 @@ end
 //
 // Print micro-instruction.
 //
-task print_uop();
+task print_uop(
+    logic [11:0] pc,
+    logic [112:1] opcode,
+    logic [8:0] const_addr,
+    logic [63:0] const_value
+);
     static string sqi_name[16] = '{
          0: "jz",   1: "cjs",   2: "jmap",  3: "cjp",
          4: "push", 5: "jsrp",  6: "cjv",   7: "jrp",
@@ -215,59 +229,144 @@ task print_uop();
         default: "???"
     };
 
-    $fwrite(fd, "(%0d) %h: %-4s", $time, pc, sqi_name[cpu.SQI]);
-    if (cpu.A != 0)
-        $fwrite(fd, " %h", cpu.A);
+    // Instruction fields
+    logic  [3:0] SQI;
+    logic [11:0] A;
+    logic  [1:0] MAP;
+    logic  [2:0] ALUD;
+    logic  [2:0] FUNC;
+    logic  [2:0] ALUS;
+    logic  [3:0] RB;
+    logic  [3:0] RA;
+    logic  [1:0] CI;
+    logic  [3:0] SHMUX;
+    logic  [5:0] STOPC;
+    logic  [6:0] PSHF;
+    logic  [1:0] MNSA;
+    logic  [4:0] MODNM;
+    logic  [3:0] DSRC;
+    logic  [3:0] YDST;
+    logic  [1:0] SHF;
+    logic  [3:0] ARBI;
+    logic  [2:0] CYSTR;
+    logic  [1:0] BRA;
+    logic  [1:0] ARA;
+    logic  [2:0] YDEV;
+    logic  [2:0] DDEV;
+    logic  [4:0] FFCNT;
+    logic  [3:0] MPADR;
+    logic  [4:0] COND;
+    logic        ALU, H, MOD, RLD, LETC, SCI, ICI, ICC, ISE, CEM, CEN,
+                 CSM, WEM, ECB, WRB, ECA, WRA, WRY, WRD, IOMP, MPS;
+
+    assign SQI   = opcode[112:109]; // Код операции селектора адреса микропрограмм СУАМ
+    assign A     = opcode[108:97];  // Адрес следующей микрокоманды или адрес ПЗУ констант
+    assign MAP   = opcode[96:95];   // Выбор источника адреса, поступающего на вход D СУАМ
+    assign ALU   = opcode[94];      // Разрешение выдачи информации из МПС на шину Y
+    assign ALUD  = opcode[93:91];   // Управление приемниками результата АЛУ
+    assign FUNC  = opcode[90:88];   // Код операции АЛУ МПС
+    assign ALUS  = opcode[87:85];   // Управление источниками операндов на входы АЛУ
+    assign H     = opcode[84];      // Управление разрядностью АЛУ
+    assign RB    = opcode[83:80];   // Адрес регистра канала B МПС
+    assign RA    = opcode[79:76];   // Адрес регистра канала A МПС
+    assign CI    = opcode[75:74];   // Управление переносом C0 АЛУ МПС, разряды I12-I11
+    assign SHMUX = opcode[73:70];   // Сдвиг в МПС, разряды I9-I6 КОП СУСС
+    assign STOPC = opcode[69:64];   // Разряды I5-I0 КОП СУСС
+    assign MOD   = opcode[63];      // Привилегированный режим обращения к специальным регистрам
+    assign PSHF  = opcode[62:56];   // Параметр сдвига сдвигателя
+    assign MNSA  = opcode[62:61];   // Адрес источника номера модификатора
+    assign MODNM = opcode[60:56];   // Номер модификатора в группе регистров
+    assign DSRC  = opcode[55:52];   // Управление источниками информации на шину D
+    assign YDST  = opcode[51:48];   // Управление приемниками информации с шины Y ЦП
+    assign SHF   = opcode[47:46];   // Код операции сдвигателя
+    assign ARBI  = opcode[45:42];   // Код операции арбитра общей шины
+    assign RLD   = opcode[41];      // Загрузка регистра селектора адреса СУАМ и ШФ шин Y ЦП и D СУАМ
+    assign LETC  = opcode[40];      // Прохождением признака ПИА на вход ПНА команд
+    assign CYSTR = opcode[39:37];   // Длительность тактового импульса
+    assign SCI   = opcode[36];      // Передача условия на вход инкрементора
+    assign ICI   = opcode[35];      // Инверсия условия на вход инкрементора (CI) СУАМ
+    assign ICC   = opcode[34];      // Инверсия условий, выбираемых полем COND
+    assign ISE   = opcode[33];      // Разрешение внешних и внутренних прерываний
+    assign CEM   = opcode[32];      // Разрешение записи в машинный регистр состояния M CYCC
+    assign CEN   = opcode[31];      // Разрешение записи в микромашинный регистр состояния N CYCC
+    assign CSM   = opcode[30];      // Управление обращением к ОЗУ модификаторов
+    assign WEM   = opcode[29];      // Разрешение записи в ОЗУ модификаторов
+    assign ECB   = opcode[28];      // Выбор канал а B БОИ данных
+    assign WRB   = opcode[27];      // Запись по каналу B в БОИ данных и БОИ тега
+    assign BRA   = opcode[26:25];   // Адрес регистра канала B БОИ даннных и БОИ тега
+    assign ECA   = opcode[24];      // Выбор канала A БОИ данных
+    assign WRA   = opcode[23];      // Запись по каналу A в БОИ данных.
+    assign ARA   = opcode[22:21];   // Адрес регистра канала A БОИ даннных
+    assign YDEV  = opcode[20:18];   // Выбор источника или приемника информации с шины Y
+    assign WRY   = opcode[17];      // Запись в источники или приемники шины Y
+    assign DDEV  = opcode[16:14];   // Выбор источника или приемника информации с шины D
+    assign WRD   = opcode[13];      // Управление записью в источники или приемники шины D
+    assign IOMP  = opcode[12];      // Выбор дешифратора триггеров признаков или часов и таймера
+    assign FFCNT = opcode[11:7];    // Установка/сброс триггеров признаков
+    assign MPADR = opcode[10:7];    // Адрес регистра в блоке обмена с ПП
+    assign COND  = opcode[6:2];     // Выбор условия, подлежащего проверке
+    assign MPS   = opcode[1];       // Выбор источника параметра сдвига
+
+    $fwrite(fd, "(%0d) %h: %-4s", $time, pc, sqi_name[SQI]);
+    if (A != 0)
+        $fwrite(fd, " %h", A);
     else
         $fwrite(fd, "    ");
 
-    if (cpu.MAP   != 3)  $fwrite(fd, " map=%0s", map_name[cpu.MAP]);
-    if (cpu.ALU   != 0)  $fwrite(fd, " ALU");
-    if (cpu.ALUD  != 1)  $fwrite(fd, " alud=%0s", alud_name[cpu.ALUD]);
-    if (cpu.FUNC  != 0)  $fwrite(fd, " func=%0s", func_name[cpu.FUNC]);
-    if (cpu.ALUS  != 0)  $fwrite(fd, " alus=%0s", alus_name[cpu.ALUS]);
-    if (cpu.H     != 0)  $fwrite(fd, " H");
-    if (cpu.RB    != 10) $fwrite(fd, " rb=%0s", rb_name[cpu.RB]);
-    if (cpu.RA    != 0)  $fwrite(fd, " ra=%0s", ra_name[cpu.RA]);
-    if (cpu.CI    != 0)  $fwrite(fd, " ci=%0s", ci_name[cpu.CI]);
-    if (cpu.SHMUX != 0)  $fwrite(fd, " shmux=%0s", shmux_name[cpu.SHMUX]);
-    if (cpu.STOPC != 20) $fwrite(fd, " stopc=%0s", stopc_name[cpu.STOPC]);
-    if (cpu.MOD   != 0)  $fwrite(fd, " MOD");
-    if (cpu.PSHF  != 64) $fwrite(fd, " pshf=%0d", int'(cpu.PSHF) - 64);
-    if (cpu.MNSA  != 2)  $fwrite(fd, " mnsa=%0s", mnsa_name[cpu.MNSA]);
-    if (cpu.MODNM != 0)  $fwrite(fd, " modnm=%0s", modnm_name[cpu.MODNM]);
-    if (cpu.DSRC  != 0)  $fwrite(fd, " dsrc=%0s", dsrc_name[cpu.DSRC]);
-    if (cpu.YDST  != 0)  $fwrite(fd, " ydst=%0s", ydst_name[cpu.YDST]);
-    if (cpu.SHF   != 0)  $fwrite(fd, " shf=%0s", shf_name[cpu.SHF]);
-    if (cpu.ARBI  != 0)  $fwrite(fd, " arbi=%0s", arbi_name[cpu.ARBI]);
-    if (cpu.RLD   != 0)  $fwrite(fd, " RLD");
-    if (cpu.LETC  != 0)  $fwrite(fd, " LETC");
-    if (cpu.SCI   != 0)  $fwrite(fd, " SCI");
-    if (cpu.ICI   != 0)  $fwrite(fd, " ICI");
-    if (cpu.ICC   != 0)  $fwrite(fd, " ICC");
-    if (cpu.ISE   != 0)  $fwrite(fd, " ISE");
-    if (cpu.CEM   != 0)  $fwrite(fd, " CEM");
-    if (cpu.CEN   != 0)  $fwrite(fd, " CEN");
-    if (cpu.CSM   != 0)  $fwrite(fd, " CSM");
-    if (cpu.WEM   != 0)  $fwrite(fd, " WEM");
-    if (cpu.ECB   != 0)  $fwrite(fd, " ECB");
-    if (cpu.WRB   != 0)  $fwrite(fd, " WRB");
-    if (cpu.BRA   != 3)  $fwrite(fd, " bra=%0s", bra_name[cpu.BRA]);
-    if (cpu.ECA   != 0)  $fwrite(fd, " ECA");
-    if (cpu.WRA   != 0)  $fwrite(fd, " WRA");
-    if (cpu.ARA   != 3)  $fwrite(fd, " ara=%0s", bra_name[cpu.ARA]);
-    if (cpu.YDEV  != 0)  $fwrite(fd, " ydev=%0s", ydev_name[cpu.YDEV]);
-    if (cpu.WRY   != 0)  $fwrite(fd, " WRY");
-    if (cpu.DDEV  != 0)  $fwrite(fd, " ddev=%0s", ddev_name[cpu.DDEV]);
-    if (cpu.WRD   != 0)  $fwrite(fd, " WRD");
+    if (MAP   != 3)  $fwrite(fd, " map=%0s", map_name[MAP]);
+    if (ALU   != 0)  $fwrite(fd, " ALU");
+    if (ALUD  != 1)  $fwrite(fd, " alud=%0s", alud_name[ALUD]);
+    if (FUNC  != 0)  $fwrite(fd, " func=%0s", func_name[FUNC]);
+    if (ALUS  != 0)  $fwrite(fd, " alus=%0s", alus_name[ALUS]);
+    if (H     != 0)  $fwrite(fd, " H");
+    if (RB    != 10) $fwrite(fd, " rb=%0s", rb_name[RB]);
+    if (RA    != 0)  $fwrite(fd, " ra=%0s", ra_name[RA]);
+    if (CI    != 0)  $fwrite(fd, " ci=%0s", ci_name[CI]);
+    if (SHMUX != 0)  $fwrite(fd, " shmux=%0s", shmux_name[SHMUX]);
+    if (STOPC != 20) $fwrite(fd, " stopc=%0s", stopc_name[STOPC]);
+    if (MOD   != 0)  $fwrite(fd, " MOD");
+    if (PSHF  != 64) $fwrite(fd, " pshf=%0d", int'(PSHF) - 64);
+    if (MNSA  != 2)  $fwrite(fd, " mnsa=%0s", mnsa_name[MNSA]);
+    if (MODNM != 0)  $fwrite(fd, " modnm=%0s", modnm_name[MODNM]);
+    if (DSRC  != 0)  $fwrite(fd, " dsrc=%0s", dsrc_name[DSRC]);
+    if (YDST  != 0)  $fwrite(fd, " ydst=%0s", ydst_name[YDST]);
+    if (SHF   != 0)  $fwrite(fd, " shf=%0s", shf_name[SHF]);
+    if (ARBI  != 0)  $fwrite(fd, " arbi=%0s", arbi_name[ARBI]);
+    if (RLD   != 0)  $fwrite(fd, " RLD");
+    if (LETC  != 0)  $fwrite(fd, " LETC");
+    if (SCI   != 0)  $fwrite(fd, " SCI");
+    if (ICI   != 0)  $fwrite(fd, " ICI");
+    if (ICC   != 0)  $fwrite(fd, " ICC");
+    if (ISE   != 0)  $fwrite(fd, " ISE");
+    if (CEM   != 0)  $fwrite(fd, " CEM");
+    if (CEN   != 0)  $fwrite(fd, " CEN");
+    if (CSM   != 0)  $fwrite(fd, " CSM");
+    if (WEM   != 0)  $fwrite(fd, " WEM");
+    if (ECB   != 0)  $fwrite(fd, " ECB");
+    if (WRB   != 0)  $fwrite(fd, " WRB");
+    if (BRA   != 3)  $fwrite(fd, " bra=%0s", bra_name[BRA]);
+    if (ECA   != 0)  $fwrite(fd, " ECA");
+    if (WRA   != 0)  $fwrite(fd, " WRA");
+    if (ARA   != 3)  $fwrite(fd, " ara=%0s", bra_name[ARA]);
+    if (YDEV  != 0)  $fwrite(fd, " ydev=%0s", ydev_name[YDEV]);
+    if (WRY   != 0)  $fwrite(fd, " WRY");
+    if (DDEV  != 0)  $fwrite(fd, " ddev=%0s", ddev_name[DDEV]);
+    if (WRD   != 0)  $fwrite(fd, " WRD");
 
-    if (cpu.IOMP  != 0)  $fwrite(fd, " IOMP mpadr=%0s", mpadr_name[cpu.MPADR]);
+    if (IOMP  != 0)  $fwrite(fd, " IOMP mpadr=%0s", mpadr_name[MPADR]);
     else
-    if (cpu.FFCNT != 0)  $fwrite(fd, " ffcnt=%0s", ffcnt_name[cpu.FFCNT]);
+    if (FFCNT != 0)  $fwrite(fd, " ffcnt=%0s", ffcnt_name[FFCNT]);
 
-    if (cpu.COND  != 0)  $fwrite(fd, " cond=%0s", cond_name[cpu.COND]);
-    if (cpu.MPS   != 0)  $fwrite(fd, " MPS");
+    if (COND  != 0)  $fwrite(fd, " cond=%0s", cond_name[COND]);
+    if (MPS   != 0)  $fwrite(fd, " MPS");
     $fdisplay(fd, "");
+
+    // Print reads, if any
+    if (DSRC == 12) begin
+        // Чтение ПЗУ констант
+        $fdisplay(fd, "(%0d) Read Const[%0d] = %h",
+            $time, const_addr, const_value);
+    end
 endtask
 
 //
@@ -397,7 +496,7 @@ task print_changed_2910();
     assign stack4 = cpu.control.reg_file[4];
     assign stack5 = cpu.control.reg_file[5];
 
-    if (sp !== old_sp) begin $fdisplay(fd, "(%0d) control.SP = %h", $time, sp); old_sp = sp; end
+    if (sp !== old_sp) begin $fdisplay(fd, "(%0d) Write control.SP = %h", $time, sp); old_sp = sp; end
     if (stack0 !== old_stack0) begin $fdisplay(fd, "(%0d) Write control.Stack0 = %h", $time, stack0); old_stack0 = stack0; end
     if (stack1 !== old_stack1) begin $fdisplay(fd, "(%0d) Write control.Stack1 = %h", $time, stack1); old_stack1 = stack1; end
     if (stack2 !== old_stack2) begin $fdisplay(fd, "(%0d) Write control.Stack2 = %h", $time, stack2); old_stack2 = stack2; end
