@@ -1,16 +1,18 @@
+`default_nettype none
+
 //
 // Am2902 - High-Speed Look-Ahead Carry Generator
 //
 module am2902(
-    input        Cin,       // Carry-in input N
-    input        nG0,       // Generate term input 0
-    input        nP0,       // Propagate term input 0
-    input        nG1,       // Generate term input 1
-    input        nP1,       // Propagate term input 1
-    input        nG2,       // Generate term input 2
-    input        nP2,       // Propagate term input 2
-    input        nG3,       // Generate term input 3
-    input        nP3,       // Propagate term input 3
+    input  wire  Cin,       // Carry-in input N
+    input  wire  nG0,       // Generate term input 0
+    input  wire  nP0,       // Propagate term input 0
+    input  wire  nG1,       // Generate term input 1
+    input  wire  nP1,       // Propagate term input 1
+    input  wire  nG2,       // Generate term input 2
+    input  wire  nP2,       // Propagate term input 2
+    input  wire  nG3,       // Generate term input 3
+    input  wire  nP3,       // Propagate term input 3
     output logic Cout1,     // Carry-out output N+1
     output logic Cout2,     // Carry-out output N+2
     output logic Cout3,     // Carry-out output N+3

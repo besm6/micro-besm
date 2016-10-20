@@ -1,6 +1,11 @@
+`default_nettype none
+
+//
+// Micro-BESM processor
+//
 module cpu(
-    input               clk,    // Clock
-    input               reset   // Global reset
+    input wire          clk,    // Clock
+    input wire          reset   // Global reset
     //TODO
 );
 
@@ -74,6 +79,9 @@ logic        ss_CO;             // Carry multiplexer output
 // Global data bus Y
 logic [63:0] Y;
 
+// Мультиплексор условий
+logic condition, condmux;
+
 //--------------------------------------------------------------
 // Microinstruction control unit.
 //
@@ -118,11 +126,7 @@ assign control_I    = SQI;      // Four-bit instruction
 assign control_nRLD = RLD;      // Unconditional load bit for register/counter
 
 // Carry-in bit for microprogram counter
-assign control_CI = '1;
-//TODO:
-//assign control_CI = SCI ? '1 :
-//                    irq ? '0 :
-//                    ICI ? ~cond_mux : cond_mux;
+assign control_CI = (SCI ? condition : '1) ^ ICI;
 
 // 12-bit data input
 assign control_D =
@@ -135,32 +139,36 @@ assign control_D =
 //assign control_D = !control_nME & MOD ? pna_mod :
 //                   !control_nVE       ? pna_irq : x;
 
+assign control_nCC = condition;
+
+assign condition = condmux ^ ICC;
+
 // Выбор условия, подлежащего проверке.
 always_comb case (COND)
-      0: control_nCC = 0;       // YES, "да"
-      1: control_nCC = 1;       // NORMB, блокировка нормализации (БНОР)
-      2: control_nCC = 1;       // RNDB, блокировка округления (БОКР)
-      3: control_nCC = 1;       // OVRIB, блокировка прерывания по переполнению (БПП)
-      4: control_nCC = 1;       // BNB, блокировка выхода числа за диапазон БЭСМ-6 (ББЧ)
-      5: control_nCC = 1;       // OVRFTB, блокировка проверки переполнения поля упрятывания (БППУ)
-      6: control_nCC = 1;       // DRG, режим диспетчера
-      7: control_nCC = 1;       // EMLRG, режим эмуляции
-      8: control_nCC = 1;       // RCB, ППК
-      9: control_nCC = 1;       // CB, ПИА
-     10: control_nCC = 1;       // CEMLRG, РЭС, 20-й разряд PP (резерв)
-     11: control_nCC = ss_CT;   // CT, сигнал CT CYCC
-     12: control_nCC = 1;       // TR1, След1
-     13: control_nCC = 1;       // INTSTP, ПОП
-     14: control_nCC = 1;       // IR15, ИР15
-     15: control_nCC = 1;       // TKKB, TKK
-     16: control_nCC = 1;       // RUN, "пуск" от ПП
-     17: control_nCC = 1;       // NMLRDY, отсутствие готовности умножителя
-     19: control_nCC = 1;       // INT, признак наличия прерываний
-     20: control_nCC = 1;       // FULMEM, ОЗУ БМСП единицами заполнено
-     21: control_nCC = 1;       // ARBRDY, готовность арбитра
-     22: control_nCC = 1;       // TR0, След0
-     23: control_nCC = 1;       // CPMP, ОЗУ обмена "ЦП -> ПП" свободно
-default: control_nCC = 1;
+      0: condmux = 0;           // YES, "да"
+      1: condmux = 1;           // NORMB, блокировка нормализации (БНОР)
+      2: condmux = 1;           // RNDB, блокировка округления (БОКР)
+      3: condmux = 1;           // OVRIB, блокировка прерывания по переполнению (БПП)
+      4: condmux = 1;           // BNB, блокировка выхода числа за диапазон БЭСМ-6 (ББЧ)
+      5: condmux = 1;           // OVRFTB, блокировка проверки переполнения поля упрятывания (БППУ)
+      6: condmux = 1;           // DRG, режим диспетчера
+      7: condmux = 1;           // EMLRG, режим эмуляции
+      8: condmux = 1;           // RCB, ППК
+      9: condmux = 1;           // CB, ПИА
+     10: condmux = 1;           // CEMLRG, РЭС, 20-й разряд PP (резерв)
+     11: condmux = ss_CT;       // CT, сигнал CT CYCC
+     12: condmux = 1;           // TR1, След1
+     13: condmux = 1;           // INTSTP, ПОП
+     14: condmux = 1;           // IR15, ИР15
+     15: condmux = 1;           // TKKB, TKK
+     16: condmux = 1;           // RUN, "пуск" от ПП
+     17: condmux = 1;           // NMLRDY, отсутствие готовности умножителя
+     19: condmux = 1;           // INT, признак наличия прерываний
+     20: condmux = 1;           // FULMEM, ОЗУ БМСП единицами заполнено
+     21: condmux = 1;           // ARBRDY, готовность арбитра
+     22: condmux = 1;           // TR0, След0
+     23: condmux = 1;           // CPMP, ОЗУ обмена "ЦП -> ПП" свободно
+default: condmux = 1;
 endcase
 
 //--------------------------------------------------------------
@@ -213,7 +221,7 @@ assign CEM   = opcode[32];      // Разрешение записи в маши
 assign CEN   = opcode[31];      // Разрешение записи в микромашинный регистр состояния N CYCC
 assign CSM   = opcode[30];      // Управление обращением к ОЗУ модификаторов
 assign WEM   = opcode[29];      // Разрешение записи в ОЗУ модификаторов
-assign ECB   = opcode[28];      // Выбор канал а B БОИ данных
+assign ECB   = opcode[28];      // Выбор канала B БОИ данных
 assign WRB   = opcode[27];      // Запись по каналу B в БОИ данных и БОИ тега
 assign BRA   = opcode[26:25];   // Адрес регистра канала B БОИ даннных и БОИ тега
 assign ECA   = opcode[24];      // Выбор канала A БОИ данных
@@ -252,7 +260,7 @@ assign alu_I = {ALUD, FUNC, ALUS};
 assign alu_A = RA;
 assign alu_B = RB;
 assign alu_mode32 = H;
-assign alu_C0 = ss_CO;
+assign alu_C0 = condition;
 
 // Управление источниками информации на шину D.
 assign alu_D =

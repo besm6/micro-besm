@@ -1,3 +1,5 @@
+`default_nettype none
+
 //
 // K1802BB1 - Multiport RAM 4x4
 //

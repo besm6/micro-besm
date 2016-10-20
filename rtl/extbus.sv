@@ -1,3 +1,5 @@
+`default_nettype none
+
 //
 // External bus interface, based on K1802BB1 four-port 4-bit RAM chip.
 //

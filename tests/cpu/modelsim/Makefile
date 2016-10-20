@@ -20,7 +20,7 @@ clean:
 
 work:           $(SOURCES)
 		[ -d word ] || $(MODELSIM)/vlib work
-		$(MODELSIM)/vlog -sv $(SOURCES)
+		$(MODELSIM)/vlog -sv -nologo $(SOURCES)
 
 run:            work
 		$(MODELSIM)/vsim -c -l run.log -do 'run 1us;quit' testbench +trace=2 +dump +limit=500

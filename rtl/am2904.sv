@@ -1,41 +1,43 @@
+`default_nettype none
+
 //
 // Am2904 - Status and Shift Control Unit
 //
 module am2904(
-    input [12:0] I,         // Instruction
+    input  wire [12:0] I,         // Instruction
 
-    input        clk,       // Clock
-    input        nCEm,      // Machine status register enable
-    input        nCEu,      // Micro status register enable
-    input        nOEy,      // Y output enable
-    input        Ic,        // Carry status from ALU
-    input        Iovr,      // Overflow status from ALU
-    input        In,        // Sign status from ALU
-    input        Iz,        // Zero status from ALU
-    input        nEz,       // Zero status enable
-    input        nEc,       // Carry status enable
-    input        nEn,       // Sign status enable
-    input        nEovr,     // Overflow status enable
-    input        Yz,        // Zero status bus input
-    input        Yc,        // Carry status bus input
-    input        Yn,        // Sign status bus input
-    input        Yovr,      // Overflow status bus input
+    input  wire  clk,       // Clock
+    input  wire  nCEm,      // Machine status register enable
+    input  wire  nCEu,      // Micro status register enable
+    input  wire  nOEy,      // Y output enable
+    input  wire  Ic,        // Carry status from ALU
+    input  wire  Iovr,      // Overflow status from ALU
+    input  wire  In,        // Sign status from ALU
+    input  wire  Iz,        // Zero status from ALU
+    input  wire  nEz,       // Zero status enable
+    input  wire  nEc,       // Carry status enable
+    input  wire  nEn,       // Sign status enable
+    input  wire  nEovr,     // Overflow status enable
+    input  wire  Yz,        // Zero status bus input
+    input  wire  Yc,        // Carry status bus input
+    input  wire  Yn,        // Sign status bus input
+    input  wire  Yovr,      // Overflow status bus input
     output logic oYz,       // Output direction of the above signals
     output logic oYc,       // --//--
     output logic oYn,       // --//--
     output logic oYovr,     // --//--
 
-    input        nOEct,     // CT output enable
+    input  wire  nOEct,     // CT output enable
     output logic CT,        // Conditional test
 
-    input        Cx,        // Carry multiplexer in
+    input  wire  Cx,        // Carry multiplexer in
     output logic Co,        // Carry multiplexer out
 
-    input        nSE,       // Shift enable
-    input        SIO0,      // Serial shift, RAM0 of least significant slice
-    input        SIOn,      // Serial shift, RAM3 of most significant slice
-    input        QIO0,      // Serial shift, QIO0 of least significant slice
-    input        QIOn,      // Serial shift, QIO3 of most significant slice
+    input  wire  nSE,       // Shift enable
+    input  wire  SIO0,      // Serial shift, RAM0 of least significant slice
+    input  wire  SIOn,      // Serial shift, RAM3 of most significant slice
+    input  wire  QIO0,      // Serial shift, QIO0 of least significant slice
+    input  wire  QIOn,      // Serial shift, QIO3 of most significant slice
     output logic oSIO0,     // Output direction of the above signals
     output logic oSIOn,     // --//--
     output logic oQIO0,     // --//--

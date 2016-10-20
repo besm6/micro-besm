@@ -1,3 +1,5 @@
+`default_nettype none
+
 module standardizer(
     input       [64:1] dc;      // ,BB1
     input              pe;      // emulator

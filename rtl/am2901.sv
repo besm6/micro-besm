@@ -1,23 +1,25 @@
+`default_nettype none
+
 //
 // Am2901 - Four-Bit Bipolar Microprocessor Slice
 //
 module am2901(
-    input         [8:0] I,          // Instruction word
-    input         [3:0] Aadd,       // Address input to RAM (for read)
-    input         [3:0] Badd,       // Address input to RAM (for read/write)
-    input         [3:0] D,          // Data input to chip
+    input  wire   [8:0] I,          // Instruction word
+    input  wire   [3:0] Aadd,       // Address input to RAM (for read)
+    input  wire   [3:0] Badd,       // Address input to RAM (for read/write)
+    input  wire   [3:0] D,          // Data input to chip
     output logic  [3:0] Y,          // Data output from chip
-    input               RAM0,       // Up/down shifter port, LSB of RAM
-    input               RAM3,       // Up/down shifter port, MSB of RAM
-    input               Q0,         // Up/down shifter port, LSB of Q-register
-    input               Q3,         // Up/down shifter port, MSB of Q-register
+    input  wire         RAM0,       // Up/down shifter port, LSB of RAM
+    input  wire         RAM3,       // Up/down shifter port, MSB of RAM
+    input  wire         Q0,         // Up/down shifter port, LSB of Q-register
+    input  wire         Q3,         // Up/down shifter port, MSB of Q-register
     output logic        oRAM0,      // Output direction of the above signals
     output logic        oRAM3,      // --//--
     output logic        oQ0,        // --//--
     output logic        oQ3,        // --//--
-    input               clk,        // Clock
-    input               C0,         // Carry input to ALU
-    input               nOE,        // Tri-state driver for Y output
+    input  wire         clk,        // Clock
+    input  wire         C0,         // Carry input to ALU
+    input  wire         nOE,        // Tri-state driver for Y output
     output logic        C4,         // Carry output from ALU
     output logic        nG,         // Generate term from ALU for carry lookahead
     output logic        nP,         // Propagate term from ALU for carry lookahead
