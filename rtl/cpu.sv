@@ -1,12 +1,20 @@
 `default_nettype none
 
+`define TODO 'z
+
 //
 // Micro-BESM processor
 //
 module cpu(
-    input wire          clk,    // Clock
-    input wire          reset   // Global reset
-    //TODO
+    input  wire         clk,        // Clock
+    input  wire         reset,      // Global reset
+    input  wire  [63:0] i_data,     // data bus input
+    input  wire   [7:0] i_tag,      // tag bus input
+    output logic [63:0] o_ad,       // address/data output
+    output logic  [7:0] o_tag,      // tag output
+    output logic        o_astb,     // address strobe
+    output logic        o_rd,       // read op
+    output logic        o_wr        // write op
 );
 
 // Internal registers
@@ -82,6 +90,20 @@ logic [63:0] Y;
 // Мультиплексор условий
 logic condition, condmux;
 
+// External bus interface
+// Inputs
+logic [71:0] bus_DA, bus_DB;        // A, B data inputs
+logic [71:0] bus_DX;                // X data bus
+logic  [1:0] bus_ARX;               // X address input
+logic        bus_ECBTAG;            // B tag port enable
+logic        bus_ECX;               // X port enable
+logic        bus_WRX;               // X write enable
+
+// Outputs
+logic [71:0] bus_oDA, bus_oDB;      // A, B data outputs TODO
+logic [71:0] bus_oDC;               // C data output TODO
+logic [71:0] bus_oDX;               // X data output
+
 //--------------------------------------------------------------
 // Microinstruction control unit.
 //
@@ -146,28 +168,28 @@ assign condition = condmux ^ ICC;
 // Выбор условия, подлежащего проверке.
 always_comb case (COND)
       0: condmux = 0;           // YES, "да"
-      1: condmux = 1;           // NORMB, блокировка нормализации (БНОР)
-      2: condmux = 1;           // RNDB, блокировка округления (БОКР)
-      3: condmux = 1;           // OVRIB, блокировка прерывания по переполнению (БПП)
-      4: condmux = 1;           // BNB, блокировка выхода числа за диапазон БЭСМ-6 (ББЧ)
-      5: condmux = 1;           // OVRFTB, блокировка проверки переполнения поля упрятывания (БППУ)
-      6: condmux = 1;           // DRG, режим диспетчера
-      7: condmux = 1;           // EMLRG, режим эмуляции
-      8: condmux = 1;           // RCB, ППК
-      9: condmux = 1;           // CB, ПИА
-     10: condmux = 1;           // CEMLRG, РЭС, 20-й разряд PP (резерв)
+      1: condmux = `TODO;       // NORMB, блокировка нормализации (БНОР)
+      2: condmux = `TODO;       // RNDB, блокировка округления (БОКР)
+      3: condmux = `TODO;       // OVRIB, блокировка прерывания по переполнению (БПП)
+      4: condmux = `TODO;       // BNB, блокировка выхода числа за диапазон БЭСМ-6 (ББЧ)
+      5: condmux = `TODO;       // OVRFTB, блокировка проверки переполнения поля упрятывания (БППУ)
+      6: condmux = `TODO;       // DRG, режим диспетчера
+      7: condmux = `TODO;       // EMLRG, режим эмуляции
+      8: condmux = `TODO;       // RCB, ППК
+      9: condmux = `TODO;       // CB, ПИА
+     10: condmux = `TODO;       // CEMLRG, РЭС, 20-й разряд PP (резерв)
      11: condmux = ss_CT;       // CT, сигнал CT CYCC
-     12: condmux = 1;           // TR1, След1
-     13: condmux = 1;           // INTSTP, ПОП
-     14: condmux = 1;           // IR15, ИР15
-     15: condmux = 1;           // TKKB, TKK
-     16: condmux = 1;           // RUN, "пуск" от ПП
-     17: condmux = 1;           // NMLRDY, отсутствие готовности умножителя
-     19: condmux = 1;           // INT, признак наличия прерываний
-     20: condmux = 1;           // FULMEM, ОЗУ БМСП единицами заполнено
-     21: condmux = 1;           // ARBRDY, готовность арбитра
-     22: condmux = 1;           // TR0, След0
-     23: condmux = 1;           // CPMP, ОЗУ обмена "ЦП -> ПП" свободно
+     12: condmux = `TODO;       // TR1, След1
+     13: condmux = `TODO;       // INTSTP, ПОП
+     14: condmux = `TODO;       // IR15, ИР15
+     15: condmux = `TODO;       // TKKB, TKK
+     16: condmux = `TODO;       // RUN, "пуск" от ПП
+     17: condmux = `TODO;       // NMLRDY, отсутствие готовности умножителя
+     19: condmux = `TODO;       // INT, признак наличия прерываний
+     20: condmux = `TODO;       // FULMEM, ОЗУ БМСП единицами заполнено
+     21: condmux = `TODO;       // ARBRDY, готовность арбитра
+     22: condmux = `TODO;       // TR0, След0
+     23: condmux = `TODO;       // CPMP, ОЗУ обмена "ЦП -> ПП" свободно
 default: condmux = 1;
 endcase
 
@@ -276,7 +298,14 @@ assign alu_D =
     (DSRC == 12) ? PROM :       // ПЗУ констант
                    '0;          // шина D не используется
 
-assign Y = ALU ? alu_Y : '0;    // Y bus output from ALU
+assign Y =
+    (YDEV == 1) ? bus_oDB[71:64] :  // ECBTAG, канал В БОИ тега
+    (YDEV == 2) ? `TODO :           // PHYSAD, физический адрес (только на чтение);
+    (YDEV == 3) ? `TODO :           // RADRR, регистр исполнительного адреса (чтение);
+    (YDEV == 4) ? `TODO :           // PSMEM, ОЗУ приписок (CS);
+    (YDEV == 5) ? `TODO :           // МРМЕМ, ОЗУ обмена с ПП;
+            ALU ? alu_Y :           // Y bus output from ALU
+                  '0;
 
 // Управление приемниками информации с шины Y ЦП.
 always @(posedge clk)
@@ -309,6 +338,8 @@ logic [3:0] IRA;                // поле модификатора коман�
 logic [31:0] irmem[1024];       // память регистров-модификаторов
 logic [4:0] mn;                 // номер модификатора
 
+assign IRA = `TODO;
+
 assign mn =
     (MNSA == 0) ? UREG[3:0] :   // регистр исполнительного адреса
     (MNSA == 1) ? IRA :         // поле модификатора команды
@@ -321,32 +352,31 @@ always @(posedge clk)
     end
 
 //--------------------------------------------------------------
-`ifdef notdef
-extbus boi(
-    input        [71:0] DA,     // A data bus input...
-    output logic [71:0] oDA,    // ...and output
-    input        [71:0] DB,     // B data bus input...
-    output logic [71:0] oDB,    // ...and output
-    input        [71:0] DC,     // C data bus input...
-    output logic [71:0] oDC,    // ...and output
-    input        [71:0] DX,     // X data bus input...
-    output logic [71:0] oDX,    // ...and output
+// External bus interface
+//
+assign bus_ECBTAG = (YDEV == 1);    // ydev=ECBTAG, выбор регистров БОИ тега
 
-    input         [1:0] AA,     // A address input
-    input         [1:0] AB,     // B address input
-    input         [1:0] AC,     // C address input
-    input         [1:0] AX,     // X address input
+assign bus_DA = alu_D;
+assign bus_DB = {Y[7:0], Y};
+assign bus_DX = {i_tag, i_data};
+assign o_ad   = bus_oDX[63:0];
+assign o_tag  = bus_oDX[71:64];
 
-    input               ECA,    // A port enable
-    input               ECB,    // B port enable
-    input               ECC,    // C port enable
-    input               ECX,    // X port enable
-
-    input               WA,     // A write enable
-    input               WB,     // B write enable
-    input               WC,     // C write enable
-    input               WX      // X write enable
+extbus busio(
+    bus_DA, bus_oDA,                    // A data bus
+    bus_DB, bus_oDB,                    // B data bus
+    '0,     bus_oDC,                    // C data bus
+    bus_DX, bus_oDX,                    // X data bus
+    ARA, BRA,          2'b01, bus_ARX,  // address inputs
+    ECA, ECB, bus_ECBTAG, '1, bus_ECX,  // port enable
+    WRA, WRB,             '0, bus_WRX   // write enable
 );
+
+//--------------------------------------------------------------
+// Arbiter
+//
+`ifdef notdef
+//TODO: signals bus_ARX, bus_ECX, bus_WRX, o_astb, o_rd, o_wr controlled by Arbiter
 
 arbiter arb(
     //TODO

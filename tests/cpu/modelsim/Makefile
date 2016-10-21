@@ -3,10 +3,12 @@
 #
 SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/datapath.sv \
+                  ../../../rtl/extbus.sv \
                   ../../../rtl/am2901.sv \
                   ../../../rtl/am2902.sv \
                   ../../../rtl/am2904.sv \
                   ../../../rtl/am2910.sv \
+                  ../../../rtl/k1802bb1.sv \
                   ../tracer.sv \
 		  ../test_cpu.sv
 

@@ -1,0 +1,217 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Thu Oct 20 19:36:34 2016
+[*]
+[dumpfile] "/local/Besm-6/micro-besm/tests/cpu/modelsim/output.vcd"
+[dumpfile_mtime] "Thu Oct 20 19:33:40 2016"
+[dumpfile_size] 130750
+[savefile] "/local/Besm-6/micro-besm/tests/cpu/modelsim/alu.gtkw"
+[timestart] 0
+[size] 1207 961
+[pos] -833 -307
+*-13.927478 21570 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testbench.
+[treeopen] testbench.cpu.
+[treeopen] testbench.cpu.alu.
+[sst_width] 235
+[signals_width] 150
+[sst_expanded] 1
+[sst_vpaned_height] 287
+@28
+testbench.clk
+testbench.reset
+@22
+testbench.cpu.control_D[11:0]
+testbench.cpu.A[11:0]
+testbench.cpu.alu_D[63:0]
+@200
+-
+@22
+#{testbench.cpu.alu.Ialu[8:0]} testbench.cpu.alu.Ialu[8] testbench.cpu.alu.Ialu[7] testbench.cpu.alu.Ialu[6] testbench.cpu.alu.Ialu[5] testbench.cpu.alu.Ialu[4] testbench.cpu.alu.Ialu[3] testbench.cpu.alu.Ialu[2] testbench.cpu.alu.Ialu[1] testbench.cpu.alu.Ialu[0]
+#{testbench.cpu.alu.A[3:0]} testbench.cpu.alu.A[3] testbench.cpu.alu.A[2] testbench.cpu.alu.A[1] testbench.cpu.alu.A[0]
+#{testbench.cpu.alu.B[3:0]} testbench.cpu.alu.B[3] testbench.cpu.alu.B[2] testbench.cpu.alu.B[1] testbench.cpu.alu.B[0]
+#{testbench.cpu.alu.D[63:0]} testbench.cpu.alu.D[63] testbench.cpu.alu.D[62] testbench.cpu.alu.D[61] testbench.cpu.alu.D[60] testbench.cpu.alu.D[59] testbench.cpu.alu.D[58] testbench.cpu.alu.D[57] testbench.cpu.alu.D[56] testbench.cpu.alu.D[55] testbench.cpu.alu.D[54] testbench.cpu.alu.D[53] testbench.cpu.alu.D[52] testbench.cpu.alu.D[51] testbench.cpu.alu.D[50] testbench.cpu.alu.D[49] testbench.cpu.alu.D[48] testbench.cpu.alu.D[47] testbench.cpu.alu.D[46] testbench.cpu.alu.D[45] testbench.cpu.alu.D[44] testbench.cpu.alu.D[43] testbench.cpu.alu.D[42] testbench.cpu.alu.D[41] testbench.cpu.alu.D[40] testbench.cpu.alu.D[39] testbench.cpu.alu.D[38] testbench.cpu.alu.D[37] testbench.cpu.alu.D[36] testbench.cpu.alu.D[35] testbench.cpu.alu.D[34] testbench.cpu.alu.D[33] testbench.cpu.alu.D[32] testbench.cpu.alu.D[31] testbench.cpu.alu.D[30] testbench.cpu.alu.D[29] testbench.cpu.alu.D[28] testbench.cpu.alu.D[27] testbench.cpu.alu.D[26] testbench.cpu.alu.D[25] testbench.cpu.alu.D[24] testbench.cpu.alu.D[23] testbench.cpu.alu.D[22] testbench.cpu.alu.D[21] testbench.cpu.alu.D[20] testbench.cpu.alu.D[19] testbench.cpu.alu.D[18] testbench.cpu.alu.D[17] testbench.cpu.alu.D[16] testbench.cpu.alu.D[15] testbench.cpu.alu.D[14] testbench.cpu.alu.D[13] testbench.cpu.alu.D[12] testbench.cpu.alu.D[11] testbench.cpu.alu.D[10] testbench.cpu.alu.D[9] testbench.cpu.alu.D[8] testbench.cpu.alu.D[7] testbench.cpu.alu.D[6] testbench.cpu.alu.D[5] testbench.cpu.alu.D[4] testbench.cpu.alu.D[3] testbench.cpu.alu.D[2] testbench.cpu.alu.D[1] testbench.cpu.alu.D[0]
+@28
+testbench.cpu.alu.C0
+testbench.cpu.alu.mode32
+@22
+testbench.cpu.alu.oYalu[63:0]
+@200
+-
+@22
+#{testbench.cpu.alu.Iss[12:0]} testbench.cpu.alu.Iss[12] testbench.cpu.alu.Iss[11] testbench.cpu.alu.Iss[10] testbench.cpu.alu.Iss[9] testbench.cpu.alu.Iss[8] testbench.cpu.alu.Iss[7] testbench.cpu.alu.Iss[6] testbench.cpu.alu.Iss[5] testbench.cpu.alu.Iss[4] testbench.cpu.alu.Iss[3] testbench.cpu.alu.Iss[2] testbench.cpu.alu.Iss[1] testbench.cpu.alu.Iss[0]
+@28
+testbench.cpu.alu.nCEM
+testbench.cpu.alu.nCEN
+@22
+testbench.cpu.alu.oYss[3:0]
+@28
+testbench.cpu.alu.CT
+testbench.cpu.alu.Css
+@200
+-
+@29
+testbench.cpu.alu.C
+@28
+testbench.cpu.alu.Co
+testbench.cpu.alu.N
+testbench.cpu.alu.PQ0
+testbench.cpu.alu.PQ63
+testbench.cpu.alu.PR0
+testbench.cpu.alu.PR63
+testbench.cpu.alu.V
+testbench.cpu.alu.Yc
+testbench.cpu.alu.Yn
+testbench.cpu.alu.Yovr
+testbench.cpu.alu.Yz
+testbench.cpu.alu.Z
+testbench.cpu.alu.Z3_0
+testbench.cpu.alu.Z7_4
+testbench.cpu.alu.Z11_8
+testbench.cpu.alu.Z15_12
+testbench.cpu.alu.Z19_16
+testbench.cpu.alu.Z23_20
+testbench.cpu.alu.Z27_24
+testbench.cpu.alu.Z31_28
+testbench.cpu.alu.Z35_32
+testbench.cpu.alu.Z39_36
+testbench.cpu.alu.Z43_40
+testbench.cpu.alu.Z47_44
+testbench.cpu.alu.Z51_48
+testbench.cpu.alu.Z55_52
+testbench.cpu.alu.Z59_56
+testbench.cpu.alu.Z63_60
+testbench.cpu.alu.c0
+testbench.cpu.alu.c4
+testbench.cpu.alu.c8
+testbench.cpu.alu.c12
+testbench.cpu.alu.c16
+testbench.cpu.alu.c20
+testbench.cpu.alu.c24
+testbench.cpu.alu.c28
+testbench.cpu.alu.c32
+testbench.cpu.alu.c36
+testbench.cpu.alu.c40
+testbench.cpu.alu.c44
+testbench.cpu.alu.c48
+testbench.cpu.alu.c52
+testbench.cpu.alu.c56
+testbench.cpu.alu.c60
+testbench.cpu.alu.c64
+testbench.cpu.alu.clk
+testbench.cpu.alu.n32
+testbench.cpu.alu.n64
+testbench.cpu.alu.nG0
+testbench.cpu.alu.nG4
+testbench.cpu.alu.nG8
+testbench.cpu.alu.nG12
+testbench.cpu.alu.nG16
+testbench.cpu.alu.nG20
+testbench.cpu.alu.nG24
+testbench.cpu.alu.nG28
+testbench.cpu.alu.nG32
+testbench.cpu.alu.nG36
+testbench.cpu.alu.nG40
+testbench.cpu.alu.nG44
+testbench.cpu.alu.nG48
+testbench.cpu.alu.nG52
+testbench.cpu.alu.nG56
+testbench.cpu.alu.nG60
+testbench.cpu.alu.nGx0
+testbench.cpu.alu.nGx1
+testbench.cpu.alu.nGx2
+testbench.cpu.alu.nGx3
+testbench.cpu.alu.nP0
+testbench.cpu.alu.nP4
+testbench.cpu.alu.nP8
+testbench.cpu.alu.nP12
+testbench.cpu.alu.nP16
+testbench.cpu.alu.nP20
+testbench.cpu.alu.nP24
+testbench.cpu.alu.nP28
+testbench.cpu.alu.nP32
+testbench.cpu.alu.nP36
+testbench.cpu.alu.nP40
+testbench.cpu.alu.nP44
+testbench.cpu.alu.nP48
+testbench.cpu.alu.nP52
+testbench.cpu.alu.nP56
+testbench.cpu.alu.nP60
+testbench.cpu.alu.nPx0
+testbench.cpu.alu.nPx1
+testbench.cpu.alu.nPx2
+testbench.cpu.alu.nPx3
+testbench.cpu.alu.oQ0
+testbench.cpu.alu.oQ63
+testbench.cpu.alu.oR0
+testbench.cpu.alu.oR63
+testbench.cpu.alu.oYc
+testbench.cpu.alu.oYn
+testbench.cpu.alu.oYovr
+testbench.cpu.alu.oYz
+testbench.cpu.alu.q3
+testbench.cpu.alu.q4
+testbench.cpu.alu.q7
+testbench.cpu.alu.q8
+testbench.cpu.alu.q11
+testbench.cpu.alu.q12
+testbench.cpu.alu.q15
+testbench.cpu.alu.q16
+testbench.cpu.alu.q19
+testbench.cpu.alu.q20
+testbench.cpu.alu.q23
+testbench.cpu.alu.q24
+testbench.cpu.alu.q27
+testbench.cpu.alu.q28
+testbench.cpu.alu.q31
+testbench.cpu.alu.q32
+testbench.cpu.alu.q35
+testbench.cpu.alu.q36
+testbench.cpu.alu.q39
+testbench.cpu.alu.q40
+testbench.cpu.alu.q43
+testbench.cpu.alu.q44
+testbench.cpu.alu.q47
+testbench.cpu.alu.q48
+testbench.cpu.alu.q51
+testbench.cpu.alu.q52
+testbench.cpu.alu.q55
+testbench.cpu.alu.q56
+testbench.cpu.alu.q59
+testbench.cpu.alu.q60
+testbench.cpu.alu.r3
+testbench.cpu.alu.r4
+testbench.cpu.alu.r7
+testbench.cpu.alu.r8
+testbench.cpu.alu.r11
+testbench.cpu.alu.r12
+testbench.cpu.alu.r15
+testbench.cpu.alu.r16
+testbench.cpu.alu.r19
+testbench.cpu.alu.r20
+testbench.cpu.alu.r23
+testbench.cpu.alu.r24
+testbench.cpu.alu.r27
+testbench.cpu.alu.r28
+testbench.cpu.alu.r31
+testbench.cpu.alu.r32
+testbench.cpu.alu.r35
+testbench.cpu.alu.r36
+testbench.cpu.alu.r39
+testbench.cpu.alu.r40
+testbench.cpu.alu.r43
+testbench.cpu.alu.r44
+testbench.cpu.alu.r47
+testbench.cpu.alu.r48
+testbench.cpu.alu.r51
+testbench.cpu.alu.r52
+testbench.cpu.alu.r55
+testbench.cpu.alu.r56
+testbench.cpu.alu.r59
+testbench.cpu.alu.r60
+testbench.cpu.alu.v32
+testbench.cpu.alu.v64
+testbench.cpu.alu.z32
+testbench.cpu.alu.z64
+[pattern_trace] 1
+[pattern_trace] 0

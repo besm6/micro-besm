@@ -4,36 +4,36 @@
 // K1802BB1 - Multiport RAM 4x4
 //
 module k1802bb1(
-    input        [3:0] nDA,     // A data bus input...
+    input  wire  [3:0] nDA,     // A data bus input...
     output logic [3:0] onDA,    // ...and output
-    input        [3:0] nDB,     // B data bus input...
+    input  wire  [3:0] nDB,     // B data bus input...
     output logic [3:0] onDB,    // ...and output
-    input        [3:0] nDC,     // C data bus input...
+    input  wire  [3:0] nDC,     // C data bus input...
     output logic [3:0] onDC,    // ...and output
-    input        [3:0] nDX,     // X data bus input...
+    input  wire  [3:0] nDX,     // X data bus input...
     output logic [3:0] onDX,    // ...and output
 
-    input        [1:0] AA,      // A address input
-    input        [1:0] AB,      // B address input
-    input        [1:0] AC,      // C address input
-    input        [1:0] AX,      // X address input
+    input  wire  [1:0] AA,      // A address input
+    input  wire  [1:0] AB,      // B address input
+    input  wire  [1:0] AC,      // C address input
+    input  wire  [1:0] AX,      // X address input
 
-    input              nECA,    // A port enable
-    input              nECB,    // B port enable
-    input              nECC,    // C port enable
-    input              nECX,    // X port enable
+    input  wire        nECA,    // A port enable
+    input  wire        nECB,    // B port enable
+    input  wire        nECC,    // C port enable
+    input  wire        nECX,    // X port enable
 
-    input              nWA,     // A write enable
-    input              nWB,     // B write enable
-    input              nWC,     // C write enable
-    input              nWX,     // X write enable
+    input  wire        nWA,     // A write enable
+    input  wire        nWB,     // B write enable
+    input  wire        nWC,     // C write enable
+    input  wire        nWX,     // X write enable
 
-    input              nRA,     // A read enable
-    input              nRB,     // B read enable
-    input              nRC,     // C read enable
-    input              nRX,     // X read enable
+    input  wire        nRA,     // A read enable
+    input  wire        nRB,     // B read enable
+    input  wire        nRC,     // C read enable
+    input  wire        nRX,     // X read enable
 
-    input              nCI,     // counter input
+    input  wire        nCI,     // counter input
     output logic       nCO,     // counter overflow
     output logic       E        // counter equal flag RG0==RG3
 );
@@ -76,7 +76,7 @@ assign selX2 = !nECX & (AX == 2);   // port X selects RG2
 assign selX3 = !nECX & (AX == 3);   // port X selects RG3
 
 // Clock and enable signals for RGi.
-logic clk0, sel1, sel2, sel3;
+logic clk0, en1, en2, en3;
 
 assign clk0 = ((selA0 & !nWA) |     // clock for flip-flop RG0
                (selB0 & !nWB) |

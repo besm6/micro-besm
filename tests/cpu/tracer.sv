@@ -1,13 +1,17 @@
 //
 // Trace monitor.
 //
-module tracer(
-    input   clk,    // Clock
-    input   reset   // Global reset
-);
+module tracer();
 
 timeunit 1ns;
 timeprecision 10ps;
+
+//
+// Global clock and reset
+//
+logic clk, reset;
+assign clk   = cpu.clk;
+assign reset = cpu.reset;
 
 //
 // Descriptor of output trace file
