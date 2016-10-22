@@ -299,7 +299,8 @@ assign alu_D =
                    '0;          // шина D не используется
 
 assign Y =
-    (YDEV == 1) ? bus_oDB[71:64] :  // ECBTAG, канал В БОИ тега
+    (YDEV == 1 & !WRB) ?
+                  bus_oDB[71:64] :  // ECBTAG, канал В БОИ тега
     (YDEV == 2) ? `TODO :           // PHYSAD, физический адрес (только на чтение);
     (YDEV == 3) ? `TODO :           // RADRR, регистр исполнительного адреса (чтение);
     (YDEV == 4) ? `TODO :           // PSMEM, ОЗУ приписок (CS);
@@ -381,6 +382,13 @@ extbus busio(
 arbiter arb(
     //TODO
 );
+`else
+assign bus_ARX = 2'b11;
+assign bus_ECX = '0;
+assign bus_WRX = '0;
+assign o_astb = '0;
+assign o_rd = '0;
+assign o_wr = '0;
 `endif
 
 endmodule

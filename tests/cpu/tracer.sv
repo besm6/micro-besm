@@ -69,20 +69,30 @@ initial begin
             print_changed_2901();
             print_changed_2904();
             print_changed_2910();
-            //print_changed_bb1();
             print_changed_cpu(opcode);
-
-            //TODO: печать памяти модификаторов и таблицы приписки
         end
 
+        // Print memory transactions
+        if (!testbench.o_astb && testbench.o_wr)
+            $fdisplay(fd, "(%0d)               Memory Store [%h] = %h:%h",
+                $time, testbench.waddr, testbench.o_tag, testbench.o_ad);
+        else if (!testbench.o_astb && testbench.o_rd)
+            $fdisplay(fd, "(%0d)               Memory Load [%h] = %h:%h",
+                $time, testbench.waddr, testbench.i_tag, testbench.i_data);
+
         //TODO: print_insn();               // Print instruction
+
+        if (testbench.trace > 1 && !$isunknown(pc_x)) begin
+            // Print changed busio state _last_,
+            // as it actually comes from the _next_ microinstruction.
+            print_changed_bb1();
+        end
 
         // Get data from fetch stage
         pc_x = pc_f;
         opcode = cpu.opcode;
         const_value = cpu.PROM;
         const_addr = cpu.A[8:0];
-
 
         wait(!clk);
     end
@@ -384,14 +394,39 @@ task print_uop(
     if (ARBI != 0)
         $fdisplay(fd, "(%0d) *** arbi=%0s not implemented yet!",
             $time, arbi_name[ARBI]);
-    if (WRA != 0)
-        $fdisplay(fd, "(%0d) *** WRA not implemented yet!", $time);
-    if (WRB != 0)
-        $fdisplay(fd, "(%0d) *** WRB not implemented yet!", $time);
     if (WRD != 0)
         $fdisplay(fd, "(%0d) *** WRD not implemented yet!", $time);
     if (WRY != 0)
         $fdisplay(fd, "(%0d) *** WRY not implemented yet!", $time);
+    case (COND)
+          1: $fdisplay(fd, "(%0d) *** cond=NORMB not implemented yet!", $time);
+          2: $fdisplay(fd, "(%0d) *** cond=RNDB not implemented yet!", $time);
+          3: $fdisplay(fd, "(%0d) *** cond=OVRIB not implemented yet!", $time);
+          4: $fdisplay(fd, "(%0d) *** cond=BNB not implemented yet!", $time);
+          5: $fdisplay(fd, "(%0d) *** cond=OVRFTB not implemented yet!", $time);
+          6: $fdisplay(fd, "(%0d) *** cond=DRG not implemented yet!", $time);
+          7: $fdisplay(fd, "(%0d) *** cond=EMLRG not implemented yet!", $time);
+          8: $fdisplay(fd, "(%0d) *** cond=RCB not implemented yet!", $time);
+          9: $fdisplay(fd, "(%0d) *** cond=CB not implemented yet!", $time);
+         10: $fdisplay(fd, "(%0d) *** cond=CEMLRG not implemented yet!", $time);
+         12: $fdisplay(fd, "(%0d) *** cond=TR1 not implemented yet!", $time);
+         13: $fdisplay(fd, "(%0d) *** cond=INTSTP not implemented yet!", $time);
+         14: $fdisplay(fd, "(%0d) *** cond=IR15 not implemented yet!", $time);
+         15: $fdisplay(fd, "(%0d) *** cond=TKKB not implemented yet!", $time);
+         16: $fdisplay(fd, "(%0d) *** cond=RUN not implemented yet!", $time);
+         17: $fdisplay(fd, "(%0d) *** cond=NMLRDY not implemented yet!", $time);
+         19: $fdisplay(fd, "(%0d) *** cond=INT not implemented yet!", $time);
+         20: $fdisplay(fd, "(%0d) *** cond=FULMEM not implemented yet!", $time);
+         21: $fdisplay(fd, "(%0d) *** cond=ARBRDY not implemented yet!", $time);
+         22: $fdisplay(fd, "(%0d) *** cond=TR0 not implemented yet!", $time);
+         23: $fdisplay(fd, "(%0d) *** cond=CPMP not implemented yet!", $time);
+    endcase
+    case (YDEV)
+        2: $fdisplay(fd, "(%0d) *** ydev=PHYSAD not implemented yet!", $time);
+        3: $fdisplay(fd, "(%0d) *** ydev=RADRR not implemented yet!", $time);
+        4: $fdisplay(fd, "(%0d) *** ydev=PSMEM not implemented yet!", $time);
+        5: $fdisplay(fd, "(%0d) *** ydev=МРМЕМ not implemented yet!", $time);
+    endcase
 endtask
 
 //
@@ -533,6 +568,41 @@ task print_changed_2910();
 endtask
 
 //
+// Print changed state of K1802BB1 chip
+//
+task print_changed_bb1();
+    logic [63:0] rg0;
+    static logic [63:0] old_rg0;
+    logic [71:0] rg1, rg2, rg3;
+    static logic [71:0] old_rg1, old_rg2, old_rg3;
+
+    assign rg0 = { cpu.busio.b60_63.RG[0], cpu.busio.b56_59.RG[0], cpu.busio.b52_55.RG[0], cpu.busio.b48_51.RG[0],
+                   cpu.busio.b44_47.RG[0], cpu.busio.b40_43.RG[0], cpu.busio.b36_39.RG[0], cpu.busio.b32_35.RG[0],
+                   cpu.busio.b28_31.RG[0], cpu.busio.b24_27.RG[0], cpu.busio.b20_23.RG[0], cpu.busio.b16_19.RG[0],
+                   cpu.busio.b12_15.RG[0], cpu.busio.b8_11.RG[0],  cpu.busio.b4_7.RG[0],   cpu.busio.b0_3.RG[0] };
+    assign rg1 = { cpu.busio.b68_71.RG[1], cpu.busio.b64_67.RG[1],
+                   cpu.busio.b60_63.RG[1], cpu.busio.b56_59.RG[1], cpu.busio.b52_55.RG[1], cpu.busio.b48_51.RG[1],
+                   cpu.busio.b44_47.RG[1], cpu.busio.b40_43.RG[1], cpu.busio.b36_39.RG[1], cpu.busio.b32_35.RG[1],
+                   cpu.busio.b28_31.RG[1], cpu.busio.b24_27.RG[1], cpu.busio.b20_23.RG[1], cpu.busio.b16_19.RG[1],
+                   cpu.busio.b12_15.RG[1], cpu.busio.b8_11.RG[1],  cpu.busio.b4_7.RG[1],   cpu.busio.b0_3.RG[1] };
+    assign rg2 = { cpu.busio.b68_71.RG[2], cpu.busio.b64_67.RG[2],
+                   cpu.busio.b60_63.RG[2], cpu.busio.b56_59.RG[2], cpu.busio.b52_55.RG[2], cpu.busio.b48_51.RG[2],
+                   cpu.busio.b44_47.RG[2], cpu.busio.b40_43.RG[2], cpu.busio.b36_39.RG[2], cpu.busio.b32_35.RG[2],
+                   cpu.busio.b28_31.RG[2], cpu.busio.b24_27.RG[2], cpu.busio.b20_23.RG[2], cpu.busio.b16_19.RG[2],
+                   cpu.busio.b12_15.RG[2], cpu.busio.b8_11.RG[2],  cpu.busio.b4_7.RG[2],   cpu.busio.b0_3.RG[2] };
+    assign rg3 = { cpu.busio.b68_71.RG[3], cpu.busio.b64_67.RG[3],
+                   cpu.busio.b60_63.RG[3], cpu.busio.b56_59.RG[3], cpu.busio.b52_55.RG[3], cpu.busio.b48_51.RG[3],
+                   cpu.busio.b44_47.RG[3], cpu.busio.b40_43.RG[3], cpu.busio.b36_39.RG[3], cpu.busio.b32_35.RG[3],
+                   cpu.busio.b28_31.RG[3], cpu.busio.b24_27.RG[3], cpu.busio.b20_23.RG[3], cpu.busio.b16_19.RG[3],
+                   cpu.busio.b12_15.RG[3], cpu.busio.b8_11.RG[3],  cpu.busio.b4_7.RG[3],   cpu.busio.b0_3.RG[3] };
+
+    if (rg0 !== old_rg0) begin $fdisplay(fd, "(%0d)               Write bus.RG0 = %h", $time, rg0); old_rg0 = rg0; end
+    if (rg1 !== old_rg1) begin $fdisplay(fd, "(%0d)               Write bus.RG1 = %h", $time, rg1); old_rg1 = rg1; end
+    if (rg2 !== old_rg2) begin $fdisplay(fd, "(%0d)               Write bus.RG2 = %h", $time, rg2); old_rg2 = rg2; end
+    if (rg3 !== old_rg3) begin $fdisplay(fd, "(%0d)               Write bus.RG3 = %h", $time, rg3); old_rg3 = rg3; end
+endtask
+
+//
 // Print changed state of internal CPU registers
 //
 task print_changed_cpu(
@@ -598,6 +668,8 @@ task print_changed_cpu(
                 old_irmem[i] = cpu.irmem[i];
             end
     end
+
+    //TODO: печать таблицы приписки
 endtask
 
 endmodule
