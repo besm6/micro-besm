@@ -1,3 +1,5 @@
+`default_nettype none
+
 // Global time parameters.
 timeunit 1ns;
 timeprecision 10ps;

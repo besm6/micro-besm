@@ -1,3 +1,5 @@
+`default_nettype none
+
 //
 // Trace monitor.
 //
@@ -394,10 +396,14 @@ task print_uop(
     if (ARBI != 0)
         $fdisplay(fd, "(%0d) *** arbi=%0s not implemented yet!",
             $time, arbi_name[ARBI]);
+    if (FFCNT != 0 && !IOMP)
+        $fdisplay(fd, "(%0d) *** ffcnt=%0s not implemented yet!",
+            $time, ffcnt_name[FFCNT]);
     if (WRD != 0)
         $fdisplay(fd, "(%0d) *** WRD not implemented yet!", $time);
-    if (WRY != 0)
-        $fdisplay(fd, "(%0d) *** WRY not implemented yet!", $time);
+    if (DDEV != 0)
+        $fdisplay(fd, "(%0d) *** ddev=%0s not implemented yet!",
+            $time, ddev_name[DDEV]);
     case (COND)
           1: $fdisplay(fd, "(%0d) *** cond=NORMB not implemented yet!", $time);
           2: $fdisplay(fd, "(%0d) *** cond=RNDB not implemented yet!", $time);
@@ -423,9 +429,6 @@ task print_uop(
     endcase
     case (YDEV)
         2: $fdisplay(fd, "(%0d) *** ydev=PHYSAD not implemented yet!", $time);
-        3: $fdisplay(fd, "(%0d) *** ydev=RADRR not implemented yet!", $time);
-        4: $fdisplay(fd, "(%0d) *** ydev=PSMEM not implemented yet!", $time);
-        5: $fdisplay(fd, "(%0d) *** ydev=МРМЕМ not implemented yet!", $time);
     endcase
 endtask
 
@@ -615,6 +618,8 @@ task print_changed_cpu(
     logic  [3:0] arbopc;
     logic [31:0] ureg;
     logic  [6:0] pshift;
+    logic  [2:0] ydev;
+    logic        stopm0, stopm1;
     static logic  [5:0] old_modgn;
     static logic  [7:0] old_procn;
     static logic [31:0] old_cnt;
@@ -623,6 +628,9 @@ task print_changed_cpu(
     static logic [31:0] old_ureg;
     static logic  [6:0] old_pshift;
     static logic [31:0] old_irmem[1024];
+    static logic  [7:0] old_mpmem[16];
+    static logic [19:0] old_psmem[1024];
+    static logic        old_stopm0, old_stopm1;
     static string ir_name[32] = '{
         0:"М0",     1:"М1",     2:"М2",     3:"М3",
         4:"М4",     5:"М5",     6:"М6",     7:"М7",
@@ -633,7 +641,13 @@ task print_changed_cpu(
         24:"ACR",   25:"YCL",   26:"YCR",   27:"РСС",
         28:"РССС",  29:"SVFA",  30:"PROCNC",31:"MREZ"
     };
-    logic csm, wem;
+    static string mpadr_name[16] = '{
+        0: "INFB1", 1: "INFB2", 2: "FCP",   3: "FMP",
+        4: "ADRB1", 5: "ADRB2", 6: "ADRB3", 7: "ADRB4",
+        8: "DATAB1",9: "DATAB2",10:"DATAB3",11:"DATAB4",
+        12:"DATAB5",13:"DATAB6",14:"DATAB7",15:"DATAB8"
+    };
+    logic csm, wem, wry;
 
     assign modgn  = cpu.MODGN;
     assign procn  = cpu.PROCN;
@@ -642,6 +656,8 @@ task print_changed_cpu(
     assign arbopc = cpu.ARBOPC;
     assign ureg   = cpu.UREG;
     assign pshift = cpu.PSHIFT;
+    assign stopm0 = cpu.stopm0;
+    assign stopm1 = cpu.stopm1;
 
     //
     // Internal registers
@@ -653,12 +669,14 @@ task print_changed_cpu(
     if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d)               Write ARBOPC = %h", $time, arbopc); old_arbopc = arbopc; end
     if (ureg   !== old_ureg)   begin $fdisplay(fd, "(%0d)               Write UREG = %h",   $time, ureg);   old_ureg   = ureg;   end
     if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d)               Write PSHIFT = %h", $time, pshift); old_pshift = pshift; end
+    if (stopm0 !== old_stopm0) begin $fdisplay(fd, "(%0d)               Write STOPM0 = %h", $time, stopm0); old_stopm0 = stopm0; end
+    if (stopm1 !== old_stopm1) begin $fdisplay(fd, "(%1d)               Write STOPM1 = %h", $time, stopm1); old_stopm1 = stopm1; end
 
     //
     // Index-registers
     //
-    assign csm = opcode[30];      // Управление обращением к ОЗУ модификаторов
-    assign wem = opcode[29];      // Разрешение записи в ОЗУ модификаторов
+    assign csm = opcode[30];        // Управление обращением к ОЗУ модификаторов
+    assign wem = opcode[29];        // Разрешение записи в ОЗУ модификаторов
     if (csm & wem) begin
         int i;
         for (i=old_modgn*32; i<old_modgn*32+32; i+=1)
@@ -669,7 +687,33 @@ task print_changed_cpu(
             end
     end
 
-    //TODO: печать таблицы приписки
+    //
+    // I/O memory for console processor
+    //
+    assign wry = opcode[17];        // Запись в источники или приемники шины Y
+    assign ydev = opcode[20:18];    // Выбор источника или приемника информации с шины Y
+    if (wry && ydev==5) begin
+        int i;
+        for (i=0; i<16; i+=1)
+            if (cpu.mpmem[i] !== old_mpmem[i]) begin
+                $fdisplay(fd, "(%0d)               Write %0s = %h",
+                    $time, mpadr_name[i], cpu.mpmem[i]);
+                old_mpmem[i] = cpu.mpmem[i];
+            end
+    end
+
+    //
+    // Page map
+    //
+    if (wry && ydev==4) begin
+        int i;
+        for (i=0; i<1024; i+=1)
+            if (cpu.psmem[i] !== old_psmem[i]) begin
+                $fdisplay(fd, "(%0d)               Write Page[%0d] = %h",
+                    $time, i, cpu.psmem[i]);
+                old_psmem[i] = cpu.psmem[i];
+            end
+    end
 endtask
 
 endmodule

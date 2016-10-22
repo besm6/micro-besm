@@ -87,6 +87,14 @@ logic        ss_CO;             // Carry multiplexer output
 // Global data bus Y
 logic [63:0] Y;
 
+logic stopm0, stopm1;           // Флаги останова
+
+// Память обмена с пультовым процессором
+logic [7:0] mpmem[16];
+
+// Память приписок страниц
+logic [19:0] psmem[1024];
+
 // Мультиплексор условий
 logic condition, condmux;
 
@@ -186,10 +194,10 @@ always_comb case (COND)
      16: condmux = `TODO;       // RUN, "пуск" от ПП
      17: condmux = `TODO;       // NMLRDY, отсутствие готовности умножителя
      19: condmux = `TODO;       // INT, признак наличия прерываний
-     20: condmux = `TODO;       // FULMEM, ОЗУ БМСП единицами заполнено
+     20: condmux = `TODO;       // FULMEM, память БМСП заполнена единицами
      21: condmux = `TODO;       // ARBRDY, готовность арбитра
      22: condmux = `TODO;       // TR0, След0
-     23: condmux = `TODO;       // CPMP, ОЗУ обмена "ЦП -> ПП" свободно
+     23: condmux = `TODO;       // CPMP, память обмена "ЦП -> ПП" свободна
 default: condmux = 1;
 endcase
 
@@ -241,8 +249,8 @@ assign ICC   = opcode[34];      // Инверсия условий, выбира
 assign ISE   = opcode[33];      // Разрешение внешних и внутренних прерываний
 assign CEM   = opcode[32];      // Разрешение записи в машинный регистр состояния M CYCC
 assign CEN   = opcode[31];      // Разрешение записи в микромашинный регистр состояния N CYCC
-assign CSM   = opcode[30];      // Управление обращением к ОЗУ модификаторов
-assign WEM   = opcode[29];      // Разрешение записи в ОЗУ модификаторов
+assign CSM   = opcode[30];      // Управление обращением к памяти модификаторов
+assign WEM   = opcode[29];      // Разрешение записи в память модификаторов
 assign ECB   = opcode[28];      // Выбор канала B БОИ данных
 assign WRB   = opcode[27];      // Запись по каналу B в БОИ данных и БОИ тега
 assign BRA   = opcode[26:25];   // Адрес регистра канала B БОИ даннных и БОИ тега
@@ -273,7 +281,6 @@ assign PROM = const_ROM[A[8:0]];
 //--------------------------------------------------------------
 // Datapath: register file, ALU and status/shifts
 //
-
 datapath alu(clk,
     alu_I, alu_A, alu_B, alu_D, alu_C0, alu_mode32, alu_Y,
     ss_I, ss_nCEM, ss_nCEN, ss_Y, ss_CT, ss_CO);
@@ -286,7 +293,7 @@ assign alu_C0 = condition;
 
 // Управление источниками информации на шину D.
 assign alu_D =
-    (DSRC == 1)  ? {MODGN, 5'd0} : // регистр номера группы ОЗУ модификаторов
+    (DSRC == 1)  ? {MODGN, 5'd0} : // регистр номера группы памяти модификаторов
     (DSRC == 2)  ? PROCN :      // регистр номера процесса
     (DSRC == 3)  ? CNT :        // регистр режимов и триггеры признаков
     (DSRC == 4)  ? {PHYSPG, 11'd0} : // регистр физической страницы
@@ -299,14 +306,13 @@ assign alu_D =
                    '0;          // шина D не используется
 
 assign Y =
-    (YDEV == 1 & !WRB) ?
-                  bus_oDB[71:64] :  // ECBTAG, канал В БОИ тега
-    (YDEV == 2) ? `TODO :           // PHYSAD, физический адрес (только на чтение);
-    (YDEV == 3) ? `TODO :           // RADRR, регистр исполнительного адреса (чтение);
-    (YDEV == 4) ? `TODO :           // PSMEM, ОЗУ приписок (CS);
-    (YDEV == 5) ? `TODO :           // МРМЕМ, ОЗУ обмена с ПП;
-            ALU ? alu_Y :           // Y bus output from ALU
-                  '0;
+    (YDEV == 1 & !WRB) ? bus_oDB[71:64] :       // ECBTAG, канал В БОИ тега
+    (YDEV == 2 & !WRY) ? `TODO :                // PHYSAD, физический адрес (только на чтение);
+    (YDEV == 3 & !WRY) ? UREG :                 // RADRR, регистр исполнительного адреса (чтение);
+    (YDEV == 4 & !WRY) ? psmem[UREG[19:10]] :   // PSMEM, память приписок (CS);
+    (YDEV == 5 & !WRY) ? mpmem[MPADR] :         // МРМЕМ, память обмена с ПП;
+                   ALU ? alu_Y :                // Y bus output from ALU
+                         '0;
 
 // Управление приемниками информации с шины Y ЦП.
 always @(posedge clk)
@@ -319,6 +325,17 @@ always @(posedge clk)
      8: UREG   <= Y[31:0];      // регистр исполнительного адреса (запись)
      9: PSHIFT <= Y[6:0];       // регистр параметра сдвига (только запись)
     endcase
+
+// Запись в источники или приемники шины Y.
+always @(posedge clk)
+    if (WRY)
+        case (YDEV)
+        4: psmem[UREG[19:10]] <= Y[19:0];   // PSMEM, память приписок (CS)
+        5: mpmem[MPADR] <= Y[7:0];          // МРМЕМ, память обмена с ПП
+        6: stopm0 <= Y[0];                  // STOPM0, флаг останова 0
+        7: stopm1 <= Y[0];                  // STOPM1, флаг останова 1
+        endcase
+
 assign CCLR = (YDST == 10);     // запуск сброса кэша
 
 assign ss_I = {CI, alu_I[7], SHMUX, STOPC};
