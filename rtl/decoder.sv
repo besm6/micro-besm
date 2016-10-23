@@ -1,13 +1,13 @@
 `default_nettype none
 
 module decoder(
-    input  wire  [64:1] dc;     // instruction word
-    input  wire         pe;     // besm6 compatibility
-    input  wire         tkk;    // right half
-    output logic  [3:0] ir;     // modifier index
-    output logic  [7:0] op;     // opcode
-    output logic        extop;  // extended opcode flag
-    output logic [19:0] addr;   // address
+    input  wire  [64:1] dc,     // instruction word
+    input  wire         pe,     // besm6 compatibility
+    input  wire         tkk,    // right half
+    output logic  [3:0] ir,     // modifier index
+    output logic  [7:0] op,     // opcode
+    output logic        extop,  // extended opcode flag
+    output logic [19:0] addr    // address
 );
 logic [7:0] bop, xop;
 
@@ -38,9 +38,9 @@ assign op = extop ? xop : bop;
 // Address field
 assign addr =
     pe ? tkk ? dc[32] ? {5'd0, dc[27:13]}           // besm6 right half
-                      : {5'd0, 3{dc[31]}, dc[24:13]}
+                      : {5'd0, {3{dc[31]}}, dc[24:13]}
              : dc[56] ? {5'd0, dc[51:37]}           // besm6 left half
-                        {5'd0, 3{dc[55]}, dc[48:37]}
+                      : {5'd0, {3{dc[55]}}, dc[48:37]}
        : tkk ? dc[20:1]                             // right half
              : dc[52:33];                           // left half
 

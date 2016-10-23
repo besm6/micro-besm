@@ -20,7 +20,7 @@ work:           $(SOURCES)
 run:            work
 		$(MODELSIM)/vsim -c -l run.log -do 'run 100000us; quit' testbench
 
-gen:            work
+test_vectors.bits: work
 		$(MODELSIM)/vsim -c -l run.log -do 'run 100000us; quit' gen
 
 view:

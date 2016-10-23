@@ -19,13 +19,13 @@ module gen();
 
     logic [63:0] testset[1000];
     int nwords;
+    int fd;
 
     //
     // Return true when the word is already present in testset[].
     //
     function bit in_testset(logic [63:0] data);
-        int n;
-        for (n=0; n<nwords; n+=1)
+        for (int n=0; n<nwords; n+=1)
             if (data == testset[n])
                 return 1;
         return 0;
@@ -39,9 +39,10 @@ module gen();
         pe = besm6_mode;
         tkk = right_half;
         #1;
-        $display("%h %h %h %h %h %h %h\n", word, pe, tkk, ir, op, extop, addr);
+        $fdisplay(fd, "%b:%b:%b:%b:%b:%b:%b:",
+            word, pe, tkk, ir, op, extop, addr);
         #1;
-    endfunction
+    endtask
 
 initial begin
     $display("Generate test vectors for micro-BESM instruction decoder.");
@@ -50,13 +51,13 @@ initial begin
     // Generate test words.
     //
     nwords = 0;
-    for (n=0; n<64; n+=1) begin
+    for (int n=0; n<64; n+=1) begin
         // Running 1
         word = 64'd1 << n;
         testset[nwords] = word;
         nwords += 1;
     end
-    for (n=0; n<64; n+=1) begin
+    for (int n=0; n<64; n+=1) begin
         // Running 0
         word = ~(64'd1 << n);
         testset[nwords] = word;
@@ -64,7 +65,7 @@ initial begin
     end
 
     // Add bit 31
-    for (n=0; n<128; n+=1) begin
+    for (int n=0; n<64; n+=1) begin
         word = testset[n];
         word[31] = 1;
         if (!in_testset(word)) begin
@@ -74,7 +75,7 @@ initial begin
     end
 
     // Add bit 55
-    for (n=0; n<128; n+=1) begin
+    for (int n=0; n<64; n+=1) begin
         word = testset[n];
         word[55] = 1;
         if (!in_testset(word)) begin
@@ -84,7 +85,7 @@ initial begin
     end
 
     // Add 'h3f
-    for (n=0; n<128; n+=1) begin
+    for (int n=0; n<128; n+=1) begin
         word = testset[n];
         word[27:20] = 8'h3f;
         if (!in_testset(word)) begin
@@ -102,12 +103,21 @@ initial begin
     //
     // Run tests.
     //
-    for (n=0; n<nwords; n+=1) begin
+    fd = $fopen("test_vectors.bits", "w");
+    $fdisplay(fd, "***************************************************");
+    $fdisplay(fd, "* Test vectors for micro-BESM instruction decoder *");
+    $fdisplay(fd, "***************************************************");
+    $fdisplay(fd, "word:pe:tkk:ir:op:extop:addr:");
+    $fdisplay(fd, "in:in:in:out:out:out:out:");
+    $fdisplay(fd, "\":':':\":\":':\":");
+
+    for (int n=0; n<nwords; n+=1) begin
         check(testset[n], 0, 0);
         check(testset[n], 0, 1);
         check(testset[n], 1, 0);
         check(testset[n], 1, 1);
     end
+    $fclose(fd);
 
     $finish;
 end
