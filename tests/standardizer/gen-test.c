@@ -65,19 +65,11 @@ int main(int argc, char **argv)
     fprintf(outfptr, "    logic [19:0] addr;\n\n");
 
     fprintf(outfptr, "    // Device under test\n");
-    fprintf(outfptr, "    decoder dut(word, pe, tkk,\n");
+    fprintf(outfptr, "    standardizer dut(clk, word, pe, tkk,\n");
     fprintf(outfptr, "        ir, op, extop, addr);\n\n");
 
     fprintf(outfptr, "    // Status\n");
     fprintf(outfptr, "    bit fail;\n\n");
-
-    fprintf(outfptr, "    // Read value from the variable.\n");
-    fprintf(outfptr, "    task verify(input check, input string message);\n");
-    fprintf(outfptr, "        if (!check) begin\n");
-    fprintf(outfptr, "            $display (\"%%s\", message);\n");
-    fprintf(outfptr, "            fail = 1;\n");
-    fprintf(outfptr, "        end\n");
-    fprintf(outfptr, "    endtask\n\n");
 
     fprintf(outfptr, "initial begin\n");
     fprintf(outfptr, "$display(\"------------------------\");\n");
@@ -190,7 +182,7 @@ int main(int argc, char **argv)
 
                             fprintf(outfptr, "%s <= %s%s;\n",
                                 ports[field_cnt].name,
-                                ports[field_cnt].data_type[0] == '"' ? "'b" : "",
+                                ports[field_cnt].data_type[0] == 'h' ? "'h" : "",
                                 var[0]=='Z' ? "'z" : var);
                         }
                     }
@@ -220,14 +212,14 @@ int main(int argc, char **argv)
                         if (var[0] != '-') {
                             /* If the item is NOT marked blank in this line */
 
-                            fprintf(outfptr, "verify(%s === %s%s, ",
+                            fprintf(outfptr, "assert (%s === %s%s) else begin fail = 1; $display(",
                                 ports[field_cnt].name,
-                                ports[field_cnt].data_type[0] == '"' && var[0]!='Z' ? "'b" : "",
+                                ports[field_cnt].data_type[0] == 'h' && var[0]!='Z' ? "'h" : "",
                                 var[0]=='Z' ? "'z" : var);
-                            fprintf(outfptr, "\"Assert %i : < %s !== %s%s >\");",
+                            fprintf(outfptr, "\"Error %i: %s 'h%%h !== %s%s\", %s); end",
                                 assert_cnt, ports[field_cnt].name,
-                                ports[field_cnt].data_type[0] == '"' && var[0]!='Z' ? "'b" : "",
-                                var[0]=='Z' ? "'z" : var);
+                                ports[field_cnt].data_type[0] == 'h' && var[0]!='Z' ? "'h" : "",
+                                var[0]=='Z' ? "'z" : var, ports[field_cnt].name);
 
                             /* Vector Count is printed only when outputs are */
                             /* tested and that too only once for each vector */

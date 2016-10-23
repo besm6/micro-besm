@@ -4,6 +4,7 @@
 module gen();
 
     // Inputs.
+    logic        clk;
     logic [63:0] word;          // instruction word
     logic        pe;            // besm6 compatibility
     logic        tkk;           // right half
@@ -14,7 +15,7 @@ module gen();
     logic        extop;         // extended opcode flag
     logic [19:0] addr;          // address
 
-    decoder dut(word, pe, tkk,
+    decoder dut(clk, word, pe, tkk,
         ir, op, extop, addr);
 
     logic [63:0] testset[1000];
@@ -39,7 +40,7 @@ module gen();
         pe = besm6_mode;
         tkk = right_half;
         #1;
-        $fdisplay(fd, "%b:%b:%b:%b:%b:%b:%b:",
+        $fdisplay(fd, "%h:%h:%h:%h:%h:%h:%h:",
             word, pe, tkk, ir, op, extop, addr);
         #1;
     endtask
@@ -109,7 +110,7 @@ initial begin
     $fdisplay(fd, "***************************************************");
     $fdisplay(fd, "word:pe:tkk:ir:op:extop:addr:");
     $fdisplay(fd, "in:in:in:out:out:out:out:");
-    $fdisplay(fd, "\":':':\":\":':\":");
+    $fdisplay(fd, "h:':':h:h:':h:");
 
     for (int n=0; n<nwords; n+=1) begin
         check(testset[n], 0, 0);

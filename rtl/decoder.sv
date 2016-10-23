@@ -1,6 +1,7 @@
 `default_nettype none
 
 module decoder(
+    input  wire        clk,
     input  wire  [64:1] dc,     // instruction word
     input  wire         pe,     // besm6 compatibility
     input  wire         tkk,    // right half
@@ -20,7 +21,7 @@ assign ir =
 
 // Base opcode
 assign bop =
-    pe ? tkk ? dc[32] ? {dc[32:27], 3'd0}   // besm6 right half
+    pe ? tkk ? dc[32] ? {dc[32:28], 3'd0}   // besm6 right half
                       : dc[32:25]
              : dc[56] ? {dc[56:52], 3'd0}   // besm6 left half
                       : dc[56:49]

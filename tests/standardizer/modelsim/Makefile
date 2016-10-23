@@ -2,6 +2,7 @@
 # Using Mentor ModelSim
 #
 SOURCES         = ../../../rtl/decoder.sv \
+                  ../../../rtl/standardizer.sv \
 		  ../gen.sv \
 		  ../test_standardizer.sv
 
