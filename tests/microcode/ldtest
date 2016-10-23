@@ -1,0 +1,25 @@
+*NАМЕ 3:OCTTEST
+*       БОИ, СТАНДАРТИЗАТОР
+*       ОЗУ МОДИФИКАТОРОВ С MNSA=IRA
+*       ФИЗ.АДРЕС, ПРОВЕРКА ИЗМЕНЕНИЯ РФС И БОБР,БИЗМ ПОСЛЕ ФА
+*TIME:01.00
+*DISC:664/SYSTEM,microb
+*FILE:arc,30,W
+*file:lib,67,r
+*LIBRA:23,25
+*NО LIST
+*CALL ficMEMORY
+*PERSO:67
+*CALL MICROB
+MPCONT:PROG;
+CONT
+END
+OCTLD:PROG;
+;===== СПИСОК ЗАГРУЖАЕМЫХ ПРОГРАММ:
+EXTERN MPCONT,OCT
+END
+*END
+*NO LIST
+*CALL MICLOA:OCTLD
+*CALL MPROM
+*END F

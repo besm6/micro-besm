@@ -1,0 +1,21 @@
+386|LINK: 2.0 -- Copyright (C) 1986-88 Phar Lap Software, Inc.
+Target CPU is 80386
+
+
+Command line switches:
+
+-switches
+BB.obj -HEX BB.HEX
+
+Warning: No stack segment.
+
+Input module(s):
+
+"BB.asm" from file "BB.obj".
+
+
+Segment map
+
+     Name         Group         Class     Type   Offset     Size
+------------  ------------  ------------  ----  --------  --------
+CODE                                      ABS   00000000  0000002F

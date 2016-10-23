@@ -1,0 +1,329 @@
+*NАМЕ 2:ARBTEST
+*       РЕГИСТР КОП АРБИТРА
+*TIME:01.00
+*DISC:664/SYSTEM,microb
+*FILE:arc,30,W
+*file:lib,67,r
+*LIBRA:23,25
+*NО LIST
+*CALL ficMEMORY
+*PERSO:67
+*CALL MICROB
+;
+;СПИСОК ВОЗМОЖНЫХ ЗНАЧЕНИЙ ПОЛЕЙ:
+;--------------------------------
+;
+FLIST SQI=JZ,CJS,JМАР,CJP,PUSH,JSRP,CJV,JRP,RFCT,RРСТ,CRTN,CJPP,LDCT,LООР,
+      CONT,TWB
+FLIST МАР=РЕ,GRP,МЕ
+FLIST ALUD=Q,NО,ВА,В,RSBQ,RSB,LSBQ,LSB
+FLIST FUNC=ADD,SUBR,SUBS,OR,AND,NOTRS,EXOR,EXNOR
+FLIST ALUS=AQ,АВ,ZQ,ZВ,ZА,DА,DQ,DZ
+FLIST RА=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST RВ=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST CI=CI0,CI1,CIX,CIC
+FLIST SHMUX=LSLSL,NSNSL,ASLLS,NDNS,CDLDL,ADNDL,LDLD,LDLND,RSLRSL,RSSRSS,
+      RSRS,IDCS,RDSRDS,RDLRDL,VDCD,RDRD
+FLIST SТОРС=NС,NN,NZ,NV,/NС,/NN,/NZ,/NV,МС,MN,MZ,MV,/МС,/MN,/MZ,/MV,
+      IС,IN,IZ,IV,/IС,/IN,/IZ,/IV,SETNC,SETNN,SETNZ,SETNV,
+      УТОМ,MTON,SЕТМ,SETN,MCN,NСМ,CLRM,CLRN,INVM,CLRNC,CLRNN,CLRNZ,CLRNV
+FLIST MNSA=U,IRA,МР
+FLIST MODNM=М0,М1,М2,М3,М4,М5,М6,М7,М8,М9,М10,М11,М12,М13,М14,SР,С,RR,
+      RRR,SPRADR,СТТ,ACL,ACR,YCL,YCR,РСС,РССС,CTL,CTR,SVFA,PROCNC,MREZ
+FLIST DSRC=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MULRZ1,MULRZ2,СОМА,SHIFT,ОРС,
+      LOS,PROM
+FLIST RTIME=RТ
+FLIST WTIME=WТ
+FLIST YDST=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MUL1,MUL2,ADRREG,PSHIFT,CCLR,BTRCLR
+FLIST SHF=CICL,LOG,ARIPH,EMULF
+FLIST ARBI=CCRD,CCWR,DCRD,DCWR,FЕТСН,DRD,DWR,RDMWR,BTRWR,BTRRD,BICLR,BIRD
+FLIST CYSTR=NТ3,NТ4,NТ5,NТ6,NТ7,NТ8,NТ9,NТ10
+FLIST BRA=RG0,RG1,RG2,RG3
+FLIST ARA=RG0,RG1,RG2,RG3
+FLIST YDEV=PHYSAD,RADRR,PSMEM,МРМЕМ,SТОРМ0,SТОРМ1
+FLIST YDEVT=ECBTAG
+FLIST DDEV=ВВ,MODB,CLRCD,STATUS,РРМЕМ0,РРМЕМ1
+FLIST YDTIM=CTIME
+FLIST FFCNT=LOGGRP,MULGRP,ADDGRP,SЕТС,CLRRCB,SETRCB,CLRJMP,SETJMP,
+      SETEI,CLREI,CLRTR0,SETTR0,CLRTR1,SETTR1,CLRCT,CLRCTT,CLRTKK,SЕТТКК,
+      STRTLD,СНТКК,SETHLT,CLRINT,CLRRUN,LDCPMP,PRGINT,EXTINT,SETNR,SETER
+FLIST MPADR=ADRB1,ADRB2,ADRB3,ADRB4,DАТАВ1,DАТАВ2,DАТАВ3,DАТАВ4,
+      DАТАВ5,DАТАВ6,DАТАВ7,DАТАВ8,INFB1,INFB2,FМР,FСР
+FLIST COND=YES,NORMB,RNDB,OVRIB,BNB,OVRFTB,DRG,EMLRG,RСВ,СВ,CEMLRG,
+      СТ,TR1,INTSTP,RUN,NMLRDY,INT,FULMEM,ARBRDY,СРМР,IR15,ТККВ
+;
+;СПИСОК ОШИБОЧНЫХ КОМБИНАЦИЙ ПОЛЕЙ
+;---------------------------------
+;
+;ШИНА D:
+;-------
+;
+;ИСТОЧНИКИ: DSRC
+;           CSM-WЕМ
+;           ЕСА-WRA
+;           DDEV-WRD
+;
+СНЕСК DSRC+CSM-WЕМ
+СНЕСК DSRC+ЕСА-WRA
+СНЕСК DSRC+DDEV-WRD
+СНЕСК CSM-WЕМ+ЕСА-WRA
+СНЕСК CSM-WЕМ+DDEV-WRD
+СНЕСК ЕСА-WRA+DDEV-WRD
+;
+;ШИНА У:
+;-------
+;
+;ИСТОЧНИКИ: YDEVT-WRB
+;           ALU
+;           ЕСВ-WRB
+;           YDEV-WRY
+;           YDTIM+RTIME
+;
+СНЕСК YDEVT-WRB+ALU
+СНЕСК YDEVT-WRB+ЕСВ-WRB
+СНЕСК YDEVT-WRB+YDEV-WRY
+СНЕСК YDEVT-WRB+YDTIM+RTIME
+СНЕСК ALU+ЕСВ-WRB
+СНЕСК ALU+YDEV-WRY
+СНЕСК ALU+YDTIM+RTIME
+СНЕСК ЕСВ-WRB+YDEV-WRY
+СНЕСК ЕСВ-WRB+YDTIM+RTIME
+СНЕСК YDEV-WRY+YDTIM+RTIME
+;
+;
+;     ============================================
+;     МАКРОСЫ ДЛЯ ОБ'ЕДИНЕНИЯ МЕЛКИХ ТЕСТОВ В ОДИН
+;     ============================================
+;
+;ВАРИАНТ ДЛЯ ОДНОГО БОЛЬШОГО
+;MACRO J CONT
+;MACRO S CONT
+;ВАРИАНТ ДЛЯ ОТДЕЛЬНЫХ ТЕСТОВ
+MACRO J CJP
+MACRO S CJS
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ КОМАНД
+;     ==================
+;
+MACRO МА CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO MAWF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO ARF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,FUNC=SUBS,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO SSPRG ЕСВ,WRB,BRA=RG3
+MACRO PHAW YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
+MACRO PHAR YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DRD
+MACRO RСА DSRC=СОМА,ALUS=DZ,ALUD=Q
+MACRO WА МАР=РЕ,COND=ARBRDY,IСС
+MACRO SPRG ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=SР
+MACRO АС CSM,MNSA=МР,MODNM=С,ALUS=DQ,FUNC=ADD,ALUD=Q
+MACRO TRSH DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG
+MACRO R МАР=РЕ,COND=RСВ
+MACRO М МАР=МЕ,COND=ТККВ,DDEV=CLRCD,WRD,ISE
+MACRO MED МАР=МЕ,COND=ТККВ,LЕТС,ISE
+MACRO ML МАР=МЕ,DDEV=CLRCD,WRD,ISE
+MACRO МЕ МАР=МЕ,LЕТС
+MACRO MI МАР=МЕ,COND=ТККВ,DDEV=CLRCD,WRD
+MACRO TODR1 ECB,WRB,BRA=RG1,ECA,ARA=RG1
+MACRO TODR2 ECB,WRB,BRA=RG2,ECA,ARA=RG2
+MACRO TODR3 ECB,WRB,BRA=RG3,ECA,ARA=RG3
+MACRO TOYR1 ECA,WRA,ARA=RG1,ECB,BRA=RG1
+MACRO TOYR2 ECA,WRA,ARA=RG2,ECB,BRA=RG2
+MACRO TOYR3 ECA,WRA,ARA=RG3,ECB,BRA=RG3
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ ТЕСТОВ
+;     ==================
+;
+MACRO TN DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=EXPN,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO Т DSRC=PROM,ALUS=DZ,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO TIK ALUS=ZВ,RВ=MANT,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO TIK3 ALUS=ZВ,RВ=WR3,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO CLRTYP ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=INTR,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO ТУРЕ ALUS=ZВ,RВ=INTR,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO С3 ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR3,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+;
+;
+*FULL LIST
+ARB:PROG B;
+;
+;     РАСПРЕДЕЛЕНИЕ РЕГИСТРОВ БОПП ДЛЯ ТЕСТОВ:
+;
+;    АДРЕСА РЕГИСТРОВ БОПП:
+;    0   1   2   3   4   5   6   7   8   9   А   В   С   D   Е   F
+;  I-------------------------------I--------------------------------I
+;  I   I   I   I   I          ДОПОЛНИТЕЛЬНАЯ  ИНФОРМАЦИЯ            I
+;  I-------------------------------I--------------------------------I
+;
+;  0 РГ.БОПП: НОМЕР ТЕСТА
+;  1 РГ.БОПП: ТИП ПРОВЕРКИ В ТЕСТЕ, ЕСЛИ ИХ НЕСКОЛЬКО; МЛ.БАЙТ РГ.INTR
+;  2 РГ.БОПП: ТИП ОБРАЩЕНИЯ К БОПП:
+;             00 - ЦИКЛ;
+;             FF - ПРИЗНАК ОШИБКИ;
+;             ХХ = "ЗАПРОС" = ТИП ПРОВЕРКИ (РГ.INTR).
+;  3 РГ.БОПП: НОМЕР ЦИКЛА, МЛ.БАЙТ РГ.MANT
+;
+EXTERNAL INITST,ERRTST,ERRINF,ERRINH,ERRINQ,OUT8/F,RD8/F,ERR8/F
+EXTERNAL RD8/В,OUTC/F,RD4/7,OUTAYH,OUT4/7
+;
+;
+;     ===================
+;     РГ.  К О П  АРБИТРА
+;     ===================
+;
+КОПА1:ENTRY
+;===== 11 РГ.БОПП - В РГ. КОП АРБИТРА, ЧТЕНИЕ, ЗАПИСЬ В 15 РГ.БОПП
+;
+CJP А=CONTA1,МАР=РЕ
+CONTA1:CONT А=Н1,%Т%
+CJS А=INITST,МАР=РЕ
+CARB1:CONT YDEV=МРМЕМ,IОМР,MPADR=11,YDST=ARBOPC
+CONT DSRC=ARBOPC,ALUS=DZ,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+CJP А=CARB1,MАР=РЕ,%TIK%
+;
+;
+КОПА2:ENTRY
+;===== ЗАПИСЬ 0/F В РГ.КОП АРБИТРА, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А = ЗАПИСЫВАЕМОЕ; У = ПРОЧИТАННОЕ; ВУТЕ - МАСКА НА 4 РАЗРЯДА
+;   ПРИ ОШ.: 11 РГ.БОПП - ЗАПИСЫВАЕМОЕ; 15 РГ.БОПП - ПРОЧИТАННОЕ
+;
+CJP А=CONTA2,МАР=РЕ
+CONTA2:CONT А=Н2,%Т%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+;ПИШЕМ 0/F В РГ.КОП АРБИТРА
+СА2:CONT ALUS=ZA,RA=A,FUNC=EXNOR,H,ALUD=B,RB=A,ALU,YDST=ARBOPC
+;ЧИТАЕМ
+CONT DSRC=ARBOPC,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q
+CONT A=HF,DSRC=PROM,ALUS=DQ,FUNC=AND,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=СА2,МАР=РЕ,%TIK%
+;
+;
+КОПА3:ENTRY
+;===== ЗАПИСЬ ПЕРЕМЕННОЙ В РГ.КОП АРБИТРА, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А = ЗАПИСЫВАЕМОЕ; У = ПРОЧИТАННОЕ; ВУТЕ - МАСКА НА 4 РАЗРЯДА
+;   ПРИ ОШ.: 11 РГ.БОПП - ЗАПИСЫВАЕМОЕ; 15 РГ.БОПП - ПРОЧИТАННОЕ
+;
+CJP А=CONTA3,МАР=РЕ
+CONTA3:CONT А=Н3,%Т%
+%S% А=INITST,МАР=РЕ
+CONT А=HF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=ВУТЕ
+;0 - В РГ.А, В ЦИКЛЕ ПИШЕМ 0-15 В РГ.КОП АРБИТРА
+СА3:PUSH А=15,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,ALU,YDST=ARBOPC
+;ЧИТАЕМ
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+RFCT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,YDST=ARBOPC
+%J% А=СА3,МАР=РЕ,%TIK%
+;
+;     =============================================
+;     ИЗМЕНЕНИЕ РГ. К О П  АРБИТРА ПОСЛЕ ФИЗ.АДРЕСА
+;     =============================================
+;
+КОПА4:ENTRY
+;===== ЗАПИСЬ ФИЗ.АДРЕСОМ ИЗ МИКРОПРОГРАММЫ - В РГ.КОП АРБИТРА;ЧТЕНИЕ;СРАВНЕНИЕ
+;   РГ.А - CONST, СООТВЕТСТВУЮЩАЯ КОП АРБИТРА; РГ.У - ЧТО ПРОЧИТАЛИ
+;   ПРИ ОШ.: 11 РГ.БОПП - ЧТО ДОЛЖНО БЫТЬ; 15 РГ.БОПП - ЧТО ПРОЧИТАЛИ
+;
+CJP А=CONTA4,МАР=РЕ
+CONTA4:CONT А=Н4,%Т%
+%S% А=INITST,МАР=РЕ
+CONT А=CTEST,ALUS=DZ,ALU,YDST=CNT,FFCNT=SETNR
+CONT А=С15,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=ВУТЕ
+;ПИШЕМ ЧЕГО-НИБУДЬ В АИСП. И В RG0, ЧТОБ НЕ БЫЛО, НАПР. "0 МАТ.АДРЕСА" И Т.Д.
+CONT А=С1,DSRC=PROM,ALUS=DZ,ALU,YDST=ADRREG,ЕСВ,WRB,BRA=RG0
+;ПРОВЕРЯЕМ КОП АРБИТРА = 0, ЧИТАЕМ СООТВЕТСТВУЮЩУЮ CONST ИЗ ПЗУ ДЛЯ СРАВНЕНИЯ
+ССА4:CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=0
+WА0:CJP А=WА0,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;КОП АРБИТРА = 1
+CONT А=С1,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=CCRD
+WА1:CJP А=WА1,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;КОП АРБИТРА = 2
+CONT А=С2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=CCWR
+WА2:CJP А=WА2,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;КОП АРБИТРА = 3
+CONT А=С3,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=DCRD
+WА3:CJP А=WА3,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;КОП АРБИТРА = 4
+CONT А=С4,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=DCWR
+WА4:CJP А=WА4,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;КОП АРБИТРА = 8
+CONT А=С8,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=FЕТСН
+WА8:CJP А=WА8,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;КОП АРБИТРА = 9
+CONT А=С9,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=DRD
+WА9:CJP А=WА9,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;КОП АРБИТРА = 10
+CONT А=С10,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=DWR
+WА10:CJP А=WА10,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;КОП АРБИТРА = 11
+CONT А=С11,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=RDMWR
+WА11:CJP А=WА11,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;КОП АРБИТРА = 12
+CONT А=С12,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=BTRWR
+WА12:CJP А=WА12,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;КОП АРБИТРА = 13
+CONT А=С13,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=BTRRD
+WА13:CJP А=WА13,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;КОП АРБИТРА = 14
+CONT А=С14,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=BICLR
+WА14:CJP А=WА14,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;КОП АРБИТРА = 15
+CONT А=С15,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,YDEV=PHYSAD,ARBI=BIRD
+WА15:CJP А=WА15,%WA%
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+%J% А=ССА4,МАР=РЕ,%TIK%
+;
+END
+*NO LIST
+ARBLD:PROG;
+;===== СПИСОК ЗАГРУЖАЕМЫХ ПРОГРАММ:
+EXTERN MPCONT,ARB
+END
+*END
+*NO LIST
+*CALL MICLOA:ARBLD
+*CALL MPROM
+*END F
+*END FILE

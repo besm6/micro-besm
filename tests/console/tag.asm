@@ -1,0 +1,32 @@
+	NAME BB
+code segment at 1000h
+assume	cs:code
+START:
+;	MOV	AL,0E2H
+	MOV	DX,0E2H
+	NOP
+;	MOV	AL,01H
+C1:	OUT 	DX,AL
+	JMP	C1
+;	INC	DX
+;	ROL	AL,1
+	NOP
+	LOOP	C1
+	MOV	CX,8
+	MOV	DX,0C8H
+	NOP
+;	MOV	AH,01H
+	MOV	AH,AL
+C2:	IN	AL,DX
+	INC	DX
+	CMP	AH,AL
+	JE	C3
+	IN	AL,4
+C3:
+;	ROL	AH,1
+	NOP
+	LOOP	C2
+	JMP	START
+;	int	3
+code	ends
+	end

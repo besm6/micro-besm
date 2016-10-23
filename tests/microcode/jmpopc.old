@@ -1,0 +1,1177 @@
+*NАМЕ ПЕРЕКЛЮЧАТЕЛЬ КОМАНД
+*TIME:01.00
+*DISC:664/SYSTEM,microb
+*FILE:arc,30,W
+*file:lib,67,r
+*LIBRA:23,25
+*CALL ficMEMORY
+*PERSO:67
+*NО LIST
+*CALL MICROB
+;
+;СПИСОК ВОЗМОЖНЫХ ЗНАЧЕНИЙ ПОЛЕЙ:
+;--------------------------------
+;
+FLIST SQI=JZ,CJS,JМАР,CJP,PUSH,JSRP,CJV,JRP,RFCT,RРСТ,CRTN,CJPP,LDCT,LООР,
+      CONT,TWB
+FLIST МАР=РЕ,GRP,МЕ
+FLIST ALUD=Q,NО,ВА,В,RSBQ,RSB,LSBQ,LSB
+FLIST FUNC=ADD,SUBR,SUBS,OR,AND,NOTRS,EXOR,EXNOR
+FLIST ALUS=AQ,АВ,ZQ,ZВ,ZА,DА,DQ,DZ
+FLIST RА=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST RВ=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST CI=CI0,CI1,CIX,CIC
+FLIST SHMUX=LSLSL,NSNSL,ASLLS,NDNS,CDLDL,ADNDL,LDLD,LDLND,RSLRSL,RSSRSS,
+      RSRS,IDCS,RDSRDS,RDLRDL,VDCD,RDRD
+FLIST SТОРС=NС,NN,NZ,NV,/NС,/NN,/NZ,/NV,МС,MN,MZ,MV,/МС,/MN,/MZ,/MV,
+      IС,IN,IZ,IV,/IС,/IN,/IZ,/IV,SETNC,SETNN,SETNZ,SETNV,
+      УТОМ,MTON,SЕТМ,SETN,MCN,NСМ,CLRM,CLRN,INVM,CLRNC,CLRNN,CLRNZ,CLRNV
+FLIST MNSA=U,IRA,МР
+FLIST MODNM=М0,М1,М2,М3,М4,М5,М6,М7,М8,М9,М10,М11,М12,М13,М14,SР,С,RR,
+      RRR,SPRADR,СТТ,ACL,ACR,YCL,YCR,РСС,РССС,CTL,CTR,SVFA,PROCNC,MREZ
+FLIST DSRC=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MULRZ1,MULRZ2,СОМА,SHIFT,ОРС,
+      LOS,PROM
+FLIST RTIME=RТ
+FLIST WTIME=WТ
+FLIST YDST=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MUL1,MUL2,ADRREG,PSHIFT,CCLR,BTRCLR
+FLIST SHF=CICL,LOG,ARIPH,EMULF
+FLIST ARBI=CCRD,CCWR,DCRD,DCWR,FЕТСН,DRD,DWR,RDMWR,BTRWR,BTRRD,BICLR,BIRD
+FLIST CYSTR=NТ3,NТ4,NТ5,NТ6,NТ7,NТ8,NТ9,NТ10
+FLIST BRA=RG0,RG1,RG2,RG3
+FLIST ARA=RG0,RG1,RG2,RG3
+FLIST YDEV=PHYSAD,RADRR,PSMEM,МРМЕМ,SТОРМ0,SТОРМ1
+FLIST YDEVT=ECBTAG
+FLIST DDEV=ВВ,MODB,CLRCD,STATUS,РРМЕМ0,РРМЕМ1
+FLIST YDTIM=CTIME
+FLIST FFCNT=LOGGRP,MULGRP,ADDGRP,SЕТС,CLRRCB,SETRCB,CLRJMP,SETJMP,
+      SETEI,CLREI,CLRTR0,SETTR0,CLRTR1,SETTR1,CLRCT,CLRCTT,CLRTKK,SЕТТКК,
+      STRTLD,СНТКК,SETHLT,CLRINT,CLRRUN,LDCPMP,PRGINT,EXTINT,SETNR,SETER
+FLIST MPADR=ADRB1,ADRB2,ADRB3,ADRB4,DАТАВ1,DАТАВ2,DАТАВ3,DАТАВ4,
+      DАТАВ5,DАТАВ6,DАТАВ7,DАТАВ8,INFB1,INFB2,FМР,FСР
+FLIST COND=YES,NORMB,RNDB,OVRIB,BNB,OVRFTB,DRG,EMLRG,RСВ,СВ,CEMLRG,
+      СТ,TR1,INTSTP,RUN,NMLRDY,INT,FULMEM,ARBRDY,СРМР,IR15,ТККВ
+;
+;СПИСОК ОШИБОЧНЫХ КОМБИНАЦИЙ ПОЛЕЙ
+;---------------------------------
+;
+;ШИНА D:
+;-------
+;
+;ИСТОЧНИКИ: DSRC
+;           CSM-WЕМ
+;           ЕСА-WRA
+;           DDEV-WRD
+;
+СНЕСК DSRC+CSM-WЕМ
+СНЕСК DSRC+ЕСА-WRA
+СНЕСК DSRC+DDEV-WRD
+СНЕСК CSM-WЕМ+ЕСА-WRA
+СНЕСК CSM-WЕМ+DDEV-WRD
+СНЕСК ЕСА-WRA+DDEV-WRD
+;
+;ШИНА У:
+;-------
+;
+;ИСТОЧНИКИ: YDEVT-WRB
+;           ALU
+;           ЕСВ-WRB
+;           YDEV-WRY
+;           YDTIM+RTIME
+;
+СНЕСК YDEVT-WRB+ALU
+СНЕСК YDEVT-WRB+ЕСВ-WRB
+СНЕСК YDEVT-WRB+YDEV-WRY
+СНЕСК YDEVT-WRB+YDTIM+RTIME
+СНЕСК ALU+ЕСВ-WRB
+СНЕСК ALU+YDEV-WRY
+СНЕСК ALU+YDTIM+RTIME
+СНЕСК ЕСВ-WRB+YDEV-WRY
+СНЕСК ЕСВ-WRB+YDTIM+RTIME
+СНЕСК YDEV-WRY+YDTIM+RTIME
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ ТЕСТОВ
+;     ==================
+;
+MACRO TN DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=EXPN,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO Т DSRC=PROM,ALUS=DZ,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO TIK ALUS=ZВ,RВ=MANT,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO TIK3 ALUS=ZВ,RВ=WR3,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO CLRTYP ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=INTR,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO ТУРЕ ALUS=ZВ,RВ=INTR,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO С3 ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR3,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ КОМАНД
+;     ==================
+;
+MACRO МА CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO MAWF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO ARF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,FUNC=SUBS,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO SSPRG ЕСВ,WRB,BRA=RG3
+MACRO PHAW YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
+MACRO PHAR YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DRD
+MACRO RСА DSRC=СОМА,ALUS=DZ,ALUD=Q
+MACRO WА МАР=РЕ,COND=ARBRDY,IСС
+MACRO SPRG ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=SР
+MACRO АС CSM,MNSA=МР,MODNM=С,ALUS=DQ,FUNC=ADD,ALUD=Q
+MACRO TRSH DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG
+MACRO R МАР=РЕ,COND=RСВ
+MACRO М МАР=МЕ,COND=ТККВ,DDEV=CLRCD,WRD,ISE
+MACRO MED МАР=МЕ,COND=ТККВ,LЕТС,ISE
+MACRO ML МАР=МЕ,DDEV=CLRCD,WRD,ISE
+MACRO МЕ МАР=МЕ,LЕТС
+MACRO MI МАР=МЕ,COND=ТККВ,DDEV=CLRC,WRD
+;
+JMPRAM:PROG;
+;MNSA=МР - ТАК РАНЬШЕ БЫЛО ПО УМОЛЧАНИЮ!
+CJP А=$800,МАР=РЕ,MNSA=МР
+END
+JОРС:PROG В;
+EXTERNAL JМРОРС
+CJP А=JМРОРС,МАР=РЕ,FFCNT=CLREI
+END
+JМРОРС:PROG;
+;===== МП ПЕРЕКЛЮЧАТЕЛЬ КОМАНД В ЗАВИСИМОСТИ ОТ ЗНАЧЕНИЙ КОП,ПИА,ТКК,15ИР,РЭ
+;   ДЛЯ ОТЛАДКИ КОМАНД ВМЕСТО ПНА!
+;
+;КОМАНДЫ Б-6 В НР И ПРИВИЛЕГИРОВАННЫЕ
+EXTERNAL АТХ,ATXF,SТХ,XTS,ХТА,XTAF
+EXTERNAL ААХ,АЕХ,ARX,АОХ,АРХ,AUX,АСХ,ANX,ASX,ASN
+EXTERNAL AAXF,AEXF,ARXF,AOXF,APXF,AUXF,ACXF,ANXF,ASXF
+EXTERNAL ATI,STI,IТА,ITS,MTJ,JDM,UТС,WТС,WTCF,VТМ,UТМ
+EXTERNAL UZA,UIA,JАМР,VJM,JMEQ,JMNE,VLM
+EXTERNAL XTR,XTRF,NTR,RТЕ
+EXTERNAL ЕХТ/,ЕХТ6,ЕХТС,EXTDR,RЕТ,IJP
+EXTERNAL RMOD,WMOD,SETR,CLRR,SEMR,SEMW,SMON,CMON,ТТХ,TTXF,ТТА,TTAF,HLT
+;
+;НОВЫЕ КОМАНДЫ
+EXTERNAL ADU,ABU,UВА,UТА,AAU,AEU,AOU,ACU,ANU,UТУ,UTS
+EXTERNAL ХТУ,УАХ,УЕХ,УОХ,УТХ,ААУ,АЕУ,АОУ
+EXTERNAL XTYF,YAXF,YEXF,YOXF,YTXF
+EXTERNAL MCJ,MSN,JВМ,VТМН,VTMQ,VТМВ,VTMF,UTCS,МРАС,MUNP,ADI,ABI,IВА,AAI,AEI,AOI
+EXTERNAL JMGE,JMLT,JMLE,JMGT,VRM,UZAS,UIAS,JOVR,JCRY,JAGT,JAGE
+EXTERNAL JALT,JALE,JAEQ,JANE,JMPS,RETS
+EXTERNAL ASNA,ADL,ABL,LВА,ADLF,ABLF,LBAF
+EXTERNAL АТН,SТН,НТА,HTS,ADH,АВН,НВАС,ААН,АЕН,АОН
+EXTERNAL ATQ,STQ,QТА,QTS,AEQ,AAQ,AOQ
+EXTERNAL АТВ,SТВ,ВТА,BTS,АЕВ,ААВ,АОВ
+EXTERNAL ATF,STF,FТА,FTS,AEF,AAF,AOF,SETF,CLRF,EXTF,NТА,NTSC,AEN,AAN,AON
+EXTERNAL ATD,DТА,ATDF,DTAF
+;
+;===== ВХОД ДЛЯ ПИА=1
+;EXTERNAL ADDC
+;CJP А=ADDC,МАР=РЕ,COND=СВ
+;===== ВХОД ПОСЛЕ + С И УСТАНОВКИ ПИА!
+;JOUTC:ENTRY
+;
+;===== ВХОД ДЛЯ АНАЛИЗА КОП ПОСЛЕ УВЕЛИЧЕНИЯ АК (Q+С)
+;ЗАДЕРЖКА ДЛЯ ИНИЦИАЛИЗАЦИИ, Т.К. JМР-АДРЕС ПОДСТАВЛЯЕТСЯ, СПУСТЯ 20-30 МК!
+PUSH А=31,МАР=РЕ,DSRC=ОРС,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=WR1
+;
+;========== КОМАНДЫ С РАЗНЫМИ КОДАМИ В ОСН.И ДОП.ФОРМАТАХ; ИСПОЛНЕНИЕ В НР = РЭ
+;
+;===== АТХ
+RFCT А=ZER,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SТХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ,FFCNT=SETEI
+CJP А=АТХ,МАР=РЕ,COND=IR15,IСС
+CJP А=ATXF,МАР=РЕ
+;===== SТХ
+SТХОРС:CONT А=Н1,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SТХ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== XTS
+CONT А=Н3,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=XTS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ХТА
+CONT А=Н8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ААХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ХТА,МАР=РЕ,COND=IR15,IСС
+CJP А=XTAF,МАР=РЕ
+CJP А=EMEML,МАР=РЕ,COND=EMLRG
+;
+;======== КОМАНДЫ, ИСПОЛНЯЮЩИЕСЯ В НР И ИМЕЮЩИЕ РАЗНЫЕ КОДЫ В ОСН.И ДОП.ФОРМАТАХ
+;
+;===== ААХ
+ААХОРС:CONT А=Н9,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АЕХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ААХ,МАР=РЕ,COND=IR15,IСС
+CJP А=AAXF,МАР=РЕ
+;===== АЕХ
+АЕХОРС:CONT А=НА,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ARXOPC,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АЕХ,МАР=РЕ,COND=IR15,IСС
+CJP А=AEXF,МАР=РЕ
+;===== ARX
+ARXOPC:CONT А=НВ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АОХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ARX,МАР=РЕ,COND=IR15,IСС
+CJP А=ARXF,МАР=РЕ
+;===== АОХ
+АОХОРС:CONT А=HD,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АРХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АОХ,МАР=РЕ,COND=IR15,IСС
+CJP А=AOXF,МАР=РЕ
+;===== АРХ
+АРХОРС:CONT А=Н10,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AUXOPC,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АРХ,МАР=РЕ,COND=IR15,IСС
+CJP А=APXF,МАР=РЕ
+;===== AUX (= ММ Д.Ф. Э-Б)
+AUXOPC:CONT А=Н11,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АСХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=AUX,МАР=РЕ,COND=IR15,IСС
+CJP А=AUXF,МАР=РЕ
+;===== АСХ
+АСХОРС:CONT А=Н12,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ANXOPC,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АСХ,МАР=РЕ,COND=IR15,IСС
+CJP А=ACXF,МАР=РЕ
+;===== ANX
+ANXOPC:CONT А=Н13,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=WТСОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ANX,МАР=РЕ,COND=IR15,IСС
+CJP А=ANXF,МАР=РЕ
+;===== WТС
+WТСОРС:CONT А=Н3В,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VТМОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=WТС,МАР=РЕ,COND=IR15,IСС
+CJP А=WTCF,МАР=РЕ
+;===== VТМ ( = ПД В Э-Б)
+VТМОРС:CONT А=Н3С,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VТМ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UТМ
+CONT А=H3D,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UТМ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UZA
+CONT А=НЕВ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UZA,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UIA
+CONT А=НЕС,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UIA,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JМР ( = ВР В Э-Б)
+CONT А=Н18,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JАМР,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== VJM ( = МР В Э-Б)
+CONT А=Н19,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VJM,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== VLM
+CONT А=Н1В,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VLM,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== XTR
+CONT А=HDB,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RMODOP,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=XTR,МАР=РЕ,COND=IR15,IСС
+CJP А=XTRF,МАР=РЕ
+;===== RMOD
+RMODOP:CONT А=HF0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RMOD,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== WMOD
+CONT А=HF1,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=WMOD,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== IJP
+CONT А=HFD,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=IJP,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SETR
+CONT А=HF2,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SETR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== CLRR
+CONT А=HF3,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=CLRR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SEMR
+CONT А=HF4,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SEMR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SEMW
+CONT А=HF7,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SEMW,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SMON
+CONT А=HF8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SMON,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== CMON
+CONT А=HF9,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=CMON,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SEMR
+CONT А=HF4,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SEMR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ТТХ
+CONT А=HF5,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ТТАОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ТТХ,МАР=РЕ,COND=IR15,IСС
+CJP А=TTXF,МАР=РЕ
+;===== ТТА
+ТТАОРС:CONT А=HF6,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RЕТОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ТТА,МАР=РЕ,COND=IR15,IСС
+CJP А=TTAF,МАР=РЕ
+;===== RЕТ
+RЕТОРС:CONT А=HFE,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RЕТ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== HLT
+CONT А=HFF,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=HLT,МАР=РЕ,COND=СТ,SТОРС=NZ
+;
+;========== КОМАНДЫ НР, ИМЕЮЩИЕ ОДИНАКОВЫЕ КОДЫ В ОСНОВНОМ И ДОП.ФОРМАТАХ
+;
+;СДВИГАЕМ ОСНОВНОЙ КОП В МЛ.РАЗРЯДЫ, ПРОРЕРЯЕМ НА ДОПОЛНИТЕЛЬНЫЙ ФОРМАТ
+CJP А=СО/D,МАР=РЕ,COND=RСВ,ЕСВ,BRA=RG1,DSRC=SHIFT,MPS,PSHF=SН0+20,SHF=LOG
+>,ALUS=DА,RА=ВУТЕ,FUNC=AND,ALUD=В,RВ=WR2
+CONT ЕСВ,BRA=RG1,DSRC=SHIFT,MPS,PSHF=SН0+52,SHF=LOG,ALUS=DА,RА=ВУТЕ
+>,FUNC=AND,ALUD=В,RВ=WR2
+СО/D:CONT А=H3F,DSRC=PROM,ALUS=DА,RА=WR2,FUNC=EXOR,CEN
+CJP А=DOF,МАР=РЕ,COND=СТ,SТОРС=NZ
+;
+;========== ОСНОВНОЙ ФОРМАТ =====
+;===== ASX
+CONT А=Н16,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UТСОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ASX,МАР=РЕ,COND=IR15,IСС
+CJP А=ASXF,МАР=РЕ
+;===== UТС
+UТСОРС:CONT А=Н90,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UТС,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JMEQ
+CONT А=Н20,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JMEQ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JMNE
+CONT А=Н21,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JMNE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А+U
+CONT А=Н81,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ADU,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А-U
+CONT А=Н82,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ABU,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== U-А
+CONT А=Н83,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UВА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UТА
+CONT А=Н48,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UТА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AAU
+CONT А=Н49,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AAU,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AEU
+CONT А=Н4А,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AEU,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AOU
+CONT А=H4D,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AOU,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ACU
+CONT А=Н52,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ACU,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ANU
+CONT А=Н53,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ANU,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UТУ
+CONT А=Н88,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UТУ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UTS
+CONT А=Н43,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UTS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ХТУ
+CONT А=Н94,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=УАХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ХТУ,МАР=РЕ,COND=IR15,IСС
+CJP А=XTYF,МАР=РЕ
+;===== УАХ
+УАХОРС:CONT А=Н95,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=УЕХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=УАХ,МАР=РЕ,COND=IR15,IСС
+CJP А=YAXF,МАР=РЕ
+;===== УЕХ
+УЕХОРС:CONT А=Н96,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=УОХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=УЕХ,МАР=РЕ,COND=IR15,IСС
+CJP А=YEXF,МАР=РЕ
+;===== УОХ
+УОХОРС:CONT А=Н97,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=УТХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=УОХ,МАР=РЕ,COND=IR15,IСС
+CJP А=YOXF,МАР=РЕ
+;===== УТХ
+УТХОРС:CONT А=Н98,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VТМНОР,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=УТХ,МАР=РЕ,COND=IR15,IСС
+CJP А=YTXF,МАР=РЕ
+;===== VТМН
+VТМНОР:CONT А=НА0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VТМН,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== VTMQ
+CONT А=НА1,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VTMQ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== VТМВ
+CONT А=НА2,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VТМВ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== VTMF
+CONT А=НА3,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VTMF,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UTCS
+CONT А=НА4,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UTCS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JMGE
+CONT А=Н22,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JMGE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JMLT
+CONT А=Н23,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JMLT,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JMLE
+CONT А=Н24,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JMLE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JMGT
+CONT А=Н25,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JMGT,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== VRM
+CONT А=НА9,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VRM,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UZAS
+CONT А=НАА,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UZAS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UIAS
+CONT А=НАВ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UIAS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JOVR
+CONT А=НАС,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JOVR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JCRY
+CONT А=HAD,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JCRY,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JAGT
+CONT А=НАЕ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JAGT,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JAGE
+CONT А=HAF,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JAGE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JALT
+CONT А=НВ0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JALT,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JALE
+CONT А=НВ1,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JALE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JAEQ
+CONT А=НВ2,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JAEQ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JANE
+CONT А=НВ3,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JANE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JMPS
+CONT А=НВ4,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JMPS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А+L
+CONT А=Н99,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ABLOPC,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ADL,МАР=РЕ,COND=IR15,IСС
+CJP А=ADLF,МАР=РЕ
+;===== А-L
+ABLOPC:CONT А=Н9А,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=LВАОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ABL,МАР=РЕ,COND=IR15,IСС
+CJP А=ABLF,МАР=РЕ
+;===== L-А
+LВАОРС:CONT А=Н9В,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АТНОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=LВА,МАР=РЕ,COND=IR15,IСС
+CJP А=LBAF,МАР=РЕ
+;===== АТН
+АТНОРС:CONT А=НВ6,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АТН,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SТН
+CONT А=НВ7,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SТН,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== НТА
+CONT А=НВ8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=НТА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== HTS
+CONT А=НВ9,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=HTS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А+Н
+CONT А=НВА,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ADH,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А-Н
+CONT А=НВВ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АВН,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== Н-А
+CONT А=НВС,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=НВАС,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ААН
+CONT А=НС1,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ААН,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== АЕН
+CONT А=НС2,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АЕН,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== АОН
+CONT А=НС3,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АОН,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ATQ
+CONT А=НС4,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ATQ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== STQ
+CONT А=НС5,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=STQ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== QТА
+CONT А=НС6,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=QТА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== QTS
+CONT А=НС7,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=QTS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AEQ
+CONT А=НС8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AEQ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AAQ
+CONT А=НС9,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AAQ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AOQ
+CONT А=НСА,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AOQ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== АТВ
+CONT А=НСВ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АТВ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SТВ
+CONT А=НСС,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SТВ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ВТА
+CONT А=HCD,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ВТА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== BTS
+CONT А=НСЕ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=BTS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== АЕВ
+CONT А=HCF,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АЕВ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ААВ
+CONT А=HD0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ААВ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== АОВ
+CONT А=HD1,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АОВ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ATF
+CONT А=HD2,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ATF,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== STF
+CONT А=HD3,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=STF,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== FТА
+CONT А=HD4,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=FТА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== FTS
+CONT А=HD5,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=FTS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AEF
+CONT А=HD6,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AEF,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AAF
+CONT А=HD7,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AAF,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AOF
+CONT А=HD8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AOF,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SETF
+CONT А=HD9,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SETF,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== CLRF
+CONT А=HDA,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=CLRF,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ATD
+CONT А=HDC,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=DТАОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ATD,МАР=РЕ,COND=IR15,IСС
+CJP А=ATDF,МАР=РЕ
+;===== DТА
+DТАОРС:CONT А=HDD,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=PSOPC,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=DТА,МАР=РЕ,COND=IR15,IСС
+CJP А=DTAF,МАР=РЕ
+PSOPC:CJP А=NETNR,МАР=РЕ
+;
+;========== ДОПОЛНИТЕЛЬНЫЙ ФОРМАТ =====
+;===== ASN
+DOF:CONT А=Н16,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ASN,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ATI
+CONT А=Н20,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ATI,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== STI
+CONT А=Н21,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=STI,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== IТА
+CONT А=Н80,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=IТА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ITS
+CONT А=Н22,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ITS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== MTJ
+CONT А=Н24,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=MTJ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== J+М
+CONT А=Н25,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JDM,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== NTR
+CONT А=Н82,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=NTR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== RТЕ
+CONT А=Н83,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RТЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ААУ
+CONT А=Н84,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ААУ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== АЕУ
+CONT А=Н85,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АЕУ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== АОУ
+CONT А=Н86,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АОУ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== MCJ
+CONT А=Н90,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=MCJ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== MSN
+CONT А=Н91,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=MSN,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== J-М
+CONT А=Н27,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JВМ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== МРАС
+CONT А=Н94,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=МРАС,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== MUNP
+CONT А=Н95,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=MUNP,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А+I
+CONT А=НА2,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ADI,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А-I
+CONT А=НА3,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ABI,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== I-А
+CONT А=НА4,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=IВА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AAI
+CONT А=НА9,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AAI,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AEI
+CONT А=НАА,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AEI,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AOI
+CONT А=НАВ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AOI,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== RETS
+CONT А=Н87,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RETS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ASNA
+CONT А=Н96,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ASNA,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== EXTF
+CONT А=НА1,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=EXTF,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== NТА
+CONT А=НВ0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=NТА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== NTS
+CONT А=НВ1,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=NTSC,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AEN
+CONT А=НВ2,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AEN,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AAN
+CONT А=НВ3,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AAN,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AON
+CONT А=НВ4,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AON,МАР=РЕ,COND=СТ,SТОРС=NZ
+;
+;===== ЕХТ
+NETNR:CJP А=ЕХТ/,МАР=РЕ
+;
+;========== КОМАНДЫ Б-6 В РЭ
+;
+EXTERNAL ААХЕ,АЕХЕ,ARXE,АОХЕ,АРХЕ,AUXE,АСХЕ,ANXE,ASXE,ASNE
+EXTERNAL AAXFE,AEXFE,ARXFE,AOXFE,APXFE,AUXFE,ACXFE,ANXFE,ASXFE
+EXTERNAL ATIE,IТАЕ,MTJE,JDME,WТСЕ,WTCFE,VТМЕ,UТМЕ
+EXTERNAL VJME,JMEQE,JMNEE,VLME
+;
+;===== ААХ
+EMEML:CONT А=Н9,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АЕХОРЕ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ААХЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=AAXFE,МАР=РЕ
+;===== АЕХ
+АЕХОРЕ:CONT А=НА,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ARXOPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АЕХЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=AEXFE,МАР=РЕ
+;===== ARX
+ARXOPE:CONT А=НВ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АОХОРЕ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ARXE,МАР=РЕ,COND=IR15,IСС
+CJP А=ARXFE,МАР=РЕ
+;===== АОХ
+АОХОРЕ:CONT А=HD,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АРХОРЕ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АОХЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=AOXFE,МАР=РЕ
+;===== АРХ
+АРХОРЕ:CONT А=Н10,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AUXOPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АРХЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=APXFE,МАР=РЕ
+;===== AUX (= ММ Д.Ф. Э-Б)
+AUXOPE:CONT А=Н11,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АСХОРЕ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=AUXE,МАР=РЕ,COND=IR15,IСС
+CJP А=AUXFE,МАР=РЕ
+;===== АСХ
+АСХОРЕ:CONT А=Н12,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ANXOPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АСХЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=ACXFE,МАР=РЕ
+;===== ANX
+ANXOPE:CONT А=Н13,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ASXOPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ANXE,МАР=РЕ,COND=IR15,IСС
+CJP А=ANXFE,МАР=РЕ
+;===== ASX
+ASXOPE:CONT А=Н16,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ASNOPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ASXE,МАР=РЕ,COND=IR15,IСС
+CJP А=ASXFE,МАР=РЕ
+;===== ASN
+ASNOPE:CONT А=Н1Е,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ASNE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ATI
+CONT А=Н20,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ATIE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== STI
+CONT А=Н21,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=STI,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== IТА
+CONT А=Н22,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=IТАЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ITS
+CONT А=Н23,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ITS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== MTJ
+CONT А=Н24,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=MTJE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== J+М
+CONT А=Н25,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JDME,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UТС
+CONT А=Н90,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UТС,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== WТС
+CONT А=Н98,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VТМОРЕ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=WТСЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=WTCFE,МАР=РЕ
+;===== VТМ
+VТМОРЕ:CONT А=НА0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VТМЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UТМ
+CONT А=НА8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UТМЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UZA
+CONT А=НВ0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UZA,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UIA
+CONT А=НВ8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UIA,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JМР
+CONT А=НС0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JАМР,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== VJM
+CONT А=НС8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VJME,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JMEQ
+CONT А=НЕ0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JMEQE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JMNE
+CONT А=НЕ8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JMNEE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== VLM
+CONT А=HF8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VLME,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== XTR
+CONT А=Н17,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=NTROPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=XTR,МАР=РЕ,COND=IR15,IСС
+CJP А=XTRF,МАР=РЕ
+;===== NTR
+NTROPE:CONT А=H1F,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=NTR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== RТЕ
+CONT А=Н18,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RТЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;
+;===== ЕХТ Б-6
+;ЕСЛИ ОТДЕЛЯТЬ РЭ, ЧТО ЧТОБ НЕ ГРУЗИЛИСЬ "ХВОСТЫ" КОМАНД, ПЕРЕХВАТЫВАЕМ ИХ:
+;STIE:ENTRY
+;ITSE:ENTRY
+;UТСЕ:ENTRY
+;EMEML:ENTRY
+;
+CJP А=ЕХТ6,МАР=РЕ
+ENDJOP:ENTRY
+END
+;********************************* ЕЩЕ ОДИН ВЫРИАНТ ПЕРЕКЛЮЧАТЕЛЯ!
+JMPRAM:PROG;
+;MNSA=МР - ТАК РАНЬШЕ БЫЛО ПО УМОЛЧАНИЮ!
+CJP А=$800,МАР=РЕ,MNSA=МР
+END
+JОРС:PROG В;
+EXTERNAL JМРОРС
+CJP А=JМРОРС,МАР=РЕ,FFCNT=CLREI
+END
+JМРОРС:PROG;
+;===== МП ПЕРЕКЛЮЧАТЕЛЬ КОМАНД В ЗАВИСИМОСТИ ОТ ЗНАЧЕНИЙ КОП,ПИА,ТКК,15ИР,РЭ
+;   ДЛЯ ОТЛАДКИ КОМАНД ВМЕСТО ПНА!
+;
+;КОМАНДЫ Б-6 В НР И РЭ
+EXTERNAL STI,ITS,UТС
+EXTERNAL XTR,XTRF,NTR,RТЕ
+EXTERNAL ADX,АВХ,ХВА,АМХ,AVX,А/Х,А*Х,EDX,ЕВХ,EDN,EBN,УТА
+EXTERNAL ADXF,ABXF,XBAF,AMXF,AVXF,А/XF,А*XF,EDXF,EBXF
+;ВХОДЫ ДЛЯ РЭ И ИР15
+EXTERNAL ADXFE,ABXFE,XBAFE,AMXFE,AVXFE,А/XFE,А*XFE,EDXFE,EBXFE
+;ПРИВИЛЕГИРОВАННЫЕ КОМАНДЫ
+EXTERNAL ЕХТ/,ЕХТ6,EXTDR,RЕТ,IJP
+EXTERNAL RMOD,WMOD,SETR,CLRR,SEMR,SEMW,SMON,CMON,ТТХ,TTXF,ТТА,TTAF,HLT
+;НОВЫЕ КОМАНДЫ
+EXTERNAL А*U,А*I,А*L,А*LF,А*Н,А/U,А/I,А/L,А/LF,А/Н
+;
+;===== ВХОД ДЛЯ АНАЛИЗА КОП ПОСЛЕ УВЕЛИЧЕНИЯ АК (Q+С)
+;ЗАДЕРЖКА ДЛЯ ИНИЦИАЛИЗАЦИИ, Т.К. JМР-АДРЕС ПОДСТАВЛЯЕТСЯ, СПУСТЯ 20-30 МК!
+PUSH А=31,МАР=РЕ,DSRC=ОРС,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=WR1
+RFCT
+CJP А=EMEML,МАР=РЕ,COND=EMLRG,FFCNT=SETEI
+;
+;======== КОМАНДЫ, ИСПОЛНЯЮЩИЕСЯ В НР И ИМЕЮЩИЕ РАЗНЫЕ КОДЫ В ОСН.И ДОП.ФОРМАТАХ
+;
+;===== XTR
+CONT А=HDB,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RMODOP,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=XTR,МАР=РЕ,COND=IR15,IСС
+CJP А=XTRF,МАР=РЕ
+;===== RMOD
+RMODOP:CONT А=HF0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RMOD,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== WMOD
+CONT А=HF1,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=WMOD,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== IJP
+CONT А=HFD,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=IJP,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SETR
+CONT А=HF2,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SETR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== CLRR
+CONT А=HF3,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=CLRR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SEMR
+CONT А=HF4,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SEMR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SEMW
+CONT А=HF7,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SEMW,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== SMON
+CONT А=HF8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=SMON,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== CMON
+CONT А=HF9,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=CMON,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ТТХ
+CONT А=HF5,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ТТАОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ТТХ,МАР=РЕ,COND=IR15,IСС
+CJP А=TTXF,МАР=РЕ
+;===== ТТА
+ТТАОРС:CONT А=HF6,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RЕТОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ТТА,МАР=РЕ,COND=IR15,IСС
+CJP А=TTAF,МАР=РЕ
+;===== RЕТ
+RЕТОРС:CONT А=HFE,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RЕТ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== HLT
+CONT А=HFF,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=HLT,МАР=РЕ,COND=СТ,SТОРС=NZ
+;
+;========== КОМАНДЫ НР, ИМЕЮЩИЕ ОДИНАКОВЫЕ КОДЫ В ОСНОВНОМ И ДОП.ФОРМАТАХ
+;
+;СДВИГАЕМ ОСНОВНОЙ КОП В МЛ.РАЗРЯДЫ, ПРОРЕРЯЕМ НА ДОПОЛНИТЕЛЬНЫЙ ФОРМАТ
+CJP А=СО/D,МАР=РЕ,COND=RСВ,ЕСВ,BRA=RG1,DSRC=SHIFT,MPS,PSHF=SН0+20,SHF=LOG
+>,ALUS=DА,RА=ВУТЕ,FUNC=AND,ALUD=В,RВ=WR2
+CONT ЕСВ,BRA=RG1,DSRC=SHIFT,MPS,PSHF=SН0+52,SHF=LOG,ALUS=DА,RА=ВУТЕ
+>,FUNC=AND,ALUD=В,RВ=WR2
+СО/D:CONT А=H3F,DSRC=PROM,ALUS=DА,RА=WR2,FUNC=EXOR,CEN
+CJP А=DOF,МАР=РЕ,COND=СТ,SТОРС=NZ
+;
+;========== ОСНОВНОЙ ФОРМАТ =====
+;===== UТС
+CONT А=Н90,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UТС,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А/U
+CONT А=Н86,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А/U,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А*U
+CONT А=Н87,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А*U,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А/L
+CONT А=Н9Е,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А*LОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=А/L,МАР=РЕ,COND=IR15,IСС
+CJP А=А/LF,МАР=РЕ
+;===== А*L
+А*LОРС:CONT А=H9F,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А/НОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=А*L,МАР=РЕ,COND=IR15,IСС
+CJP А=А*LF,МАР=РЕ
+;===== А/Н
+А/НОРС:CONT А=HBF,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А/Н,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А*Н
+CONT А=НС0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А*Н,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А+Х
+CONT А=НЕ5,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АВХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+ADXE:CJP А=ADX,МАР=РЕ,COND=IR15,IСС
+CJP А=ADXFE,МАР=РЕ,COND=EMLRG
+CJP А=ADXF,МАР=РЕ
+;===== А-Х
+АВХОРС:CONT А=НЕ6,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ХВАОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+АВХЕ:CJP А=АВХ,МАР=РЕ,COND=IR15,IСС
+CJP А=ABXFE,МАР=РЕ,COND=EMLRG
+CJP А=ABXF,МАР=РЕ
+;===== Х-А
+ХВАОРС:CONT А=НЕ7,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АМХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+ХВАЕ:CJP А=ХВА,МАР=РЕ,COND=IR15,IСС
+CJP А=XBAFE,МАР=РЕ,COND=EMLRG
+CJP А=XBAF,МАР=РЕ
+;===== АМХ
+АМХОРС:CONT А=НЕ8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AVXOPC,МАР=РЕ,COND=СТ,SТОРС=/NZ
+АМХЕ:CJP А=АМХ,МАР=РЕ,COND=IR15,IСС
+CJP А=AMXFE,МАР=РЕ,COND=EMLRG
+CJP А=AMXF,МАР=РЕ
+;===== AVX
+AVXOPC:CONT А=НЕ9,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А/ХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+AVXE:CJP А=AVX,МАР=РЕ,COND=IR15,IСС
+CJP А=AVXFE,МАР=РЕ,COND=EMLRG
+CJP А=AVXF,МАР=РЕ
+;===== А/Х
+А/ХОРС:CONT А=НЕ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А*ХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+А/ХЕ:CJP А=А/Х,МАР=РЕ,COND=IR15,IСС
+CJP А=А/XFE,МАР=РЕ,COND=EMLRG
+CJP А=А/XF,МАР=РЕ
+;===== А*Х
+А*ХОРС:CONT А=НЕА,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=EDXOPC,МАР=РЕ,COND=СТ,SТОРС=/NZ
+А*ХЕ: CJP А=А*Х,МАР=РЕ,COND=IR15,IСС
+CJP А=А*XFE,МАР=РЕ,COND=EMLRG
+CJP А=А*XF,МАР=РЕ
+;===== Е+Х
+EDXOPC:CONT А=Н14,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ЕВХОРС,МАР=РЕ,COND=СТ,SТОРС=/NZ
+EDXE:CJP А=EDX,МАР=РЕ,COND=IR15,IСС
+CJP А=EDXFE,МАР=РЕ,COND=EMLRG
+CJP А=EDXF,МАР=РЕ
+;===== Е-Х
+ЕВХОРС:CONT А=Н15,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ОРСЕХТ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+ЕВХЕ:CJP А=ЕВХ,МАР=РЕ,COND=IR15,IСС
+CJP А=EBXFE,МАР=РЕ,COND=EMLRG
+CJP А=EBXF,МАР=РЕ
+;===== ЕХТ НР
+ОРСЕХТ:CONT А=Н80,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ЕХТ/,МАР=РЕ,COND=СТ,SТОРС=NZ
+CJP А=NETNR,МАР=РЕ
+;
+;========== ДОПОЛНИТЕЛЬНЫЙ ФОРМАТ =====
+;===== STI
+DOF:CONT А=Н21,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=STI,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ITS
+CONT А=Н22,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ITS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== NTR
+CONT А=Н82,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=NTR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== RТЕ
+CONT А=Н83,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RТЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А/I
+CONT А=НА7,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А/I,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А*I
+CONT А=НА8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А*I,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== Е+N
+CONT А=Н1С,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=EDN,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== Е-N
+CONT А=H1D,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=EBN,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== УТА
+CONT А=Н81,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=УТА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;
+;===== ЕХТ
+NETNR:CJP А=EXTDR,МАР=РЕ
+;
+;========== КОМАНДЫ Б-6 В РЭ
+;
+EXTERNAL ААХЕ,АЕХЕ,ARXE,АОХЕ,АРХЕ,AUXE,АСХЕ,ANXE,ASXE,ASNE
+EXTERNAL AAXFE,AEXFE,ARXFE,AOXFE,APXFE,AUXFE,ACXFE,ANXFE,ASXFE
+EXTERNAL ATIE,IТАЕ,WТСЕ,WTCFE
+EXTERNAL JMEQE,JMNEE,VLME
+EXTERNAL MTJ,JDM,VТМ,UТМ,VJM
+;
+;===== ААХ
+EMEML:CONT А=Н9,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АЕХОРЕ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ААХЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=AAXFE,МАР=РЕ
+;===== АЕХ
+АЕХОРЕ:CONT А=НА,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ARXOPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АЕХЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=AEXFE,МАР=РЕ
+;===== ARX
+ARXOPE:CONT А=НВ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АОХОРЕ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ARXE,МАР=РЕ,COND=IR15,IСС
+CJP А=ARXFE,МАР=РЕ
+;===== АОХ
+АОХОРЕ:CONT А=HD,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АРХОРЕ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АОХЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=AOXFE,МАР=РЕ
+;===== АРХ
+АРХОРЕ:CONT А=Н10,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AUXOPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АРХЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=APXFE,МАР=РЕ
+;===== AUX
+AUXOPE:CONT А=Н11,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АСХОРЕ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=AUXE,МАР=РЕ,COND=IR15,IСС
+CJP А=AUXFE,МАР=РЕ
+;===== АСХ
+АСХОРЕ:CONT А=Н12,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ANXOPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=АСХЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=ACXFE,МАР=РЕ
+;===== ANX
+ANXOPE:CONT А=Н13,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ASXOPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ANXE,МАР=РЕ,COND=IR15,IСС
+CJP А=ANXFE,МАР=РЕ
+;===== ASX
+ASXOPE:CONT А=Н16,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ASNOPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=ASXE,МАР=РЕ,COND=IR15,IСС
+CJP А=ASXFE,МАР=РЕ
+;===== ASN
+ASNOPE:CONT А=Н1Е,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ASNE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ATI
+CONT А=Н20,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ATIE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== STI
+CONT А=Н21,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=STI,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== IТА
+CONT А=Н22,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=IТАЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== ITS
+CONT А=Н23,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ITS,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== MTJ
+CONT А=Н24,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=MTJ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== J+М
+CONT А=Н25,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JDM,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UТС
+CONT А=Н90,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UТС,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== WТС
+CONT А=Н98,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VТМОРЕ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=WТСЕ,МАР=РЕ,COND=IR15,IСС
+CJP А=WTCFE,МАР=РЕ
+;===== VТМ
+VТМОРЕ:CONT А=НА0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VТМ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== UТМ
+CONT А=НА8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=UТМ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== VJM
+CONT А=НС8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VJM,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JMEQ
+CONT А=НЕ0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JMEQE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== JMNE
+CONT А=НЕ8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=JMNEE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== VLM
+CONT А=HF8,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=VLME,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== XTR
+CONT А=Н17,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=NTROPE,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CJP А=XTR,МАР=РЕ,COND=IR15,IСС
+CJP А=XTRF,МАР=РЕ
+;===== NTR
+NTROPE:CONT А=H1F,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=NTR,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== RТЕ
+CONT А=Н18,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=RТЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А+Х
+CONT А=Н4,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ADXE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А-Х
+CONT А=Н5,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АВХЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== Х-А
+CONT А=Н6,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ХВАЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== АМХ
+CONT А=Н7,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=АМХЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== AVX
+CONT А=НС,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=AVXE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А/Х
+CONT А=НЕ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А/ХЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== А*Х
+CONT А=HF,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=А*ХЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== Е+Х
+CONT А=Н14,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=EDXE,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== Е-Х
+CONT А=Н15,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=ЕВХЕ,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== Е+N
+CONT А=Н1С,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=EDN,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== Е-N
+CONT А=H1D,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=EBN,МАР=РЕ,COND=СТ,SТОРС=NZ
+;===== УТА
+CONT А=Н19,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,CEN
+CJP А=УТА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;
+;===== ЕХТ Б-6
+CJP А=ЕХТ6,МАР=РЕ
+ENDJOP:ENTRY
+END
+*END
+*END FILE
+*END FILE
+

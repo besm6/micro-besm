@@ -1,0 +1,2369 @@
+*NАМЕ КОМАНДЫ НР
+*TIME:01.00
+*DISC:664/SYSTEM,microb
+*FILE:arc,30,W
+*file:lib,67,r
+*LIBRA:23,25
+*NO LIST
+*CALL ficMEMORY
+*PERSO:67
+*CALL MICROB
+;
+;СПИСОК ВОЗМОЖНЫХ ЗНАЧЕНИЙ ПОЛЕЙ:
+;--------------------------------
+;
+FLIST SQI=JZ,CJS,JМАР,CJP,PUSH,JSRP,CJV,JRP,RFCT,RРСТ,CRTN,CJPP,LDCT,LООР,
+      CONT,TWB
+FLIST МАР=РЕ,GRP,МЕ
+FLIST ALUD=Q,NО,ВА,В,RSBQ,RSB,LSBQ,LSB
+FLIST FUNC=ADD,SUBR,SUBS,OR,AND,NOTRS,EXOR,EXNOR
+FLIST ALUS=AQ,АВ,ZQ,ZВ,ZА,DА,DQ,DZ
+FLIST RА=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST RВ=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST CI=CI0,CI1,CIX,CIC
+FLIST SHMUX=LSLSL,NSNSL,ASLLS,NDNS,CDLDL,ADNDL,LDLD,LDLND,RSLRSL,RSSRSS,
+      RSRS,IDCS,RDSRDS,RDLRDL,VDCD,RDRD
+FLIST SТОРС=NС,NN,NZ,NV,/NС,/NN,/NZ,/NV,МС,MN,MZ,MV,/МС,/MN,/MZ,/MV,
+      IС,IN,IZ,IV,/IС,/IN,/IZ,/IV,SETNC,SETNN,SETNZ,SETNV,
+      УТОМ,MTON,SЕТМ,SETN,MCN,NСМ,CLRM,CLRN,INVM,CLRNC,CLRNN,CLRNZ,CLRNV
+FLIST MNSA=U,IRA,МР
+FLIST MODNM=М0,М1,М2,М3,М4,М5,М6,М7,М8,М9,М10,М11,М12,М13,М14,SР,С,RR,
+      RRR,SPRADR,СТТ,ACL,ACR,YCL,YCR,РСС,РССС,CTL,CTR,SVFA,PROCNC,MREZ
+FLIST DSRC=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MULRZ1,MULRZ2,СОМА,SHIFT,ОРС,
+      LOS,PROM
+FLIST RTIME=RТ
+FLIST WTIME=WТ
+FLIST YDST=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MUL1,MUL2,ADRREG,PSHIFT,CCLR,BTRCLR
+FLIST SHF=CICL,LOG,ARIPH,EMULF
+FLIST ARBI=CCRD,CCWR,DCRD,DCWR,FЕТСН,DRD,DWR,RDMWR,BTRWR,BTRRD,BICLR,BIRD
+FLIST CYSTR=NТ3,NТ4,NТ5,NТ6,NТ7,NТ8,NТ9,NТ10
+FLIST BRA=RG0,RG1,RG2,RG3
+FLIST ARA=RG0,RG1,RG2,RG3
+FLIST YDEV=PHYSAD,RADRR,PSMEM,МРМЕМ,SТОРМ0,SТОРМ1
+FLIST YDEVT=ECBTAG
+FLIST DDEV=ВВ,MODB,CLRCD,STATUS,РРМЕМ0,РРМЕМ1
+FLIST YDTIM=CTIME
+FLIST FFCNT=LOGGRP,MULGRP,ADDGRP,SЕТС,CLRRCB,SETRCB,CLRJMP,SETJMP,
+      SETEI,CLREI,CLRTR0,SETTR0,CLRTR1,SETTR1,CLRCT,CLRCTT,CLRTKK,SЕТТКК,
+      STRTLD,СНТКК,SETHLT,CLRINT,CLRRUN,LDCPMP,PRGINT,EXTINT,SETNR,SETER
+FLIST MPADR=ADRB1,ADRB2,ADRB3,ADRB4,DАТАВ1,DАТАВ2,DАТАВ3,DАТАВ4,
+      DАТАВ5,DАТАВ6,DАТАВ7,DАТАВ8,INFB1,INFB2,FМР,FСР
+FLIST COND=YES,NORMB,RNDB,OVRIB,BNB,OVRFTB,DRG,EMLRG,RСВ,СВ,CEMLRG,
+      СТ,TR1,INTSTP,RUN,NMLRDY,INT,FULMEM,ARBRDY,СРМР,IR15,ТККВ
+;
+;СПИСОК ОШИБОЧНЫХ КОМБИНАЦИЙ ПОЛЕЙ
+;---------------------------------
+;
+;ШИНА D:
+;-------
+;
+;ИСТОЧНИКИ: DSRC
+;           CSM-WЕМ
+;           ЕСА-WRA
+;           DDEV-WRD
+;
+СНЕСК DSRC+CSM-WЕМ
+СНЕСК DSRC+ЕСА-WRA
+СНЕСК DSRC+DDEV-WRD
+СНЕСК CSM-WЕМ+ЕСА-WRA
+СНЕСК CSM-WЕМ+DDEV-WRD
+СНЕСК ЕСА-WRA+DDEV-WRD
+;
+;ШИНА У:
+;-------
+;
+;ИСТОЧНИКИ: YDEVT-WRB
+;           ALU
+;           ЕСВ-WRB
+;           YDEV-WRY
+;           YDTIM+RTIME
+;
+СНЕСК YDEVT-WRB+ALU
+СНЕСК YDEVT-WRB+ЕСВ-WRB
+СНЕСК YDEVT-WRB+YDEV-WRY
+СНЕСК YDEVT-WRB+YDTIM+RTIME
+СНЕСК ALU+ЕСВ-WRB
+СНЕСК ALU+YDEV-WRY
+СНЕСК ALU+YDTIM+RTIME
+СНЕСК ЕСВ-WRB+YDEV-WRY
+СНЕСК ЕСВ-WRB+YDTIM+RTIME
+СНЕСК YDEV-WRY+YDTIM+RTIME
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ ТЕСТОВ
+;     ==================
+;
+MACRO TN DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=EXPN,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO Т DSRC=PROM,ALUS=DZ,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO TIK ALUS=ZВ,RВ=MANT,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO TIK3 ALUS=ZВ,RВ=WR3,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO CLRTYP ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=INTR,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO ТУРЕ ALUS=ZВ,RВ=INTR,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO С3 ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR3,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ КОМАНД
+;     ==================
+;
+MACRO МА CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO MAWF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO ARF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,FUNC=SUBS,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO SSPRG ЕСВ,WRB,BRA=RG3
+MACRO PHAW YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
+MACRO PHAR YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DRD
+MACRO RСА DSRC=СОМА,ALUS=DZ,ALUD=Q
+MACRO WА МАР=РЕ,COND=ARBRDY,IСС
+MACRO SPRG ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=SР
+MACRO АС CSM,MNSA=МР,MODNM=С,ALUS=DQ,FUNC=ADD,ALUD=Q
+MACRO TRSH DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG
+MACRO R МАР=РЕ,COND=RСВ
+MACRO М МАР=МЕ,COND=ТККВ,DDEV=CLRCD,WRD,ISE
+MACRO MED МАР=МЕ,COND=ТККВ,LЕТС,ISE
+MACRO ML МАР=МЕ,DDEV=CLRCD,WRD,ISE
+MACRO МЕ МАР=МЕ,LЕТС
+MACRO MI МАР=МЕ,COND=ТККВ,DDEV=CLRC,WRD
+;
+;
+ADU:PROG;
+;     ==============================
+;     7.С НЕПОСРЕДСТВЕННЫМ ОПЕРАНДОМ
+;     ==============================
+;
+;А+U(ADU),А-U(ABU),U-А(UВА),UТА,AAU,AEU,AOU,А/U,А*U,ACU,ANU,UТУ,UTS
+;
+;     I=========I
+;     I  А + U  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-81
+;PROM:081,281
+;===== ЦЕЛОЕ СЛОЖЕНИЕ СУММАТОРА С НЕПОСРЕДСТВЕННЫМ ОПЕРАНДОМ (АДРЕСОМ)
+;
+EXTERNAL JQ,LCW
+;ВЫЧИСЛЯЕМ АИСП., ПРОВЕРЯЕМ ЗНАК
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,CEN
+>,ALU,ЕСВ,WRB,BRA=RG2,FFCNT=CLRJMP
+PSADU:ENTRY
+;ПЕРЕХОД, ЕСЛИ НАДО РАЗМНОЖАТЬ ЗНАК
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG2,ALUS=DА,RА=HALF,FUNC=AND
+>,Н,ALUD=В,RВ=WR2,FFCNT=СНТКК
+;СКЛАДЫВАЕМ
+JRP А=JQ,МАР=РЕ,COND=ТККВ,ISE,DDEV=CLRCD,ALUS=АВ,RА=WR2,RВ=А,FUNC=ADD,Н
+>,ALUD=В,СЕМ,FFCNT=MULGRP
+;
+NADR:ENTRY
+;РАЗМНОЖАЕМ ЗНАК
+CRTN А=MNH,DSRC=PROM,ALUS=DА,RА=WR2,FUNC=OR,Н,ALUD=В,RВ=WR2
+END
+ABU:PROG;
+;     I=========I
+;     I  А - U  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-82
+;PROM:082,282
+;===== ЦЕЛОЕ ВЫЧИТАНИЕ НЕПОСРЕДСТВНЕННОГО ОПЕРАНДА (АДРЕСА) ИЗ СУММАТОРА
+;
+EXTERNAL JQ,LCW,NADR
+;ВЫЧИСЛЯЕМ АИСП., ПРОВЕРЯЕМ ЗНАК
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,CEN
+>,ALU,ЕСВ,WRB,BRA=RG2,FFCNT=CLRJMP
+PSABU:ENTRY
+;ПЕРЕХОД, ЕСЛИ НАДО РАЗМНОЖАТЬ ЗНАК
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG2,ALUS=DА,RА=HALF,FUNC=AND
+>,Н,ALUD=В,RВ=WR2,FFCNT=СНТКК
+;ВЫЧИТАЕМ
+JRP А=JQ,МАР=РЕ,COND=ТККВ,ISE,DDEV=CLRCD,ALUS=АВ,RА=WR2,RВ=А,FUNC=SUBR,Н
+>,CI,ALUD=В,СЕМ,FFCNT=MULGRP
+END
+UВА:PROG;
+;     I=========I
+;     I  U - А  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-83
+;PROM:083,283
+;===== ЦЕЛОЕ ВЫЧИТАНИЕ СУММАТОРА ИЗ НЕПОСРЕДСТВНЕННОГО ОПЕРАНДА (АДРЕСА)
+;
+EXTERNAL JQ,LCW,NADR
+;ВЫЧИСЛЯЕМ АИСП., ПРОВЕРЯЕМ ЗНАК
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,CEN
+>,ALU,ЕСВ,WRB,BRA=RG2,FFCNT=CLRJMP
+PSUBA:ENTRY
+;ПЕРЕХОД, ЕСЛИ НАДО РАЗМНОЖАТЬ ЗНАК
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG2,ALUS=DА,RА=HALF,FUNC=AND
+>,Н,ALUD=В,RВ=WR2,FFCNT=СНТКК
+;ВЫЧИТАЕМ
+JRP А=JQ,МАР=РЕ,COND=ТККВ,ISE,DDEV=CLRCD,ALUS=АВ,RА=WR2,RВ=А,FUNC=SUBS,Н
+>,CI,ALUD=В,СЕМ,FFCNT=MULGRP
+END
+UТА:PROG;
+;     I=========I
+;     I  U Т А  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-48
+;PROM:048,248
+;===== ВЫДАЧА ИСПОЛНИТЕЛЬНОГО АДРЕСА В СУММАТОР
+;
+EXTERNAL LCW,NADR,JQ
+;ВЫЧИСЛЯЕМ АИСП., ПРОВЕРЯЕМ ЗНАК
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,CEN
+>,ALU,ЕСВ,WRB,BRA=RG2,FFCNT=CLRJMP
+PSUTA:ENTRY
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG2,ALUS=DА,RА=HALF,FUNC=AND
+>,Н,ALUD=В,RВ=WR2,FFCNT=СНТКК
+;ПЕРЕСЫЛАЕМ АДРЕС В СУММАТОР, УСТАН.ЛОГИЧЕСКУЮ ГРУППУ!
+JRP А=JQ,МАР=РЕ,COND=ТККВ,ISE,DDEV=CLRCD,ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=А,СЕМ
+>,FFCNT=LOGGRP
+END
+AAU:PROG;
+;     I=========I
+;     I  А А U  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-49
+;PROM:049,249
+;===== ЛОГИЧЕСКОЕ УМНОЖЕНИЕ
+;
+EXTERNAL LCW,NADR,JQ
+;ВЫЧИСЛЯЕМ АИСП., ПРОВЕРЯЕМ ЗНАК, РАЗМНОЖАЕМ, ЕСЛИ НАДО
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,CEN
+>,ALU,ЕСВ,WRB,BRA=RG2,FFCNT=CLRJMP
+PSAAU:ENTRY
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG2,ALUS=DА,RА=HALF,FUNC=AND
+>,Н,ALUD=В,RВ=WR2,FFCNT=СНТКК
+;ЛОГИЧЕСКОЕ УМНОЖЕНИЕ, УСТАН.ЛОГИЧЕСКУЮ ГРУППУ!
+JRP А=JQ,МАР=РЕ,COND=ТККВ,ISE,DDEV=CLRCD,ALUS=АВ,RА=WR2,RВ=А,FUNC=AND,Н
+>,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+AEU:PROG;
+;     I=========I
+;     I  А Е U  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-4А
+;PROM:04А,24А
+;===== СРАВНЕНИЕ
+;
+EXTERNAL LCW,NADR,JQ
+;ВЫЧИСЛЯЕМ АИСП., ПРОВЕРЯЕМ ЗНАК, РАЗМНОЖАЕМ, ЕСЛИ НАДО
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,CEN
+>,ALU,ЕСВ,WRB,BRA=RG2,FFCNT=CLRJMP
+PSAEU:ENTRY
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG2,ALUS=DА,RА=HALF,FUNC=AND
+>,Н,ALUD=В,RВ=WR2,FFCNT=СНТКК
+;СРАВНЕНИЕ, УСТАН.ЛОГИЧЕСКУЮ ГРУППУ!
+JRP А=JQ,МАР=РЕ,COND=ТККВ,ISE,DDEV=CLRCD,ALUS=АВ,RА=WR2,RВ=А,FUNC=EXOR,Н
+>,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+AOU:PROG;
+;     I=========I
+;     I  А О U  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-4D
+;PROM:04D,24D
+;===== ЛОГИЧЕСКОЕ СЛОЖЕНИЕ
+;
+EXTERNAL LCW,NADR,JQ
+;ВЫЧИСЛЯЕМ АИСП., ПРОВЕРЯЕМ ЗНАК, РАЗМНОЖАЕМ, ЕСЛИ НАДО
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,CEN
+>,ALU,ЕСВ,WRB,BRA=RG2,FFCNT=CLRJMP
+PSAOU:ENTRY
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG2,ALUS=DА,RА=HALF,FUNC=AND
+>,Н,ALUD=В,RВ=WR2,FFCNT=СНТКК
+;ЛОГИЧЕСКОЕ СЛОЖЕНИЕ, УСТАН.ЛОГИЧЕСКУЮ ГРУППУ!
+JRP А=JQ,МАР=РЕ,COND=ТККВ,ISE,DDEV=CLRCD,ALUS=АВ,RА=WR2,RВ=А,FUNC=OR,Н
+>,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+ACU:PROG;
+;     I=========I
+;     I  А С U  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:52
+;PROM:052,252
+;===== ПОДСЧЕТ ЧИСЛА ЕДИНИЦ В СУММАТОРЕ;
+;ЗАТЕМ ВЫПОЛНЯЕТСЯ АРИФМЕТИЧЕСКОЕ(!) СЛОЖЕНИЕ РЕЗ-ТА С АДРЕСОМ (С РАЗМНОЖ.ЗНАКА
+;
+EXTERNAL LCW,NADR,ACXNC,JQ
+;ВЫЧИСЛЯЕМ АИСП., ПРОВЕРЯЕМ ЗНАК, РАЗМНОЖАЕМ, ЕСЛИ НАДО
+CONT CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,CEN,ALU,ЕСВ,WRB,BRA=RG2
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG2,ALUS=DА,RА=HALF,FUNC=AND
+>,Н,ALUD=В,RВ=WR2
+;СУММАТОР - В WR1
+CJS А=ACXNC,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR1,SТОРС=CLRM,СЕМ,FFCNT=СНТКК
+;ДЕЛАЕМ АРИФМЕТИЧЕСКОЕ(!) СЛОЖЕНИЕ
+PSACU:ENTRY
+LDCT А=LCW,МАР=РЕ,ALUS=АВ,RА=WR2,RВ=WR3,FUNC=ADD,Н,ALUD=В,FFCNT=CLRJMP
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,WRD,ISE
+>,ALUS=ZА,RА=WR3,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
+END
+ANU:PROG;
+;     I=========I
+;     I  А N U  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:53
+;PROM:053,253
+;===== ОПРЕДЕЛЯЕТСЯ НОМЕР СТАРШЕГО РАЗРЯДА СУММАТОРА, СОДЕРЖАЩЕГО "1";
+;   В РМР ПОМЕЩАЕТСЯ "ОСТАТОК" СУММАТОРА ПОСЛЕ РАЗРЯДА С "1";
+;   ЗАТЕМ - АРИФМЕТИЧЕСКОЕ(!) СЛОЖЕНИЕ С АДРЕСОМ.
+;
+EXTERNAL NADR,PSACU
+CONT CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,CEN,ALU,ЕСВ,WRB,BRA=RG2
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG2,ALUS=DА,RА=HALF,FUNC=AND,Н
+>,ALUD=В,RВ=WR2
+;ЧИСЛО ЕДИНИЦ ИЗ "ПЛЕ"+1 - В РГ.WR3, ЗАПОМИНАЕМ СУММАТОР В БОИ ДЛЯ РМР
+CONT ALUS=DZ,Н,CI,ALUD=ВА,RА=А,RВ=А,ALU,ЕСВ,WRB,BRA=RG3,DSRC=LOS
+;МАСКА НА 7 РАЗРЯДОВ
+CONT А=М7В,DSRC=PROM,ALUS=DА,RА=А,FUNC=AND,Н,ALUD=В,RВ=WR3
+;ВЫЧИСЛЯЕМ ПАРАМЕТР СДВИГА ДЛЯ ОПРЕДЕЛЕНИЯ "ОСТАТКА" СУММАТОРА
+CONT А=S0,DSRC=PROM,ALUS=DА,RА=WR3,FUNC=SUBS,Н,CI,ALU,YDST=PSHIFT
+;СДВИГАЕМ СУММАТОР ИЗ БОИ НА СООТВ.ЧИСЛО РАЗРЯДОВ - В РМР; П/У НА ЦИКЛ.СЛОЖЕНИЕ
+CJP А=PSACU,МАР=РЕ,ЕСВ,BRA=RG3,DSRC=SHIFT,SHF=LOG,ALUS=DZ,Н,ALUD=В,RВ=У
+>,FFCNT=СНТКК
+END
+UТУ:PROG;
+;     I=========I
+;     I  U Т У  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-88
+;PROM:088,288
+;===== ВЫДАЧА ИСПОЛНИТЕЛЬНОГО АДРЕСА В РМР
+;
+EXTERNAL LCW,NADR,JQ
+;ВЫЧИСЛЯЕМ АИСП., ПРОВЕРЯЕМ ЗНАК, РАЗМНОЖАЕМ, ЕСЛИ НАДО
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,CEN
+>,ALU,ЕСВ,WRB,BRA=RG2,FFCNT=CLRJMP
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG2,ALUS=DА,RА=HALF,FUNC=AND
+>,Н,ALUD=В,RВ=WR2,FFCNT=СНТКК
+;ПЕРЕСЫЛАЕМ АДРЕС В РМР
+JRP А=JQ,МАР=РЕ,COND=ТККВ,ISE,DDEV=CLRCD,ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=У
+END
+UTS:PROG;
+;     I=========I
+;     I  U Т S  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-43
+;PROM:043,243
+;===== ЗАГРУЗКА АДРЕСА В СУММАТОР МАГАЗИННАЯ
+;   СУММАТОР ПЕРЕСЫЛАЕТСЯ В МАГАЗИН; АИСП.С РАЗМНОЖЕНИЕМ ЗНАКА - В СУММАТОР.
+;
+EXTERNAL NADR,LCW,JQ
+;15 РЕГИСТР - В АИСП, В ИАОП
+CONT %MAWF%
+;ФИЗ. АДРЕС - В RG0; ИСПОЛНИТЕЛЬНЫЙ АДРЕС - В WR2, ПРОВЕРЯЕМ ЗНАК
+CONT %PHAW%,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+;СУММАТОР - В БОИ
+LDCT А=LCW,МАР=РЕ,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=А,ALU,ЕСВ,WRB,BRA=RG3
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ALUS=АВ,RА=HALF,RВ=WR2,FUNC=AND,Н,ALUD=В
+>,FFCNT=СНТКК
+;15+1 - В RG2
+WА:CJP А=WА,%WА%,ALUS=ZА,RА=DADR,CI,ALU,ЕСВ,WRB,BRA=RG2,FFCNT=LOGGRP
+;ПЕРЕХОД НА СЛЕД.КОМАНДУ, НОВОЕ ЗНАЧЕНИЕ SР - В 15 РЕГИСТР, АДРЕС - В СУММАТОР
+JRP А=JQ,МАР=РЕ,COND=ТККВ,ISE,DDEV=CLRCD,ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=А,СЕМ
+>,ЕСВ,BRA=RG2,CSM,WЕМ,MNSA=МР,MODNM=SР,FFCNT=CLRJMP
+END
+ХТУ:PROG;
+;      ===================
+;      8.ОПЕРАЦИИ С  Р М Р
+;      ===================
+;
+;ХТУ,УАХ,УЕХ,УОХ,УТХ,ААУ,АЕУ,АОУ
+;
+;     I=========I
+;     I  Х Т У  I
+;     I=========I
+;
+;РЭ:0,15ИР:0,ПИА:0,КОП-94
+;PROM:094
+;===== ЧТЕНИЕ ЧИСЛА ИЗ ПАМЯТИ В РМР
+;
+EXTERN RDOPER,LCW,ХТУ
+;М.А. - В АИСП, ИАОП
+CJS А=RDOPER,МАР=РЕ,%МА%
+;ПЕРЕХОД ПО КОП ИЛИ НА ВКС, ПМИ, ОПЕРАНД - В РМР
+JRP %М%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=У
+;
+;
+XTYF:ENTRY
+;РЭ:0,15ИР:1,ПИА:0,КОП-94
+;PROM:294
+;===== ЧТЕНИЕ ЧИСЛА В РМР ИЗ МАГАЗИНА: 15-1 -> 15; ЧТЕНИЕ ПО 15ИР.
+;
+;ПЕРЕХОД, ЕСЛИ НЕ 0; ПИШЕМ М.А. ДЛЯ МАГАЗИННОГО ОБРАЩЕНИЯ
+LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
+CJP А=ХТУ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%
+;ЧТЕНИЕ ИЗ МАГАЗИНА: Ф.А.
+CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+;ПЕРЕХОД ПО КОП, НОВЫЙ SР НА МЕСТО, ОПЕРАНД - В РМР, ПМИ
+JRP %М%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=У,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР
+END
+УАХ:PROG;
+;     I=========I
+;     I  У А Х  I
+;     I=========I
+;
+;РЭ:0,15ИР:0,ПИА:0,КОП:95
+;PROM:095
+;===== ЛОГИЧЕСКОЕ УМНОЖЕНИЕ РМР НА ОПЕРАНД, РЕЗ-Т - В СУММАТОРЕ
+;
+EXTERNAL RDOPER,LCW,УАХ
+;М.А. - В АИСП, ИАОП
+CJS А=RDOPER,МАР=РЕ,%МА%
+;ПЕРЕХОД ПО КОП ИЛИ НА ВКС, ПМИ, ЛОГИЧЕСКОЕ УМНОЖЕНИЕ РМР НА ОПЕРАНД
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=У,FUNC=AND,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
+;
+;
+YAXF:ENTRY
+;РЭ:0,15ИР:1,ПИА:0,КОП:95
+;PROM:295
+;
+;ПЕРЕХОД, ЕСЛИ АК НЕ 0; ПИШЕМ М.А. ДЛЯ МАГАЗИННОГО ОБРАЩЕНИЯ
+LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
+CJP А=УАХ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
+;ЧИТАЕМ ИЗ МАГАЗИНА; Ф.А.
+CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+;ПЕРЕХОД; НОВЫЙ SР ИЗ RG3 НА МЕСТО В ОЗУ МОД.; ОПЕРАНД УМНОЖАЕМ НА РМР
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=У,FUNC=AND,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
+>,%SPRG%
+END
+УЕХ:PROG;
+;     I=========I
+;     I  У Е Х  I
+;     I=========I
+;
+;РЭ:0,15ИР:0,ПИА:0,КОП:96
+;PROM:096
+;===== ЛОГИЧЕСКОЕ СРАВНЕНИЕ ОПЕРАНДА С РМР, РЕЗ-Т - В СУММАТОРЕ!
+;
+EXTERNAL RDOPER,LCW,УЕХ
+;М.А. - В АИСП, ИАОП
+CJS А=RDOPER,МАР=РЕ,%МА%
+;ПЕРЕХОД НА СЛЕД.КОМАНДУ, ПМИ, ЛОГИЧЕСКОЕ СРАВНЕНИЕ РМР И ОПЕРАНДА
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=У,FUNC=EXOR,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
+;
+;
+YEXF:ENTRY
+;РЭ:0,15ИР:1,ПИА:0,КОП:96
+;PROM:296
+;
+;ПЕРЕХОД, ЕСЛИ НЕ 0; М.А. ДЛЯ МАГАЗИННОГО ОБРАЩЕНИЯ
+LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
+CJP А=УЕХ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
+;МАГАЗИННОЕ ОБРАЩЕНИЕ; Ф.А.
+CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+;ПЕРЕХОД; НОВЫЙ SР ИЗ RG3 НА МЕСТО В ОЗУ МОД.;ОПЕРАНД СРАВНИВАЕМ С РМР
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=У,FUNC=EXOR,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
+>,%SPRG%
+END
+УОХ:PROG;
+;     I=========I
+;     I  У О Х  I
+;     I=========I
+;
+;РЭ:0,15ИР:0,ПИА:0,КОП:97
+;PROM:097
+;===== ЛОГИЧЕСКОЕ СЛОЖЕНИЕ РМР И ОПЕРАНДА, РЕЗ-Т - В СУММАТОРЕ
+;
+EXTERNAL RDOPER,LCW,УОХ
+;М.А. - В АИСП, ИАОП
+CJS А=RDOPER,МАР=РЕ,%МА%
+;ПЕРЕХОД НА СЛЕД.КОМАНДУ, ПМИ, ЛОГИЧЕСКОЕ СЛОЖЕНИЕ РМР И ОПЕРАНДА
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=У,FUNC=OR,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
+;
+;
+YOXF:ENTRY
+;РЭ:0,15ИР:1,ПИА:0,КОП:97
+;PROM:297
+;
+;ПЕРЕХОД, ЕСЛИ НЕ 0; ПИШЕМ М.А. ДЛЯ МАГАЗИННОГО ОБРАЩЕНИЯ
+LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
+CJP А=УОХ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
+;МАГАЗИННОЕ ОБРАЩЕНИЕ; Ф.А.
+CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+;ПЕРЕХОД; НОВЫЙ SР ИЗ RG3 НА МЕСТО В ОЗУ МОД.; ДЕЛАЕМ ЛОГ.СЛОЖЕНИЕ
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=У,FUNC=OR,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
+>,%SPRG%
+END
+УТХ:PROG;
+;     I=========I
+;     I  У Т Х  I
+;     I=========I
+;
+;РЭ:0,15ИР:0,ПИА:0,КОП-98
+;PROM:098
+;===== ЗАПИСЬ РМР В ПАМЯТЬ ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ
+;
+EXTERN LCW
+;МАТ.АДРЕС (М + Q) - В АИСП, ИАОП
+CONT %МА%
+;ФИЗ.АДРЕС - В RG0
+LDCT А=LCW,МАР=РЕ,%PHAW%,FFCNT=СНТКК
+;У - В РГ.РЕЗУЛЬТАТА, ЖДЕМ ГОТ.АРБИТРА
+WА:CJP А=WА,%WА%,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=У,ALU,ЕСВ,WRB,BRA=RG3
+;ПЕРЕХОД НА СЛЕД.КОМАНДУ; ПМИ, ТКК КОПИРУЕТСЯ В ППК ПО ПМИ
+JRP %М%,FFCNT=CLRJMP,%RСА%
+;
+;
+YTXF:ENTRY
+;РЭ:0,15ИР:1,ПИА:0,КОП-98
+;PROM:298
+;
+;ЕСЛИ ДАЖЕ МАГАЗИННОЕ ОБРАЩЕНИЕ, М.А. ВЫЧИСЛЯЕТСЯ ТАК ЖЕ!
+CONT %МА%
+;Ф.А.; ПРОВЕРЯЕМ АК
+LDCT А=LCW,МАР=РЕ,%PHAW%,FFCNT=СНТКК,ALUS=ZQ,CEN
+;РМР - В БОИ, ПЕРЕХОД, ЕСЛИ НЕ МАГАЗИН
+CJP А=WА,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=У,ALU,ЕСВ
+>,WRB,BRA=RG3
+;ЖДЕМ ГОТ. АРБИТРА, ЧИТАЕМ АК В Q
+WAF:CJP А=WAF,%WА%,%RСА%
+;ПЕРЕХОД ПО КОП, 15+1 - В 15 РЕГИСТР, ПМИ, ТКК КОПИРУЕТСЯ В ППК
+JRP %М%,ALUS=ZА,RА=DADR,FUNC=ADD,CI,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР,FFCNT=CLRJMP
+END
+ААУ:PROG;
+;     I=========I
+;     I  А А У  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-84,ДОП.ФОРМАТ
+;PROM:884,А84
+;===== ЛОГИЧЕСКОЕ УМНОЖЕНИЕ А,У; РЕЗ-Т - В СУММАТОРЕ
+;
+EXTERNAL LCWISE,JIQ
+LDCT А=LCWISE,МАР=РЕ,FFCNT=LOGGRP
+JRP А=JIQ,%R%,IСС,ALUS=АВ,RА=У,RВ=А,FUNC=AND,Н,ALUD=В,СЕМ,FFCNT=СНТКК
+END
+АЕУ:PROG;
+;     I=========I
+;     I  А Е У  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-85,ДОП.ФОРМАТ
+;PROM:885,А85
+;===== СРАВНЕНИЕ СУММАТОРА С РМР; РЕЗ-Т - В СУММАТОРЕ
+;   СУММАТОР В РМР ПЕРЕД ОПЕРАЦИЕЙ НЕ ПЕРЕСЫЛАЕТСЯ!
+;
+EXTERNAL LCWISE,JIQ
+LDCT А=LCWISE,МАР=РЕ,FFCNT=LOGGRP
+JRP А=JIQ,%R%,IСС,ALUS=АВ,RА=У,RВ=А,FUNC=EXOR,Н,ALUD=В,СЕМ,FFCNT=СНТКК
+END
+АОУ:PROG;
+;     I=========I
+;     I  А О У  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-86,ДОП.ФОРМАТ
+;PROM:886,А86
+;===== ЛОГИЧЕСКОЕ СЛОЖЕНИЕ СУММАТОРА И РМР; РЕЗ-Т - В СУММАТОРЕ
+;
+EXTERNAL LCWISE,JIQ
+LDCT А=LCWISE,МАР=РЕ,FFCNT=LOGGRP
+JRP А=JIQ,%R%,IСС,ALUS=АВ,RА=У,RВ=А,FUNC=OR,Н,ALUD=В,СЕМ,FFCNT=СНТКК
+END
+MCJ:PROG;
+;      ======================
+;      9.ИНДЕКСНЫЕ КОМАНДЫ НР
+;      ======================
+;
+;MCJ,MSN,J-М(JВМ),VТМН,VTMQ,VТМВ,VTMF,UTCS,МРАС,MUNP
+;А+I(ADI),А-I(ABI),I-А(IВА),А/I,А*I,AAI,AEI,AOI
+;
+;     I=========I
+;     I  М С J  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:90,ДОП.ФОРМАТ
+;PROM:890,А90
+;===== ОБМЕН СОДЕРЖИМОГО МОДИФИКАТОРОВ
+;
+EXTERNAL LCWISE,JIQ
+;ЧИТАЕМ МОДИФИКАТОР ПО IRA В RG3, ИСПОЛН.АДРЕС (Q) - В АИСП.
+CONT CSM,MNSA=IRA,ЕСА,WRA,ARA=RG3,ALUS=ZQ,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+;ЧИТАЕМ МОДИФИКАТОР ПО АИСП. - В RG2
+CONT CSM,MNSA=U,ЕСА,WRA,ARA=RG2
+;ПИШЕМ В МОДИФИКАТОР ПО IRA
+LDCT А=LCWISE,МАР=РЕ,ЕСВ,BRA=RG2,CSM,WЕМ,MNSA=IRA
+;ПИШЕМ В МОДИФИКАТОР ПО АИСП.
+JRP А=JIQ,%R%,IСС,ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=U,FFCNT=СНТКК
+END
+MSN:PROG;
+;     I=========I
+;     I  М S N  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-91,ДОП.ФОРМАТ
+;PROM:891,А91
+;===== АРИФМЕТИЧЕСКИЙ СДВИГ СОДЕРЖИМОГО МОДИФИКАТОРА
+;   ПЕРЕМЕЩАЕМ СОДЕРЖИМОЕ МОДИФИКАТОРА В СТАРШУЮ ПОЛОВИНУ
+;   И СДВИГАЕМ 64 РАЗРЯДА, ЧТОБ НЕ ВПРАВЛЯТЬ ВРУЧНУЮ ЗНАК.
+;   РЕЗУЛЬТАТ СДВИГА ПЕРЕСЫЛАЕМ В МЛАДШУЮ ПОЛОВИНУ И ПИШЕМ В ОЗУ МОД.
+;   НАПРАВЛЕНИЕ И ЧИСЛО СДВИГОВ - В АИСП.(РГ.Q) ПО ОБЩЕМУ ПРАВИЛУ.
+;
+EXTERNAL LCWISE,JRPCH
+;ЧИТАЕМ МОДИФИКАТОР В БОИ ДАННЫХ, АИСП.(ПАР-Р СДВИГА) - В РПС
+CONT CSM,MNSA=IRA,ЕСА,WRA,ARA=RG3,ALUS=ZQ,ALUD=В,RВ=DADR,ALU,YDST=PSHIFT
+;МОДИФИКАТОР - В СТАРШУЮ ПОЛОВИНУ
+CONT ЕСВ,BRA=RG3,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG,ALUS=DZ,Н,ALUD=В,RВ=WR1
+;СДВИГАЕМ МОДИФИКАТОР АРИФМЕТИЧЕСКИ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU,DSRC=SHIFT,SHF=ARIPH
+;СДВИГАЕМ РЕЗУЛЬТАТ ОБРАТНО В МЛ.РАЗРЯДЫ
+LDCT А=LCWISE,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0+32,SHF=LOG
+PSMSN:ENTRY
+;ПИШЕМ В ОЗУ МОД., П/У НА КОНЕЦ VТМ
+CJP А=JRPCH,МАР=РЕ,ALUS=ZА,RА=WR1,ALU,CSM,WЕМ,MNSA=IRA
+END
+JВМ:PROG;
+;     I=========I
+;     I  J - М  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:27,ДОП.ФОРМАТ
+;PROM:827,А27
+;===== ВЫЧИТАНИЕ МОДИФИКАТОРОВ: М(АК) - М(MRA) -> М(АК)
+;
+EXTERNAL LCW,JQ
+;ЧИТАЕМ МОДИФИКАТОР ПО IRA В RG3, ИСПОЛН.АДРЕС (Q) - В АИСП.
+CONT CSM,MNSA=IRA,ЕСА,WRA,ARA=RG3,ALUS=ZQ,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+;ЧИТАЕМ МОДИФИКАТОР ПО АИСП. - В РГ.WR1
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=U,ALUS=DZ,ALUD=В,RВ=WR1,FFCNT=СНТКК
+;ВЫЧИТАЕМ: М(WR1) - М(RG3) -> ПИШЕМ В МОДИФИКАТОР ПО АИСП.
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,WRD,ISE,ЕСА,ARA=RG3,ALUS=DА,RА=WR1
+>,FUNC=SUBR,CI,ALU,CSM,WЕМ,MNSA=U,FFCNT=CLRJMP
+END
+VТМН:PROG;
+;     I===========I
+;     I  V Т М Н  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-А0
+;PROM:0А0,2А0
+;===== УСТАНОВКА АДРЕСА ПОЛУСЛОВА НА МОДИФИКАТОР; АК СДВИГАЕТСЯ ВЛЕВО НА 1 Р.
+;   АК ПЕРЕМЕЩАЕМ В СТАРШИЕ РАЗРЯДЫ И СДВИГАЕМ ВЛЕВО АРИФМЕТИЧЕСКИ 64 РАЗРЯДА,
+;   ЧТОБ НЕ ВПРАВЛЯТЬ ВРУЧНУЮ ЗНАК.
+;   РЕЗУЛЬТАТ СДВИГАЕМ В МЛ.ПОЛОВИНУ И ПЕРЕПИСЫВАЕМ В ОЗУ МОДИФИКАТОРОВ.
+;
+EXTERNAL LCWISE,PSMSN
+;АК - В СТАРШУЮ ПОЛОВИНУ
+CONT ALUS=ZQ,ALUD=В,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG,ЕСА,WRA
+>,ARA=RG3
+;СДВИГАЕМ АК ВЛЕВО НА 1 РАЗРЯД АРИФМЕТИЧЕСКИ
+LDCT А=LCWISE,МАР=РЕ,ЕСВ,BRA=RG3,DSRC=SHIFT,MPS,PSHF=SН0-1,SHF=ARIPH,ALUS=DZ
+>,Н,ALUD=В,RВ=WR1
+PSVTMH:ENTRY
+;СДВИГАЕМ В МЛАДШИЕ РАЗРЯДЫ, ИДЕМ НА ЗАПИСЬ В ОЗУ МОД.
+CJP А=PSMSN,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0+32,SHF=LOG
+END
+VTMQ:PROG;
+;     I===========I
+;     I  V Т М Q  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-А1
+;PROM:0А1,2А1
+;===== УСТАНОВКА АДРЕСА 16-РАЗР.ФРАГМЕНТА НА МОДИФИКАТОР; АК СДВИГАЕТСЯ НА 2Р.
+;
+EXTERNAL PSVTMH,LCWISE
+;АК - В СТАРШУЮ ПОЛОВИНУ
+LDCT А=LCWISE,МАР=РЕ,ALUS=ZQ,ALUD=В,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0-32
+>,SHF=LOG,ЕСА,WRA,ARA=RG3
+;СДВИГАЕМ АК ВЛЕВО НА 2 РАЗРЯДА АРИФМЕТИЧЕСКИ, ПЕРЕХОД
+CJP А=PSVTMH,МАР=РЕ,ЕСВ,BRA=RG3,DSRC=SHIFT,MPS,PSHF=SН0-2,SHF=ARIPH,ALUS=DZ
+>,Н,ALUD=В,RВ=WR1
+END
+VТМВ:PROG;
+;     I===========I
+;     I  V Т М В  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-А2
+;PROM:0А2,2А2
+;===== УСТАНОВКА АДРЕСА БАЙТА НА МОДИФИКАТОР; АК СДВИГАЕТСЯ ВЛЕВО НА 3
+;
+EXTERNAL PSVTMH,LCWISE
+;АК - В СТАРШУЮ ПОЛОВИНУ
+LDCT А=LCWISE,МАР=РЕ,ALUS=ZQ,ALUD=В,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0-32
+>,SHF=LOG,ЕСА,WRA,ARA=RG3
+;СДВИГАЕМ АК ВЛЕВО НА 3 РАЗРЯДА АРИФМЕТИЧЕСКИ, ПЕРЕХОД
+CJP А=PSVTMH,МАР=РЕ,ЕСВ,BRA=RG3,DSRC=SHIFT,MPS,PSHF=SН0-3,SHF=ARIPH,ALUS=DZ
+>,Н,ALUD=В,RВ=WR1
+END
+VTMF:PROG;
+;     I===========I
+;     I  V Т М F  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-А3
+;PROM:0А3,2А3
+;===== УСТАНОВКА АДРЕСА БИТА НА МОДИФИКАТОР; АК СДВИГАЕТСЯ ВЛЕВО НА 6
+;
+EXTERNAL PSVTMH,LCWISE
+;АК - В СТАРШУЮ ПОЛОВИНУ
+LDCT А=LCWISE,МАР=РЕ,ALUS=ZQ,ALUD=В,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0-32
+>,SHF=LOG,ЕСА,WRA,ARA=RG3
+;СДВИГАЕМ АК ВЛЕВО НА 6 РАЗРЯДОВ АРИФМЕТИЧЕСКИ, ПЕРЕХОД
+CJP А=PSVTMH,МАР=РЕ,ЕСВ,BRA=RG3,DSRC=SHIFT,MPS,PSHF=SН0-6,SHF=ARIPH,ALUS=DZ
+>,Н,ALUD=В,RВ=WR1
+END
+UTCS:PROG;
+;     I===========I
+;     I  U Т С S  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:А4
+;PROM:0А4,2А4
+;===== ПРЕФИКСАЦИЯ АДРЕСОМ СО СДВИГОМ
+;
+EXTERNAL LCW,JQ
+;ИСПОЛНИТ.АДРЕС (М+Q) - В DADR
+CONT CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,FFCNT=CLRJMP
+;СДВИГАЕМ АИСП. ВЛЕВО НА 16 РАЗРЯДОВ, ПИШЕМ ПОКА В БОИ
+LDCT А=LCW,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=WR1,ALU
+>,DSRC=SHIFT,MPS,PSHF=SН0-16,SHF=LOG,FFCNT=СНТКК
+;ПЕРЕПИСЫВАЕМ В РГ.С; К СОЖАЛЕНИЮ, НЕГДЕ РАНЬШЕ УСТАНОВТЬ ПИА ИЛИ ИЗМЕНИТЬ ТКК
+JRP А=JQ,МАР=РЕ,COND=ТККВ,ISE,ALUS=ZВ,RВ=WR6,ALUD=ВА,RА=WR1,ALU,CSM,WЕМ
+>,MNSA=МР,MODNM=С,FFCNT=SЕТС
+END
+МРАС:PROG;
+;     I===========I
+;     I  М Р А С  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:94,ДОП.ФОРМАТ
+;PROM:894,А94
+;===== УПАКОВКА МОДИФИКАТОРОВ В А,У; АИСП.= МЛАДШЕМУ МОДИФИКАТОРУ
+;
+EXTERNAL LCW,JQ
+;ИСПОЛНИТ.АДРЕС (М+Q) - В АИСП
+CONT %МА%
+;ЧИТАЕМ МОДИФИКАТОРЫ, УВЕЛИЧИВАЯ АДРЕС, СНАЧАЛА В СУММАТОР
+CONT CSM,MNSA=U,ALUS=DZ,ALUD=В,RВ=WR4
+CONT ALUS=ZА,RА=DADR,CI,ALUD=В,RВ=WR1,ALU,YDST=ADRREG
+CONT CSM,MNSA=U,ALUS=DА,RА=HALF,FUNC=AND,Н,ALUD=Q
+CONT ALUS=DQ,FUNC=OR,Н,ALUD=ВА,RА=WR4,RВ=А,СЕМ,ALU,DSRC=SHIFT,MPS,PSHF=SН0-32
+>,SHF=LOG,FFCNT=LOGGRP
+;ПОТОМ В РМР
+CONT ALUS=ZВ,RВ=WR1,CI,ALUD=В,ALU,YDST=ADRREG
+CONT CSM,MNSA=U,ALUS=DZ,ALUD=В,RВ=WR4
+CONT ALUS=ZВ,RВ=WR1,CI,ALU,YDST=ADRREG
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=U,ALUS=DА,RА=HALF,FUNC=AND,Н,ALUD=Q,FFCNT=СНТКК
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,WRD,ISE,ALUS=DQ,FUNC=OR,Н,ALUD=ВА
+>,RА=WR4,RВ=У,ALU,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG,FFCNT=CLRJMP
+END
+MUNP:PROG;
+;     I===========I
+;     I  М U N Р  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:95,ДОП.ФОРМАТ
+;PROM:895,А95
+;===== РАСПАКОВКА МОДИФИКАТОРОВ; АИСП.= МЛАДШЕМУ МОДИФИКАТОРУ
+;
+EXTERNAL LCW
+;ИСПОЛНИТ.АДРЕС (М+Q)+1  - В АИСП
+CONT CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,CI,ALUD=В,RВ=WR1,ALU,YDST=ADRREG
+;ПИШЕМ В ОЗУ МОД., УВЕЛИЧИВАЯ АДРЕС, СНАЧАЛА ИЗ СУММАТОРА
+;ПАР-Р СДВИГА НА 32 - В РПС, ЧТОБ МОЖНО БЫЛО ОДНОВЕМЕННО СДВИГАТЬ И ПИСАТЬ В МОД
+CONT А=SR32,DSRC=PROM,ALUS=DZ,ALU,YDST=PSHIFT
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=WR4,ALU,CSM,WЕМ,MNSA=U,DSRC=SHIFT,SHF=LOG
+CONT ALUS=ZА,RА=WR1,FUNC=SUBR,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+CONT ALUS=ZА,RА=WR4,ALU,CSM,WЕМ,MNSA=U
+;ИЗ РМР
+CONT А=С3,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=ADD,ALU,YDST=ADRREG
+CONT ALUS=ZА,RА=У,Н,ALU,CSM,WЕМ,MNSA=U,DSRC=SHIFT,SHF=LOG,ЕСА,WRA,ARA=RG3
+LDCT А=LCW,МАР=РЕ,ALUS=ZА,RА=WR1,CI,ALU,YDST=ADRREG,FFCNT=СНТКК
+JRP %М%,ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=U,%RСА%,FFCNT=CLRJMP
+END
+ADI:PROG;
+;     I=========I
+;     I  А + I  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-А2,ДОП.ФОРМАТ
+;PROM:8А2,АА2
+;===== ЦЕЛОЕ СЛОЖЕНИЕ СУММАТОРА С МОДИФИКАТОРОМ ПО ИСП.АДРЕСУ
+;
+EXTERNAL LCW,PSADU
+;ЧИТАЕМ МОДИФИКАТОР ПО ИСП.АДРЕСУ., ПРОВЕРЯЕМ ЗНАК
+LDCT А=LCW,МАР=РЕ,%МА%
+CJP А=PSADU,МАР=РЕ,CSM,MNSA=U,ЕСА,WRA,ARA=RG2,ALUS=DZ,CEN,FFCNT=CLRJMP
+END
+ABI:PROG;
+;     I=========I
+;     I  А - I  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-А3,ДОП.ФОРМАТ
+;PROM:8А3,АА3
+;===== ЦЕЛОЕ ВЫЧИТАНИЕ МОДИФИКАТОРА ИЗ СУММАТОРА
+;
+EXTERNAL LCW,PSABU
+;ЧИТАЕМ МОДИФИКАТОР ПО АИСП., ПРОВЕРЯЕМ ЗНАК
+LDCT А=LCW,МАР=РЕ,%МА%
+CJP А=PSABU,МАР=РЕ,CSM,MNSA=U,ЕСА,WRA,ARA=RG2,ALUS=DZ,CEN,FFCNT=CLRJMP
+END
+IВА:PROG;
+;     I=========I
+;     I  I - А  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-А4,ДОП.ФОРМАТ
+;PROM:8А4,АА4
+;===== ЦЕЛОЕ ВЫЧИТАНИЕ СУММАТОРА ИЗ МОДИФИКАТОРА
+;
+EXTERNAL LCW,PSUBA
+;ЧИТАЕМ МОДИФИКАТОР, ПЕРЕХОД
+LDCT А=LCW,МАР=РЕ,%МА%
+CJP А=PSUBA,МАР=РЕ,CSM,MNSA=U,ЕСА,WRA,ARA=RG2,ALUS=DZ,CEN,FFCNT=CLRJMP
+END
+AAI:PROG;
+;     I=========I
+;     I  А А I  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-А9,ДОП.ФОРМАТ
+;PROM:8А9,АА9
+;===== ЛОГИЧЕСКОЕ УМНОЖЕНИЕ НА МОДИФИКАТОР
+;
+EXTERNAL LCW,PSAAU
+LDCT А=LCW,МАР=РЕ,%МА%
+CJP А=PSAAU,МАР=РЕ,CSM,MNSA=U,ЕСА,WRA,ARA=RG2,ALUS=DZ,CEN,FFCNT=CLRJMP
+END
+AEI:PROG;
+;     I=========I
+;     I  А Е I  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-АА,ДОП.ФОРМАТ
+;PROM:8АА,ААА
+;===== СРАВНЕНИЕ
+;
+EXTERNAL LCW,PSAEU
+LDCT А=LCW,МАР=РЕ,%МА%
+CJP А=PSAEU,МАР=РЕ,CSM,MNSA=U,ЕСА,WRA,ARA=RG2,ALUS=DZ,CEN,FFCNT=CLRJMP
+END
+AOI:PROG;
+;     I=========I
+;     I  А О I  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-АВ,ДОП.ФОРМАТ
+;PROM:8АВ,ААВ
+;===== ЛОГИЧЕСКОЕ СЛОЖЕНИЕ
+;
+EXTERNAL LCW,PSAOU
+LDCT А=LCW,МАР=РЕ,%МА%
+CJP А=PSAOU,МАР=РЕ,CSM,MNSA=U,ЕСА,WRA,ARA=RG2,ALUS=DZ,CEN,FFCNT=CLRJMP
+END
+JMGE:PROG;
+;      =================================
+;      10.КОМАНДЫ ПЕРЕДАЧИ УПРАВЛЕНИЯ НР
+;      =================================
+;
+;JMGE,JMLT,JMLE,JMGT,VRM,UZAS,UIAS,JOVR,JCRY,JAGT,JAGE
+;JALT,JALE,JAEQ,JANE,JMPS,RETS
+;
+;     I===========I
+;     I  J М G Е  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:22
+;PROM:022,222
+;===== ПЕРЕХОД, ЕСЛИ МОДИФИКАТОР М(IRA) БОЛЬШЕ ИЛИ РАВЕН 0
+;
+EXTERNAL LCW,LCWJMP
+;ПРОВЕРЯЕМ ЗНАК МОДИФИКАТОРА НА "0"
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DZ,CEN
+;ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ NN = 0 (ЗНАК МОДИФ.= 0)
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=/NN,ALUS=ZQ,ALUD=В,RВ=DADR,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP %М%,FFCNT=CLRJMP,%RСА%
+END
+JMLT:PROG;
+;     I===========I
+;     I  J М L Т  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:23
+;PROM:023,223
+;===== ПЕРЕХОД, ЕСЛИ МОДИФИКАТОР М(IRA) МЕНЬШЕ 0
+;
+EXTERNAL LCW,LCWJMP
+;ПРОВЕРЯЕМ ЗНАК МОДИФИКАТОРА НА "0"
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DZ,CEN
+;ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ NN = 1 (ЗНАК МОДИФ.= 1)
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=NN,ALUS=ZQ,ALUD=В,RВ=DADR,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP %М%,FFCNT=CLRJMP,%RСА%
+END
+JMLE:PROG;
+;     I===========I
+;     I  J М L Е  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:24
+;PROM:024,224
+;===== ПЕРЕХОД, ЕСЛИ МОДИФИКАТОР М(IRA) МЕНЬШЕ ИЛИ РАВЕН 0
+;
+EXTERNAL LCW,LCWJMP
+;ЧИТАЕМ МОДИФИКАТОР, СРАВНИВАЕМ С 0
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DZ,FUNC=SUBS,CI,CEN
+;ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ МОДИФИКАТОР > 0
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=0,ALUS=ZQ,ALUD=В,RВ=DADR,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP %М%,FFCNT=CLRJMP,%RСА%
+END
+JMGT:PROG;
+;     I===========I
+;     I  J М G Т  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:25
+;PROM:025,225
+;===== ПЕРЕХОД, ЕСЛИ МОДИФИКАТОР М(IRA) БОЛЬШЕ 0
+;
+EXTERNAL LCW,LCWJMP
+;ЧИТАЕМ МОДИФИКАТОР, СРАВНИВАЕМ С 0
+LDCT А=LCW,МАР=РЕ,CSM,MNSA=IRA,ALUS=DZ,FUNC=SUBS,CI,CEN
+;ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ МОДИФИКАТОР > 0
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=1,ALUS=ZQ,ALUD=В,RВ=DADR,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP %М%,FFCNT=CLRJMP,%RСА%
+END
+VRM:PROG;
+;     I=========I
+;     I  V R М  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:А9
+;PROM:0А9,2А9
+;===== КОНЕЦ ЦИКЛА С УМЕНЬШЕНИЕМ ЗНАЧЕНИЯ МОДИФИКАТОРА:
+; - ЕСЛИ УКАЗАННЫЙ В ПОЛЕ МОДИФИКАТОРА ИНДЕКС-РЕГИСТР НЕ РАВЕН 0,
+;   ПРОИЗВОДИТСЯ П/У ПО АК, А ИР = ИР - 1;
+; - ЕСЛИ ИР = 0, ВЫПОЛНЯЕТСЯ СЛЕДУЮЩАЯ КОМАНДА.
+;
+EXTERN LCWJMP,LCWISE,JIQ
+;ПРОВЕРЯЕМ МОДИФИКАТОР НА "0"
+LDCT А=LCWISE,МАР=РЕ,CSM,MNSA=IRA,ALUS=DZ,ALUD=В,RВ=WR1,CEN
+;ПЕРЕХОД, ЕСЛИ МОДИФИКАТОР НЕ РАВЕН 0
+CJP А=VRMJMP,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZQ,ALUD=В,RВ=DADR
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ. ТКК РАНЬШЕ МЕНЯТЬ НЕЛЬЗЯ! ВОЗМОЖНА ЗАПИСЬ ПО IRA
+JRP А=JIQ,%R%,IСС,FFCNT=СНТКК
+;
+;МОДИФИКАТОР НЕ РАВЕН 0: УМЕНЬШЕНИЕ МОДИФИКАТОРА, П/У ПО АК
+VRMJMP:CJP А=LCWJMP,МАР=РЕ,ALUS=ZА,RА=WR1,FUNC=SUBR,ALU,CSM,WЕМ,MNSA=IRA
+END
+UZAS:PROG;
+;     I===========I
+;     I  U Z А S  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:АА
+;PROM:0АА,2АА
+;===== УСЛОВНЫЙ ПЕРЕХОД ПО "0" МАГАЗИННЫЙ(!) В ЗАВИСИМОСТИ ОТ ПРИЗНАКОВ ГРУПП
+;   В ПНА ГРУПП 4 КОМБИНАЦИИ СЛ.1,0 СООТВЕТСТВУЮТ КОМАНДАМ UZA,UIA,УТА,UZAS+UIAS
+;   Т.Е. АДРЕСА В ПНА ГРУПП ДЛЯ КОМАНД UZAS,UIAS - ОДНИ И ТЕ ЖЕ.
+;   ПОЭТОМУ ПЕРЕХОД ПО ПНА ГРУПП ДЕЛАЕМ С ЗАПИСЬЮ АДРЕСА ВОЗВРАТА В СТЕК,
+;   А ПОСЛЕ ВЫРАБОТКИ УСЛОВИЯ В ЗАВИСИМОСТИ ОТ ПРИЗНАКА ГРУППЫ - ВОЗВРАТ.
+;   ДАЛЬШЕ В КОМАНДЕ UIAS - ИНВЕРТИРОВАНИЕ ПРИЗНАКА И ПЕРЕХОД НА КОМАНДУ UZAS.
+;   В UZAS,UIAS ЕСТЬ ЧТЕНИЕ В СУММАТОР, РГ.М ПЕРЕУСТАНАВЛИВАЕТСЯ;
+;   МОЖНО ИСПОЛЬЗОВАТЬ РГ.М КАК РАБОЧИЙ, Т.К. ЕГО ЛЕГКО ИНВЕРТИРОВАТЬ!
+;   СЛ.1 = 0     СЛ.0 = 0
+;
+EXTERNAL LCW,LCWJMP
+;УСТАНАВЛИВАЕМ СЛ.0,1 = 0; М.А.+ Ф.А. ДЛЯ ЧТЕНИЯ ИЗ МАГАЗИНА В СУММАТОР
+CONT %ARF%,FFCNT=CLRTR0
+LDCT А=LCW,МАР=РЕ,%PHAR%,FFCNT=CLRTR1
+;ПЕРЕХОДИМ ПО ПНА ГРУПП, ВЫЧИСЛЯЕМ АК; 0 - В MZ, ЕСЛИ ВСЕ ПРИЗНАКИ ГРУПП = 0
+CJS МАР=GRP,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=Q,SТОРС=CLRM,СЕМ
+WAUZAS:ENTRY
+CJP А=WAUZAS,%WА%,SТОРС=MCN,CEN,FFCNT=LOGGRP
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=NZ,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=ВА,RА=DADR
+>,RВ=А,СЕМ,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР,FFCNT=СНТКК
+JRP %М%,%RСА%,FFCNT=CLRJMP
+END
+UZSPNA:PROG;
+;===== ПНА-ЗАВИСИМАЯ ЧАСТЬ КОМАНД UZAS,UIAS
+;   СИГНАЛЫ, УПРАВЛЯЮЩИЕ ВЫБОРКОЙ ИЗ ПНА ГРУПП:
+;   СЛ1, СЛ0, ГС, ГУ, ГЛ
+;    0    0    Х   Х   Х  -  ДЛЯ КОМАНД  UZAS,UIAS
+;   ЕСЛИ ОДНОВРЕМЕННО УСТАНОВЛЕНЫ НЕСКОЛЬКО ПРИЗНАКОВ ГРУПП, ТО ПРИОРИТЕТ
+;   ИМЕЕТ ГРУППА СЛОЖЕНИЯ (ГС); ЕСЛИ ЕЕ НЕТ - ГРУППА УМНОЖЕНИЯ (ГУ)
+;
+UZSADD:ENTRY
+;===== ГРУППА СЛОЖЕНИЯ (ГС) ДЛЯ КОМАНД UZAS,UIAS
+;   ВОЗМОЖНЫЕ КОМБИНАЦИИ ВХОДНЫХ СИГНАЛОВ:
+;   0 0 1 0 0  =  04 Н
+;   0 0 1 0 1  =  05 Н
+;   0 0 1 1 0  =  06 Н
+;   0 0 1 1 1  =  07 Н
+;PROM:1804,1805,1806,1807
+;UZAS: ПРОИСХОДИТ ПЕРЕДАЧА УПРАВЛЕНИЯ ПО АИСП, ЕСЛИ ЗНАК МАНТИССЫ (53Р.) = 0
+CRTN А=В53,DSRC=PROM,ALUS=DА,RА=А,FUNC=AND,Н,СЕМ
+;
+UZSZER:ENTRY
+;===== ВСЕ ПРИЗНАКИ ГРУПП = 0 ДЛЯ КОМАНД UZAS,UIAS
+;   0 0 0 0 0  =  00 Н
+;ПРОИСХОДИТ ПЕРЕДАЧА УПРАВЛЕНИЯ НА СЛЕДУЮЩУЮ КОМАНДУ (UZAS, MZ=0);
+;ИЛИ ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ (UIAS, MZ=1).
+;PROM:1800
+CRTN
+;
+UZSMUL:ENTRY
+;===== ГРУППА УМНОЖЕНИЯ (ГУ) ДЛЯ КОМАНД UZAS,UIAS
+;   ВОЗМОЖНЫЕ КОМБИНАЦИИ ВХОДНЫХ СИГНАЛОВ:
+;   0 0 0 1 0  =  02 Н
+;   0 0 0 1 1  =  03 Н
+;PROM:1802,1803
+;UZAS: ПРОИСХОДИТ П/У ПО АИСП.,ЕСЛИ ПОРЯДОК ЧИСЛА В РГ.А > ИЛИ = "0" (64Р.= 1)
+;Т.Е.УСЛОВИЕ ПЕРЕХОДА - ПРОТИВОПОЛОЖНОЕ! ПОСЛЕ ЗАПИСИ В РГ.М ИНВЕРТИРУЕМ ЕГО!
+CONT А=В64,DSRC=PROM,ALUS=DА,RА=А,FUNC=AND,Н,СЕМ
+CRTN SТОРС=INVM,СЕМ
+;
+UZSLOG:ENTRY
+;===== ЛОГИЧЕСКАЯ ГРУППА (ГЛ) ДЛЯ КОМАНД UZAS,UIAS
+;   ВОЗМОЖНЫЕ КОМБИНАЦИИ ВХОДНЫХ СИГНАЛОВ:
+;   0 0 0 0 1  =  01 Н
+;PROM:1801
+;UZAS: ПРОИСХОДИТ ПЕРЕДАЧА УПРАВЛЕНИЯ ПО АИСП, ЕСЛИ РГ.А = 0
+CRTN ALUS=ZА,RА=А,Н,СЕМ
+ENDUZS:ENTRY
+END
+UIAS:PROG;
+;     I===========I
+;     I  U I А S  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-АВ
+;PROM:0АВ,2АВ
+;===== УСЛОВНЫЙ ПЕРЕХОД ПО "1" МАГАЗИННЫЙ (!) В ЗАВИСИМОСТИ ОТ ПРИЗНАКОВ ГРУПП
+;   СЛ.1,0 = 0, ОПИСАНИЕ СМ. В UZAS
+;
+EXTERNAL LCW,WAUZAS
+;УСТАНАВЛИВАЕМ СЛ.0,1 = 0; М.А.+ Ф.А. ДЛЯ ЧТЕНИЯ ИЗ МАГАЗИНА В СУММАТОР
+CONT %ARF%,FFCNT=CLRTR0
+LDCT А=LCW,МАР=РЕ,%PHAR%,FFCNT=CLRTR1
+;ПЕРЕХОДИМ ПО ПНА ГРУПП, ВЫЧИСЛЯЕМ АК; 0 - В MZ, ЕСЛИ ВСЕ ПРИЗНАКИ ГРУПП = 0
+CJS МАР=GRP,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=Q,SТОРС=CLRM,СЕМ
+;ИНВЕРТИРУЕМ РГ.М, ДАЛЬШЕ - КАК В UZAS
+CJP А=WAUZAS,МАР=РЕ,SТОРС=INVM,СЕМ
+END
+JOVR:PROG;
+;     I===========I
+;     I  J О V R  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:АС
+;PROM:0АС,2АС
+;===== УСЛОВНЫЙ ПЕРЕХОД ПРИ ПЕРЕПОЛНЕНИИ
+;
+EXTERNAL LCW,LCWJMP
+;ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ ПЕРЕПОЛНЕНИЕ = 1
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=MV,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=Q
+LDCT А=LCW,МАР=РЕ,ALUS=ZQ,ALUD=В,RВ=DADR,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP %М%,FFCNT=CLRJMP,%RСА%
+END
+JCRY:PROG;
+;     I===========I
+;     I  J С R У  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:AD
+;PROM:0AD,2AD
+;===== УСЛОВНЫЙ ПЕРЕХОД ПРИ ПЕРЕНОСЕ
+;
+EXTERNAL LCW,LCWJMP
+;ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ ПЕРЕНОС = 1
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=МС,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=Q
+LDCT А=LCW,МАР=РЕ,ALUS=ZQ,ALUD=В,RВ=DADR,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP %М%,FFCNT=CLRJMP,%RСА%
+END
+JAGT:PROG;
+;     I===========I
+;     I  J А G Т  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:АЕ
+;PROM:0АЕ,2АЕ
+;===== ПЕРЕХОД, ЕСЛИ СУММАТОР БОЛЬШЕ 0
+;
+EXTERNAL LCW,LCWJMP,JQ
+;ЧИТАЕМ М(IRA) В БОИ ДЛЯ ВЫЧИСЛЕНИЯ АК, ЧТОБ МОЖНО БЫЛО ИЗМЕНЯТЬ ТКК
+LDCT А=LCW,МАР=РЕ,ALUS=ZА,RА=А,Н,FUNC=SUBR,CI,CEN,CSM,MNSA=IRA,ЕСА,WRA,ARA=RG3
+;М(RG3)+Q->Q; ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ РГ.А > 0
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=1,ЕСА,ARA=RG3,ALUS=DQ,FUNC=ADD,ALUD=Q
+>,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,FFCNT=CLRJMP,ALUS=ZQ,ALUD=В,RВ=DADR
+END
+JAGE:PROG;
+;     I===========I
+;     I  J А G Е  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:AF
+;PROM:0AF,2AF
+;===== ПЕРЕХОД, ЕСЛИ СУММАТОР БОЛЬШЕ ИЛИ РАВЕН 0
+;   В ЛК МОЖНО СДЕЛАТЬ П/У ПО ПНА (ВМЕСТО JQ), ЕСЛИ ИСПОЛЬЗОВАТЬ ГОТОВЫЙ РГ.М!
+;
+EXTERNAL LCW,LCWJMP,JQ
+LDCT А=LCW,МАР=РЕ,ALUS=ZА,RА=А,Н,CEN,CSM,MNSA=IRA,ЕСА,WRA,ARA=RG3
+;ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ ЗНАК = 0
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=/NN,ЕСА,ARA=RG3,ALUS=DQ,FUNC=ADD,ALUD=Q
+>,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,FFCNT=CLRJMP,ALUS=ZQ,ALUD=В,RВ=DADR
+END
+JALT:PROG;
+;     I===========I
+;     I  J А L Т  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:В0
+;PROM:0В0,2В0
+;===== ПЕРЕХОД, ЕСЛИ СУММАТОР МЕНЬШЕ 0
+;   М.ПОПРОБОВАТЬ ВОСПОЛЬЗОВАТЬСЯ ГОТОВЫМИ ПРИЗНАКАМИ РГ.М!
+;
+EXTERNAL LCW,LCWJMP,JQ
+LDCT А=LCW,МАР=РЕ,ALUS=ZА,RА=А,Н,CEN,CSM,MNSA=IRA,ЕСА,WRA,ARA=RG3
+;ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ ЗНАК = 1
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG3,ALUS=DQ,FUNC=ADD,ALUD=Q
+>,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,FFCNT=CLRJMP,ALUS=ZQ,ALUD=В,RВ=DADR
+END
+JALE:PROG;
+;     I===========I
+;     I  J А L Е  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:В1
+;PROM:0В1,2В1
+;===== ПЕРЕХОД, ЕСЛИ СУММАТОР МЕНЬШЕ ИЛИ РАВЕН 0
+;
+EXTERNAL LCW,LCWJMP,JQ
+LDCT А=LCW,МАР=РЕ,ALUS=ZА,RА=А,Н,FUNC=SUBR,CI,CEN,CSM,MNSA=IRA,ЕСА,WRA,ARA=RG3
+;ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ РГ.А МЕНЬШЕ ИЛИ РАВЕН 0
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=0,ЕСА,ARA=RG3,ALUS=DQ,FUNC=ADD,ALUD=Q
+>,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,FFCNT=CLRJMP,ALUS=ZQ,ALUD=В,RВ=DADR
+END
+JAEQ:PROG;
+;     I===========I
+;     I  J А Е Q  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:В2
+;PROM:0В2,2В2
+;===== ПЕРЕХОД, ЕСЛИ СУММАТОР = 0
+;   ГОТОВЫЕ ПРИЗНАКИ РГ.М?
+;
+EXTERNAL LCW,LCWJMP,JQ
+LDCT А=LCW,МАР=РЕ,ALUS=ZА,RА=А,Н,CEN,CSM,MNSA=IRA,ЕСА,WRA,ARA=RG3
+;ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ ЗНАК = 0
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=NZ,ЕСА,ARA=RG3,ALUS=DQ,FUNC=ADD,ALUD=Q
+>,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,FFCNT=CLRJMP,ALUS=ZQ,ALUD=В,RВ=DADR
+END
+JANE:PROG;
+;     I===========I
+;     I  J А N Е  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП:В3
+;PROM:0В3,2В3
+;===== ПЕРЕХОД, ЕСЛИ СУММАТОР НЕ РАВЕН 0
+;   ГОТОВЫЕ ПРИЗНАКИ РГ.М?
+;
+EXTERNAL LCW,LCWJMP,JQ
+LDCT А=LCW,МАР=РЕ,ALUS=ZА,RА=А,Н,CEN,CSM,MNSA=IRA,ЕСА,WRA,ARA=RG3
+;ПЕРЕХОД ПО АИСП. ИЗ РГ.Q, ЕСЛИ ЗНАК = 0
+CJP А=LCWJMP,МАР=РЕ,COND=СТ,SТОРС=/NZ,ЕСА,ARA=RG3,ALUS=DQ,FUNC=ADD,ALUD=Q
+>,FFCNT=СНТКК
+;НЕТ ПЕРЕХОДА, ИДЕМ ПО ПОРЯДКУ НА СЛЕДУЮЩУЮ КОМАНДУ
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,FFCNT=CLRJMP,ALUS=ZQ,ALUD=В,RВ=DADR
+END
+JMPSZZ:PROG;
+;         I===========I       СДЕЛАНА ДРУГАЯ
+; БЫВШАЯ: I  J М Р S  I       С ЗАПОМИНАНИЕМ
+;         I===========I   ПРИЗНАКА ПРАВОЙ КОМАНДЫ!
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-В4
+;PROM:0В4,2В4
+;===== ПЕРЕХОД К ПОДПРОГРАММЕ
+;   ПИШЕМ В ПАМЯТЬ С ТЕМ ЖЕ РР И ТЕГОМ! Т.Е.ОБЛАСТЬ УПРЯТЫВАНИЯ АДРЕСОВ ВОЗВРАТА
+;   ДОЛЖНА БЫТЬ ДОСТУПНА ТАК ЖЕ, КАК И РАБОЧАЯ ПАМЯТЬ ПРОГРАММЫ!
+;   ВОЗМОЖНЫ СТРАНИЧНЫЕ И ДРУГИЕ ПРЕРЫВАНИЯ!
+;
+EXTERNAL LCWJ1
+;РГ.АДРЕСОВ ВОЗВРАТА - В АИСП.
+CONT CSM,MNSA=МР,MODNM=SPRADR,ALUS=DZ,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+;ПИШЕМ В ПАМЯТЬ, ВЫЧИСЛЯЕМ АИСП.
+CONT %PHAW%,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=Q
+;ПИШЕМ АДРЕС ВОЗВРАТА В БОИ: УСПЕЕМ ??!!! ЖДЕМ ГОТ.АРБИТРА
+WAF:CJP А=WAF,%WА%,ALUS=ZА,RА=РС,Н,CI,ALU,ЕСВ,WRB,BRA=RG3
+;УВЕЛИЧИВАЕМ РАВ, П/У ПО АИСП. ИЗ РГ.Q
+CJP А=LCWJ1,МАР=РЕ,ALUS=ZА,RА=DADR,CI,ALU,CSM,WЕМ,MNSA=МР,MODNM=SPRADR
+>,FFCNT=CLRTKK
+END
+RETSZZ:PROG;
+;         I===========I       СДЕЛАНА ДРУГАЯ
+; БЫВШАЯ: I  R Е Т S  I      С ВОССТАНОВЛЕНИЕМ
+;         I===========I   ПРИЗНАКА ПРАВОЙ КОМАНДЫ!
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-87,ДОП.ФОРМАТ
+;PROM:887,А87
+;===== ВОЗВРАТ ИЗ ПОДПРОГРАММЫ; СМ.КОМАНДУ JMPS
+;
+EXTERNAL RDOPER,LCWJ1
+;РГ.АДРЕСОВ ВОЗВРАТА - 1  -> В АИСП., ИДЕМ НА П/П ЧТЕНИЯ ОПЕРАНДА (АДРЕСА)
+CJS А=RDOPER,МАР=РЕ,CSM,MNSA=МР,MODNM=SPRADR,ALUS=DZ,FUNC=SUBS,ALUD=В
+>,RВ=DADR,ALU,YDST=ADRREG,ЕСВ,WRB,BRA=RG3
+;УМЕНЬШЕННОЕ РАВ ПИШЕМ В ОЗУ МОД.,ЧИТАЕМ АДРЕС ВОЗВРАТА В Q, П/У ПО АИСП.ИЗ РГ.Q
+CJP А=LCWJ1,МАР=РЕ,ЕСА,ARA=RG2,ALUS=DZ,ALUD=Q,ЕСВ,BRA=RG3
+>,CSM,WЕМ,MNSA=МР,MODNM=SPRADR,FFCNT=CLRTKK
+END
+ASNA:PROG;
+;     ================================
+;     11.ЦЕЛАЯ 64-РАЗРЯДНАЯ АРИФМЕТИКА
+;     ================================
+;
+;ASNA,А+L(ADL),А-L(ABL),L-А(LВА),А/L,А*L
+;
+;     I===========I
+;     I  А S N А  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-96,ДОП.ФОРМАТ
+;PROM:896,А96
+;===== СДВИГ АРИФМЕТИЧЕСКИЙ ЦЕЛОГО СУММАТОРА ПО АДРЕСУ
+;
+EXTERNAL LCW
+;ВЫЧИСЛЯЕМ АИСП., ПИШЕМ В РПС
+CONT CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,ALU,YDST=PSHIFT,FFCNT=CLRJMP
+;СДВИГАЕМ СУММАТОР
+LDCT А=LCW,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,СЕМ,ALU,DSRC=SHIFT,SHF=ARIPH
+>,FFCNT=СНТКК
+;ПЕРЕХОД НА СЛЕД. КОМАНДУ
+JRP %М%,%RСА%,FFCNT=MULGRP
+END
+ADL:PROG;
+;     I=========I
+;     I  А + L  I
+;     I=========I
+;
+;РЭ:0,15ИР:0,ПИА:0,КОП-99
+;PROM:099
+;===== ЦЕЛОЕ СЛОЖЕНИЕ СУММАТОРА С ОПЕРАНДОМ ПО ИСП.АДРЕСУ
+;
+EXTERNAL RDOPER,LCW,ADL
+;ВЫЧИСЛЯЕМ АИСП.
+CJS А=RDOPER,МАР=РЕ,%МА%
+;СКЛАДЫВАЕМ
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=ADD
+>,Н,ALUD=В,RВ=А,СЕМ,FFCNT=MULGRP
+;
+;
+ADLF:ENTRY
+;РЭ:0,15ИР:1,ПИА:0,КОП-99
+;PROM:299
+;===== ЦЕЛОЕ СЛОЖЕНИЕ СУММАТОРА С ОПЕРАНДОМ ПО ИСП.АДРЕСУ, ИР15
+;
+;ПЕРЕХОД, ЕСЛИ АК НЕ 0; ПИШЕМ М.А. ДЛЯ МАГАЗИННОГО ОБРАЩЕНИЯ
+LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
+CJP А=ADL,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
+;МАГАЗИН: ЗАГРУЖАЕМ АДРЕС ПЕРЕХОДА, ЕСЛИ КОМАНДА ПРАВАЯ
+CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+;СКЛАДЫВАЕМ
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=ADD
+>,Н,ALUD=В,RВ=А,СЕМ,FFCNT=MULGRP,%SPRG%
+END
+ABL:PROG;
+;     I=========I
+;     I  А - L  I
+;     I=========I
+;
+;РЭ:0,15ИР:0,ПИА:0,КОП-9А
+;PROM:09А
+;===== ЦЕЛОЕ ВЫЧИТАНИЕ ОПЕРАНДА ПО ИСП.АДРЕСУ
+;
+EXTERNAL RDOPER,LCW,ABL
+;ВЫЧИСЛЯЕМ АИСП.
+CJS А=RDOPER,МАР=РЕ,%МА%
+;ВЫЧИТАЕМ
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=SUBR,Н,CI
+>,ALUD=В,RВ=А,СЕМ,FFCNT=MULGRP
+;
+;
+ABLF:ENTRY
+;РЭ:0,15ИР:1,ПИА:0,КОП-9А
+;PROM:29А
+;===== ЦЕЛОЕ ВЫЧИТАНИЕ ОПЕРАНДА ПО ИСП.АДРЕСУ, ИР15
+;
+LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
+;ПЕРЕХОД, ЕСЛИ АК НЕ РАВЕН 0; ПИШЕМ М.А. ДЛЯ МАГАЗИННОГО ОБРАЩЕНИЯ
+CJP А=ABL,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
+;МАГАЗИН: Ф.А.
+CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+;ВЫЧИТАЕМ
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=SUBR,Н,CI
+>,ALUD=В,RВ=А,СЕМ,FFCNT=MULGRP,%SPRG%
+END
+LВА:PROG;
+;     I=========I
+;     I  L - А  I
+;     I=========I
+;
+;РЭ:0,15ИР:0,ПИА:0,КОП-9В
+;PROM:09В
+;===== ЦЕЛОЕ ВЫЧИТАНИЕ СУММАТОРА ИЗ ОПЕРАНДА ПО ИСП.АДРЕСУ
+;
+EXTERNAL RDOPER,LCW,LВА
+;ВЫЧИСЛЯЕМ АИСП.
+CJS А=RDOPER,МАР=РЕ,%МА%
+;СКЛАДЫВАЕМ
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=SUBS,CI
+>,Н,ALUD=В,RВ=А,СЕМ,FFCNT=MULGRP
+;
+;
+LBAF:ENTRY
+;РЭ:0,15ИР:1,ПИА:0,КОП-9В
+;PROM:29В
+;===== ЦЕЛОЕ ВЫЧИТАНИЕ СУММАТОРА ИЗ ОПЕРАНДА ПО ИСП.АДРЕСУ, ИР15
+;
+LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
+;ПЕРЕХОД, ЕСЛИ АК НЕ РАВЕН 0; ПИШЕМ М.А. ДЛЯ МАГАЗИННОГО ОБРАЩЕНИЯ
+CJP А=LВА,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
+;МАГАЗИН; Ф.А.
+CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+;СКЛАДЫВАЕМ
+JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=SUBS,CI
+>,Н,ALUD=В,RВ=А,СЕМ,FFCNT=MULGRP,%SPRG%
+END
+АТН:PROG;
+;      ===========================
+;      12.ОПЕРАЦИИ НАД ПОЛУСЛОВАМИ
+;      ===========================
+;
+;АТН,SТН,НТА,HTS,А+Н(ADH),А-Н(АВН),Н-А(НВАС),А/Н,А*Н,ААН,АЕН,АОН
+;
+;     I=========I
+;     I  А Т Н  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-В6
+;PROM:0В6,2В6
+;===== ЗАПИСЬ ПОЛУСЛОВА В ПАМЯТЬ ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ
+;   ДАЖЕ ПРИ ИР15 И АК=0 ОБРАЩЕНИЕ К ПАМЯТИ НЕМАГАЗИННОЕ!
+;   В ИАОП - АДРЕС ПО ПАМЯТИ, А НЕ АИСП.!!!
+;
+EXTERN NADR,LCW,RDOPER
+;ИСПОЛНИТ.АДРЕС ПОЛУСЛОВА - В WR2
+CJP А=ATHSTH,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=CLRTR1
+;
+ATHSTH:ENTRY
+;===== ПОДГОТОВКА ДЛЯ ЗАПИСИ ПОЛУСЛОВА В ПАМЯТЬ
+;РАЗМНОЖАЕМ ЗНАК В 33-64 РАЗРЯДЫ ДЛЯ АРИФМ.СДВИГА
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ALUS=АВ,RА=HALF,RВ=WR2,FUNC=AND,Н,ALUD=В
+;СДВИГ АРИФМ. ВПРАВО НА 1 = АДРЕС СЛОВА -> В ИАОП
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR2,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+1,SHF=ARIPH
+;МАСКУ НА ПОЛУСЛОВО - В РГ.WR6, АДРЕС - В АИСП.
+CONT А=МН,DSRC=PROM,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=WR6,ALU,YDST=ADRREG
+;Ф.А., ИНВЕРТИРУЕМ ИСП.АДРЕС (НОМЕР БИТА)
+CONT %PHAR%,ALUS=ZА,RА=WR2,FUNC=EXNOR,ALUD=В,RВ=WR1
+;СДВИГАЕМ ВЛЕВО ЛОГ.НА 5 = КОЛИЧЕСТВО РАЗРЯДОВ ДЛЯ СДВИГА (0 ИЛИ 32)
+CJP А=АТМЕМ,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0-5,SHF=LOG
+;
+АТМЕМ:ENTRY
+;===== ЗАПИСЬ РАЗНЫХ ЧАСТЕЙ СЛОВА В ПАМЯТЬ
+;ОСТАВЛЯЕМ 6 РАЗРЯДОВ
+CONT А=H3F,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=AND,Н,ALUD=В,RВ=WR1
+;ЧИСЛО СДВИГОВ ВЛЕВО - В РПС
+CONT А=S0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=SUBS,CI,ALU,YDST=PSHIFT
+;СДВИГАЕМ МАСКУ ВЛЕВО НА МЕСТО ЧАСТИ СЛОВА, ИНВЕРТИРУЕМ ЕЕ ДЛЯ ОПЕРАНДА - WR5
+CONT ALUS=DZ,FUNC=EXNOR,Н,ALUD=ВА,RА=WR6,RВ=WR5,ALU,DSRC=SHIFT,SHF=LOG
+;ОСТАВЛЯЕМ СООТВ.ЧАСТЬ СУММАТОРА, ТОЖЕ СДВИГАЕМ НА МЕСТО; ПРОВЕРЯЕМ ГОТ.АРБИТРА
+LDCT А=LCW,МАР=РЕ,ALUS=АВ,RА=А,RВ=WR6,FUNC=AND,Н,ALUD=В
+WА:CJP А=WА,%WА%,ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR4,ALU,DSRC=SHIFT,SHF=LOG
+;ЧИТАЕМ ОПЕРАНД, МАСКИРУЕМ; ПЕРЕХОД, ЕСЛИ КОМАНДА МАГАЗИННАЯ
+CJP А=SТМЕМ,МАР=РЕ,COND=TR1
+>,%PHAW%,ЕСА,ARA=RG2,ALUS=DА,RА=WR5,FUNC=AND,Н,ALUD=В,RВ=WR5,FFCNT=СНТКК
+;ОБ'ЕДИНЯЕМ С ЧАСТЬЮ СУММАТОРА, ПИШЕМ В БОИ; ЖДЕМ ГОТ.АРБИТРА
+WAW:CJP А=WAW,%WА%,ALUS=АВ,RА=WR5,RВ=WR4,FUNC=OR,Н,ALU,ЕСВ,WRB,BRA=RG3
+JRP %М%,%RСА%,FFCNT=CLRJMP
+;
+;ПИШЕМ В БОИ, ЖДЕМ ГОТ.АРБИТРА
+SТМЕМ:CJP А=SТМЕМ,%WА%,ALUS=АВ,RА=WR5,RВ=WR4,FUNC=OR,Н,ALU,ЕСВ,WRB,BRA=RG3
+>,FFCNT=CLRTR1
+;МАТ.АДРЕС (15ИР-1) - В АИСП, ИАОП
+CJS А=RDOPER,МАР=РЕ,%ARF%,FFCNT=СНТКК
+;ПЕРЕХОД НА ДР.КОМАНДУ, ПМИ, ПЕРЕПИСЫВАЕМ SР, ЧИТАЕМ ОПЕРАНД - В СУММАТОР
+JRP %М%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=А,СЕМ,FFCNT=LOGGRP
+>,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР
+END
+SТН:PROG;
+;     I=========I
+;     I  S Т Н  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-В7
+;PROM:0В7,2В7
+;===== ЗАПИСЬ ПОЛУСЛОВА МАГАЗИННАЯ
+;      АТН - ЗАПИСЬ ПОЛУСЛОВА В ПАМЯТЬ ПО АИСП.
+;   15 ХТА - ЧТЕНИЕ СЛОВА В СУММАТОР ИЗ МАГАЗИННОЙ ПАМЯТИ
+;
+EXTERNAL ATHSTH
+;ВЫЧИСЛЯЕМ АИСП. = АДРЕСУ ПОЛУСЛОВА; ИДЕМ НА П/П ЗАПИСИ ПОЛУСЛОВА В ПАМЯТЬ
+CJP А=ATHSTH,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=SETTR1
+END
+НТА:PROG;
+;     I=========I
+;     I  Н Т А  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-В8
+;PROM:0В8,2В8
+;===== ЧТЕНИЕ ПОЛУСЛОВА ИЗ ПАМЯТИ ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ
+;   ДАЖЕ ПРИ ИР15 И АК=0 ОБРАЩЕНИЕ К ПАМЯТИ НЕМАГАЗИННОЕ!
+;
+EXTERN LCWISE,LCW,NADR
+;ИСПОЛНИТ.АДРЕС ПОЛУСЛОВА - В WR2
+CJS А=RDH,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP %М%,ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=А,СЕМ,FFCNT=MULGRP
+;
+RDH:ENTRY
+;===== ЧТЕНИЕ ПОЛУСЛОВА ИЗ ПАМЯТИ В РГ. WR2 С РАЗМНОЖЕНИЕМ ЗНАКА
+;В РГ/СЧ - АДРЕС ПЕРЕХОДА LCW
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ALUS=АВ,RА=HALF,RВ=WR2,FUNC=AND,Н,ALUD=В
+;СДВИГ АРИФМ. ВПРАВО НА 1 = АДРЕС СЛОВА - В ИАОП
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR2,RВ=DADR,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0+1,SHF=ARIPH
+;МАТ.АДРЕС СЛОВА - В АИСП.; ИНВЕРТИР.АИСП.
+CONT ALUS=ZВ,RВ=WR2,FUNC=EXNOR,ALUD=ВА,RА=DADR,ALU,YDST=ADRREG
+;ОСТАВЛЯЕМ 1Р.,СДВИГАЕМ ВЛЕВО ЛОГ.НА 5, = КОЛ-ВУ РАЗРЯДОВ ДЛЯ СДВИГА (0 ИЛИ 32)
+CONT А=В1,%PHAR%,DSRC=PROM,ALUS=DА,RА=WR2,FUNC=AND,Н,ALUD=В,RВ=WR1
+PUSH А=LCW,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU
+>,DSRC=SHIFT,MPS,PSHF=SН0-5,SHF=LOG
+;ЧИСЛО СДВИГОВ ВПРАВО - В РПС, ПРОВЕРЯЕМ ГОТ.АРБИТРА
+LООР А=S0,COND=ARBRDY,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=ADD,Н,ALU,YDST=PSHIFT
+;ЧИТАЕМ ОПЕРАНД, СДВИГАЕМ, РАЗМНОЖАЕМ ЗНАК; ВОЗВРАТ
+CONT ЕСВ,BRA=RG2,DSRC=SHIFT,SHF=LOG,ALUS=DZ,ALUD=В,RВ=WR2,CEN,FFCNT=СНТКК
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ALUS=АВ,RА=HALF,RВ=WR2,FUNC=AND,Н,ALUD=В
+>,FFCNT=CLRJMP
+CRTN %RСА%
+END
+HTS:PROG;
+;     I=========I
+;     I  Н Т S  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-В9
+;PROM:0В9,2В9
+;===== ЧТЕНИЕ ПОЛУСЛОВА МАГАЗИННОЕ
+;   15 АТХ
+;      НТА  ПО ИСП.АДРЕСУ
+;
+EXTERN RDH
+;ПИШЕМ СУММАТОР В СТЕК
+CONT %MAWF%
+;SР+1 - ВРЕМЕННО В WR5 (НОВОЕ ЗНАЧЕНИЕ)
+CONT %PHAW%,ALUS=ZА,RА=DADR,FUNC=ADD,CI,ALUD=В,RВ=WR5
+WА:CJP А=WА,%WА%,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=А,ALU,ЕСВ,WRB,BRA=RG3
+;ЧИТАЕМ ПОЛУСЛОВО В СУММАТОР
+CJS А=RDH,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=ВА,RА=WR5,RВ=WR2,CEN
+>,ALU,ЕСВ,WRB,BRA=RG3
+JRP %М%,ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=А,СЕМ,FFCNT=MULGRP,%SPRG%
+END
+ADH:PROG;
+;     I=========I
+;     I  А + Н  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-ВА
+;PROM:0ВА,2ВА
+;===== АРИФМЕТИЧЕСКОЕ СЛОЖЕНИЕ С ПОЛУСЛОВОМ
+;
+EXTERN RDH
+;ИСПОЛНИТ.АДРЕС ПОЛУСЛОВА - В WR2
+CJS А=RDH,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+;СКЛАДЫВАЕМ
+JRP %М%,ALUS=АВ,RА=WR2,RВ=А,FUNC=ADD,Н,ALUD=В,СЕМ
+>,FFCNT=MULGRP
+END
+АВН:PROG;
+;     I=========I
+;     I  А - Н  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-ВВ
+;PROM:0ВВ,2ВВ
+;===== АРИФМЕТИЧЕСКОЕ ВЫЧИТАНИЕ ПОЛУСЛОВА ИЗ СУММАТОРА
+;
+EXTERN RDH
+;ИСПОЛНИТ.АДРЕС ПОЛУСЛОВА - В WR2
+CJS А=RDH,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+;ВЫЧИТАЕМ
+JRP %М%,ALUS=АВ,RА=WR2,RВ=А,FUNC=SUBR,Н,CI,ALUD=В,СЕМ
+>,FFCNT=MULGRP
+END
+НВАС:PROG;
+;     I=========I
+;     I  Н - А  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-ВС
+;PROM:0ВС,2ВС
+;===== ОБРАТНОЕ ВЫЧИТАНИЕ: СУММАТОРА ИЗ ПОЛУСЛОВА
+;
+EXTERN RDH
+;ИСПОЛНИТ.АДРЕС ПОЛУСЛОВА - В WR2
+CJS А=RDH,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+;ВЫЧИТАЕМ; ВЫХОД ПО АДРЕСУ РГ/СЧ, ЕСЛИ УСТАНОВЛЕНА БПП
+JRP %М%,ALUS=АВ,RА=WR2,RВ=А,FUNC=SUBS,Н,CI,ALUD=В
+>,СЕМ,FFCNT=MULGRP
+END
+ААН:PROG;
+;     I=========I
+;     I  А А Н  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-С1
+;PROM:0С1,2С1
+;===== ЛОГИЧЕСКОЕ УМНОЖЕНИЕ НА ПОЛУСЛОВО
+;
+EXTERN RDH
+;ИСПОЛНИТ.АДРЕС ПОЛУСЛОВА - В WR2
+CJS А=RDH,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP %М%,ALUS=АВ,RА=WR2,RВ=А,FUNC=AND,Н,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+АЕН:PROG;
+;     I=========I
+;     I  А Е Н  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-С2
+;PROM:0С2,2С2
+;===== СРАВНЕНИЕ С ПОЛУСЛОВОМ
+;
+EXTERN RDH
+;ИСПОЛНИТ.АДРЕС ПОЛУСЛОВА - В WR2
+CJS А=RDH,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP %М%,ALUS=АВ,RА=WR2,RВ=А,FUNC=EXOR,Н,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+АОН:PROG;
+;     I=========I
+;     I  А О Н  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-С3
+;PROM:0С3,2С3
+;===== ЛОГИЧЕСКОЕ СЛОЖЕНИЕ С ПОЛУСЛОВОМ
+;
+EXTERN RDH
+;ИСПОЛНИТ.АДРЕС ПОЛУСЛОВА - В WR2
+CJS А=RDH,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP %М%,ALUS=АВ,RА=WR2,RВ=А,FUNC=OR,Н,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+ATQ:PROG;
+;      =========================================
+;      13.ОПЕРАЦИИ НАД 16-РАЗРЯДНЫМИ ФРАГМЕНТАМИ
+;      =========================================
+;
+;ATQ,STQ,QТА,QTS,AEQ,AAQ,AOQ
+;
+;     I=========I
+;     I  А Т Q  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-С4
+;PROM:0С4,2С4
+;===== ЗАПИСЬ 16-РАЗРЯДНОГО ФРАГМЕНТА В ПАМЯТЬ ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ
+;   ДАЖЕ ПРИ ИР15 И АК=0 ОБРАЩЕНИЕ К ПАМЯТИ НЕМАГАЗИННОЕ!
+;
+EXTERN LCW,NADR,АТМЕМ
+;ИСПОЛНИТ.АДРЕС 16-Р.ФРАГМЕНТРА - В WR2
+CJP А=ATQSTQ,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=CLRTR1
+;
+ATQSTQ:ENTRY
+;===== ПОДГОТОВКА ДЛЯ ЗАПИСИ 16-РАЗРЯДНОГО ФРАГМЕНТА В ПАМЯТЬ
+;РАЗМНОЖАЕМ ЗНАК АДРЕСА ДЛЯ АРИФМЕТИЧЕСКОГО СДВИГА
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ALUS=АВ,RА=HALF,RВ=WR2,FUNC=AND,Н,ALUD=В
+;СДВИГ АРИФМ. ВПРАВО НА 2 = АДРЕС СЛОВА -> В ИАОП
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR2,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+2,SHF=ARIPH
+;МАСКУ НА 16-РАЗР.ФРАГМЕНТ - В РГ.WR6, АДРЕС - В АИСП.
+CONT А=MQ,DSRC=PROM,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=WR6,ALU,YDST=ADRREG
+;Ф.А., ИНВЕРТИРУЕМ ИСП.АДРЕС
+CONT %PHAR%,ALUS=ZА,RА=WR2,FUNC=EXNOR,ALUD=В,RВ=WR1
+;СДВИГАЕМ ВЛЕВО ЛОГ.НА 4 = КОЛ-ВУ РАЗР.ДЛЯ СДВИГА:0,16,32 ИЛИ 48; ИДЕМ НА П/П
+CJP А=АТМЕМ,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0-4,SHF=LOG
+END
+STQ:PROG;
+;     I=========I
+;     I  S Т Q  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-С5
+;PROM:0С5,2С5
+;===== ЗАПИСЬ 16-РАЗРЯДНОГО ФРАГМЕНТА МАГАЗИННАЯ
+;      ATQ - ЗАПИСЬ ФРАГМЕНТА В ПАМЯТЬ ПО АИСП.
+;   15 ХТА - ЧТЕНИЕ СЛОВА В СУММАТОР ИЗ МАГАЗИННОЙ ПАМЯТИ
+;
+EXTERNAL ATQSTQ
+;ВЫЧИСЛЯЕМ АИСП. = АДРЕСУ ФРАГМЕНТА; ИДЕМ НА П/П ЗАПИСИ ФРАГМЕНТА В ПАМЯТЬ
+CJP А=ATQSTQ,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=SETTR1
+END
+QТА:PROG;
+;     I=========I
+;     I  Q Т А  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-С6
+;PROM:0С6,2С6
+;===== ЧТЕНИЕ 16-РАЗР.ФРАГМЕНТА ИЗ ПАМЯТИ ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ
+;
+EXTERN JQ,LCW,NADR,RDFRAG
+;ИСПОЛНИТ.АДРЕС ФРАГМЕНТА - В WR2
+CJS А=RDQ,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=А,СЕМ
+>,FFCNT=LOGGRP
+;
+RDQ:ENTRY
+;===== ЧТЕНИЕ 16-РАЗР.ФРАГМЕНТА ИЗ ПАМЯТИ
+;РАЗМНОЖАЕМ ЗНАК АДРЕСА ДЛЯ АРИФ.СДВИГА
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ALUS=АВ,RА=HALF,RВ=WR2,FUNC=AND,Н,ALUD=В
+;СДВИГ АРИФМ. ВПРАВО НА 2 = АДРЕС СЛОВА - В ИАОП
+LDCT А=LCW,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR2,RВ=DADR,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0+2,SHF=ARIPH
+;МАТ.АДРЕС - В АИСП., МАСКУ - В WR6
+CONT А=MQ,DSRC=PROM,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=WR6,ALU,YDST=ADRREG
+;Ф.А., ИНВЕРТИРУЕМ ИСП.АДРЕС
+CONT %PHAR%,ALUS=ZА,RА=WR2,FUNC=EXNOR,ALUD=В,RВ=WR1
+;СДВИГАЕМ ВЛЕВО = К-ВО РАЗРЯДОВ ДЛЯ СДВИГА Q-ФРАГМЕНТА: 0,16,32,48
+CJP А=RDFRAG,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0-4,SHF=LOG
+END
+QTS:PROG;
+;     I=========I
+;     I  Q Т S  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-С7
+;PROM:0С7,2С7
+;===== ЧТЕНИЕ 16-РАЗР.ФРАГМЕНТА МАГАЗИННОЕ
+;   15 АТХ
+;      QТА  ПО ИСП.АДРЕСУ
+;
+EXTERN RDQ,JQ
+;ПИШЕМ СУММАТОР В СТЕК
+CONT %MAWF%
+;SР+1 - ВРЕМЕННО В WR5 (НОВОЕ ЗНАЧЕНИЕ)
+CONT %PHAW%,ALUS=ZА,RА=DADR,FUNC=ADD,CI,ALUD=В,RВ=WR5
+WА:CJP А=WА,%WА%,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=А,ALU,ЕСВ,WRB,BRA=RG3
+;ЧИТАЕМ ФРАГМЕНТ В СУММАТОР
+CJS А=RDQ,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=ВА,RА=WR5,RВ=WR2,CEN
+>,ALU,ЕСВ,WRB,BRA=RG3
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=А,СЕМ
+>,FFCNT=LOGGRP,%SPRG%
+END
+AEQ:PROG;
+;     I=========I
+;     I  А Е Q  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-С8
+;PROM:0С8,2С8
+;===== СРАВНЕНИЕ С 16-РАЗРЯДНЫМ ФРАГМЕНТОМ
+;
+EXTERN RDQ,JQ
+;ИСПОЛНИТ.АДРЕС ФРАГМЕНТА - В WR2
+CJS А=RDQ,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=АВ,RА=WR2,RВ=А,FUNC=EXOR,Н
+>,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+AAQ:PROG;
+;     I=========I
+;     I  А А Q  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-С9
+;PROM:0С9,2С9
+;===== ЛОГИЧЕСКОЕ УМНОЖЕНИЕ НА 16-РАЗР.ФРАГМЕНТ
+;
+EXTERN JQ,RDQ
+;ИСПОЛНИТ.АДРЕС ФРАГМЕНТА - В WR2
+CJS А=RDQ,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=АВ,RА=WR2,RВ=А,FUNC=AND
+>,Н,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+AOQ:PROG;
+;     I=========I
+;     I  А О Q  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-СА
+;PROM:0СА,2СА
+;===== ЛОГИЧЕСКОЕ СЛОЖЕНИЕ С 16-РАЗР.ФРАГМЕНТОМ
+;
+EXTERN JQ,RDQ
+;ИСПОЛНИТ.АДРЕС ФРАГМЕНТА - В WR2
+CJS А=RDQ,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=АВ,RА=WR2,RВ=А,FUNC=OR
+>,Н,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+АТВ:PROG;
+;      =======================
+;      14.ОПЕРАЦИИ НАД БАЙТАМИ
+;      =======================
+;
+;АТВ,SТВ,ВТА,BTS,АЕВ,ААВ,АОВ
+;
+;     I=========I
+;     I  А Т В  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-СВ
+;PROM:0СВ,2СВ
+;===== ЗАПИСЬ БАЙТА В ПАМЯТЬ ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ
+;   ДАЖЕ ПРИ ИР15 И АК=0 ОБРАЩЕНИЕ К ПАМЯТИ НЕМАГАЗИННОЕ!
+;
+EXTERN LCW,NADR,АТМЕМ
+;ИСПОЛНИТ.АДРЕС БАЙТА - В WR2
+CJP А=ATBSTB,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=CLRTR1
+;
+ATBSTB:ENTRY
+;===== ПОДГОТОВКА ДЛЯ ЗАПИСИ БАЙТА В ПАМЯТЬ
+;РАЗМНОЖАЕМ ЗНАК АДРЕСА ДЛЯ АРИФМ.СДВИГА
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ALUS=АВ,RА=HALF,RВ=WR2,FUNC=AND,Н,ALUD=В
+;СДВИГ АРИФМ. ВПРАВО НА 3 = АДРЕС СЛОВА -> В ИАОП
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR2,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+3,SHF=ARIPH
+;МАСКУ НА БАЙТ - В РГ.WR6, АДРЕС - В АИСП.
+CONT А=МВ,DSRC=PROM,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=WR6,ALU,YDST=ADRREG
+;Ф.А., ИНВЕРТИРУЕМ МАТ.АДРЕС
+CONT %PHAR%,ALUS=ZА,RА=WR2,FUNC=EXNOR,ALUD=В,RВ=WR1
+;СДВИГ ВЛЕВО ЛОГ.НА 3 = КОЛ-ВУ РАЗР.ДЛЯ СДВИГА: 0,8,16,24,...,56; ИДЕМ НА П/П
+CJP А=АТМЕМ,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0-3,SHF=LOG
+END
+SТВ:PROG;
+;     I=========I
+;     I  S Т В  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-СС
+;PROM:0СС,2СС
+;===== ЗАПИСЬ БАЙТА В ПАМЯТЬ МАГАЗИННАЯ
+;      АТВ - ЗАПИСЬ БАЙТА В ПАМЯТЬ ПО АИСП.
+;   15 ХТА - ЧТЕНИЕ СЛОВА В СУММАТОР ИЗ МАГАЗИННОЙ ПАМЯТИ
+;
+EXTERNAL ATBSTB
+;ВЫЧИСЛЯЕМ АИСП. = АДРЕСУ БАЙТА; ИДЕМ НА П/П ЗАПИСИ БАЙТА В ПАМЯТЬ
+CJP А=ATBSTB,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=SETTR1
+END
+ВТА:PROG;
+;     I=========I
+;     I  В Т А  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-CD
+;PROM:0CD,2CD
+;===== ЧТЕНИЕ БАЙТА ИЗ ПАМЯТИ ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ
+;
+EXTERN JQ,LCW,NADR,RDFRAG
+;ИСПОЛНИТ.АДРЕС БАЙТА - В WR2
+CJS А=RDB,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=А
+>,СЕМ,FFCNT=LOGGRP
+;
+RDB:ENTRY
+;===== ЧТЕНИЕ БАЙТА ИЗ ПАМЯТИ
+;РАЗМНОЖАЕМ ЗНАК АДРЕСА
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ALUS=АВ,RА=HALF,RВ=WR2,FUNC=AND,Н,ALUD=В
+;СДВИГ АРИФМ. ВПРАВО НА 3 = АДРЕС СЛОВА - В ИАОП
+LDCT А=LCW,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR2,RВ=DADR,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0+3,SHF=ARIPH
+;МАТ.АДРЕС - В АИСП., МАСКУ - В WR6
+CONT А=МВ,DSRC=PROM,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=WR6,ALU,YDST=ADRREG
+;Ф.А., ИНВЕРТИРУЕМ МАТ.АДРЕС
+CONT %PHAR%,ALUS=ZА,RА=WR2,FUNC=EXNOR,ALUD=В,RВ=WR1
+;СДВИГАЕМ ВЛЕВО ЛОГ.НА 3 = КОЛИЧЕСТВО РАЗРЯДОВ ДЛЯ СДВИГА (0,8,16,24,32,...,56)
+CJP А=RDFRAG,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0-3,SHF=LOG
+END
+BTS:PROG;
+;     I=========I
+;     I  В Т S  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-СЕ
+;PROM:0СЕ,2СЕ
+;===== ЧТЕНИЕ БАЙТА МАГАЗИННОЕ
+;   15 АТХ
+;      ВТА  ПО ИСП.АДРЕСУ
+;
+EXTERN JQ,RDB
+;ПИШЕМ СУММАТОР В СТЕК
+CONT %MAWF%
+;SР+1 - ВРЕМЕННО В WR5 (НОВОЕ ЗНАЧЕНИЕ)
+CONT %PHAW%,ALUS=ZА,RА=DADR,FUNC=ADD,CI,ALUD=В,RВ=WR5
+WА:CJP А=WА,%WА%,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=А,ALU,ЕСВ,WRB,BRA=RG3
+;ЧИТАЕМ БАЙТ В СУММАТОР
+CJS А=RDB,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=ВА,RА=WR5,RВ=WR2,CEN
+>,ALU,ЕСВ,WRB,BRA=RG3
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=А
+>,СЕМ,FFCNT=LOGGRP,%SPRG%
+END
+АЕВ:PROG;
+;     I=========I
+;     I  А Е В  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-CF
+;PROM:0CF,2CF
+;===== СРАВНЕНИЕ С БАЙТОМ
+;
+EXTERN RDB,JQ
+;ИСПОЛНИТ.АДРЕС БАЙТА - В WR2
+CJS А=RDB,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=АВ,RА=WR2,RВ=А,FUNC=EXOR,Н
+>,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+ААВ:PROG;
+;     I=========I
+;     I  А А В  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-D0
+;PROM:0D0,2D0
+;===== ЛОГИЧЕСКОЕ УМНОЖЕНИЕ НА БАЙТ
+;
+EXTERN RDB,JQ
+;ИСПОЛНИТ.АДРЕС БАЙТА - В WR2
+CJS А=RDB,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=АВ,RА=WR2,RВ=А,FUNC=AND,Н
+>,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+АОВ:PROG;
+;     I=========I
+;     I  А О В  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-D1
+;PROM:0D1,2D1
+;===== ЛОГИЧЕСКОЕ СЛОЖЕНИЕ С БАЙТОМ
+;
+EXTERN RDB,JQ
+;ИСПОЛНИТ.АДРЕС БАЙТА - В WR2
+CJS А=RDB,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=АВ,RА=WR2,RВ=А,FUNC=OR,Н
+>,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+ATF:PROG;
+;      ======================
+;      15.ОПЕРАЦИИ НАД БИТАМИ
+;      ======================
+;
+;ATF,STF,FТА,FTS,AEF,AAF,AOF,SETF,CLRF,EXTF,NТА,NTS(NTSC),AEN,AAN,AON
+;
+;     I=========I
+;     I  А Т F  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-D2
+;PROM:0D2,2D2
+;===== ЗАПИСЬ БИТА В ПАМЯТЬ ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ
+;   ДАЖЕ ПРИ ИР15 И АК=0 ОБРАЩЕНИЕ К ПАМЯТИ НЕМАГАЗИННОЕ!
+;
+EXTERN LCW,NADR,АТМЕМ
+;ИСПОЛНИТ.АДРЕС БИТА - В WR2
+CJP А=ATFSTF,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=CLRTR1
+;
+ATFSTF:ENTRY
+;===== ПОДГОТОВКА ДЛЯ ЗАПИСИ БИТА В ПАМЯТЬ
+;РАЗМНОЖЕНИЕ ЗНАКА АДРЕСА
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ALUS=АВ,RА=HALF,RВ=WR2,FUNC=AND,Н,ALUD=В
+;СДВИГ АРИФМ. ВПРАВО НА 6 = АДРЕС СЛОВА -> В ИАОП
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR2,RВ=DADR,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0+6,SHF=ARIPH
+;МАСКУ НА БИТ - В РГ.WR6, АДРЕС - В АИСП.
+CONT А=В1,DSRC=PROM,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=WR6,ALU,YDST=ADRREG
+;Ф.А., ИНВЕРТИРУЕМ 6 МЛ.РАЗРЯДОВ, ИДЕМ НА ОБЩУЮ П/П ЗАПИСИ (ПО РГ/СЧ)
+CJP А=АТМЕМ,МАР=РЕ,%PHAR%,ALUS=ZА,RА=WR2,FUNC=EXNOR,ALUD=В,RВ=WR1
+END
+STF:PROG;
+;     I=========I
+;     I  S Т F  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-D3
+;PROM:0D3,2D3
+;===== ЗАПИСЬ БИТА В ПАМЯТЬ МАГАЗИННАЯ
+;      ATF - ЗАПИСЬ БИТА В ПАМЯТЬ ПО АИСП.
+;   15 ХТА - ЧТЕНИЕ СЛОВА В СУММАТОР ИЗ МАГАЗИННОЙ ПАМЯТИ
+;
+EXTERNAL ATFSTF
+;ВЫЧИСЛЯЕМ АИСП. = АДРЕСУ БАЙТА; ИДЕМ НА П/П ЗАПИСИ БАЙТА В ПАМЯТЬ
+CJP А=ATFSTF,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=SETTR1
+END
+FТА:PROG;
+;     I=========I
+;     I  F Т А  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-D4
+;PROM:0D4,2D4
+;===== ЧТЕНИЕ БИТА ИЗ ПАМЯТИ ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ
+;
+EXTERN JQ,LCW,NADR,SETCLR
+;ИСПОЛНИТ.АДРЕС БИТА - В WR2
+CJS А=RDF,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=CLRTR1
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=ZА,RА=WR2,Н,ALUD=В
+>,RВ=А,СЕМ,FFCNT=LOGGRP
+;
+RDF:ENTRY
+;===== ЧТЕНИЕ БИТА ИЗ ПАМЯТИ
+;РАЗМНОЖАЕМ ЗНАК АДРЕСА
+CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ALUS=АВ,RА=HALF,RВ=WR2,FUNC=AND,Н,ALUD=В
+;СДВИГ АРИФМ. ВПРАВО НА 6 = АДРЕС СЛОВА - В ИАОП
+CJP А=SETCLR,МАР=РЕ,COND=TR1,ALUS=DZ,Н,ALUD=ВА,RА=WR2,RВ=DADR,ALU
+>,DSRC=SHIFT,MPS,PSHF=SН0+6,SHF=ARIPH
+;МАТ.АДРЕС - В АИСП., МАСКУ - В WR6
+CONT А=В1,DSRC=PROM,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=WR6,ALU,YDST=ADRREG
+;Ф.А., ИНВЕРТИРУЕМ ИСП.АДРЕС
+LDCT А=LCW,МАР=РЕ,%PHAR%,ALUS=ZА,RА=WR2,FUNC=EXNOR,ALUD=В,RВ=WR1
+RDFRAG:ENTRY
+;ОСТАВЛЯЕМ 6 РАЗРЯДОВ АДРЕСА БИТА В СЛОВЕ
+PUSH А=H3F,IСС,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=AND,ALUD=В,RВ=WR1
+;ЧИСЛО СДВИГОВ ВПРАВО - В РПС, ПРОВЕРЯЕМ ГОТ.АРБИТРА
+LООР А=S0,COND=ARBRDY,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=ADD,ALU,YDST=PSHIFT
+>,FFCNT=CLRJMP
+;ЧИТАЕМ ОПЕРАНД, СДВИГАЕМ, МАСКИРУЕМ; ВОЗВРАТ
+CRTN ЕСВ,BRA=RG2,DSRC=SHIFT,SHF=LOG,ALUS=DА,RА=WR6,FUNC=AND,Н,ALUD=В,RВ=WR2
+>,FFCNT=СНТКК
+END
+FTS:PROG;
+;     I=========I
+;     I  F Т S  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-D5
+;PROM:0D5,2D5
+;===== ЧТЕНИЕ БИТА МАГАЗИННОЕ
+;   15  АТХ
+;       FТА    ПО ИСП.АДРЕСУ
+;
+EXTERN RDF,JQ
+;ПИШЕМ СУММАТОР В СТЕК
+CONT %MAWF%
+;SР+1 - ВРЕМЕННО В WR5 (НОВОЕ ЗНАЧЕНИЕ)
+CONT %PHAW%,ALUS=ZА,RА=DADR,FUNC=ADD,CI,ALUD=В,RВ=WR5
+WА:CJP А=WА,%WА%,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=А,ALU,ЕСВ,WRB,BRA=RG3
+;ЧИТАЕМ БИТ В СУММАТОР
+CJS А=RDF,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=ВА,RА=WR5,RВ=WR2,CEN
+>,ALU,ЕСВ,WRB,BRA=RG3,FFCNT=CLRTR1
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=ZА,RА=WR2,Н,ALUD=В
+>,RВ=А,СЕМ,FFCNT=LOGGRP,%SPRG%
+END
+AEF:PROG;
+;     I=========I
+;     I  А Е F  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-D6
+;PROM:0D6,2D6
+;===== СРАВНЕНИЕ С БИТОМ
+;
+EXTERN RDF,JQ
+;ИСПОЛНИТ.АДРЕС БИТА - В WR2
+CJS А=RDF,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=CLRTR1
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=АВ,RА=WR2,RВ=А,FUNC=EXOR,Н
+>,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+AAF:PROG;
+;     I=========I
+;     I  А А F  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-D7
+;PROM:0D7,2D7
+;===== ЛОГИЧЕСКОЕ УМНОЖЕНИЕ НА БИТ
+;
+EXTERN RDF,JQ
+;ИСПОЛНИТ.АДРЕС БИТА - В WR2
+CJS А=RDF,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=CLRTR1
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=АВ,RА=WR2,RВ=А,FUNC=AND,Н
+>,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+AOF:PROG;
+;     I=========I
+;     I  А О F  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-D8
+;PROM:0D8,2D8
+;===== ЛОГИЧЕСКОЕ СЛОЖЕНИЕ С БИТОМ
+;
+EXTERN RDF,JQ
+;ИСПОЛНИТ.АДРЕС БИТА - В WR2
+CJS А=RDF,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=CLRTR1
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,ISE,ALUS=АВ,RА=WR2,RВ=А,FUNC=OR,Н
+>,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+SETF:PROG;
+;     I===========I
+;     I  S Е Т F  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-D9
+;PROM:0D9,2D9
+;===== УСТАНОВКА В "1" БИТА ПО ИСПОЛНИТ.АДРЕСУ ПАМЯТИ
+;
+EXTERN LCW,NADR,RDF,RDOPER
+;ИСПОЛНИТ.АДРЕС БИТА - В WR2
+CJS А=RDF,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=SETTR1
+;ЧИТАЕМ ОПЕРАНД, ДОБАВЛЯЕМ СООТВ.РАЗРЯД, ПИШЕМ В БОИ
+LDCT А=LCW,МАР=РЕ,ЕСА,ARA=RG2,ALUS=DА,RА=WR2,FUNC=OR,Н,ALU,ЕСВ,WRB,BRA=RG3
+>,FFCNT=СНТКК
+PSSETF:ENTRY
+CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAW%
+JRP %М%
+;
+SETCLR:ENTRY
+;===== ЧТЕНИЕ СЛОВА ПО ИСП.АДРЕСУ; ПОДГОТОВКА МАСКИ ДЛЯ БИТА
+;В П/П АДРЕС - В ИАОП; МАСКУ НА БИТ - В РГ.WR6, АДРЕС - В АИСП.
+CONT А=В64,DSRC=PROM,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=WR6,ALU,YDST=ADRREG
+>,FFCNT=CLRTR1
+;Ф.А., ОСТАВЛЯЕМ 6 МЛ.РАЗРЯДОВ АДРЕСА
+CONT А=H3F,%PHAR%,DSRC=PROM,ALUS=DА,RА=WR2,FUNC=AND,Н,ALUD=В,RВ=WR1
+;ЧИСЛО СДВИГОВ ВПРАВО(!) - В РПС; ЖДЕМ ГОТ.АРБИТРА
+PUSH А=S0,SCI,ICI,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=ADD,Н,ALU,YDST=PSHIFT
+;СДВИГАЕМ МАСКУ ВЛЕВО НА МЕСТО ЧАСТИ СЛОВА, ВОЗВРАТ ПОСЛЕ ГОТ.АРБИТРА
+CRTN COND=ARBRDY,SCI,ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR2,ALU,DSRC=SHIFT,SHF=LOG
+;ДОБАВЛЯЕМ ЕЩЕ 1 МК НА СЛУЧАЙ ПРЕРЫВАНИЯ!
+CRTN COND=ARBRDY,SCI
+END
+CLRF:PROG;
+;     I===========I
+;     I  С L R F  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-DА
+;PROM:0DA,2DA
+;===== УСТАНОВКА В "0" БИТА ПО ИСПОЛНИТ.АДРЕСУ ПАМЯТИ
+;
+EXTERN RDF,PSSETF,LCW
+;ИСПОЛНИТ.АДРЕС БИТА - В WR2
+CJS А=RDF,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
+>,FFCNT=SETTR1
+;ИНВЕРТИРУЕМ МАСКУ
+LDCT А=LCW,МАР=РЕ,ALUS=ZА,RА=WR2,FUNC=EXNOR,Н,ALUD=В,RВ=WR2
+;ЧИТАЕМ ОПЕРАНД, УБИРАЕМ СООТВ.РАЗРЯД, ПИШЕМ В БОИ, ИДЕМ НА ОБЩИЙ КОНЕЦ
+CJP А=PSSETF,МАР=РЕ,ЕСА,ARA=RG2,ALUS=DА,RА=WR2,FUNC=AND,Н,ALU,ЕСВ,WRB,BRA=RG3
+>,FFCNT=СНТКК
+END
+EXTF:PROG;
+;     I===========I
+;     I  Е Х Т F  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-А1,ДОП.ФОРМАТ
+;PROM:8А1,АА1
+;===== РАЗМНОЖЕНИЕ ЗАДАННОГО БИТА РГ.А ВЛЕВО ДО ГРАНИЦЫ СЛОВА
+;   НОМЕР БИТА = 0,1,2,...63, СЧИТАЯ СО СТАРШИХ РАЗРЯДОВ.
+;   ИСПОЛЬЗУЕМ ТОЛЬКО 6 РАЗРЯДОВ АИСП., ОСТАЛЬНЫЕ МАСКИРУЕМ.
+;
+EXTERN LCW,JQ
+;ИСПОЛНИТ.АДРЕС БИТА - В DADR
+CONT CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR
+;ОСТАВЛЯЕМ 6 РАЗРЯДОВ АИСП.- В WR2
+CONT А=H3F,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=AND,Н,ALUD=В,RВ=WR2
+;СДВИГАЕМ СУММАТОР ВЛЕВО НА ЧИСЛО РАЗРЯДОВ = АИСП.,ЧТОБ ЗАДАННЫЙ БИТ СТАЛ 64!
+CONT А=S0,DSRC=PROM,ALUS=DА,RА=WR2,FUNC=SUBS,CI,ALU,YDST=PSHIFT
+LDCT А=LCW,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=WR1,ALU,DSRC=SHIFT,SHF=LOG
+>,FFCNT=CLRJMP
+;СДВИГАЕМ РГ.А ВПРАВО НА СТОЛЬКО ЖЕ РАЗРЯДОВ АРИФМ.,ЧТОБ ЭТОТ БИТ РАЗМНОЖИЛСЯ!
+CONT А=S0,DSRC=PROM,ALUS=DА,RА=WR2,FUNC=ADD,ALU,YDST=PSHIFT,FFCNT=СНТКК
+JRP А=JQ,МАР=РЕ,COND=ТККВ,DDEV=CLRCD,WRD,ISE
+>,ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=А,СЕМ,FFCNT=LOGGRP,ALU,DSRC=SHIFT,SHF=ARIPH
+END
+NТА:PROG;
+;     I=========I
+;     I  N Т А  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-В0,ДОП.ФОРМАТ
+;PROM:8В0,АВ0
+;===== УСТАНОВКА В "1" ЗАДАННОГО БИТА СУММАТОРА
+;   N РАЗРЯДА = 1-6Р. АИСП.(0,1,2,...63), СЧИТАЯ СО СТ.РАЗР.,ЕСЛИ 11Р.АИСП.= 0;
+;   И СЧИТАЯ С МЛ.РАЗРЯДОВ, ЕСЛИ 11Р.АИСП.= 1.
+;
+EXTERN LCW
+;ИСПОЛНИТ.АДРЕС БИТА - В ИАОП
+CJS А=RDN,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR
+JRP %М%,ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
+;
+RDN:ENTRY
+;===== ВЫЧИСЛЕНИЕ ОПЕРАНДА, У КОТОРОГО ЗАДАННЫЙ БИТ = "1"
+;
+;ОСТАВЛЯЕМ 6 РАЗРЯДОВ АИСП.
+CONT А=H3F,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=AND,Н,ALUD=В,RВ=WR1
+;ПРОВЕРЯЕМ 11 РАЗРЯД АИСП.(ЗАГОНЯЕМ ЕГО В ЗНАК!)
+LDCT А=BIT0,МАР=РЕ,ALUS=DZ,ALUD=ВА,RА=DADR,RВ=WR6,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0-21,SHF=LOG,CEN,FFCNT=СНТКК
+JSRP А=BIT1,МАР=РЕ,COND=СТ,SТОРС=NN,%RСА%
+;СДВИГАЕМ "1" НА МЕСТО ПО АИСП., ВОЗВРАТ
+CRTN ALUS=DZ,Н,ALUD=ВА,RА=WR2,RВ=WR2,ALU,DSRC=SHIFT,SHF=LOG
+;
+;11Р.=0: НУМЕРАЦИЯ - СО СТАРШИХ РАЗРЯДОВ! "1" В 64-ОМ РАЗРЯДЕ - В WR2
+BIT0:LDCT А=LCW,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=RSB,RВ=WR2,SHMUX=NSNSL
+;ЧИСЛО СДВИГОВ ВПРАВО НА CONST ИЗ АИСП. - В РПС
+CRTN А=S0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=ADD,ALU,YDST=PSHIFT
+;
+;11Р.=1: НУМЕРАЦИЯ - С МЛАДШИХ РАЗРЯДОВ! "1" В 1-ОМ РАЗРЯДЕ - В WR2
+BIT1:LDCT А=LCW,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=LSB,RВ=WR2,SHMUX=NSNSL
+;ЧИСЛО СДВИГОВ ВЛЕВО НА CONST ИЗ АИСП. - В РПС
+CRTN А=S0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=SUBS,CI,ALU,YDST=PSHIFT
+END
+NTSC:PROG;
+;     I=========I
+;     I  N Т S  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-В1,ДОП.ФОРМАТ
+;PROM:8В1,АВ1
+;===== УСТАНОВКА В "1" ЗАДАННОГО БИТА СУММАТОРА МАГАЗИННАЯ
+;   15 АТХ
+;      NТА  ПО ИСП.АДРЕСУ
+;
+EXTERN RDN
+;ПИШЕМ СУММАТОР В СТЕК
+CONT %MAWF%
+;SР+1 - ВРЕМЕННО В WR5 (НОВОЕ ЗНАЧЕНИЕ)
+CONT %PHAW%,ALUS=ZА,RА=DADR,FUNC=ADD,CI,ALUD=В,RВ=WR5
+WА:CJP А=WА,%WА%,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=А,ALU,ЕСВ,WRB,BRA=RG3
+;ЧИТАЕМ БИТ В СУММАТОР
+CJS А=RDN,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=ВА,RА=WR5,RВ=DADR,ALU
+>,ЕСВ,WRB,BRA=RG3
+JRP %М%,ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP,%SPRG%
+END
+AEN:PROG;
+;     I=========I
+;     I  А Е N  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-В2,ДОП.ФОРМАТ
+;PROM:8В2,АВ2
+;===== СРАВНЕНИЕ С ЗАДАННЫМ БИТОМ
+;
+EXTERN RDN
+;ИСПОЛНИТ.АДРЕС БИТА - В DADR
+CJS А=RDN,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR
+JRP %М%,ALUS=АВ,RА=WR2,RВ=А,FUNC=EXOR,Н,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+AAN:PROG;
+;     I=========I
+;     I  А А N  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-В3,ДОП.ФОРМАТ
+;PROM:8В3,АВ3
+;===== ЛОГИЧЕСКОЕ УМНОЖЕНИЕ НА ЗАДАННЫЙ БИТ
+;
+EXTERN RDN
+;ИСПОЛНИТ.АДРЕС БИТА - В DADR
+CJS А=RDN,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR
+JRP %М%,ALUS=АВ,RА=WR2,RВ=А,FUNC=AND,Н,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+AON:PROG;
+;     I=========I
+;     I  А О N  I
+;     I=========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-В4,ДОП.ФОРМАТ
+;PROM:8В4,АВ4
+;===== ЛОГИЧЕСКОЕ СЛОЖЕНИЕ С БИТОМ
+;
+EXTERN RDN,JQ
+;ИСПОЛНИТ.АДРЕС БИТА - В DADR
+CJS А=RDN,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR
+JRP %М%,ALUS=АВ,RА=WR2,RВ=А,FUNC=OR,Н,ALUD=В,СЕМ,FFCNT=LOGGRP
+END
+ATD:PROG;
+;      =================================
+;      16.АРИФМЕТИКА С ДВОЙНОЙ ТОЧНОСТЬЮ
+;      =================================
+;
+;ATD,DТА,А+D(ADD),А-D(ABD),D-А(DВА),А/D,А*D
+;
+;     I=========I
+;     I  А Т D  I
+;     I=========I
+;
+;РЭ:0,15ИР:0,ПИА:0,КОП-DС
+;PROM:0DC
+;===== ЗАПИСЬ А,У В ПАМЯТЬ ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ
+;
+EXTERN LCW
+;МАТ.АДРЕС (М + Q) - В АИСП, ИАОП; Ф.А.; А - В БОИ
+CONT %МА%
+CONT %PHAW%
+WАА:CJP А=WАА,%WА%,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=А,ALU,ЕСВ,WRB,BRA=RG3
+;АИСП.+ 1 - В АИСП.,ИАОП
+CONT ALUS=ZВ,RВ=DADR,CI,ALUD=В,ALU,YDST=ADRREG,FFCNT=СНТКК
+;ФИЗ.АДРЕС - В RG0
+LDCT А=LCW,МАР=РЕ,%PHAW%,%RСА%
+;ЖДЕМ ГОТ. АРБИТРА
+WАУ:CJP А=WАУ,%WА%,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=У,ALU,ЕСВ,WRB,BRA=RG3
+JRP %М%,FFCNT=CLRJMP
+;
+;
+ATDF:ENTRY
+;РЭ:0,15ИР:1,ПИА:0,КОП-DС
+;PROM:2DC
+;===== ЗАПИСЬ А,У В ПАМЯТЬ, ИР15
+;
+;ЕСЛИ ДАЖЕ МАГАЗИННОЕ ОБРАЩЕНИЕ, М.А.ТАКОЙ ЖЕ!
+CONT %МА%
+;ПРОВЕРЯЕМ АК
+CONT %PHAW%,ALUS=ZQ,CEN
+;СУММАТОР - В БОИ, ПЕРЕХОД, ЕСЛИ НЕ МАГАЗИН
+CJP А=WАА,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=А,ALU,ЕСВ
+>,WRB,BRA=RG3
+;СЛЕДУЮЩИЙ МАТ.АДРЕС ПО МАГАЗИНУ - В АИСП.
+CONT ALUS=ZВ,RВ=DADR,CI,ALUD=В,ALU,YDST=ADRREG,FFCNT=СНТКК
+WAAF:CJP А=WAAF,%WА%
+LDCT А=LCW,МАР=РЕ,%PHAW%,%RСА%
+;У - В БОИ, ЖДЕМ ГОТ.АРБИТРА
+WAYF:CJP А=WAYF,%WА%,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=У,ALU,ЕСВ,WRB,BRA=RG3
+;ПЕРЕХОД ПО КОП, 15+2 - В 15 РЕГИСТР
+JRP %М%,ALUS=ZА,RА=DADR,FUNC=ADD,CI,ALU
+>,CSM,WЕМ,MNSA=МР,MODNM=SР,FFCNT=CLRJMP
+END
+DТА:PROG;
+;     I=========I
+;     I  D Т А  I
+;     I=========I
+;
+;РЭ:0,15ИР:0,ПИА:0,КОП-DD
+;PROM:0DD
+;===== ЧТЕНИЕ ДВОЙНОГО СЛОВА ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ В А,У
+;
+EXTERN RDOPER,LCW,DТА
+;М.А. - В АИСП, ИАОП
+CJS А=RDOPER,МАР=РЕ,%МА%
+;МАТ.АДРЕС + 1 - В АИСП. ДЛЯ ВТОРОГО СЛОВА; ПРОЧИЩАЕМ СТЕК ДЛЯ 15ИР
+LООР ALUS=ZВ,RВ=DADR,CI,ALUD=В,ALU,YDST=ADRREG
+;ФИЗ.АДРЕС + ЧИТАЕМ ПЕРВОЕ СЛОВО В СУМАТОР; ЖДЕМ ГОТ.АРБИТРА В П/П ЧЕРЕЗ CI СУАМ
+CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=А,СЕМ
+;ЧИТАЕМ В РМР
+JRP %М%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=У,FFCNT=LOGGRP
+;
+;
+DTAF:ENTRY
+;РЭ:0,15ИР:1,ПИА:0,КОП-DD
+;PROM:2DD
+;===== ЧТЕНИЕ ДВОЙНОГО СЛОВА ИЗ МАГАЗИНА: 15-2 -> 15; ЧТЕНИЕ ПО 15ИР.
+;
+;ПЕРЕСЫЛКА АК
+LDCT А=RDOPER,МАР=РЕ,ALUS=ZQ,CEN
+;ПЕРЕХОД, ЕСЛИ АК НЕ РАВНО 0; ПИШЕМ М.А.ДЛЯ МАГАЗИННОГО ОБРАЩЕНИЯ
+JSRP А=DТА,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%
+;ВТОРОЙ МАТ.АДРЕС - В АИСП. (-1 ОТ ПРЕДЫДУЩЕГО)
+CONT ALUS=ZВ,RВ=DADR,FUNC=SUBR,ALUD=В,ALU,YDST=ADRREG
+;ФИЗ.АДРЕС + ЧИТАЕМ В РМР! ЖДЕМ ГОТ.А.В П/П ЧЕРЕЗ CI СУАМ!
+CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=У
+;ПЕРЕХОД ПО КОП, НОВЫЙ SР НА МЕСТО, ЧИТАЕМ В СУММАТОР!
+JRP %М%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=А,СЕМ
+>,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР,FFCNT=LOGGRP
+END
+JMPS:PROG;
+;     I===========I
+;     I  J М Р S  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,КОП-В5
+;PROM:0В5,2В5
+;===== ПЕРЕХОД К ПОДПРОГРАММЕ С ЗАПОМИНАНИЕМ ПРИЗНАКА ППК!
+;   ПИШЕМ В ПАМЯТЬ С ТЕМ ЖЕ РР И ТЕГОМ! Т.Е.ОБЛАСТЬ УПРЯТЫВАНИЯ АДРЕСОВ ВОЗВРАТА
+;   ДОЛЖНА БЫТЬ ДОСТУПНА ТАК ЖЕ, КАК И РАБОЧАЯ ПАМЯТЬ ПРОГРАММЫ!
+;   ВОЗМОЖНЫ СТРАНИЧНЫЕ И ДРУГИЕ ПРЕРЫВАНИЯ!
+;
+;   ПРИ УПРЯТЫВАНИИ АДРЕСА ВОЭВРАТА 1-32 РАЗРЯДЫ = РС;
+;   64Р=1 (33:63 - ЛЮБЫЕ), ЕСЛИ ВОЗВРАТ НА ПК;
+;   64Р=0 (33:63 - ЛЮБЫЕ), ЕСЛИ ВОЗВРАТ НА ЛК.
+;
+EXTERNAL LCWJ1
+;РГ.АДРЕСОВ ВОЗВРАТА - В АИСП.; ПЕРЕХОД, ЕСЛИ ПК
+CJP A=RCJMPS,MAP=PE,COND=RCB,CSM,MNSA=МР,MODNM=SPRADR,ALUS=DZ,ALUD=В,RВ=DADR
+>,ALU,YDST=ADRREG
+;ЛК: ВОЗВРАТ НА ПРАВУЮ; ЗАПОМИНАЕМ РС, 64Р.=1
+CONT A=B64,DSRC=PROM,ALUS=DA,RA=PC,FUNC=OR,H,ALUD=B,RB=WR1,%PHAW%
+;ПИШЕМ АДРЕС ВОЗВРАТА В БОИ, ВЫЧИСЛЯЕМ АИСП.
+CONT ALUS=ZB,RB=WR6,H,ALUD=BA,RA=WR1,ALU,ECB,WRB,BRA=RG3
+PSJ:CONT CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=Q
+WAF:CJP А=WAF,%WА%
+;УВЕЛИЧИВАЕМ РАВ, П/У ПО АИСП. ИЗ РГ.Q
+CJP А=LCWJ1,МАР=РЕ,ALUS=ZА,RА=DADR,CI,ALU,CSM,WЕМ,MNSA=МР,MODNM=SPRADR
+>,FFCNT=CLRTKK
+;
+;ПК: ВОЗВРАТ НА ЛЕВУЮ; ЗАПОМИНАЕМ РС+1, 64Р.=0
+RCJMPS:CONT ALUS=ZA,RA=PC,CI,ALUD=B,RB=WR1,%PHAW%
+CJP A=PSJ,MAP=PE,ALUS=AB,RA=HALF,RB=WR1,FUNC=AND,H,ALU,ECB,WRB,BRA=RG3
+END
+RETS:PROG;
+;     I===========I
+;     I  R Е Т S  I
+;     I===========I
+;
+;РЭ:0,15ИР:0-1,ПИА:0,KОП-FE,ДОП.ФОРМАТ
+;PROM:888,A88
+;
+;===== ВОЗВРАТ ИЗ ПОДПРОГРАММЫ, В Т.Ч. И НА ПРАВУЮ КОМАНДУ! СМ.JMPS
+;
+EXTERNAL RDOPER,LCWPH
+;РГ.АДРЕСОВ ВОЗВРАТА - 1  -> В АИСП., ИДЕМ НА П/П ЧТЕНИЯ ОПЕРАНДА (АДРЕСА)
+CJS А=RDOPER,МАР=РЕ,CSM,MNSA=МР,MODNM=SPRADR,ALUS=DZ,FUNC=SUBS,ALUD=В
+>,RВ=DADR,ALU,YDST=ADRREG,ЕСВ,WRB,BRA=RG3,FFCNT=CLRTR1
+;"РАВ-1"- В ОЗУ МОД.,АДРЕС ВОЗВРАТА - В Q;ПРОВЕРЯЕМ 64Р.: ИДЕМ НА ЛК ИЛИ ПК?
+CONT ECA,ARA=RG2,ALUS=DZ,H,ALUD=Q,CEN,ECB,BRA=RG3,CSM,WEM,MNSA=MP
+>,MODNM=SPRADR,FFCNT=SETJMP
+;УСТАНОВКУ ППК ДЕЛАЕМ ПОЛЕМ FFCNT, А НЕ КОПИРОВАНИЕМ ТКК В ППК ПО ПМИ,
+;T.K.ПМИ ДЕЛАТЬ НЕЛЬЗЯ, ИНАЧЕ В РЕЖИМЕ HALT КОМ.СЛОВО ТАК И НЕ ВЫБЕРЕТСЯ!
+;(ВОЗВРАТ ИЗ HALT'A НА ПК - БЕЗ ВКС)
+CJP A=RCRETS,MAP=PE,COND=CT,STOPC=NN,ALUS=ZA,RA=PC,ALUD=B,RB=PCCOPY
+>,FFCNT=CLRTKK,DDEV=CLRCD
+;ЛЕВАЯ
+CJP A=LCWPH,MAP=PE,ALUS=ZQ,ALUD=B,RB=PC,ALU,YDST=ADRREG,FFCNT=CLRRCB
+;ПРАВАЯ
+RCRETS:CONT FFCNT=SETTKK
+CJP A=LCWPH,MAP=PE,ALUS=ZQ,ALUD=B,RB=PC,ALU,YDST=ADRREG,FFCNT=SETRCB
+END
+*END
+*END FILE
+*END FILE
+

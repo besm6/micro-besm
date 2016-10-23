@@ -1,0 +1,3522 @@
+*NАМЕ 1:INITEST
+*       ПЛАТЫ БМПУ,УПРО,ПРОСЕК
+*       БМПУ+МПС+СУСС+БОПП+ПЗУ+РГ/ТГ+СДВИГАТЕЛЬ
+*TIME:01.00
+*DISC:664/SYSTEM,microb
+*FILE:arc,30,W
+*file:lib,67,r
+*LIBRA:23,25
+*NО LIST
+*CALL ficMEMORY
+*PERSO:67
+*CALL MICROB
+;
+;СПИСОК ВОЗМОЖНЫХ ЗНАЧЕНИЙ ПОЛЕЙ:
+;--------------------------------
+;
+FLIST SQI=JZ,CJS,JМАР,CJP,PUSH,JSRP,CJV,JRP,RFCT,RРСТ,CRTN,CJPP,LDCT,LООР,
+      CONT,TWB
+FLIST МАР=РЕ,GRP,МЕ
+FLIST ALUD=Q,NО,ВА,В,RSBQ,RSB,LSBQ,LSB
+FLIST FUNC=ADD,SUBR,SUBS,OR,AND,NOTRS,EXOR,EXNOR
+FLIST ALUS=AQ,АВ,ZQ,ZВ,ZА,DА,DQ,DZ
+FLIST RА=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST RВ=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST CI=CI0,CI1,CIX,CIC
+FLIST SHMUX=LSLSL,NSNSL,ASLLS,NDNS,CDLDL,ADNDL,LDLD,LDLND,RSLRSL,RSSRSS,
+      RSRS,IDCS,RDSRDS,RDLRDL,VDCD,RDRD
+FLIST SТОРС=NС,NN,NZ,NV,/NС,/NN,/NZ,/NV,МС,MN,MZ,MV,/МС,/MN,/MZ,/MV,
+      IС,IN,IZ,IV,/IС,/IN,/IZ,/IV,SETNC,SETNN,SETNZ,SETNV,
+      УТОМ,MTON,SЕТМ,SETN,MCN,NСМ,CLRM,CLRN,INVM,CLRNC,CLRNN,CLRNZ,CLRNV
+FLIST MNSA=U,IRA,МР
+FLIST MODNM=М0,М1,М2,М3,М4,М5,М6,М7,М8,М9,М10,М11,М12,М13,М14,SР,С,RR,
+      RRR,SPRADR,СТТ,ACL,ACR,YCL,YCR,РСС,РССС,CTL,CTR,SVFA,PROCNC,MREZ
+FLIST DSRC=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MULRZ1,MULRZ2,СОМА,SHIFT,ОРС,
+      LOS,PROM
+FLIST RTIME=RТ
+FLIST WTIME=WТ
+FLIST YDST=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MUL1,MUL2,ADRREG,PSHIFT,CCLR,BTRCLR
+FLIST SHF=CICL,LOG,ARIPH,EMULF
+FLIST ARBI=CCRD,CCWR,DCRD,DCWR,FЕТСН,DRD,DWR,RDMWR,BTRWR,BTRRD,BICLR,BIRD
+FLIST CYSTR=NТ3,NТ4,NТ5,NТ6,NТ7,NТ8,NТ9,NТ10
+FLIST BRA=RG0,RG1,RG2,RG3
+FLIST ARA=RG0,RG1,RG2,RG3
+FLIST YDEV=PHYSAD,RADRR,PSMEM,МРМЕМ,SТОРМ0,SТОРМ1
+FLIST YDEVT=ECBTAG
+FLIST DDEV=ВВ,MODB,CLRCD,STATUS,РРМЕМ0,РРМЕМ1
+FLIST YDTIM=CTIME
+FLIST FFCNT=LOGGRP,MULGRP,ADDGRP,SЕТС,CLRRCB,SETRCB,CLRJMP,SETJMP,
+      SETEI,CLREI,CLRTR0,SETTR0,CLRTR1,SETTR1,CLRCT,CLRCTT,CLRTKK,SЕТТКК,
+      STRTLD,СНТКК,SETHLT,CLRINT,CLRRUN,LDCPMP,PRGINT,EXTINT,SETNR,SETER
+FLIST MPADR=ADRB1,ADRB2,ADRB3,ADRB4,DАТАВ1,DАТАВ2,DАТАВ3,DАТАВ4,
+      DАТАВ5,DАТАВ6,DАТАВ7,DАТАВ8,INFB1,INFB2,FМР,FСР
+FLIST COND=YES,NORMB,RNDB,OVRIB,BNB,OVRFTB,DRG,EMLRG,RСВ,СВ,CEMLRG,
+      СТ,TR1,INTSTP,RUN,NMLRDY,INT,FULMEM,ARBRDY,СРМР,IR15,ТККВ
+;
+;СПИСОК ОШИБОЧНЫХ КОМБИНАЦИЙ ПОЛЕЙ
+;---------------------------------
+;
+;ШИНА D:
+;-------
+;
+;ИСТОЧНИКИ: DSRC
+;           CSM-WЕМ
+;           ЕСА-WRA
+;           DDEV-WRD
+;
+СНЕСК DSRC+CSM-WЕМ
+СНЕСК DSRC+ЕСА-WRA
+СНЕСК DSRC+DDEV-WRD
+СНЕСК CSM-WЕМ+ЕСА-WRA
+СНЕСК CSM-WЕМ+DDEV-WRD
+СНЕСК ЕСА-WRA+DDEV-WRD
+;
+;ШИНА У:
+;-------
+;
+;ИСТОЧНИКИ: YDEVT-WRB
+;           ALU
+;           ЕСВ-WRB
+;           YDEV-WRY
+;           YDTIM+RTIME
+;
+СНЕСК YDEVT-WRB+ALU
+СНЕСК YDEVT-WRB+ЕСВ-WRB
+СНЕСК YDEVT-WRB+YDEV-WRY
+СНЕСК YDEVT-WRB+YDTIM+RTIME
+СНЕСК ALU+ЕСВ-WRB
+СНЕСК ALU+YDEV-WRY
+СНЕСК ALU+YDTIM+RTIME
+СНЕСК ЕСВ-WRB+YDEV-WRY
+СНЕСК ЕСВ-WRB+YDTIM+RTIME
+СНЕСК YDEV-WRY+YDTIM+RTIME
+;
+;
+;     ============================================
+;     МАКРОСЫ ДЛЯ ОБ'ЕДИНЕНИЯ МЕЛКИХ ТЕСТОВ В ОДИН
+;     ============================================
+;
+;ВАРИАНТ ДЛЯ ОДНОГО БОЛЬШОГО
+;MACRO J CONT
+;MACRO S CONT
+;ВАРИАНТ ДЛЯ ОТДЕЛЬНЫХ ТЕСТОВ
+MACRO J CJP
+MACRO S CJS
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ КОМАНД
+;     ==================
+;
+MACRO МА CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO MAWF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO ARF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,FUNC=SUBS,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO SSPRG ЕСВ,WRB,BRA=RG3
+MACRO PHAW YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
+MACRO PHAR YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DRD
+MACRO RСА DSRC=СОМА,ALUS=DZ,ALUD=Q
+MACRO WА МАР=РЕ,COND=ARBRDY,IСС
+MACRO SPRG ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=SР
+MACRO АС CSM,MNSA=МР,MODNM=С,ALUS=DQ,FUNC=ADD,ALUD=Q
+MACRO TRSH DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG
+MACRO R МАР=РЕ,COND=RСВ
+MACRO М МАР=МЕ,COND=ТККВ,DDEV=CLRCD,WRD,ISE
+MACRO MED МАР=МЕ,COND=ТККВ,LЕТС,ISE
+MACRO ML МАР=МЕ,DDEV=CLRCD,WRD,ISE
+MACRO МЕ МАР=МЕ,LЕТС
+MACRO MI МАР=МЕ,COND=ТККВ,DDEV=CLRCD,WRD
+MACRO TODR1 ECB,WRB,BRA=RG1,ECA,ARA=RG1
+MACRO TODR2 ECB,WRB,BRA=RG2,ECA,ARA=RG2
+MACRO TODR3 ECB,WRB,BRA=RG3,ECA,ARA=RG3
+MACRO TOYR1 ECA,WRA,ARA=RG1,ECB,BRA=RG1
+MACRO TOYR2 ECA,WRA,ARA=RG2,ECB,BRA=RG2
+MACRO TOYR3 ECA,WRA,ARA=RG3,ECB,BRA=RG3
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ ТЕСТОВ
+;     ==================
+;
+MACRO TN DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=EXPN,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO Т DSRC=PROM,ALUS=DZ,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO TIK ALUS=ZВ,RВ=MANT,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO TIK3 ALUS=ZВ,RВ=WR3,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO CLRTYP ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=INTR,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO ТУРЕ ALUS=ZВ,RВ=INTR,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO С3 ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR3,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+;
+;
+*FULL LIST
+INI:PROG B;
+;
+;     РАСПРЕДЕЛЕНИЕ РЕГИСТРОВ БОПП ДЛЯ ТЕСТОВ:
+;
+;    АДРЕСА РЕГИСТРОВ БОПП:
+;    0   1   2   3   4   5   6   7   8   9   А   В   С   D   Е   F
+;  I-------------------------------I--------------------------------I
+;  I   I   I   I   I          ДОПОЛНИТЕЛЬНАЯ  ИНФОРМАЦИЯ            I
+;  I-------------------------------I--------------------------------I
+;
+;  0 РГ.БОПП: НОМЕР ТЕСТА
+;  1 РГ.БОПП: ТИП ПРОВЕРКИ В ТЕСТЕ, ЕСЛИ ИХ НЕСКОЛЬКО; МЛ.БАЙТ РГ.INTR
+;  2 РГ.БОПП: ТИП ОБРАЩЕНИЯ К БОПП:
+;             00 - ЦИКЛ;
+;             FF - ПРИЗНАК ОШИБКИ;
+;             ХХ = "ЗАПРОС" = ТИП ПРОВЕРКИ (РГ.INTR).
+;  3 РГ.БОПП: НОМЕР ЦИКЛА, МЛ.БАЙТ РГ.MANT
+;
+EXTERNAL INITST,ERRTST,ERRINF,ERRINH,ERRINQ,OUT8/F,RD8/F,ERR8/F
+;
+;     =================================================================
+;         ПРОВЕРКА ПОСЛЕДОВАТЕЛЬНОСТИ ИСПОЛНЕНИЯ КОМАНД В  Б М П У
+;     ИСПОЛЬЗУЕМ УСЛОВИЕ EMLRG, КОТОРОЕ ПОСЛЕ СБРОСА I8080 ВСЕГДА "НЕТ"
+;     =================================================================
+;
+BU1:ENTRY
+;===== КОМАНДЫ CONT + CJP
+;
+CJP А=PSBU1,МАР=РЕ,COND=EMLRG,ICC
+PSBU1:CONT
+CONT А=ERRINI,МАР=РЕ,COND=EMLRG
+CONT А=ERRINI,МАР=РЕ,COND=EMLRG,IСС
+CJP А=MPU1,МАР=РЕ,COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+MPU1:CJP А=PSBU1,МАР=РЕ,COND=EMLRG,ICC
+;
+ERRINI:ENTRY
+CJP A=ERRINI,MAP=PE,COND=EMLRG,ICC
+;
+;
+BU2:ENTRY
+;===== LDCT + RРСТ
+;
+CJP А=PSBU2,МАР=РЕ,COND=EMLRG,ICC
+PSBU2:LDCT А=$F0,МАР=РЕ
+RBU2:RРСТ А=RBU2,МАР=РЕ,COND=EMLRG
+RРСТ А=ERRINI,МАР=РЕ,COND=EMLRG
+LDCT А=ERRINI,МАР=РЕ
+LDCT А=$F0,МАР=РЕ,COND=EMLRG
+RBUI2:RРСТ А=RBUI2,МАР=РЕ
+LDCT А=0,МАР=РЕ
+RРСТ А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+LDCT А=$F,МАР=РЕ
+RРСТ А=LBU2,МАР=РЕ,COND=EMLRG
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+LBU2:CJP A=PSBU2,MAP=PE,COND=EMLRG,ICC
+;
+;
+BU3:ENTRY
+;===== JRP
+;
+CJP А=PSBU3,МАР=РЕ,COND=EMLRG,ICC
+PSBU3:LDCT А=ERRINI,МАР=РЕ
+JRP А=NЕХ3,МАР=РЕ,COND=EMLRG,ICC
+CJP A=ERRINI,MAP=PE,COND=EMLRG,ICC
+NЕХ3:JRP А=NЕХТ3,МАР=РЕ,COND=EMLRG,IСС
+NЕХТ3:LDCT А=NЕХТС3,МАР=РЕ
+JRP А=ERRINI,МАР=РЕ,COND=EMLRG
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+NEXTC3:LDCT A=ERRINI,MAP=PE
+JRP А=LBU3,МАР=РЕ,COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+LBU3:CJP A=PSBU3,MAP=PE,COND=EMLRG,ICC
+;
+;
+BU4:ENTRY
+;===== CJS + CRTN
+;
+CJP А=PSBU4,МАР=РЕ,COND=EMLRG,ICC
+PSBU4:CJS А=ERRINI,МАР=РЕ,COND=EMLRG
+CJS А=SBU1,МАР=РЕ,COND=EMLRG,ICC
+CJP А=PSBU4,МАР=РЕ,COND=EMLRG,ICC
+;
+SBU1:CJS А=SBU2,МАР=РE,COND=EMLRG,ICC
+CRTN COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SBU2:CRTN COND=EMLRG
+CJS А=SBU3,МАР=РЕ,COND=EMLRG,ICC
+CRTN COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SBU3:CJS А=SBU4,МАР=РE,COND=EMLRG,ICC
+CRTN COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SBU4:CJS А=SBU5,МАР=РЕ,COND=EMLRG,ICC
+CRTN COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SBU5:CRTN COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+;
+;
+BU5:ENTRY
+;===== CJPP
+;
+CJP А=PSBU5,МАР=РЕ,COND=EMLRG,ICC
+PSBU5:LDCT А=20,МАР=РЕ
+JS5:CJS А=SBB1,МАР=РЕ,COND=EMLRG,ICC
+RРСТ А=JS5,МАР=РЕ
+CJS А=SBE1,МАР=РЕ,COND=EMLRG,ICC
+CJP А=PSBU5,МАР=РЕ,COND=EMLRG,ICC
+;
+SBB1:CJS А=SBB2,МАР=РЕ,COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SBB2:CJPP А=SBS2,МАР=РЕ,COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SBS2:CRTN COND=EMLRG,ICC
+;
+SBE1:CJS А=SBE2,МАР=РЕ,COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SBE2:CJS А=SBE3,МАР=РЕ,COND=EMLRG,ICC
+CJP А=ERRTST,МАР=РЕ,COND=EMLRG,ICC
+SBE3:CJS А=SBE4,МАР=РЕ,COND=EMLRG,ICC
+CJS А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SBE4:CJS А=SBE5,МАР=РЕ,COND=EMLRG,ICC
+CJS А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SBE5:CJPP А=RI1,МАР=РЕ,COND=EMLRG,ICC
+CJS А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+RI1:CJPP А=RI2,МАР=РЕ,COND=EMLRG,ICC
+CJS А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+RI2:CJPP А=RI3,МАР=РЕ,COND=EMLRG,ICC
+CJS А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+RI3:CJPP А=RI4,МАР=РЕ,COND=EMLRG,ICC
+CJS А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+RI4:CJPP А=ERRINI,МАР=РЕ,COND=EMLRG
+CRTN
+;
+;
+BU6:ENTRY
+;===== PUSH
+;
+CJP А=PSBU6,МАР=РЕ,COND=EMLRG,ICC
+PSBU6:LDCT А=ERRINI,МАР=РЕ
+PUSH А=N2,МАР=РЕ,COND=EMLRG,ICC
+CJPP А=N1,МАР=РЕ,COND=EMLRG,ICC
+N1:JRP А=ERRINI,МАР=РЕ,COND=EMLRG
+N2:LDCT А=LBU6,МАР=РЕ
+PUSH А=ERRINI,МАР=РЕ,COND=EMLRG
+CJPP А=N3,МАР=РЕ,COND=EMLRG,ICC
+N3:JRP А=ERRINI,МАР=РЕ,COND=EMLRG
+LBU6:CJP A=PSBU6,MAP=PE,COND=EMLRG,ICC
+;
+;
+BU7:ENTRY
+;===== PUSH + LООР
+;
+CJP А=PSBU7,МАР=РЕ,COND=EMLRG,ICC
+PSBU7:PUSH А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+LООР COND=EMLRG,IСС
+PUSH А=100,МАР=РЕ,COND=EMLRG,ICC
+RРСТ А=LРS,МАР=РЕ
+CJPP А=LBU7,МАР=РЕ,COND=EMLRG,ICC
+LРS:LООР COND=EMLRG
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+LBU7:CJP A=PSBU7,MAP=PE,COND=EMLRG,ICC
+;
+;
+BU8:ENTRY
+;===== RFCT
+;
+CJP А=PSBU8,МАР=РЕ,COND=EMLRG,ICC
+PSBU8:PUSH А=100,МАР=РЕ,COND=EMLRG,ICC
+RFCT
+PUSH А=ERRINI,МАР=РЕ,COND=EMLRG
+RFCT COND=EMLRG
+CJP А=PSBU8,МАР=РЕ,COND=EMLRG,ICC
+;
+;
+BU9:ENTRY
+;===== JSRP
+;
+CJP А=PSBU9,МАР=РЕ,COND=EMLRG,ICC
+PSBU9:LDCT А=SВR1,МАР=РЕ
+JSRP А=ERRINI,МАР=РЕ,COND=EMLRG
+LDCT А=ERRINI,МАР=РЕ
+JSRP А=SВR2,МАР=РЕ,COND=EMLRG,IСС
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SВR1:CRTN COND=EMLRG,ICC
+SВR2:CJPP А=LABL9,МАР=РЕ,COND=EMLRG,ICC
+CJS A=ERRINI,MAP=PE,COND=EMLRG,ICC
+LABL9:CJP A=PSBU9,MAP=PE,COND=EMLRG,ICC
+;
+;
+BUA:ENTRY
+;===== TWB
+;
+CJP А=PSBUA,МАР=РЕ,COND=EMLRG,ICC
+PSBUA:PUSH А=100,МАР=РЕ,COND=EMLRG,ICC
+TWB А=NRBUA,МАР=РЕ,COND=EMLRG
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+NRBUA:PUSH А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+TWB А=ERRINI,COND=EMLRG,IСС
+CJS А=SA1,МАР=РЕ,COND=EMLRG,ICC
+CJP А=PSBUA,МАР=РЕ,COND=EMLRG,ICC
+;
+SA1:CJS А=SA2,МАР=РЕ,COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SA2:CJS А=SA3,МАР=РЕ,COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SA3:CJS А=SA4,МАР=РЕ,COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SA4:CJS А=SA5,МАР=РЕ,COND=EMLRG,ICC
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+SA5:LDCT А=0,МАР=РЕ
+TWB А=RT1,МАР=РЕ,COND=EMLRG
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+RT1:TWB А=RT2,МАР=РЕ,COND=EMLRG
+CJP А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+RT2:TWB А=ERRINI,МАР=РЕ,COND=EMLRG,ICC
+TWB А=ERRINI,МАР=РЕ,COND=EMLRG,IСС
+CRTN COND=EMLRG,ICC
+;
+;   ======================================================
+;   ПРОВЕРКА ВСЕХ СИГНАЛОВ, ВЫРАБАТЫВАЕМЫХ МИКРОПРОГРАММОЙ
+;   ======================================================
+;
+MICB:ENTRY
+;===== ПРОВЕРКА СИГНАЛОВ МИКРОПРОГРАММЫ ДЛЯ БМПУ
+;
+CJP А=PSMICB,МАР=РЕ,COND=EMLRG,ICC
+PSMICB:CONT MAP=0
+CONT MAP=1
+CONT MAP=2
+CONT MAP=3
+CJP А=PSMICB,МАР=РЕ,COND=EMLRG,ICC
+;
+;
+MICB1:ENTRY
+;===== ПРОВЕРКА РАЗРЯДОВ АДРЕСА МИКРОПРОГРАММЫ
+;
+CJP А=PSMIB1,МАР=РЕ,COND=EMLRG,ICC
+PSMIB1:CONT A=0,MAP=PE
+CONT A=$FFF,MAP=PE
+CONT A=$555,MAP=PE
+CONT A=$AAA,MAP=PE
+CJP А=PSMIB1,МАР=РЕ,COND=EMLRG,ICC
+;
+;
+MICC:ENTRY
+;===== ПРОВЕРКА СИГНАЛОВ МИКРОПРОГРАММЫ ДЛЯ БОПП
+;
+CJP А=PSMICC,МАР=РЕ,COND=EMLRG,ICC
+PSMICC:CONT YDEV=МРМЕМ,IОМР,MPADR=0
+CONT YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+CONT YDEV=МРМЕМ,IОМР,MPADR=5
+CONT YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+CONT YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+CONT YDEV=МРМЕМ,IОМР,MPADR=15
+CONT YDEV=МРМЕМ,WRY,IОМР,MPADR=5
+CJP А=PSMICC,МАР=РЕ,COND=EMLRG,ICC,YDEV=МРМЕМ,IОМР,MPADR=10
+;
+;
+MICD:ENTRY
+;===== ПРОВЕРКА СИГНАЛОВ МИКРОПРОГРАММЫ ДЛЯ МИКРОПРОЦЕССОРНЫХ СЕКЦИЙ
+;
+CJP А=PSMICD,МАР=РЕ,COND=EMLRG,ICC
+PSMICD:CONT ALUS=0,FUNC=0,Н,ALUD=0,RA=0,RВ=0,ALU
+CONT ALUS=0,FUNC=0,Н,ALUD=0,RA=0,RВ=0,ALU
+CONT ALUS=7,FUNC=7,ALUD=7,RA=15,RВ=15
+CONT ALUS=5,FUNC=5,Н,ALUD=5,RA=5,RВ=5,ALU
+CJP А=PSMICD,МАР=РЕ,COND=EMLRG,ICC,ALUS=2,FUNC=2,ALUD=2,RA=10,RВ=10
+;
+MICD1:ENTRY
+;===== ПРОВЕРКА СИГНАЛОВ МИКРОПРОГРАММЫ ДЛЯ СУСС
+;
+CJP А=PSMID1,МАР=РЕ,COND=EMLRG,ICC
+PSMID1:CONT SHMUX=0,ALUD=NO,STOPC=0,CI=0,CEM,CEN
+CONT SHMUX=0,ALUD=NO,STOPC=0,CI=0,CEM,CEN
+CONT SHMUX=15,ALUD=LSB,STOPC=$3F,CI=3
+CONT SHMUX=10,ALUD=NO,STOPC=$2A,CI=1,CEM,CEN
+CJP А=PSMID1,МАР=РЕ,COND=EMLRG,ICC,SHMUX=5,ALUD=RSB,STOPC=$15,CI=2
+;
+;
+MICE:ENTRY
+;===== ПРОВЕРКА СИГНАЛОВ МИКРОПРОГРАММЫ ДЛЯ ОЗУ МОДИФИКАТОРОВ
+;
+CJP А=PSMICE,МАР=РЕ,COND=EMLRG,ICC
+PSMICE:CONT CSM,WEM,MNSA=0,MODNM=0,MOD
+CONT CSM,WEM,MNSA=1,MODNM=0
+CONT CSM,WEM,MNSA=3,MODNM=0
+CONT CSM,MNSA=3,MODNM=31
+CONT CSM,WEM,MNSA=3,MODNM=10
+CJP А=PSMICE,МАР=РЕ,COND=EMLRG,ICC,CSM,MNSA=3,MODNM=21
+;
+;
+MICE1:ENTRY
+;===== ПРОВЕРКА СИГНАЛОВ МИКРОПРОГРАММЫ ДЛЯ БОИ ДАННЫХ
+;
+CJP А=PSMIE1,МАР=РЕ,COND=EMLRG,ICC
+PSMIE1:CONT ARA=RG0,BRA=RG0
+CONT ECB,WRB,BRA=RG0,ARA=RG0
+CONT ECB,BRA=RG1,ARA=RG0
+CONT ECB,WRB,BRA=RG2,ARA=RG0
+CONT ECB,BRA=RG3,ARA=RG0
+CONT ECA,WRA,ARA=RG0,BRA=RG0
+CONT ECA,ARA=RG1,BRA=RG0
+CONT ECA,WRA,ARA=RG2,BRA=RG0
+CJP А=PSMIE1,МАР=РЕ,COND=EMLRG,ICC,ECA,ARA=RG3,BRA=RG0
+;
+;
+MIC14:ENTRY
+;===== ПРОВЕРКА КОП АРБИТРА
+;
+CJP А=PSMI14,МАР=РЕ,COND=EMLRG,ICC
+PSMI14:CONT ARBI=1
+CONT ARBI=2
+CONT ARBI=3
+CONT ARBI=4
+CONT ARBI=8
+CONT ARBI=9
+CONT ARBI=10
+CONT ARBI=11
+CONT ARBI=12
+CONT ARBI=13
+CONT ARBI=14
+CJP А=PSMI14,МАР=РЕ,COND=EMLRG,ICC,ARBI=15
+;
+;
+MIC141:ENTRY
+;===== ПРОВЕРКА СИГНАЛОВ ДЛЯ УМНОЖИТЕЛЯ
+;
+CJP А=PSM141,МАР=РЕ,COND=EMLRG,ICC
+PSM141:CONT CSMPY,MPYF=0
+CONT CSMPY,MPYF=1
+CONT CSMPY,MPYF=2
+CONT CSMPY,MPYF=3
+CJP А=PSM141,МАР=РЕ,COND=EMLRG,ICC,CSMPY,MPYF=0
+;
+;
+MICE2:ENTRY
+;===== ПРОВЕРКА ОДИНОЧНЫХ СИГНАЛОВ МИКРОПРОГРАММЫ
+;
+CJP А=PSMIE2,МАР=РЕ,COND=EMLRG,ICC
+PSMIE2:CONT SCI,COND=EMLRG
+CONT SCI,COND=EMLRG,ICI
+CONT COND=EMLRG,ICC
+CONT ISE
+CONT LETC
+CJP А=PSMIE2,МАР=РЕ,COND=EMLRG,ICC
+;
+;   ====================================================================
+;   ПРОВЕРКА ДЕШИФРАТОРОВ, УСЛОВИЙ, РГ/ТГ ПРИЗНАКОВ И Т.Д. НА ПЛАТЕ УПРО
+;   ====================================================================
+;
+MICE3:ENTRY
+;===== ПРОВЕРКА УПРАВЛЕНИЯ ДЛИТЕЛЬНОСТЬЮ ТАКТА
+;
+CJP А=PSMIE3,МАР=РЕ,COND=EMLRG,ICC
+PSMIE3:CONT CYSTR=NT3
+CONT CYSTR=NT4
+CONT CYSTR=NT5
+CONT CYSTR=NT6
+CONT CYSTR=NT7
+CONT CYSTR=NT8
+CONT CYSTR=NT9
+CONT CYSTR=NT10
+CJP А=PSMIE3,МАР=РЕ,COND=EMLRG,ICC,CYSTR=NT10
+;
+;
+MIC11:ENTRY
+;===== ПРОВЕРКА ДЕШИФРАТОРОВ ПЛАТЫ УПРО: DSRC, YDST
+;
+CJP А=PSMI11,МАР=РЕ,COND=EMLRG,ICC
+PSMI11:CONT DSRC=0,YDST=0
+CONT DSRC=1,YDST=1
+CONT DSRC=2,YDST=2
+CONT DSRC=3,YDST=3
+CONT DSRC=4,YDST=4
+CONT DSRC=5,YDST=5
+CONT DSRC=6,YDST=6
+CONT DSRC=7,YDST=7
+CONT DSRC=8,YDST=8
+CONT DSRC=9,YDST=9
+CONT DSRC=10,YDST=10
+CONT DSRC=11,YDST=11
+CJP А=PSMI11,МАР=РЕ,COND=EMLRG,ICC,DSRC=12,YDST=12
+;
+;
+MIC12:ENTRY
+;===== ПРОВЕРКА ДЕШИФРАТОРОВ ПЛАТЫ УПРО: YDEV, DDEV
+;
+CJP А=PSMI12,МАР=РЕ,COND=EMLRG,ICC
+PSMI12:CONT YDEV=0,DDEV=0,WRD
+CONT YDEV=1,WRY,DDEV=1
+CONT YDEV=2,DDEV=2,WRD
+CONT YDEV=3,WRY,DDEV=3
+CONT YDEV=4,DDEV=4,WRD
+CONT YDEV=5,WRY,DDEV=5
+CONT YDEV=6,DDEV=6,WRD
+CJP А=PSMI12,МАР=РЕ,COND=EMLRG,ICC,YDEV=7,WRY,DDEV=7
+;
+;
+MIC13:ENTRY
+;===== ПРОВЕРКА СИГНАЛОВ МИКРОПРОГРАММЫ ДЛЯ УСЛОВИЙ
+;
+CJP А=PSMI13,МАР=РЕ,COND=EMLRG,ICC
+PSMI13:CONT COND=0
+CONT COND=1
+CONT COND=2
+CONT COND=3
+CONT COND=4
+CONT COND=5
+CONT COND=6
+CONT COND=7
+CONT COND=8
+CONT COND=9
+CONT COND=10
+CONT COND=11
+CONT COND=12
+CONT COND=13
+CONT COND=14
+CONT COND=15
+CONT COND=16
+CONT COND=17
+CONT COND=18
+CONT COND=19
+CONT COND=20
+CONT COND=21
+CONT COND=22
+CONT COND=23
+CONT COND=24
+CONT COND=25
+CONT COND=26
+CONT COND=27
+CONT COND=28
+CONT COND=29
+CONT COND=30
+CONT COND=31
+CJP А=PSMI13,МАР=РЕ,COND=EMLRG,ICC
+;
+;
+MI131:ENTRY
+;===== ПРОВЕРКА СИГНАЛОВ МИКРОПРОГРАММЫ ДЛЯ РГ/ТГ
+;
+CJP А=PSM131,МАР=РЕ,COND=EMLRG,ICC
+PSM131:CONT FFCNT=0
+CONT FFCNT=1
+CONT FFCNT=2
+CONT FFCNT=3
+CONT FFCNT=4
+CONT FFCNT=5
+CONT FFCNT=6
+CONT FFCNT=7
+CONT FFCNT=8
+CONT FFCNT=9
+CONT FFCNT=10
+CONT FFCNT=11
+CONT FFCNT=12
+CONT FFCNT=13
+CONT FFCNT=14
+CONT FFCNT=15
+CONT FFCNT=16
+CONT FFCNT=17
+CONT FFCNT=18
+CONT FFCNT=19
+CONT FFCNT=20
+CONT FFCNT=21
+;22 - УСТАНОВКА РЭ НЕ ОТРЕЗАНА! (В ОТЛИЧИЕ ОТ МАКЕТА)
+CONT FFCNT=22
+;20 - ВОССТАНАВЛИВАЕМ НР
+CONT FFCNT=20
+CONT FFCNT=23
+CONT FFCNT=24
+CONT FFCNT=25
+CONT FFCNT=26
+CONT FFCNT=27
+CONT FFCNT=28
+CONT FFCNT=29
+CONT FFCNT=30
+CJP А=PSM131,МАР=РЕ,COND=EMLRG,ICC,FFCNT=31
+;
+;
+MIC10:ENTRY
+;===== ПРОВЕРКА СИГНАЛОВ МИКРОПРОГРАММЫ ДЛЯ БОИ ТЕГА
+;
+CJP А=PSMI10,МАР=РЕ,COND=EMLRG,ICC
+PSMI10:CONT YDEVT=ECBTAG,WRB,BRA=RG0
+CONT YDEVT=ECBTAG,BRA=RG1
+CONT YDEVT=ECBTAG,WRB,BRA=RG2
+CONT YDEVT=ECBTAG,BRA=RG3
+CJP А=PSMI10,МАР=РЕ,COND=EMLRG,ICC,BRA=RG0
+;
+;   ========================================================================
+;                 ДЛЯ ЗАПУСКА АВТОМАТИЧЕСКИХ ТЕСТОВ ПРОВЕРЯЕМ
+;         MIN КОЛИЧЕСТВО БЛОКОВ С ПОМОЩЬЮ АППАРАТУРЫ (ОСЦИЛЛОГРАФА):
+;   МИКРОПРОЦЕССОРНЫЕ СЕКЦИИ, СУСС, ПЗУ, СДВИГАТЕЛЬ (ДЛЯ ПЕРЕДАЧИ ИНФОРМАЦИИ
+;         С ШИНЫ Y НА ШИНУ D, РЕГИСТРЫ БОПП (ДЛЯ ВЫДАЧИ ИНФОРМАЦИИ)
+;   ========================================================================
+;
+;     ==========
+;     МПС + БОПП
+;     ==========
+;
+MIC15:ENTRY
+;===== ЗАПИСЬ 0,FF,1 И ПЕРЕМЕННОГО КОДА ИЗ МПС В 8-15 РЕГИСТРЫ БОПП
+;     СОДЕРЖИМОЕ 8-15 РГ.БОПП: 0,FF,1,XX,XX,XX,XX,XX
+;
+CJP А=PSMI15,МАР=РЕ
+PSMI15:CONT ALUS=DZ,FUNC=AND,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=ZA,RA=A,FUNC=EXNOR,Н,ALUD=B,RB=Y,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=B,RB=A
+CONT ALUS=ZA,RA=A,FUNC=ADD,H,CI,ALUD=B,RB=A,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=10
+RPMI15:CONT ALUS=ZA,RA=A,FUNC=ADD,H,CI,ALUD=B,RB=A,ALU,YDEV=MPMEM,WRY,IOMP
+>,MPADR=11
+CONT ALUS=ZA,RA=A,FUNC=ADD,H,CI,ALUD=B,RB=A,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=12
+CONT ALUS=ZA,RA=A,FUNC=ADD,H,CI,ALUD=B,RB=A,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=13
+CONT ALUS=ZA,RA=A,FUNC=ADD,H,CI,ALUD=B,RB=A,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=14
+CJP А=RPMI15,МАР=РЕ,ALUS=ZA,RA=A,FUNC=ADD,H,CI,ALUD=B
+>,RB=A,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=15
+;
+;      =====
+;      П З У
+;      =====
+;
+MIC16:ENTRY
+;===== ЧТЕНИЕ ИЗ ПЗУ 0,F,A,5 НА ШИНУ D, ЧЕРЕЗ МПС - НА Y, ЗАПИСЬ В 8-11 РГ.БОПП
+;     СОДЕРЖИМОЕ 8-11 РГ.БОПП: 00,FF,AA,55
+;
+CJP А=PSMI16,МАР=РЕ
+PSMI16:CONT A=ZER,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=8
+CONT A=CFFF,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=9
+CONT A=CAAA,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=10
+CONT A=C555,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=11
+CJP А=PSMI16,МАР=РЕ
+;
+;
+MIC161:ENTRY
+;===== ЧТЕНИЕ ПЗУ, ЗАПИСЬ ЧЕРЕЗ МПС В 8-15 РЕГИСТРЫ БОПП
+;     СОДЕРЖИМОЕ 8-15 РГ.БОПП: 11,22,44,88,00,FF,AA,55
+;
+CJP А=PSM161,МАР=РЕ
+PSM161:CONT A=H11,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=8
+CONT A=H22,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=9
+CONT A=H44,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=10
+CONT A=H88,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=11
+CONT A=ZER,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=12
+CONT A=HFF,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=13
+CONT A=HAA,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=14
+CONT A=H55,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=15
+CJP А=PSM161,МАР=РЕ
+;
+;      ==========
+;      СДВИГАТЕЛЬ
+;      ==========
+;
+MIC17:ENTRY
+;===== ПРОВЕРКА СДВИГАТЕЛЯ: CДВИГ ЦИКЛИЧЕСКИЙ ВЛЕВО C ЗАПИСЬЮ РЕЗ-ТА В БОПП
+;     СДВИГАЕМАЯ "1" - В МЛ. РАЗРЯДАХ, ПАР-Р СДВИГА - В МП;
+;     СОДЕРЖИМОЕ 8-15 РГ.БОПП: 1,2,4,8,10,20,40,80
+;
+CJP А=PSMI17,МАР=РЕ
+PSMI17:CONT A=B1,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=CICL,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=CICL,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=CICL,YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=CICL,YDEV=МРМЕМ,WRY,IОМР,MPADR=11
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=CICL,YDEV=МРМЕМ,WRY,IОМР,MPADR=12
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=CICL,YDEV=МРМЕМ,WRY,IОМР,MPADR=13
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=CICL,YDEV=МРМЕМ,WRY,IОМР,MPADR=14
+CJP А=PSMI17,МАР=РЕ,ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A
+>,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1,SHF=CICL,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+;
+;
+MIC18:ENTRY
+;===== ПРОВЕРКА СДВИГАТЕЛЯ: ЦИКЛИЧЕСКИЙ ВЛЕВО
+;     8 РГ.БОПП = 1, 9 РГ. БОПП - РЕДКАЯ 1 НА РАЗНЫХ ПОЗИЦИЯХ
+;
+CJP А=PSMI18,МАР=РЕ
+PSMI18:CONT A=B1,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ
+>,WRY,IОМР,MPADR=8
+RPMI18:CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS
+>,PSHF=SH0-1,SHF=CICL,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CJP А=RPMI18,МАР=РЕ
+;
+;
+MIC19:ENTRY
+;===== ПРОВЕРКА СДВИГАТЕЛЯ: ЦИКЛИЧЕСКИЙ ВПРАВО
+;     8 РГ.БОПП = 1, 9 РГ. БОПП - РЕДКАЯ 1 НА РАЗНЫХ ПОЗИЦИЯХ
+;
+CJP А=PSMI19,МАР=РЕ
+PSMI19:CONT A=B1,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A,ALU,YDEV=МРМЕМ
+>,WRY,IОМР,MPADR=8
+RPMI19:CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS
+>,PSHF=SH0+1,SHF=CICL,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CJP А=RPMI19,МАР=РЕ
+;
+;
+MIC1A:ENTRY
+;===== ПРОВЕРКА СДВИГАТЕЛЯ: ЛОГИЧЕСКИЙ ВЛЕВО 8 РАЗ С ЗАПИСЬЮ РЕЗ-ТА В БОПП
+;     СОДЕРЖИМОЕ 8-15 РГ.БОПП: 1,2,4,8,10,20,40,80
+;
+CJP А=PSMI1A,МАР=РЕ
+PSMI1A:CONT A=B1,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=11
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=12
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=13
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=14
+CJP А=PSMI1A,МАР=РЕ,ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU
+>,DSRC=SHIFT,MPS,PSHF=SH0-1,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+;
+;
+MIC1B:ENTRY
+;===== ПРОВЕРКА СДВИГАТЕЛЯ: ЛОГИЧЕСКИЙ ВПРАВО 8 РАЗ
+;     СОДЕРЖИМОЕ 8-15 РГ.БОПП: 80,40,20,10,08,04,02,01
+;
+CJP А=PSMI1B,МАР=РЕ
+PSMI1B:CONT A=H80,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=11
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=12
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=13
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+1
+>,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=14
+CJP А=PSMI1B,МАР=РЕ,ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A
+>,ALU,DSRC=SHIFT,MPS,PSHF=SH0+1,SHF=LOG,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+;
+;
+MIC1C:ENTRY
+;===== ПРОВЕРКА СДВИГАТЕЛЯ: АРИФМЕТИЧЕСКИЙ ВПРАВО НА 16 5 РАЗ, 64P.= 1
+;     СОДЕРЖИМОЕ 8-12 РГ.БОПП: 00,33,55,FF,FF
+;
+CJP А=PSMI1C,МАР=РЕ
+PSMI1C:CONT A=CF530,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+16
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+16
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+16
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+16
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=11
+CJP А=PSMI1C,МАР=РЕ,ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A
+>,ALU,DSRC=SHIFT,MPS,PSHF=SH0+16,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=12
+;
+;
+MIC1D:ENTRY
+;===== ПРОВЕРКА СДВИГАТЕЛЯ: АРИФМЕТИЧЕСКИЙ ВПРАВО НА 16 5 РАЗ, 64P.= 0
+;     СОДЕРЖИМОЕ 8-12 РГ.БОПП: FF,FF,55,55,00
+;
+CJP А=PSMI1D,МАР=РЕ
+PSMI1D:CONT A=C55FF,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+16
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+16
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+16
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+16
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=11
+CJP А=PSMI1D,МАР=РЕ,ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A
+>,ALU,DSRC=SHIFT,MPS,PSHF=SH0+16,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=12
+;
+;
+MIC1E:ENTRY
+;===== ПРОВЕРКА СДВИГАТЕЛЯ: АРИФМЕТИЧЕСКИЙ ВЛЕВО НА 32 3 РАЗА, 64P.= 0
+;     СОДЕРЖИМОЕ 8-10 РГ.БОПП: FF,00,00
+;
+CJP А=PSMI1E,МАР=РЕ
+PSMI1E:CONT A=C55FF,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-32
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-32
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CJP А=PSMI1E,МАР=РЕ,ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A
+>,ALU,DSRC=SHIFT,MPS,PSHF=SH0-32,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+;
+;
+MIC1F:ENTRY
+;===== ПРОВЕРКА СДВИГАТЕЛЯ: АРИФМЕТИЧЕСКИЙ ВЛЕВО НА 32 3 РАЗА, 64P.= 1
+;     СОДЕРЖИМОЕ 8-10 РГ.БОПП: 00,00,00; ПРОВЕРИТЬ 64-Й РАЗРЯД!
+;
+CJP А=PSMI1F,МАР=РЕ
+PSMI1F:CONT A=CF530,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-32
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0-32
+>,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CJP А=PSMI1F,МАР=РЕ,ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A
+>,ALU,DSRC=SHIFT,MPS,PSHF=SH0-32,SHF=ARIPH,YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+;
+;
+MIC20:ENTRY
+;===== ПРОВЕРКА СДВИГАТЕЛЯ: "ХЛОП" ВПРАВО НА 32 3 РАЗА, 64P.= 0
+;     СОДЕРЖИМОЕ 8-10 РГ.БОПП: 03,03,FF; ПРОВЕРИТЬ 64-Й РАЗРЯД!
+;
+CJP А=PSMI20,МАР=РЕ
+PSMI20:CONT A=C0003,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=B,RB=A
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+32
+>,SHF=EMULF,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A,ALU,DSRC=SHIFT,MPS,PSHF=SH0+32
+>,SHF=EMULF,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CJP А=PSMI20,МАР=РЕ,ALUS=DZ,FUNC=ADD,Н,ALUD=BA,RA=A,RB=A
+>,ALU,DSRC=SHIFT,MPS,PSHF=SH0+32,SHF=EMULF,YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+;
+;
+СДВИГ1:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ CONST ВЛЕВО(!) В СДВИГАТЕЛЕ; РЕЗУЛЬТАТ- В БОПП
+;   7 РГ.БОПП - ЧИСЛО СДВИГОВ ВЛЕВО В ПРЯМОМ(!) КОДЕ
+;   8-15 РГ. - РЕЗУЛЬТАТ; CONST ДЛЯ СДВИГА ЧИТАЕМ ИЗ ПЗУ!
+;
+CJP А=PSSH1,МАР=РЕ
+PSSH1:CONT А=Н1,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ЧИСЛО СДВИГОВ, ВЫЧИТАЕМ ИХ ИЗ S0, ПИШЕМ В РПС
+CSH1:CONT YDEV=МРМЕМ,IОМР,MPADR=7,%TRSH%,ALUS=DZ,ALUD=В,RВ=DADR
+CONT А=МВ,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=AND,Н,ALUD=В,RВ=DADR
+CONT А=S0,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=SUBS,ALUD=B,RB=DADR,CI,ALU,YDST=PSHIFT
+CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=A
+CONT ALUS=DZ,Н,ALUD=ВА,RА=A,RВ=Y,ALU,DSRC=SHIFT,SHF=LOG
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZA,RA=A,H,ALUD=B,RB=WR6
+CJP А=CSH1,МАР=РЕ
+;
+;
+СДВИ1М:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ CONST ИЗ БОПП ВЛЕВО В СДВИГАТЕЛЕ; РЕЗУЛЬТАТ- В БОПП
+;   АНАЛОГИЧНО ПРЕДЫДУЩЕМУ, НО ЧИСЛО ДЛЯ СДВИГА ЧИТАЕМ В БОПП.
+;   7 РГ.БОПП - ЧИСЛО СДВИГОВ ВЛЕВО В ПРЯМОМ(!) КОДЕ;
+;   8-15 РГ. - ЧИСЛО ДЛЯ СДВИГА; ТУДА ЖЕ ПИШЕМ РЕЗУЛЬТАТ!
+;
+CJP А=PSSH1M,МАР=РЕ
+PSSH1M:CONT А=Н81,%T%
+CJS А=INITST,МАР=РЕ
+;"1" В 11 РАЗРЯДЕ - В HALF
+CONT A=B11,DSRC=PROM,ALUS=DZ,H,ALUD=В,RВ=HALF
+;ЧИТАЕМ В БОПП ЧИСЛО СДВИГОВ, ВЫЧИТАЕМ ИХ ИЗ "1" В 11 РАЗРЯДЕ, ПИШЕМ В РПС
+CONT YDEV=МРМЕМ,IОМР,MPADR=7,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DZ,Н,ALUD=В,RВ=DADR
+CJS А=RD8/F,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=DADR,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0+56,SHF=LOG
+CONT ALUS=АВ,RА=HALF,RВ=DADR,FUNC=SUBS,Н,CI,ALUD=Q,ALU,YDST=PSHIFT
+CJS А=OUT8/F,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,SHF=LOG
+STSH1M:CJP А=STSH1M,МАР=РЕ
+;
+;
+CДBИ1N:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ CONST ИЗ БОПП ВПРАВО В СДВИГАТЕЛЕ; РЕЗУЛЬТАТ- В БОПП
+;   АНАЛОГИЧНО ПРЕДЫДУЩЕМУ, НО ВПРАВО!
+;   7 РГ.БОПП - ЧИСЛО СДВИГОВ ВПРАВО В ПРЯМОМ(!) КОДЕ;
+;   8-15 РГ. - ЧИСЛО ДЛЯ СДВИГА; ТУДА ЖЕ ПИШЕМ РЕЗУЛЬТАТ!
+;
+CJP А=PSSH1N,МАР=РЕ
+PSSH1N:CONT А=НС1,%T%
+CJS А=INITST,МАР=РЕ
+;"1" В 11 РАЗРЯДЕ - В HALF
+CONT A=B11,DSRC=PROM,ALUS=DZ,H,ALUD=В,RВ=HALF
+;ЧИТАЕМ В БОПП ЧИСЛО СДВИГОВ, СКЛАДЫВАЕМ ИХ С "1" В 11 РАЗРЯДЕ, ПИШЕМ В РПС
+CONT YDEV=МРМЕМ,IОМР,MPADR=7,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+>,ALUS=DZ,Н,ALUD=В,RВ=DADR
+CJS А=RD8/F,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=DADR,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0+56,SHF=LOG
+CONT ALUS=АВ,RА=HALF,RВ=DADR,FUNC=ADD,Н,ALUD=Q,ALU,YDST=PSHIFT
+CJS А=OUT8/F,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,SHF=LOG
+STSH1N:CJP А=STSH1N,МАР=РЕ
+;
+;
+СДВИГ2:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ CONST ВПРАВО(!)  В СДВИГАТЕЛЕ; РЕЗУЛЬТАТ- В БОПП
+;   7 РГ.БОПП - ЧИСЛО СДВИГОВ ВПРАВО В ПРЯМОМ КОДЕ
+;   8-15 РГ. - РЕЗУЛЬТАТ. CONST ЧИТАЕМ В ПЗУ!
+;
+CJP А=PSSH2,МАР=РЕ
+PSSH2:CONT А=Н2,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ЧИСЛО СДВИГОВ, СКЛАДЫВАЕМ ИХ С S0, ПИШЕМ В РПС
+CSH2:CONT YDEV=МРМЕМ,IОМР,MPADR=7,%TRSH%,ALUS=DZ,ALUD=В,RВ=DADR
+CONT А=МВ,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=AND,Н,ALUD=В,RВ=DADR
+CONT А=S0,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=ADD,H,ALUD=B,RB=DADR,ALU,YDST=PSHIFT
+CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=A
+CONT ALUS=DZ,Н,ALUD=ВА,RА=A,RВ=Y,ALU,DSRC=SHIFT,SHF=LOG
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZA,RA=Y,H,ALUD=B,RB=WR6
+CJP А=CSH2,МАР=РЕ
+;
+;
+СДВИГ3:ENTRY
+;===== СДВИГ АРИФМЕТИЧЕСКИЙ(!) ВЛЕВО В СДВИГАТЕЛЕ 64Р; CONST(!) И РЕЗ-Т - В БОПП
+;   7 РГ.БОПП - ЧИСЛО СДВИГОВ ВЛЕВО В ПРЯМОМ(!) КОДЕ
+;   8-15 РГ. - СДВИГАЕМОЕ ЧИСЛО; ТУДА ЖЕ ПИШЕМ РЕЗУЛЬТАТ.
+;
+CJP А=PSSH3,МАР=РЕ
+PSSH3:CONT А=Н3,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ЧИСЛО СДВИГОВ, ВЫЧИТАЕМ ИХ ИЗ S0, ПИШЕМ В РПС
+CJS А=RD8/F,МАР=РЕ,YDEV=МРМЕМ,IОМР,MPADR=7,%TRSH%,ALUS=DZ,ALUD=В,RВ=DADR
+CONT А=МВ,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=AND,Н,ALUD=В,RВ=DADR
+CONT А=S0,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=SUBS,H,CI,ALUD=B,RB=DADR,ALU
+>,YDST=PSHIFT
+CJS А=OUT8/F,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,SHF=ARIPH
+STSH3:CJP А=STSH3,МАР=РЕ
+;
+;
+СДВИГ4:ENTRY
+;===== СДВИГ АРИФМЕТИЧЕСКИЙ ВПРАВО(!) В СДВИГАТЕЛЕ 64Р; ДАННЫЕ И РЕЗ-Т - В БОПП
+;   7 РГ.БОПП - ЧИСЛО СДВИГОВ ВПРАВО В ПРЯМОМ КОДЕ
+;   8-15 РГ. - СДВИГАЕМОЕ ЧИСЛО; ТУДА ЖЕ ПИШЕМ РЕЗУЛЬТАТ.
+;
+CJP А=PSSH4,МАР=РЕ
+PSSH4:CONT А=Н4,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ЧИСЛО СДВИГОВ, СКЛАДЫВАЕМ ИХ С S0, ПИШЕМ В РПС
+CJS А=RD8/F,МАР=РЕ,YDEV=МРМЕМ,IОМР,MPADR=7,%TRSH%,ALUS=DZ,ALUD=В,RВ=DADR
+CONT А=МВ,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=AND,Н,ALUD=В,RВ=DADR
+CONT А=S0,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=ADD,H,ALUD=B,RB=DADR,ALU,YDST=PSHIFT
+CJS А=OUT8/F,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,SHF=ARIPH
+STSH4:CJP А=STSH4,МАР=РЕ
+;
+;   ================================
+;   ЧТЕНИЕ, ЗАПИСЬ БЛОКА ОБМЕНА С ПП
+;   ================================
+;
+БОПП2:ENTRY
+;===== 4-Й РГ.БОПП - В РГ.А МПС, ОБРАТНЫЙ КОД - В РГ.5 БОПП
+;
+CJP А=PSMP2,МАР=РЕ
+PSMP2:CONT А=Н2,%T%
+CJS А=INITST,МАР=РЕ
+PSPMP2:CONT YDEV=МРМЕМ,IОМР,MPADR=4,DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG
+>,ALUS=DZ,FUNC=ADD,Н,ALUD=В,RВ=А
+CJP А=PSРМР2,МАР=РЕ,ALUS=ZА,RА=А,FUNC=EXNOR,Н,ALUD=В,RВ=Y,ALU
+>,YDEV=МРМЕМ,WRY,IОМР,MPADR=5
+;
+;
+БОПП3:ENTRY
+;===== 4-Й РГ.БОПП - В РГ.А МПС, ИЗ РГ.А ПЕРЕПИСЫВАЕМ В 5-15 РГ.БОПП
+;
+CJP А=PSMP3,МАР=РЕ
+PSMP3:CONT А=Н3,%T%
+CJS А=INITST,МАР=РЕ
+PSPMP3:CONT YDEV=МРМЕМ,IОМР,MPADR=4,DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG
+>,ALUS=DZ,FUNC=ADD,Н,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=5
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=6
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=7
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=11
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=12
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=13
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=14
+CJP А=PSРМР3,МАР=РЕ,ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+;
+;
+БОПП4:ENTRY
+;===== 4-Й РГ.БОПП - В РГ.А МПС, ОБРАТНЫЙ КОД ПЕРЕПИСЫВАЕМ В 5-15 РГ.БОПП
+;
+CJP А=PSMP4,МАР=РЕ
+PSMP4:CONT А=Н4,%T%
+CJS А=INITST,МАР=РЕ
+PSPMP4:CONT YDEV=МРМЕМ,IОМР,MPADR=4,DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG
+>,ALUS=DZ,FUNC=ADD,Н,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,Н,ALUD=В,RВ=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=5
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=6
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=7
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=11
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=12
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=13
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=14
+CJP А=PSРМР4,МАР=РЕ,ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+;
+ПЗУ1:ENTRY
+;===== ЧТЕНИЕ ИЗ ПЗУ, ЗАПИСЬ В БОПП, В 8-15 РЕГИСТРЫ
+;
+CJP А=PSROM1,МАР=РЕ
+PSROM1:CONT А=Н1,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ИЗ ПЗУ В РГ.WR6, ИДЕМ НА ВЫДАЧУ В БОПП
+CROM1:CONT А=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+CJS А=OUT8/F,МАР=РЕ
+CJP А=CROM1,МАР=РЕ
+;
+;
+;     ==================================================================
+;     АВТОМАТИЧЕСКИЕ ТЕСТЫ C ИСПОЛЬЗОВАНИЕМ МПС,СУСС,СДВИГАТЕЛЯ,БОПП,ПЗУ
+;     ==================================================================
+;
+;===== ПЕРЕД ПЕРЕТРАНСЛЯЦИЕЙ В 1 БОЛЬШОЙ ТЕСТ СДЕЛАТЬ ЕДИНУЮ НУМЕРАЦИЮ,
+;===== ЧТОБ ЛЕГКО БЫЛО НАХОДИТЬ ОШИБКУ !!!!!
+;
+;     ========================
+;     ПРОВЕРКА КОМАНД  Б М П У
+;     ========================
+;
+БМПУ5:ENTRY
+;===== КОМАНДЫ CONT + CJP
+;   ТИП ПРОВЕРКИ (МЛ. БАЙТ INTR И 1 РГ.БОПП) = 1 (CONT); = 2 (CJP)
+;   ЕСЛИ ОШИБКА, 2 РГ.БОПП = FF
+;
+CJP А=PSMPU5,МАР=РЕ
+PSMPU5:CONT А=Н5,%T%
+CJS А=INITST,МАР=РЕ
+CMPU5:CONT %CLRTYP%
+;ПРОВЕРЯЕМ КОМАНДЫ
+;INTR=1 (ТИП ПРОВЕРКИ)
+CONT А=ERRTST,МАР=РЕ,%ТУРЕ%
+CONT А=ERRTST,МАР=РЕ,IСС
+CJP А=MPU5,МАР=РЕ,%ТУРЕ%
+CJP А=ERRTST,МАР=РЕ
+MPU5:%J% А=CMPU5,МАР=РЕ,%TIK%
+;
+;
+БМПУ6:ENTRY
+;===== LDCT + RРСТ; INTR = 0-5
+;
+CJP А=PSMPU6,МАР=РЕ
+PSMPU6:CONT А=Н6,%T%
+%S% А=INITST,МАР=РЕ
+CMPU6:CONT %CLRTYP%
+;ПРОВЕРЯЕМ КОМАНДЫ
+;INTR=1
+LDCT А=$F0,МАР=РЕ,%ТУРЕ%
+RPD6:RРСТ А=RPD6,МАР=РЕ,IСС
+;INTR=2
+RРСТ А=ERRTST,МАР=РЕ,IСС,%ТУРЕ%
+;INTR=3
+LDCT А=ERRTST,МАР=РЕ,%ТУРЕ%
+LDCT А=$F0,МАР=РЕ,IСС
+RPDI6:RРСТ А=RPDI6,МАР=РЕ
+;INTR=4
+LDCT А=0,МАР=РЕ,%ТУРЕ%
+RРСТ А=ERRTST,МАР=РЕ
+LDCT А=$F,МАР=РЕ
+;INTR=5
+RРСТ А=LABL6,МАР=РЕ,%ТУРЕ%
+CJP А=ERRTST,МАР=РЕ
+LABL6:%J% A=CMPU6,MAP=PE,%TIK%
+;
+;
+БМПУ7:ENTRY
+;===== JRP; INTR = 0-4
+;
+CJP А=PSMPU7,МАР=РЕ
+PSMPU7:CONT А=Н7,%T%
+%S% А=INITST,МАР=РЕ
+CMPU7:CONT %CLRTYP%
+;INTR=1
+CONT %ТУРЕ%
+;УСТАНАВЛИВАЕМ НР
+LDCT А=ERRTST,МАР=РЕ,FFCNT=SETNR
+JRP А=NЕХ7,МАР=РЕ
+;INTR=2
+NЕХ7:JRP А=NЕХТ7,МАР=РЕ,COND=EMLRG,IСС,%ТУРЕ%
+NЕХТ7:LDCT А=NЕХТС7,МАР=РЕ
+;INTR=3
+JRP А=ERRTST,МАР=РЕ,COND=EMLRG,%ТУРЕ%
+CJP А=ERRTST,МАР=РЕ
+;INTR=4
+NЕХТС7:LDCT A=ERRTST,MAP=PE
+JRP А=LABL7,МАР=РЕ,%ТУРЕ%
+JRP А=ERRTST,МАР=РЕ
+LABL7:%J% A=CMPU7,MAP=PE,%TIK%
+;
+;
+БМПУ8:ENTRY
+;===== CJS + CRTN
+;   INTR = 00,01,02,03,04,05,06, ЕСЛИ ЧЕРЕЗ ВСЕ П/П ПРОХОДИМ НОРМАЛЬНО!
+;
+CJP А=PSMPU8,МАР=РЕ
+PSMPU8:CONT А=Н8,%T%
+%S% А=INITST,МАР=РЕ
+CMPU8:CONT %CLRTYP%
+;INTR=1
+CJS А=ERRTST,МАР=РЕ,IСС,%ТУРЕ%
+;УСТАНАВЛИВАЕМ НР
+CONT FFCNT=SETNR
+;INTR=2
+CJS А=ERRTST,МАР=РЕ,COND=EMLRG,%ТУРЕ%
+;1-Я ЗАГРУЗКА АДРЕСА В СТЕК
+CJS А=SUBR1,МАР=РЕ
+%J% А=CMPU8,МАР=РЕ,%TIK%
+;
+;
+БМПУ9:ENTRY
+;===== CJPP; ТИП ПРОВЕРКИ (РГ.INTR) = 0-25 (19 Н)
+;
+CJP А=PSMPU9,МАР=РЕ
+PSMPU9:CONT А=Н9,%T%
+%S% А=INITST,МАР=РЕ
+CMPU9:CONT %CLRTYP%
+LDCT А=20,МАР=РЕ,FFCNT=SETNR
+JS:CJS А=SUB1,МАР=РЕ
+RРСТ А=JS,МАР=РЕ
+;1 ЗАГРУЗКА СТЕКА
+CJS А=SUBE1,МАР=РЕ
+%J% А=CMPU9,МАР=РЕ,%TIK%
+;
+;
+БМПУА:ENTRY
+;===== PUSH; ТИП ПРОВЕРКИ (РГ.INTR) = 01,02
+;
+CJP А=PSPUA,МАР=РЕ
+PSPUA:CONT А=НА,%T%
+%S% А=INITST,МАР=РЕ
+CMPUA:CONT %CLRTYP%
+LDCT А=ERRTST,МАР=РЕ,FFCNT=SETNR
+;INTR=1
+PUSH А=NС2,МАР=РЕ,%ТУРЕ%
+CJPP А=NС1,МАР=РЕ
+CJP A=ERRTST,MAP=PE
+NС1:JRP А=ERRTST,МАР=РЕ,IСС
+CJP A=ERRTST,MAP=PE
+NС2:LDCT А=LABLA,МАР=РЕ
+;INTR=2
+PUSH А=ERRTST,МАР=РЕ,COND=EMLRG,%ТУРЕ%
+CJPP А=NС3,МАР=РЕ
+NС3:JRP А=ERRTST,МАР=РЕ,COND=EMLRG
+LABLA:%J% A=CMPUA,MAP=PE,%TIK%
+;
+;
+БМПУВ:ENTRY
+;===== PUSH + LООР;  1 РГ.БОПП = РГ.INTR = 0-64
+;
+CJP А=PSPUB,МАР=РЕ
+PSPUB:CONT А=НВ,%T%
+%S% А=INITST,МАР=РЕ
+CMPUB:CONT %CLRTYP%
+PUSH А=ERRTST,МАР=РЕ,FFCNT=SETNR
+;INTR=1
+LООР COND=EMLRG,IСС,%ТУРЕ%
+LООР
+PUSH А=100,МАР=РЕ
+RРСТ А=LР,МАР=РЕ
+CJPP А=LABLB,МАР=РЕ
+;INTR=2
+LР:LООР COND=EMLRG,%ТУРЕ%
+CJP А=ERRTST,МАР=РЕ
+LABLB:%J% A=CMPUB,MAP=PE,%TIK%
+;
+;
+БМПУС:ENTRY
+;===== RFCT;  INTR = 0,1,2 (2 - ОЧЕНЬ РЕДКО)
+;
+CJP А=PSPUC,МАР=РЕ
+PSPUC:CONT А=НС,%T%
+%S% А=INITST,МАР=РЕ
+CMPUC:CONT %CLRTYP%
+CONT FFCNT=SETNR
+;INTR=1
+PUSH А=100,МАР=РЕ,%ТУРЕ%
+RFCT
+PUSH А=ERRTST,МАР=РЕ,IСС
+;INTR=2
+RFCT COND=EMLRG,%ТУРЕ%
+%J% А=CMPUC,МАР=РЕ,%TIK%
+;
+;
+БMПYD:ENTRY
+;===== JSRP
+;
+CJP А=PSPUD,МАР=РЕ
+PSPUD:CONT А=HD,%T%
+%S% А=INITST,МАР=РЕ
+CMPUD:CONT %CLRTYP%
+CONT FFCNT=SETNR
+;INTR=1
+LDCT А=SВ1,МАР=РЕ,%ТУРЕ%
+JSRP А=ERRTST,МАР=РЕ,IСС
+LDCT А=ERRTST,МАР=РЕ
+;INTR=2
+JSRP А=SВ2,МАР=РЕ,COND=EMLRG,IСС,%ТУРЕ%
+CJP А=ERRTST,МАР=РЕ
+SВ1:CRTN
+SВ2:CJPP А=LABLD,МАР=РЕ
+CJS A=ERRTST,MAP=PE
+LABLD:%J% A=CMPUD,MAP=PE,%TIK%
+;
+;
+БМПУЕ:ENTRY
+;===== TWB; ТИП ПРОВЕРКИ (РГ.INTR) = 00-06
+;
+CJP А=PSPUE,МАР=РЕ
+PSPUE:CONT А=НЕ,%T%
+%S% А=INITST,МАР=РЕ
+CMPUE:CONT %CLRTYP%
+CONT FFCNT=SETNR
+;INTR=1
+PUSH А=100,МАР=РЕ,%ТУРЕ%
+TWB А=NСОМ,МАР=РЕ,COND=EMLRG
+;INTR=2
+CJP А=ERRTST,МАР=РЕ
+NСОМ:PUSH А=ERRTST,МАР=РЕ,%ТУРЕ%
+TWB А=ERRTST,COND=EMLRG,IСС
+;1-Я ЗАГРУЗКА СТЕКА
+CJS А=SU1,МАР=РЕ
+%J% А=CMPUE,МАР=РЕ,%TIK%
+;
+;     ============================
+;     УСЛОВНЫЕ ПЕРЕХОДЫ ПО СТ СУСС
+;     ============================
+;
+CTCCF:ENTRY
+;===== ЗАГРУЗКА 0 В N, УСЛОВНЫЙ ПЕРЕХОД  CJP  ПО СТ СУСС; INTR = 0-1
+;     ПРИ ОШИБКЕ 8-15 РГ.БОПП = РГ.Y, В КОТОРЫЙ ПРОЧИТАН РГ.N СУСС
+;     10P.- Z(0), 9P.- N(0), 8P.- C(0), 7P.- OVR(0)
+;
+CJP А=PSCTF,МАР=РЕ
+PSCTF:CONT А=HF,%T%
+%S% А=INITST,МАР=РЕ
+;1 - В РГ.N
+CCTF:CONT SТОРС=SETN,CEN,%CLRTYP%
+;0 - В N
+CONT SТОРС=CLRN,CEN
+;П/У НА НАЧАЛО, ЕСЛИ /NZ=1 (Т.К. NZ Д.БЫТЬ = 0, КОТОРЫЙ ЗАГРУЗИЛИ!)
+CJP А=LABLF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;ОШИБКА; ЧИТАЕМ N В РГ.У
+CONT A=MIND,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=Y
+CJS А=ERRINF,МАР=РЕ,SТОРС=1,DDEV=STATUS,ALUS=DA,RA=Y,FUNC=AND,H,ALUD=В,RВ=У
+LABLF:%J% A=CCTF,MAP=PE,%TIK%
+;
+;
+СТСС10:ENTRY
+;===== ЗАГРУЗКА 0 В N, КОМАНДА JRP
+;     ПРИ ОШИБКЕ 8-15 РГ.БОПП = РГ.Y, В КОТОРЫЙ ПРОЧИТАН РГ.N СУСС
+;     10P.- Z(0), 9P.- N(0), 8P.- C(0), 7P.- OVR(0)
+;
+CJP А=PSCT10,МАР=РЕ
+PSCT10:CONT А=Н10,%T%
+%S% А=INITST,МАР=РЕ
+;1 - В РГ.N
+ССТ10:CONT SТОРС=SETN,CEN
+;0 - В N
+LDCT А=LAB10,МАР=РЕ,SТОРС=CLRN,CEN
+;П/У НА ERR, ЕСЛИ NZ=1
+JRP А=ERCT10,МАР=РЕ,COND=СТ,SТОРС=NZ
+;ОШИБКА; ЧИТАЕМ N В РГ.У
+ERCT10:CONT A=MIND,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=Y
+CJS А=ERRINF,МАР=РЕ,SТОРС=1,DDEV=STATUS,ALUS=DA,RA=Y,FUNC=AND,H,ALUD=В,RВ=У
+LAB10:%J% А=ССТ10,МАР=РЕ,%TIK%
+;
+;
+СТСС11:ENTRY
+;===== УСТАНОВКА N ПО РЕЗ-ТУ ИЗ ПРЦР + КОМАНДА CJP
+;     ПРИ ОШИБКЕ 8-15 РГ.БОПП = РГ.Y, В КОТОРЫЙ ПРОЧИТАН РГ.N СУСС
+;     10P.- Z(0), 9P.- N(1), 8P.- C(0), 7P.- OVR(0)
+;
+CJP А=PSCT11,МАР=РЕ
+PSCT11:CONT А=Н11,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А ПРЦР, NZ=1
+ССТ11:CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,CEN
+;F...F - В РГ.А ПРЦР, NZ=0
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,Н,ALUD=В,RВ=А,CEN
+;П/У НА НАЧАЛО, ЕСЛИ NZ=0 (/NZ=1), ЕСЛИ НЕ 0-Й РЕЗУЛЬТАТ
+CJP А=LABL11,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;ОШИБКА; ЧИТАЕМ N В РГ.У
+CONT A=MIND,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=Y
+CJS А=ERRINF,МАР=РЕ,SТОРС=1,DDEV=STATUS,ALUS=DA,RA=Y,FUNC=AND,H,ALUD=В,RВ=У
+LABL11:%J% А=ССТ11,МАР=РЕ,%TIK%
+;
+;
+СТСС12:ENTRY
+;===== УСТАНОВКА N ПО РЕЗ-ТУ ИЗ ПРЦР + КОМАНДА JRP
+;     ПРИ ОШИБКЕ 8-15 РГ.БОПП = РГ.Y, В КОТОРЫЙ ПРОЧИТАН РГ.N СУСС
+;     10P.- Z(0), 9P.- N(1), 8P.- C(0), 7P.- OVR(0)
+;
+CJP А=PSCT12,МАР=РЕ
+PSCT12:CONT А=Н12,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А ПРЦР, NZ=1
+ССТ12:CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,CEN
+;F...F - В РГ.А ПРЦР, NZ=0
+LDCT А=LABL12,МАР=РЕ,ALUS=ZА,RА=А,FUNC=EXNOR,Н,ALUD=В,RВ=А,CEN
+;П/У НА НАЧАЛО, ЕСЛИ NZ=0
+JRP А=ERCT12,МАР=РЕ,COND=СТ,SТОРС=NZ
+;ОШИБКА; ЧИТАЕМ N В РГ.У
+ERCT12:CONT A=MIND,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=Y
+CJS А=ERRINF,МАР=РЕ,SТОРС=1,DDEV=STATUS,ALUS=DA,RA=Y,FUNC=AND,H,ALUD=В,RВ=У
+LABL12:%J% А=ССТ12,МАР=РЕ,%TIK%
+;
+;
+СТСС13:ENTRY
+;===== ПРОВЕРКА СИГНАЛОВ СЕМ И CEN
+;     ПРИ ОШИБКЕ 8-15 РГ.БОПП = РГ.Y, В КОТОРЫЙ ПРОЧИТАН РГ. N ИЛИ М CУСС
+;     10P.- Z(1), 9P.- N(0), 8P.- C(0), 7P.- OVR(0)
+;
+CJP А=PSCT13,МАР=РЕ
+PSCT13:CONT А=Н13,%T%
+%S% А=INITST,МАР=РЕ
+ССТ13:CONT A=MIND,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=BYTE
+;0 - В РГ.А ПРЦР, NZ=MZ=1
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,CEN,СЕМ
+;ПЫТАЕМСЯ ЗАГРУЗИТЬ 0 В NZ И MZ БЕЗ CEN И СЕМ
+CONT SТОРС=CLRM,%CLRTYP%
+;INTR = 0: П/У НА ОШИБКУ, ЕСЛИ NZ=0 (/NZ=1); N - В РГ.У
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND
+>,H,ALUD=В,RВ=У
+LDCT А=LABL13,МАР=РЕ,%ТУРЕ%
+;INTR = 1: П/У НА НАЧАЛО, ЕСЛИ MZ=1; ИЛИ НА ОШИБКУ, ЕСЛИ MZ=0; М - В РГ.У
+JRP А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/MZ,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND
+>,H,ALUD=В,RВ=У
+LABL13:%J% A=CCT13,MAP=PE,%TIK%
+;
+;
+СТСС14:ENTRY
+;===== ЗАГРУЗКА 0 В М; INTR=1-4
+;     ПРИ ОШИБКЕ 8-15 РГ.БОПП = РГ.Y, В КОТОРЫЙ ПРОЧИТАН РГ. М CУСС
+;     10P.- Z(0), 9P.- N(0), 8P.- C(0), 7P.- OVR(0)
+;
+CJP А=PSCT14,МАР=РЕ
+PSCT14:CONT А=Н14,%T%
+%S% А=INITST,МАР=РЕ
+;1 - В РГ.М
+CONT A=MIND,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=BYTE
+ССТ14:CONT SТОРС=SETM,СЕМ,%CLRTYP%
+;0 - В М (MZ=0)
+LDCT А=ERRINF,МАР=РЕ,SТОРС=CLRM,СЕМ,%TYPE%
+;П/У НА НАЧАЛО, ЕСЛИ M=0; ИЛИ НА ОШИБКУ, ЕСЛИ M=1
+JRP А=L141,МАР=РЕ,COND=СТ,SТОРС=/MZ,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+L141:JRP А=L142,МАР=РЕ,COND=СТ,SТОРС=/MN,%TYPE%
+L142:JRP А=L143,МАР=РЕ,COND=СТ,SТОРС=/MC,%TYPE%
+L143:JRP А=L144,МАР=РЕ,COND=СТ,SТОРС=/MV,%TYPE%
+L144:%J% A=CCT14,MAP=PE,%TIK%
+;
+;
+СТСС15:ENTRY
+;===== УСТАНОВКА М ПО РЕЗ-ТУ ИЗ ПРЦР
+;     ПРИ ОШИБКЕ 8-15 РГ.БОПП = РГ.Y, В КОТОРЫЙ ПРОЧИТАН РГ. М CУСС
+;     10P.- Z(0), 9P.- N(0), 8P.- C(0), 7P.- OVR(0)
+;
+CJP А=PSCT15,МАР=РЕ
+PSCT15:CONT А=Н15,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А ПРЦР, MZ=1
+CONT A=MIND,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=BYTE
+ССТ15:CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,СЕМ
+;1 - В РГ.А ПРЦР, MZ=0
+LDCT А=ERRINF,МАР=РЕ,ALUS=ZА,RА=А,FUNC=ADD,Н,CI,ALUD=В,RВ=А,СЕМ
+;П/У НА НАЧАЛО, ЕСЛИ MZ=0; ИЛИ НА ОШИБКУ, ЕСЛИ MZ=1
+JRP А=LABL15,МАР=РЕ,COND=СТ,SТОРС=/MZ,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+LABL15:%J% A=CCT15,MAP=PE,%TIK%
+;
+;
+СТСС16:ENTRY
+;===== ОБМЕН МЕЖДУ М И N
+;     ПРИ ОШИБКЕ 8-15 РГ.БОПП = РГ.Y, В КОТОРЫЙ ПРОЧИТАН РГ. М ИЛИ N CУCС
+;     10P.- Z(1,0), 9P.- N(0), 8P.- C(0), 7P.- OVR(0)
+;
+CJP А=PSCT16,МАР=РЕ
+PSCT16:CONT А=Н16,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А ПРЦР, MZ=1
+ССТ16:CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,СЕМ
+CONT A=MIND,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=BYTE
+;1 - В РГ.А ПРЦР, NZ=0
+CONT ALUS=ZА,RА=А,FUNC=ADD,Н,CI,ALUD=В,RВ=А,CEN
+;ОБМЕН М И N, NZ=1, MZ=0
+CONT SТОРС=MCN,СЕМ,CEN,%CLRTYP%
+;INTR=0; П/У НА ОШИБКУ, ЕСЛИ NZ=0 (/NZ=1)
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+LDCT А=LABL16,МАР=РЕ,%ТУРЕ%
+;INTR=1; П/У НА НАЧАЛО, ЕСЛИ MZ=0; ИЛИ НА ОШИБКУ, ЕСЛИ MZ=1
+JRP А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=MZ,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+LABL16:%J% A=CCT16,MAP=PE,%TIK%
+;
+;
+СТСС17:ENTRY
+;===== ЗАПИСЬ 0,F С ШИНЫ У В РГ.М СУСС, ЧТЕНИЕ РГ.М, СРАВНЕНИЕ В МП
+;     ПРИ ОШИБКЕ 8-11 РГ.= РГ.A (ЧТО ПИСАЛИ), 12-15 = РГ.Y (ЧТО ПРОЧИТАЛИ)
+;     10 PАЗРЯД - Z, 9P.- N, 8P.- C, 7P.- OVR
+;
+CJP А=PSCT17,МАР=РЕ
+PSCT17:CONT А=Н17,%T%
+%S% А=INITST,МАР=РЕ
+CONT A=MIND,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=BYTE
+;0 - В РГ.А ПРЦР, В РГ.N  СУСС
+CONT ALUS=ZА,FUNC=AND,Н,ALUD=В,RВ=А
+;/А - В А, В РГ.М СУСС ЧЕРЕЗ ШИНУ У, СТАРОЕ М - В N
+ССТ17:CONT ALUS=ZА,RА=А,FUNC=EXNOR,Н,ALUD=В,RВ=А,ALU,DDEV=STATUS,WRD
+>,SТОРС=YTOM,СЕМ
+;РГ.М СУСС - НА ШИНУ D, В РГ.У, СРАВНИВАЕМ С РГ.А
+CONT SТОРС=32,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,Н,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+;П/У НА ОШИБКУ, ЕСЛИ /NZ=1 (NZ=0)
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% A=CCT17,MAP=PE,STOPC=CLRN,CEN,%TIK%
+;
+;
+СТСС18:ENTRY
+;===== ПОРАЗРЯДНОЕ ИЗМЕНЕНИЕ РГ.N;  INTR = 0-1
+;     ПРИ ОШИБКЕ 8-11 РГ.= РГ.A (ЧТО Д.БЫТЬ), 12-15 = РГ.Y (ЧТО ПРОЧИТАЛИ)
+;     10 PАЗРЯД - Z, 9P.- N, 8P.- C, 7P.- OVR
+;
+CJP А=PSCT18,МАР=РЕ
+PSCT18:CONT А=Н18,%T%
+%S% А=INITST,МАР=РЕ
+ССТ18:CONT A=MIND,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=BYTE
+;0 - В РГ.А ПРЦР, В РГ.N  СУСС
+CONT ALUS=ZА,FUNC=AND,Н,ALUD=В,RВ=А,SТОРС=CLRN,CEN
+;УСТАНАВЛИВАЕМ В 1 ОТДЕЛЬНЫЕ РАЗРЯДЫ РГ.N: 1 - В NZ
+CONT SТОРС=SETNZ,CEN
+;1 - В NС
+CONT SТОРС=SETNC,CEN
+;1 - В NN
+CONT SТОРС=SETNN,CEN
+;1 - В NV, F...F - В РГ.А
+CONT SТОРС=SETNV,CEN,ALUS=ZА,RА=А,FUNC=EXNOR,Н,ALUD=В,RВ=А
+;ЧИТАЕМ РГ.N СУСС - В РГ.У МПС, СРАВНИВАЕМ С РГ.А
+CONT SТОРС=1,DDEV=STATUS,ALUS=DА,RA=BYTE,FUNC=AND,H,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,Н,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEM
+;INTR=0; П/У НА ОШИБКУ, ЕСЛИ N НЕ РАВЕН РГ.А
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/MZ,%CLRTYP%
+;УСТАНАВЛИВАЕМ В 0 ОТДЕЛЬНЫЕ РАЗРЯДЫ РГ.N: 0 - В NZ,NС,NN,NV
+CONT SТОРС=CLRNZ,CEN
+CONT SТОРС=CLRNC,CEN
+CONT SТОРС=CLRNN,CEN
+;А ТАКЖЕ 0 - В РГ.А
+CONT SТОРС=CLRNV,CEN,ALUS=ZА,FUNC=AND,Н,ALUD=В,RВ=А
+;СРАВНИВАЕМ А И N
+CONT SТОРС=1,DDEV=STATUS,ALUS=DА,RA=BYTE,FUNC=AND,H,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,Н,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEM
+;INTR=1; П/У НА ОШИБКУ, ЕСЛИ /MZ=1 (MZ=0)
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/MZ,%ТУРЕ%
+%J% A=CCT18,MAP=PE,%TIK%
+;
+;     ==============================================
+;     ПОВЕРКА МИКРОПРОЦЕССОРНЫХ СЕКЦИЙ   +   С У С С
+;     ==============================================
+;
+МПС19:ENTRY
+;===== КОМАНДЫ ADD, EOR
+;     ПРИ ОШ. 8-11 РГ.БОПП = МЛАДШИЕ 32 РАЗРЯДА РГ.A, 12-15 - РГ.Y
+;
+CJP А=PSMP19,МАР=РЕ
+PSMP19:CONT А=Н19,%T%
+%S% А=INITST,МАР=РЕ
+;CONST ИЗ ПЗУ - В РГ.А МПС И В РГ.Y
+CONT A=B32,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
+CONT A=B32,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=Y
+;А + 1 -> В РГ.А
+CMPS19:CONT ALUS=ZА,RА=А,Н,CI,ALUD=В,RВ=А
+;Y + 1 -> В РГ.Y
+CONT ALUS=ZА,RА=Y,Н,CI,ALUD=В,RВ=Y
+;СРАВНИВАЕМ А И Y, РЕЗ-Т СРАВНЕНИЯ - В РГ.Q
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% A=CMPS19,MAP=PE,%TIK%
+;
+;
+МПС1А:ENTRY
+;===== КОМАНДЫ ADD И SUBR
+;     ПРИ ОШ. 8-11 РГ.= МЛ.32Р.РГ.A (ЧТО Д.БЫТЬ), 12-15 = РГ.Y (ЧТО ПОЛУЧИЛОСЬ)
+;
+CJP А=PSMP1A,МАР=РЕ
+PSMP1A:CONT А=Н1А,%T%
+%S% А=INITST,МАР=РЕ
+;CONST ИЗ ПЗУ - В РГ.А, ТО ЖЕ - В РГ.Y
+CMPS1A:CONT A=С55FF,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
+CONT ALUS=ZA,RA=A,H,ALUD=B,RB=Y
+PUSH А=30,МАР=РЕ
+;А + 1 - В РГ.А, 31 РАЗ
+RFCT ALUS=ZВ,RВ=А,Н,CI,ALUD=В
+PUSH А=30,МАР=РЕ
+;А - 1 - В РГ.А, 31 РАЗ (СТОЛЬКО ЖЕ РАЗ ВЫЧИТАЕМ)
+RFCT ALUS=ZА,RА=А,FUNC=SUBR,Н,ALUD=В,RВ=А
+;СРАВНИВАЕМ С РГ.Y
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% A=CMPS1A,MAP=PE,%TIK%
+;
+;
+МПС1В:ENTRY
+;===== УСТАНОВКА РЕГИСТРОВ  М,N  СУСС ПО РЕЗУЛЬТАТУ ИЗ МПС
+;   INTR = 0,1 - ПРОВЕРЯЕМ NZ,MZ; 2,3 - NN,MN; 4,5 - NС,МС; 7,8 - NV,MV
+;   ПРИ ОШИБКЕ 8-15 РГ.БОПП = РГ.У = РГ.N ИЛИ М.
+;
+CJP А=PSMP1B,МАР=РЕ
+PSMP1B:CONT А=Н1В,%T%
+%S% А=INITST,МАР=РЕ
+CMPS1B:CONT A=MIND,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=BYTE
+;0 - В РГ.А, NZ=MZ=1; INTR=0,1
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,CEN,СЕМ
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+CONT %ТУРЕ%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/MZ,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+;ИНВЕРТИРУЕМ РГ.А, NN=MN=1; INTR=2,3
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,Н,ALUD=В,RВ=А,CEN,СЕМ
+CONT %ТУРЕ%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NN,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+CONT %ТУРЕ%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/MN,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+;ДОБАВЛЯЕМ 1 К FFF...FFF, NС=МС=1, INTR=4,5
+CONT ALUS=ZВ,RВ=А,Н,CI,ALUD=В,CEN,СЕМ
+CONT %ТУРЕ%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NC,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+CONT %ТУРЕ%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/MC,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+;СДВИГАЕМ 0 ВПРАВО С ЗАГРУЗКОЙ "1" = 80...00
+CONT ALUS=ZА,RА=А,Н,ALUD=RSB,RВ=А,SHMUX=NSNSL
+;К 80...00 ДОБАВЛЯЕМ СТОЛЬКО ЖЕ: NV=MV=1; INTR=7,8
+CONT ALUS=АВ,RА=А,RВ=А,FUNC=ADD,Н,ALUD=В,CEN,СЕМ
+CONT %ТУРЕ%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NV,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+CONT %ТУРЕ%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/MV,DDEV=STATUS,ALUS=DA,RA=BYTE,FUNC=AND,H
+>,ALUD=В,RВ=У
+%J% А=CMPS1B,МАР=РЕ,%TIK%
+;
+;
+МПС1С:ENTRY
+;===== ЗАПИСЬ, ЧТЕНИЕ РЕГИСТРОВ МПС: РГ.Q
+;     ПРИ ОШИБКЕ: 7-15 РГ.БОПП = Q
+;
+CJP А=PSMP1C,МАР=РЕ
+PSMP1C:CONT А=Н1С,%T%
+%S% А=INITST,МАР=РЕ
+;ИЗ ПЗУ - В РГ.Q
+CMPS1C:CONT A=CF530,DSRC=PROM,ALUS=DZ,FUNC=ADD,Н,ALUD=Q
+;СНОВА ЧИТАЕМ ИЗ ПЗУ, СРАВНИВАЕМ С РГ.Q
+CONT YDEV=МРМЕМ,IОМР,MPADR=4,DSRC=SHIFT,MPS,PSHF=SН0-56,SHF=LOG
+CONT A=CF530,DSRC=PROM,ALUS=DQ,FUNC=EXOR,Н,ALUD=B,RB=Y,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% A=CMPS1C,MAP=PE,%TIK%
+;
+;
+MПC1D:ENTRY
+;===== ПЕРЕСЫЛКА РГ.А->WR1-WR5->Y
+;     ПРИ ОШИБКЕ: 7-15 РГ.БОПП = Y (ПОСЛЕДНЯЯ ПЕРЕСЫЛКА)
+;
+CJP А=PSMP1D,МАР=РЕ
+PSMP1D:CONT А=H1D,%T%
+%S% А=INITST,МАР=РЕ
+;CONST ИЗ ПЗУ - В РГ.А
+CMPS1D:CONT A=С55FF,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
+;А -> WR1 -> WR2 -> WR3 -> WR4 -> WR5 -> У
+CONT ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR1
+CONT ALUS=ZА,RА=WR1,Н,ALUD=В,RВ=WR2
+CONT ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=WR3
+CONT ALUS=ZА,RА=WR3,Н,ALUD=В,RВ=WR4
+CONT ALUS=ZА,RА=WR4,Н,ALUD=В,RВ=WR5
+CONT ALUS=ZА,RА=WR5,Н,ALUD=В,RВ=У
+;СНОВА ЧИТАЕМ ИЗ ПЗУ, СРАВНИВАЕМ С РГ.У
+CONT A=С55FF,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% A=CMPS1D,MAP=PE,%TIK%
+;
+;
+МПС1Е:ENTRY
+;===== СРАВНИВАЕМ ОДИН И ТОТ ЖЕ РЕГИСТР ПО ВХОДАМ А И В
+;     ПРИ ОШИБКЕ: 7-15 РГ.БОПП = Q (РЕЗУЛЬТАТ СРАВНЕИЯ)
+;     INTR: 1 - RG.A; 2 - Y; 3,4,5,6,7 - WR1,2,3,4,5
+;
+CJP А=PSMP1E,МАР=РЕ
+PSMP1E:CONT А=Н1Е,%T%
+%S% А=INITST,МАР=РЕ
+CMPS1E:CONT %CLRTYP%
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=A,RВ=A,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+CONT ALUS=АВ,RА=У,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+CONT ALUS=АВ,RА=WR1,RВ=WR1,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+CONT ALUS=АВ,RА=WR2,RВ=WR2,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+CONT ALUS=АВ,RА=WR3,RВ=WR3,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+CONT ALUS=АВ,RА=WR4,RВ=WR4,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+CONT ALUS=АВ,RА=WR5,RВ=WR5,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+%J% A=CMPS1E,MAP=PE,%TIK%
+;
+;
+MПC1F:ENTRY
+;===== ЛОГИЧЕСКИЕ, АРИФМЕТИЧЕСКИЕ КОМАНДЫ: AND
+;   AND С "0" (INTR=00); AND С F...F" (01); AND С ДОПОЛНЕНИЕМ (INTR=02)
+;   ПРИ ОШ. 8-15 РГ.БОПП = РГ.Q, ГДЕ РЕЗУЛЬТАТ ФУНКЦИИ "AND"
+;
+CJP А=PSMP1F,МАР=РЕ
+PSMP1F:CONT А=H1F,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В А, FF...FF - В РГ.WR1
+CONT A=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CONT A=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR1
+;CONST = "F...F0...0" - В РГ.WR2, ОБРАТНЫЙ КОД - В WR3
+CONT A=MH,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR2
+CONT A=MNH,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR3
+;INTR=0; "FF...FF" AND С "0"
+CMPS1F:CONT ALUS=АВ,RА=А,RВ=WR1,FUNC=AND,Н,ALUD=Q,ALU,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;INTR=1; CONST (F...F0...0) AND С "F...F" = CONST
+CONT ALUS=АВ,RА=WR1,RВ=WR2,FUNC=AND,Н,ALUD=Q,ALU
+;СРАВНИВАЕМ С CONST
+CONT ALUS=AQ,RА=WR2,FUNC=EXOR,Н,ALUD=B,RB=Y,CEN
+CJP А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;INTR=2; AND С ДОПОЛНЕНИЕМ
+CONT ALUS=АВ,RА=WR2,RВ=WR3,FUNC=AND,Н,ALUD=Q,ALU,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% A=CMPS1F,MAP=PE,%TIK%
+;
+;
+МПС20:ENTRY
+;===== OR С "0" (INTR=00), С ДОПОЛНЕНИЕМ (01), C FFFF (02), C CONST (03)
+;     ПРИ ОШ. 8-15 РГ. БОПП = РГ.Q = РЕЗУЛЬТАТ Ф-ИИ "OR"
+;
+CJP А=PSMP20,МАР=РЕ
+PSMP20:CONT А=Н20,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В WR1, FF...FF - В WR2
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR1
+CONT A=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR2
+;CONST = "FFFF00...00" - В WR3, ОБРАТНУЮ CONST - В WR4
+CONT A=MNQ,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR3
+CONT A=MQ,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR4
+;INTR=0; OR С "0" = CONST
+CMPS20:CONT ALUS=АВ,RА=WR1,RВ=WR3,FUNC=OR,Н,ALUD=Q,ALU
+CONT ALUS=AQ,RА=WR3,FUNC=EXOR,Н,ALUD=B,RB=Y,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;INTR=1; OR С ДОПОЛНЕНИЕМ = FFFF
+CONT ALUS=АВ,RА=WR3,RВ=WR4,FUNC=OR,Н,ALUD=Q,ALU
+CONT ALUS=AQ,RА=WR2,FUNC=EXOR,Н,ALUD=B,RB=Y,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;INTR=2; OR С FFFF = FFFF
+CONT ALUS=АВ,RА=WR3,RВ=WR2,FUNC=OR,Н,ALUD=Q,ALU
+CONT ALUS=AQ,RА=WR2,FUNC=EXOR,Н,ALUD=B,RB=Y,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;INTR=3; OR С CONST = CONST
+CONT ALUS=АВ,RА=WR3,RВ=WR3,FUNC=OR,Н,ALUD=Q,ALU
+CONT ALUS=AQ,RА=WR3,FUNC=EXOR,Н,ALUD=B,RB=Y,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+%J% A=CMPS20,MAP=PE,%TIK%
+;
+;
+МПС21:ENTRY
+;===== NOTRS, R=S=CONST
+;     ПРИ ОШ. 8-15 РГ. БОПП = РГ.Q = РЕЗУЛЬТАТ Ф-ИИ "NOTRS" (Д.Б.= 0)
+;
+CJP А=PSMP21,МАР=РЕ
+PSMP21:CONT А=Н21,%T%
+%S% А=INITST,МАР=РЕ
+;CONST (ЛЮБУЮ) - В WR1
+CONT A=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR1
+;ИЗМЕНЯЕМ CONST (УВЕЛИЧИВАЕМ НА 0001000100010001)
+CMPS21:CONT A=C0001,DSRC=PROM,ALUS=DA,RA=WR1,FUNC=ADD,Н,ALUD=В,RВ=WR1
+;(.NОТ.R).AND.S
+CONT ALUS=АВ,RА=WR1,RВ=WR1,FUNC=NOTRS,Н,ALUD=Q,CEN,ALU
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% A=CMPS21,MAP=PE,%TIK%
+;
+;
+МПС22:ENTRY
+;===== NOTRS, S=0; S=F...F;  INTR = 0-1
+;     ПРИ ОШ. 8-15 РГ. БОПП = РГ.Q = РЕЗУЛЬТАТ Ф-ИИ "NOTRS" (Д.Б.= 0 ИЛИ FFFF)
+;
+CJP А=PSMP22,МАР=РЕ
+PSMP22:CONT А=Н22,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В WR1
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR1
+;CONST (F530) - В WR2
+CONT A=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR2
+;ИЗМЕНЯЕМ CONST (УВЕЛИЧИВАЕМ НА 0001000100010001)
+CMPS22:CONT A=C0001,DSRC=PROM,ALUS=DA,RA=WR2,FUNC=ADD,Н,ALUD=В,RВ=WR2
+;INTR=0; NOTRS: AND С 0
+CONT ALUS=АВ,RА=WR2,RВ=WR1,FUNC=NOTRS,Н,ALUD=Q,CEN,ALU
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;INTR=1; NOTRS: AND С "F...F"
+CONT ALUS=АВ,RА=WR1,RВ=WR2,FUNC=NOTRS,Н,ALUD=Q,ALU
+CONT ALUS=AQ,RА=WR2,FUNC=EXOR,Н,ALUD=Q,СЕМ
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/MZ,%TYPE%
+%J% A=CMPS22,MAP=PE,%TIK%
+;
+;
+МПС23:ENTRY
+;===== ALUS=DQ
+;     ПРИ ОШ. 8-15 РГ. БОПП = РГ.Y = РЕЗУЛЬТАТ Ф-ИИ "EXOR" (Д.Б.= 0)
+;
+CJP А=PSMP23,МАР=РЕ
+PSMP23:CONT А=Н23,%T%
+%S% А=INITST,МАР=РЕ
+;CONST - В Q
+CMPS23:CONT A=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+;СРАВНИВАЕМ ЕЕ С НЕЙ ЖЕ
+CONT A=CF530,DSRC=PROM,ALUS=DQ,FUNC=EXOR,Н,ALUD=В,RВ=У,CEN,ALU
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% A=CMPS23,MAP=PE,%TIK%
+;
+;
+МПС24:ENTRY
+;===== ALUS=ZВ
+;   ПРИ ОШ. 8-15 РГ. БОПП = РГ.Y = РЕЗУЛЬТАТ СРАВНЕНИЯ ПОСЛЕ КОМАНДЫ C ALUS=ZB
+;
+CJP А=PSMP24,МАР=РЕ
+PSMP24:CONT А=Н24,%T%
+%S% А=INITST,МАР=РЕ
+;CONST - В WR1
+CONT A=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=B,RB=WR1
+;ИЗМЕНЯЕМ CONST (УВЕЛИЧИВАЕМ НА 0001000100010001)
+CMPS24:CONT A=C0001,DSRC=PROM,ALUS=DA,RA=WR1,FUNC=ADD,Н,ALUD=В,RВ=WR1,ALU
+;ПЕРЕСЫЛАЕМ В Q
+CONT ALUS=ZВ,RВ=WR1,Н,ALUD=Q,ALU
+;СРАВНИВАЕМ
+CONT ALUS=AQ,RA=WR1,FUNC=EXOR,Н,ALUD=В,RВ=Y,CEN,ALU
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% A=CMPS24,MAP=PE,%TIK%
+;
+;     ===
+;      Н
+;     ===
+;
+НМПС25:ENTRY
+;===== Н: ПЕРЕСЫЛКА 32 РАЗРЯДОВ; INTR = 0-1
+;     ПРИ ОШ. 8-15 РГ. БОПП = РГ.Q = РЕЗУЛЬТАТ ПЕРЕСЫЛКИ 32 РАЗРЯДОВ
+;
+CJP А=PSH25,МАР=РЕ
+PSH25:CONT А=Н25,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В WR1
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR1
+;F...F - В WR2
+CONT ALUS=ZА,RА=WR1,FUNC=EXNOR,Н,ALUD=В,RВ=WR2
+;0...0F...F - B WR3
+CONT A=MH,DSRC=PROM,ALUS=DZ,Н,ALUD=B,RB=WR3
+;0 - В Q (64 Р.)
+СН25:CONT ALUS=ZА,RА=WR1,Н,ALUD=Q,ALU
+;F...F - В Q (32 Р.)
+CONT ALUS=ZА,RА=WR2,ALUD=Q,ALU
+;INTR=0; СРАВНИВАЕМ Q И WR3
+CONT ALUS=AQ,RА=WR3,FUNC=EXOR,Н,ALUD=В,RВ=У,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;INTR=1; ПЕРЕСЫЛАЕМ 0 (32 Р.)
+CONT ALUS=ZА,RА=WR1,ALUD=Q,ALU
+CONT ALUS=ZQ,Н,СЕМ,ALU
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/MZ,%ТУРЕ%
+%J% A=CH25,MAP=PE,%TIK%
+;
+;
+НМПС26:ENTRY
+;===== ЛОГИЧЕСКИЕ ОПЕРАЦИИ С 32 Р.
+;     РГ.INTR = 1 РГ.БОПП: OR - 01; EXNOR - 02; AND - 03; EOR - 04.
+;     ПРИ ОШ. 8-15 РГ. БОПП = РГ.Q = РЕЗУЛЬТАТ ОПЕРАЦИИ НА 32 РАЗРЯДА
+;
+CJP А=PSH26,МАР=РЕ
+PSH26:CONT А=Н26,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В WR1, F...F - В WR2
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR1
+CONT ALUS=ZА,RА=WR1,FUNC=EXNOR,Н,ALUD=В,RВ=WR2
+;0...0F...F - В WR3, F...F0...0 - В WR4
+CONT A=MH,DSRC=PROM,ALUS=DZ,Н,ALUD=B,RB=WR3
+CONT A=MNH,DSRC=PROM,ALUS=DZ,Н,ALUD=B,RB=WR4
+СН26:CONT %CLRTYP%
+;0 - В Q (64 Р.)
+CONT ALUS=ZА,RА=WR1,Н,ALUD=Q
+;INTR=1; OR С F...F (32 Р.); СРАВНИВАЕМ Q И WR3
+CONT ALUS=AQ,RА=WR2,FUNC=OR,ALUD=Q
+CONT ALUS=AQ,RА=WR3,FUNC=EXOR,Н,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;INTR=2; ИНВЕРТИРУЕМ МЛ. 32Р. РГ.Q
+CONT ALUS=ZQ,FUNC=EXNOR,ALUD=Q
+CONT ALUS=ZQ,Н,СЕМ
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/MZ,%TYPE%
+;F...F - В РГ.Q
+CONT ALUS=ZА,RА=WR2,Н,ALUD=Q
+;INTR=3; AND С "0" (32 Р.) = F...F0...0, СРАВНИВАЕМ
+CONT ALUS=ZQ,FUNC=AND,ALUD=Q
+CONT ALUS=AQ,RА=WR4,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;INTR=4; EOR НА 32 РАЗР.
+CONT ALUS=AQ,RА=WR4,FUNC=EXOR,СЕМ
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/MZ,%TYPE%
+%J% A=CH26,MAP=PE,%TIK%
+;
+;
+НМПС27:ENTRY
+;===== ОТСУТСТВИЕ ПЕРЕНОСА В 33 РАЗРЯД ПРИ СЛОЖЕНИИ 32 РАЗРЯДОВ; INTR = 0-2
+;  ПРИ ОШ.: 8-15 РГ. БОПП = РГ.Y ИЛИ Q = РЕЗУЛЬТАТ СРАВНЕНИЯ ИЛИ МАСКИ; Д.Б.= 0
+;
+CJP А=PSH27,МАР=РЕ
+PSH27:CONT А=Н27,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В WR1, 0...0F...F - В WR2, F...F0...0 - В BYTE (МАСКА)
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR1
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR2
+CONT ALUS=ZА,RА=WR1,FUNC=EXNOR,ALUD=В,RВ=WR2
+CONT ALUS=ZА,RА=WR2,FUNC=EXNOR,Н,ALUD=B,RB=BYTE
+СН27:CONT %CLRTYP%
+;0...0F...F - В Y
+CONT ALUS=ZА,RА=WR2,Н,ALUD=В,RВ=Y
+;0...0F...F  + 1  НА 32 РАЗР.
+CONT ALUS=ZВ,RВ=Y,CI,ALUD=В,ALU
+;INTR=1; ПРОВЕРЯЕМ ОТСУТСТВИЕ ПЕРЕНОСА (ВСЕ 64Р. Д.Б. = 0)
+CONT ALUS=ZА,RА=Y,Н,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;INTR=2; WR1 + CONST - В WR1 НА 32 Р.; ПРОВЕРЯЕМ СТ.РАЗРЯДЫ WR1 (Д.Б.= 0)
+CONT A=MNB23,DSRC=PROM,ALUS=ZA,RA=WR1,ALUD=В,RB=WR1,ALU
+CONT ALUS=AB,RА=WR1,RB=BYTE,FUNC=AND,Н,ALUD=Q,СЕМ
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/MZ,%TYPE%
+%J% A=CH27,MAP=PE,%TIK%
+;
+;
+НМПС28:ENTRY
+;===== ОТСУТСТВИЕ ЗАЕМА В 33Р.ПРИ ВЫЧИТАНИИ 32 РАЗРЯДОВ; INTR = 0-2
+;  ПРИ ОШ.: 8-15 РГ. БОПП = РГ.Q = РЕЗУЛЬТАТ СРАВНЕНИЯ ИЛИ МАСКИ; Д.Б.= 0
+;
+CJP А=PSH28,МАР=РЕ
+PSH28:CONT А=Н28,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В WR1, 0...0F...F - В WR2, F...F0...0 - В BYTE (MАСКА)
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR1
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR2
+CONT ALUS=ZА,RА=WR1,FUNC=EXNOR,ALUD=В,RВ=WR2
+CONT ALUS=ZА,RА=WR2,FUNC=EXNOR,Н,ALUD=B,RB=BYTE
+СН28:CONT %CLRTYP%
+;0 - В A, ВЫЧИТАЕМ 1 В 32 РАЗР.
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=A
+CONT ALUS=ZB,RВ=A,FUNC=SUBR,ALUD=В,ALU
+;INTR=1; ПРОВЕРЯЕМ ОТСУТСТВИЕ ЗАЕМА (СТ.ПОЛОВИНА Д.Б. = 0, МЛ.ПОЛОВИНА = -1)
+CONT ALUS=АВ,RА=WR2,RВ=A,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;WR1 - 1 - В WR1 НА 32 Р.
+CONT A=B31,DSRC=PROM,ALUS=DA,RA=WR1,FUNC=SUBR,CI,ALUD=В,RB=WR1,ALU
+;INTR=2; ПРОВЕРЯЕМ СТ.РАЗРЯДЫ WR1 (Д.Б.=0)
+CONT ALUS=AB,RА=WR1,RB=BYTE,FUNC=AND,Н,ALUD=Q,СЕМ
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/MZ,%ТУРЕ%
+%J% A=CH28,MAP=PE,%TIK%
+;
+;
+НМПС29:ENTRY
+;===== ПРОВЕРКА ПРИЗНАКОВ (IZ) НА 32 И 64 РАЗР.; INTR = 0-2
+;  ПРИ ОШ.: 8-15 РГ. БОПП = РЕЗУЛЬТАТУ ПЕРЕСЫЛКИ (Q ИЛИ Y);  Д.Б.= 0
+;
+CJP А=PSH29,МАР=РЕ
+PSH29:CONT А=Н29,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В Q, 0...0F...F - В Y, F...F0...0 - В WR2
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=Q
+CONT ALUS=ZQ,FUNC=EXNOR,ALUD=В,RВ=Y
+CONT ALUS=ZА,RА=Y,FUNC=EXNOR,Н,ALUD=В,RВ=WR2
+СН29:CONT STOPC=CLRM,CEM,CEN,%CLRTYP%
+;INTR=1; ПЕРЕСЫЛАЕМ F...F0...0, 64 РАЗРЯДА, Д.Б.NZ=0
+CONT ALUS=ZА,RА=WR2,Н,ALUD=Q,ALU,CEN
+CJP А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=NZ,%ТУРЕ%
+;INTR=2; ПЕРЕСЫЛАЕМ 32 РАЗРЯДА, Д.Б. MZ=1
+CONT ALUS=ZА,RА=WR2,ALUD=B,RB=Y,СЕМ
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/MZ,%ТУРЕ%
+%J% A=CH29,MAP=PE,%TIK%
+;
+;
+МПС2А:ENTRY
+;===== КОМАНДА RРСТ + RLD
+;  ПРИ ОШ.: 8-15 РГ. БОПП = РЕЗУЛЬТАТУ ВЫЧИТАНИЯ (РГ.Y);  Д.Б.= 0
+;
+CJP А=PSMP2A,МАР=РЕ
+PSMP2A:CONT А=Н2А,%T%
+%S% А=INITST,МАР=РЕ
+;RРСТ: CONST (FF) - В РГ/СЧ СУАМ, CONST+1 - В РГ.У
+CMPS2A:CONT A=MB,DSRC=PROM,ALUS=DZ,Н,ALUD=B,RB=У
+CONT ALUS=ZА,RА=У,Н,CI,ALUD=ВА,RВ=У,ALU,RLD
+;ЦИКЛ: ВЫЧИТАЕМ ПО 1 ИЗ CONST
+RР2А:RРСТ А=RР2А,МАР=РЕ,ALUS=ZВ,RВ=У,FUNC=SUBR,ALUD=В,CEN
+;ЕСЛИ НЕ 0 - ОШИБКА
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMPS2A,МАР=РЕ,%TIK%
+;
+;
+МПС2В:ENTRY
+;===== ПРОВЕРКА ALUD=ВА; ИСПОЛЬЗУЕТСЯ 4 РГ. БОПП
+;  ПРИ ОШ.: 11,15 РГ. БОПП Д.Б.= B1 ИЛИ 4 РГ. БОПП, T.E. ЧТО ПИСАЛИ ПО ALUD=BA
+;
+CJP А=PSMP2B,МАР=РЕ
+PSMP2B:CONT А=Н2В,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ B1 В РГ.А ДЛЯ СДВИГА, FF - МАСКА
+CMPS2B:CONT A=MB,DSRC=PROM,ALUS=DZ,Н,ALUD=B,RB=BYTE
+CONT A=B1,DSRC=PROM,ALUS=DZ,Н,ALUD=B,RB=A
+;ПИШЕМ В 4РГ. БОПП НЕ СДВИНУТОЕ, СДВИГАЕМ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=A,RВ=Y,ALU,IOMP,YDEV=MPMEM,WRY,MPADR=4,DSRC=SHIFT
+>,MPS,PSHF=SН0-1,SHF=LOG
+;ПРОВЕРЯЕМ, ЧТО ЗАПИСАЛОСЬ В БОПП (Д.Б. НЕ СДВИНУТОЕ!)
+CONT IOMP,YDEV=MPMEM,MPADR=4,%TRSH%,ALUS=DA,RA=BYTE,FUNC=AND,H,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMPS2B,МАР=РЕ,%TIK%
+;
+;
+МПС2С:ENTRY
+;===== ОТНОШЕНИЕ ЧИСЕЛ
+;  ПРИ ОШ.: 8-15 РГ. РАЗНИЦА МЕЖДУ РГ. Y И A, Д.Б.= 1
+;
+CJP А=PSMP2C,МАР=РЕ
+PSMP2C:CONT А=Н2С,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=A
+;УВЕЛИЧИВАЕМ РГ.A
+CMPS2C:CONT ALUS=ZВ,RВ=A,Н,CI,ALUD=В
+;A + 1 - В РГ.Y
+CONT ALUS=ZА,RА=A,Н,CI,ALUD=В,RВ=Y
+;СРАВНИВАЕМ: Y - A
+CONT ALUS=АВ,RА=Y,RВ=A,FUNC=SUBS,Н,CI,ALUD=Q,СЕМ
+;КТО БОЛЬШЕ? ЕСЛИ Y МЕНЬШЕ ИЛИ РАВЕН A - ОШИБКА
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=48
+%J% А=CMPS2C,МАР=РЕ,%TIK%
+;
+;    ========================
+;    ДОПОЛНИТЕЛЬНЫЕ ТЕСТЫ МПС
+;    ========================
+;
+CPU31:ENTRY
+;===== ЗАПИСЬ HOME-АДРЕСА В РEГИСТРЫ МПС
+;   ПИШЕМ CONST=N РЕГИСТРА ИЗ ПЗУ В РЕГИСТРЫ МПС, СРАВНИВАЕМ С CONST ИЗ ПЗУ.
+;   N ПРОВЕРЯЕМОГО РЕГИСТРА - В 1 РГ.БОПП, Q - РЕЗ-Т СРАВНЕНИЯ.
+;   ПРИ ОШ.: 8-15 РГ.БОПП - СОДЕРЖИМОЕ СРАВНИВАЕМОГО РЕГИСТРА.
+;   ТЕСТ НЕ "ТИКАЕТ", Т.К. НЕТ СВОБОДНЫХ РЕГИСТРОВ.
+;
+CJP А=CCPU31,МАР=РЕ
+CCPU31:CONT А=Н31,%Т%
+%S% А=INITST,МАР=РЕ
+;ПИШЕМ В РГ.МПС HOME-АДРЕС
+CC31:CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=0
+CONT A=H1,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=1
+CONT A=H2,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=2
+CONT A=H3,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=3
+CONT A=H4,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=4
+CONT A=H5,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=5
+CONT A=H6,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=6
+CONT A=H7,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=7
+CONT A=H8,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=8
+CONT A=H9,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=9
+CONT A=HA,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=10
+CONT A=HB,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=11
+CONT A=HC,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=12
+CONT A=HD,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=13
+CONT A=HE,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=14
+CONT A=HF,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=15
+;СРАВНИВАЕМ РГ.МПС С CONST ИЗ ПЗУ, 1-Й РГ.БОПП = N РЕГИСТРА!
+;0A: CНАЧАЛА ПРОВЕРЯЕМ WR6=A,ЧТОБ ЕГО М.БЫЛО ИСПОЛЬЗОВАТЬ ДЛЯ ВЫДАЧИ ИНФ.В БОПП
+CONT A=HA,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=HA,DSRC=PROM,ALUS=DA,RA=10,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;00
+CONT A=ZER,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=ZER,DSRC=PROM,ALUS=DA,RA=0,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;01
+CONT A=H1,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=H1,DSRC=PROM,ALUS=DA,RA=1,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;02
+CONT A=H2,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=H2,DSRC=PROM,ALUS=DA,RA=2,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;03
+CONT A=H3,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=H3,DSRC=PROM,ALUS=DA,RA=3,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;04
+CONT A=H4,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=H4,DSRC=PROM,ALUS=DA,RA=4,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;05
+CONT A=H5,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=H5,DSRC=PROM,ALUS=DA,RA=5,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;06
+CONT A=H6,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=H6,DSRC=PROM,ALUS=DA,RA=6,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;05
+CONT A=H7,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=H7,DSRC=PROM,ALUS=DA,RA=7,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;08
+CONT A=H8,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=H8,DSRC=PROM,ALUS=DA,RA=8,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;09
+CONT A=H9,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=H9,DSRC=PROM,ALUS=DA,RA=9,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;0B
+CONT A=HB,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=HB,DSRC=PROM,ALUS=DA,RA=11,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;0C
+CONT A=HC,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=HC,DSRC=PROM,ALUS=DA,RA=12,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;0D
+CONT A=HD,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=HD,DSRC=PROM,ALUS=DA,RA=13,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;0E
+CONT A=HE,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=HE,DSRC=PROM,ALUS=DA,RA=14,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+;0F
+CONT A=HF,DSRC=PROM,ALUS=DZ,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=1
+CONT A=HF,DSRC=PROM,ALUS=DA,RA=15,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERR8/F,MAP=PE,COND=CT,STOPC=/NZ
+%J% А=СC31,МАР=РЕ
+;
+;
+CPU32:ENTRY
+;===== СРАВНЕНИЕ ОДНИХ И ТЕХ ЖЕ РЕГИСТРОВ ПО ВХОДАМ А И В
+;   ПРИ ОШ.: 8-15 РГ.БОПП - СОДЕРЖИМОЕ РЕГИСТРА Y, Q - РЕЗ-Т СРАВНЕНИЯ.
+;
+CJP А=CCPU32,МАР=РЕ
+CCPU32:CONT А=Н32,%Т%
+%S% А=INITST,МАР=РЕ
+;0 - B РЕГИСТРЫ A,Y; F...F - B DADR
+CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
+CONT ALUS=ZA,RA=A,FUNC=EXNOR,H,ALUD=B,RB=DADR
+CONT ALUS=ZA,RA=DADR,FUNC=EXNOR,H,ALUD=B,RB=Y
+;00: СРАВНИВАЕМ A=Y
+CC32:CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERRINF,MAP=PE,COND=CT,STOPC=/NZ,%CLRTYP%
+;01: СРАВНИВАЕМ Y=A
+CONT ALUS=AB,RA=Y,RB=A,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERRINF,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;02: СРАВНИВАЕМ НЕРАВНЫЕ Y,DADR
+CONT ALUS=AB,RA=Y,RB=DADR,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERRINF,MAP=PE,COND=CT,STOPC=NZ,%TYPE%
+;03: СРАВНИВАЕМ НЕРАВНЫЕ DADR,Y
+CONT ALUS=AB,RA=DADR,RB=Y,FUNC=EXOR,H,ALUD=Q,CEN
+CJS A=ERRINF,MAP=PE,COND=CT,STOPC=NZ,%TYPE%
+;УВЕЛИЧИВАЕМ A,Y,DADR.  DADR > A И Y HA 1
+CONT ALUS=ZA,RA=A,H,CI,ALUD=B,RB=A
+CONT ALUS=ZA,RA=Y,H,CI,ALUD=B,RB=Y
+CONT ALUS=ZA,RA=A,H,CI,ALUD=B,RB=DADR
+%J% А=СC32,МАР=РЕ,%TIK%
+;
+;     ==================================
+;     ПРОВЕРКА РГ/ТГ ПРИЗНАКОВ И УСЛОВИЙ
+;     ==================================
+;
+TГ2D:ENTRY
+;===== ПРОВЕРКА УСЛОВИЙ РЕГИСТРА РЕЖИМОВ
+;   В СЛУЧАЕ ОШИБКИ НЕ СБРАСЫВАЮТСЯ:
+;   БНОР(01),БОКР(02),БПП(03),ББЧ(04),БППУ(05),РД(06),РЭ(07),
+;   ППК(08),ПИА(09),РЭС(0А),ПОП(0В)
+;
+CJP А=PSTG2D,МАР=РЕ
+PSTG2D:CONT А=H2D,%T%
+%S% А=INITST,МАР=РЕ
+;0 ИЗ МПС - В РГ/ТГ ПРИЗНАКОВ
+CONT ALUS=DZ,FUNC=AND,ALU,YDST=CNT,FFCNT=SETNR
+CTG2D:CONT %CLRTYP%
+;ПРОВЕРЯЕМ УСЛОВИЯ: INTR=1
+CJS А=ERRTST,МАР=РЕ,COND=NORMB,%ТУРЕ%
+;2
+CJS А=ERRTST,МАР=РЕ,COND=RNDB,%ТУРЕ%
+;3
+CJS А=ERRTST,МАР=РЕ,COND=OVRIB,%ТУРЕ%
+;4
+CJS А=ERRTST,МАР=РЕ,COND=BNB,%ТУРЕ%
+;5
+CJS А=ERRTST,МАР=РЕ,COND=OVRFTB,%ТУРЕ%
+;6
+CJS А=ERRTST,МАР=РЕ,COND=DRG,%ТУРЕ%
+;7
+CJS А=ERRTST,МАР=РЕ,COND=EMLRG,%ТУРЕ%
+;8
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,%ТУРЕ%
+;9
+CJS А=ERRTST,МАР=РЕ,COND=СВ,%ТУРЕ%
+;А
+CJS А=ERRTST,МАР=РЕ,COND=CEMLRG,%ТУРЕ%
+;В
+CJS А=ERRTST,МАР=РЕ,COND=INTSTP,%ТУРЕ%
+%J% А=CTG2D,МАР=РЕ,%TIK%
+;
+;
+ТГ2Е:ENTRY
+;===== ПРОВЕРКА УСЛОВИЙ РЕГИСТРА РЕЖИМОВ
+;   НЕ УСТАНАВЛИВАЮТСЯ:
+;   БНОР(01),БОКР(02),БПП(03),ББЧ(04),БППУ(05),РД(06),
+;   ППК(07),ПИА(08),РЭС(09),ПОП(0А)
+;
+CJP А=PSTG2E,МАР=РЕ
+PSTG2E:CONT А=Н2Е,%T%
+%S% А=INITST,МАР=РЕ
+;FF..FF ИЗ МПС - В РГ,ТГ ПРИЗНАКОВ
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALU,YDST=CNT
+CTG2E:CONT %CLRTYP%
+;ПРОВЕРЯЕМ УСЛОВИЯ, INTR=1
+CJS А=ERRTST,МАР=РЕ,COND=NORMB,IСС,%ТУРЕ%
+;2
+CJS А=ERRTST,МАР=РЕ,COND=RNDB,IСС,%ТУРЕ%
+;3
+CJS А=ERRTST,МАР=РЕ,COND=OVRIB,IСС,%ТУРЕ%
+;4
+CJS А=ERRTST,МАР=РЕ,COND=BNB,IСС,%ТУРЕ%
+;5
+CJS А=ERRTST,МАР=РЕ,COND=OVRFTB,IСС,%ТУРЕ%
+;6
+CJS А=ERRTST,МАР=РЕ,COND=DRG,IСС,%ТУРЕ%
+;7
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,IСС,%ТУРЕ%
+;8
+CJS А=ERRTST,МАР=РЕ,COND=СВ,IСС,%ТУРЕ%
+;9
+CJS А=ERRTST,МАР=РЕ,COND=CEMLRG,IСС,%ТУРЕ%
+;А
+CJS А=ERRTST,МАР=РЕ,COND=INTSTP,IСС,%ТУРЕ%
+%J% А=CTG2E,МАР=РЕ,%TIK%
+;
+;
+TГ2F:ENTRY
+;===== УСТАНОВКА ТГ. ПОЛЕМ FFCNT + ПРОВЕРКА НА УСЛОВИЯХ
+; ОШИБКИ: ПИА = 0 ПОСЛЕ ЕГО УСТАНОВКИ ИЗ FFCNT (INTR = 01); ППК (02); СЛЕД1 (03)
+;
+CJP А=PSTG2F,МАР=РЕ
+PSTG2F:CONT А=H2F,%T%
+%S% А=INITST,МАР=РЕ
+;0 ИЗ МПС - В РГ,ТГ ПРИЗНАКОВ
+CTG2F:CONT ALUS=DZ,FUNC=AND,ALU,YDST=CNT
+CONT %CLRTYP%
+;1: УСТАНОВКА ПИА
+CONT FFCNT=SЕТС
+CJS А=ERRTST,МАР=РЕ,COND=СВ,IСС,%ТУРЕ%
+;2: ППК
+CONT FFCNT=SETRCB
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,IСС,%ТУРЕ%
+;3: СЛЕД1
+CONT FFCNT=SETTR1
+CJS А=ERRTST,МАР=РЕ,COND=TR1,IСС,%ТУРЕ%
+%J% А=CTG2F,МАР=РЕ,%TIK%
+;
+;
+ТГ30:ENTRY
+;===== СБРОС ТГ. ПОЛЕМ FFCNT + ПРОВЕРКА НА УСЛОВИЯХ
+;   ПИА = 1 ПОСЛЕ ЕГО СБРОСА ПОЛЕМ FFCNT (INTR = 01); ППК (02); СЛЕД1 (03)
+;
+CJP А=PSTG30,МАР=РЕ
+PSTG30:CONT А=Н30,%T%
+%S% А=INITST,МАР=РЕ
+;FF..FF ИЗ МПС - В РГ/ТГ ПРИЗНАКОВ
+CTG30:CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALU,YDST=CNT
+;1: СБРОС ПИА
+CONT DDEV=CLRCD
+CONT %CLRTYP%
+CJS А=ERRTST,МАР=РЕ,COND=СВ,%ТУРЕ%
+;2: ППК
+CONT FFCNT=CLRRCB
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,%ТУРЕ%
+;3: СЛЕД1
+CONT FFCNT=CLRTR1
+CJS А=ERRTST,МАР=РЕ,COND=TR1,%ТУРЕ%
+%J% А=CTG30,МАР=РЕ,%TIK%
+;
+;
+ТГ31:ENTRY
+;===== "0" - В РГ,ТГ ПРИЗНАКОВ, УСТ/СБРОС ТКК, ISE, ПРОВЕРКА ППК ПО УСЛОВИЮ
+;   INTR = 1: УСТАНОВКА ТКК; = 2: СБРОС ТКК
+;
+CJP А=PSTG31,МАР=РЕ
+PSTG31:CONT А=Н31,%T%
+%S% А=INITST,МАР=РЕ
+;"0" - В РГ/ТГ ПРИЗНАКОВ
+CTG31:CONT ALUS=DZ,FUNC=AND,Н,ALU,YDST=CNT
+;УСТАНОВКА ТКК
+CONT FFCNT=SЕТТКК
+;ПРИЗНАК ПМИ, ПО КОТОРОМУ ТКК ПЕРЕПИСЫВАЕТСЯ В ППК
+CONT ISE,%CLRTYP%
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,IСС,%TYPE%
+;СБРАСЫВАЕМ ППК ЧЕРЕЗ ТКК
+CONT FFCNT=CLRTKK
+CONT ISE
+;П/У НА ОШИБКУ, ЕСЛИ ППК УСТАНОВЛЕН
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,%TYPE%
+%J% A=CTG31,MAP=PE,%TIK%
+;
+;
+ТГ32:ENTRY
+;===== "1" - В РГ,ТГ ПРИЗНАКОВ, СБРОС/УСТАНОВКА ТКК, ISE, ПРОВЕРКА ППК ПО УСЛ.
+;   INTR = 1: СБРОС ТКК; = 2: УСТАНОВКА ТКК
+;
+CJP А=PSTG32,МАР=РЕ
+PSTG32:CONT А=Н32,%T%
+%S% А=INITST,МАР=РЕ
+;"FF" - В РГ,ТГ ПРИЗНАКОВ
+CTG32:CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALU,YDST=CNT
+;СБРОС ТКК
+CONT FFCNT=CLRTKK
+CONT ISE,%CLRTYP%
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,%TYPE%
+;УСТАНАВЛИВАЕМ ППК ЧЕРЕЗ ТКК
+CONT FFCNT=SЕТТКК
+CONT ISE
+;П/У НА ОШИБКУ, ЕСЛИ ППК СБРОШЕН
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,IСС,%TYPE%
+%J% A=CTG32,MAP=PE,%TIK%
+;
+;
+ТГ33:ENTRY
+;===== "0","F"-В РГ/ТГ ПРИЗНАКОВ,СМЕНА ТКК,ISE,ПРОВЕРКА ППК ПО УСЛОВИЮ; INTR=0-4
+;
+CJP А=PSTG33,МАР=РЕ
+PSTG33:CONT А=Н33,%T%
+%S% А=INITST,МАР=РЕ
+;"0" - В РГ,ТГ ПРИЗНАКОВ; ТКК=ППК=ЛК=0
+CTG33:CONT ALUS=DZ,FUNC=AND,Н,ALU,YDST=CNT,FFCNT=CLRTKK
+;ИЗМЕНЕНИЕ ППК ЧЕРЕЗ ТКК: ТКК=ПК (1)
+CONT FFCNT=СНТКК
+;INTR=1; ПРИЗНАК ПМИ, ПО КОТОРОМУ ТКК ПЕРЕПИСЫВАЕТСЯ В ППК
+CONT ISE,%CLRTYP%
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,IСС,%ТУРЕ%
+;ИЗМЕНЯЕМ ППК ЧЕРЕЗ ТКК
+CONT FFCNT=СНТКК
+CONT ISE
+;INTR=2; П/У НА ОШИБКУ, ЕСЛИ ППК УСТАНОВЛЕН
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,%ТУРЕ%
+;"FF" - В РГ,ТГ ПРИЗНАКОВ, ТКК=ППК=ПК=1
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALU,YDST=CNT,FFCNT=SЕТТКК
+;INTR=3; ИЗМЕНЕНИЕ ППК: ТКК=ЛК=0
+CONT FFCNT=СНТКК
+CONT ISE
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,%ТУРЕ%
+;УСТАНАВЛИВАЕМ ППК ЧЕРЕЗ ТКК
+CONT FFCNT=СНТКК
+CONT ISE
+;INTR=4; П/У НА ОШИБКУ, ЕСЛИ ППК СБРОШЕН
+CJS А=ERRTST,МАР=РЕ,COND=RСВ,IСС,%ТУРЕ%
+%J% A=CTG33,MAP=PE,%TIK%
+;
+;
+ТГ34:ENTRY
+;===== ПРОВЕРКА ПРИЗНАКОВ ГРУПП
+;   ЧИТАЕМ РГ.ПРИЗНАКОВ, СРАВНИВАЕМ C CONST ИЗ ПЗУ
+;   ЗАПИСЬ 0 (РГ.INTR = 01); ЛОГ.ГРУППА ПОСЛЕ ЗАПИСИ 0 (02);
+;   ЗАПИСЬ 1 (03); ГРУППА УМНОЖЕНИЯ ПОСЛЕ ЗАПИСИ 1 (04);
+;   ЛОГ.ГРУППА (05); УМНОЖЕНИЯ (06); СЛОЖЕНИЯ (07)
+;
+CJP А=PSTG34,МАР=РЕ
+PSTG34:CONT А=Н34,%T%
+%S% А=INITST,МАР=РЕ
+CONT A=H1C,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=BYTE
+;INTR = 1: "0" - В РГ/ТГ ПРИЗНАКОВ
+CTG34:CONT ALUS=DZ,FUNC=AND,Н,ALU,YDST=CNT
+CONT %CLRTYP%
+;ЧИТАЕМ ТГ.ПРИЗНАКОВ, МАСКА НА 5-3 РАЗРЯДЫ, ПРОВЕРЯЕМ НА "0"
+CONT DSRC=CNT,ALUS=DA,RA=BYTE,FUNC=AND,H,ALUD=В,RВ=Y,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;2: ЛОГИЧЕСКАЯ ГРУППА
+CONT FFCNT=LOGGRP
+CONT DSRC=CNT,ALUS=DA,RA=BYTE,FUNC=AND,H,ALUD=В,RВ=Y
+CONT А=В3,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;3: "FF" - В РГ/ТГ ПРИЗНАКОВ
+CONT A=H1C,DSRC=PROM,ALUS=DZ,ALU,YDST=CNT
+;ЧИТАЕМ ТГ.ПРИЗНАКОВ, МАСКА НА 5-3 РАЗРЯДЫ, СРАВНИВАЕМ С ТЕМ ЖЕ (1С)
+CONT DSRC=CNT,ALUS=DA,RA=BYTE,FUNC=AND,H,ALUD=В,RВ=Y
+CONT А=H1C,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;4: ГРУППА УМНОЖЕНИЯ
+CONT FFCNT=MULGRP
+CONT DSRC=CNT,ALUS=DA,RA=BYTE,FUNC=AND,H,ALUD=В,RВ=Y
+CONT А=B4,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;5: ЛОГИЧЕСКАЯ ГРУППА
+CONT FFCNT=LOGGRP
+CONT DSRC=CNT,ALUS=DA,RA=BYTE,FUNC=AND,H,ALUD=В,RВ=Y
+CONT А=B3,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;6: ГРУППА УМНОЖЕНИЯ
+CONT FFCNT=MULGRP
+CONT DSRC=CNT,ALUS=DA,RA=BYTE,FUNC=AND,H,ALUD=В,RВ=Y
+CONT А=B4,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;7: ГРУППА СЛОЖЕНИЯ
+CONT FFCNT=ADDGRP
+CONT DSRC=CNT,ALUS=DA,RA=BYTE,FUNC=AND,H,ALUD=В,RВ=Y
+CONT А=B5,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+%J% А=CTG34,МАР=РЕ,%TIK%
+;
+БОПП35:ENTRY
+;===== ИЗ РГ.А ПИШЕМ ЧИСЛА ОТ 0 ДО FF В 4-15 РГ.БОПП, ЧИТАЕМ, ПРОВЕРЯЕМ
+;   INTR = N РЕГИСТРА: 4-15 ПРИ ПРОВЕРКЕ 4-15 РГ.БОПП СООТВЕТСТВЕННО
+;   ПРИ ОШИБКЕ 8-11РГ.БОПП = ЧТО ПИСАЛИ, 12-15 = ЧТО ПРОЧИТАЛИ (1 БАЙТ)
+;
+CJP А=PSMP35,МАР=РЕ
+PSMP35:CONT А=Н3,%T%
+%S% А=INITST,МАР=РЕ
+CONT А=MB,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=BYTE
+CONT ALUS=DZ,FUNC=AND,H,ALUD=B,RB=A
+LABL35:CONT ALUS=ZА,RА=А,CI,ALUD=B,RB=A,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=4
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=5
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=6
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=7
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=8
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=9
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=10
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=11
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=12
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=13
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=14
+CONT ALUS=ZА,RА=А,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+CONT A=C3,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=INTR
+;INTR=4
+CONT YDEV=MPMEM,IOMP,MPADR=4,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;5
+CONT YDEV=MPMEM,IOMP,MPADR=5,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;6
+CONT YDEV=MPMEM,IOMP,MPADR=6,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;7
+CONT YDEV=MPMEM,IOMP,MPADR=7,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;8
+CONT YDEV=MPMEM,IOMP,MPADR=8,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;9
+CONT YDEV=MPMEM,IOMP,MPADR=9,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;10
+CONT YDEV=MPMEM,IOMP,MPADR=10,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;11
+CONT YDEV=MPMEM,IOMP,MPADR=11,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;12
+CONT YDEV=MPMEM,IOMP,MPADR=12,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;13
+CONT YDEV=MPMEM,IOMP,MPADR=13,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;14
+CONT YDEV=MPMEM,IOMP,MPADR=14,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+;15
+CONT YDEV=MPMEM,IOMP,MPADR=15,%TRSH%,ALUS=DZ,H,ALUD=B,RB=Y
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AQ,RA=BYTE,FUNC=AND,H,ALUD=Q,CEN
+CJS A=ERRINH,MAP=PE,COND=CT,STOPC=/NZ,%TYPE%
+%J% А=LABL35,МАР=РЕ,%TIK%
+;
+;     ================
+;     П З У   КОНСТАНТ
+;     ================
+;
+ПЗУ2:ENTRY
+;===== ЧТЕНИЕ ИЗ ПЗУ В РЕГИСТРЫ МПС, ПРОВЕРКА
+;  ПРИ ОШИБКЕ 8-15 РГ.БОПП = РЕЗУЛЬТАТУ СРАВНЕНИЯ CONST ИЗ ПЗУ И СОДЕРЖ.РЕГИСТРА
+;  АДРЕС ПЗУ   НОМЕР РЕГИСТРА МПС     ОШИБКА
+;        0          WR1                 01
+;        1          WR2                 02
+;        2          WR3                 03
+;        3          WR4                 04
+;        4          WR5                 05
+;        5          WR6                 06
+;        6           А                  07
+;        7           У                  08
+;
+CJP А=PSROM2,МАР=РЕ
+PSROM2:CONT А=Н2,%T%
+%S% А=INITST,МАР=РЕ
+CONT А=0,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR1
+CONT А=1,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR2
+CONT А=2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR3
+CONT А=3,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR4
+CONT А=4,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR5
+CONT А=5,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+CONT А=6,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CONT А=7,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=У
+;INTR=1; ПРОВЕРЯЕМ CONST ПО АДРЕСУ ПЗУ 0:
+CROM2:CONT %CLRTYP%
+CONT А=0,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;INTR=2, АДРЕС ПЗУ 1:
+CONT А=1,DSRC=PROM,ALUS=DА,RА=WR2,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;INTR=3; АДРЕС 2:
+CONT А=2,DSRC=PROM,ALUS=DА,RА=WR3,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;INTR=4, АДРЕС 3:
+CONT А=3,DSRC=PROM,ALUS=DА,RА=WR4,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;INTR=5, АДРЕС 4:
+CONT А=4,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;INTR=6, АДРЕС 5:
+CONT А=5,DSRC=PROM,ALUS=DА,RА=WR6,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;INTR=7, АДРЕС 6:
+CONT А=6,DSRC=PROM,ALUS=DА,RА=А,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;INTR=8, АДРЕС 7:
+CONT А=7,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CROM2,МАР=РЕ,%TIK%
+;
+;
+ПЗУ3:ENTRY
+;===== ПРОВЕРКА ОТДЕЛЬНЫХ АДРЕСОВ ПЗУ
+;  ЧИТАЕМ CONST ИЗ ПЗУ, ДЕЛАЕМ ЛОГИЧЕСКИЕ ОПЕРАЦИИ С ДРУГИМИ CONST, СРАВНИВАЕМ
+;  INTR = 0 - 3, 8-15 РГ. БОПП = РГ.Q, Д.Б. РАВЕН 0
+;
+CJP А=PSROM3,МАР=РЕ
+PSROM3:CONT А=Н3,%T%
+%S% А=INITST,МАР=РЕ
+CROM3:CONT %CLRTYP%
+;INTR = 01: ЧИТАЕМ FF..FF, ИНВЕРТИРУЕМ, СРАВНИВАЕМ С 0
+CONT А=CFFF,DSRC=PROM,ALUS=DZ,FUNC=EXNOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;INTR = 02: ЧИТАЕМ 00...FF, ИНВЕРТИРУЕМ МЛ.32 РАЗРЯДА, СРАВНИВАЕМ ВСЕ С 0
+CONT А=МН,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=У
+CONT ALUS=ZА,RА=У,FUNC=EXNOR,ALUD=В,RВ=У
+CONT ALUS=ZА,RА=У,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;INTR = 03: ВЫПОЛНЯЕМ РАЗЛИЧНЫЕ ЛОГИЧЕСКИЕ ОПЕРАЦИИ, СРАВНИВАЕМ РЕЗУЛЬТАТ С 0
+CONT А=СААА,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=У
+;FF...FF
+CONT А=С555,DSRC=PROM,ALUS=ZА,RА=У,FUNC=OR,Н,ALUD=В,RВ=У
+;FF...FF
+CONT А=ZER,DSRC=PROM,ALUS=ZА,RА=У,FUNC=OR,Н,ALUD=В,RВ=У
+;FFFF...00
+CONT А=MNQ,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,Н,ALUD=В,RВ=У
+;00...00
+CONT А=MQ,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,Н,ALUD=В,RВ=У
+;00...00FF
+CONT А=МВ,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,Н,ALUD=В,RВ=У
+;FF...FF
+CONT А=MNB,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,Н,ALUD=В,RВ=У
+;00...00
+CONT А=С1,DSRC=PROM,ALUS=DА,RА=У,FUNC=ADD,Н,ALUD=В,RВ=У
+;00...0.FFF
+CONT А=MADR,DSRC=PROM,ALUS=DА,RА=У,FUNC=OR,Н,ALUD=В,RВ=У
+;FF...FF
+CONT А=MNADR,DSRC=PROM,ALUS=DА,RА=У,FUNC=OR,Н,ALUD=В,RВ=У
+;4
+CONT А=С5,DSRC=PROM,ALUS=DА,RА=У,FUNC=ADD,Н,ALUD=В,RВ=У
+;0...0
+CONT А=В3,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CROM3,МАР=РЕ,%TIK%
+;
+;     ================================
+;     СДВИГИ В СДВИГАТЕЛЕ И МПС + СУСС
+;     ================================
+;
+СДВИГ5:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ ВЛЕВО 64Р. В МПС И СДВИГАТЕЛЕ; ПАРАМЕТР СДВИГА - В МП
+;   DADR - CONST ДЛЯ СДВИГА ИЗ ПЗУ; А - СДВИНУТОЕ В МПС; У - В СДВИГАТЕЛЕ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В СДВИГАТЕЛЕ
+;
+CJP А=PSSH5,МАР=РЕ
+PSSH5:CONT А=Н5,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В РГ.DADR МПС
+CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;DADR - B РГ.A, СДВИГ A В МПС 3 РАЗА
+CSH5:PUSH A=2,MAP=PE,ALUS=ZА,RА=DADR,Н,ALUD=B,RВ=А
+RFCT ALUS=ZА,RА=А,Н,ALUD=LSB,RВ=А,SHMUX=ASLLS
+;СДВИГАЕМ НА 3 В СДВИГАТЕЛЕ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=У,ALU,DSRC=SHIFT,MPS,PSHF=SН0-3,SHF=LOG
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CSH5,МАР=РЕ,%TIK%
+;
+;
+СДВИГ6:ENTRY
+;===== СДВИГ ЦИКЛИЧЕСКИЙ ВЛЕВО 64Р. В МПС И СДВИГАТЕЛЕ, ПАРАМЕТР СДВИГА - В МП
+;   А - ЧИСЛО ИЗ ПЗУ, СДВИГАЕМОЕ В СДВИГАТЕЛЕ; У - ТО ЖЕ, НО СДВИГАЕМОЕ В МПС
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В МПС
+;
+CJP А=PSSH6,МАР=РЕ
+PSSH6:CONT А=Н6,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В РГ.А МПС
+CSH6:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=22,МАР=РЕ
+;А - СДВИГ В МПС 3 РАЗА - В У
+CONT ALUS=ZА,RА=А,Н,ALUD=LSB,RВ=У,SHMUX=RSRS
+CONT ALUS=ZА,RА=У,Н,ALUD=LSB,RВ=У,SHMUX=RSRS
+CONT ALUS=ZА,RА=У,Н,ALUD=LSB,RВ=У,SHMUX=RSRS
+;СДВИГАЕМ НА 3 В СДВИГАТЕЛЕ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0-3,SHF=CICL
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESH6,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESH6:%J% А=CSH6,МАР=РЕ
+;
+;
+СДВИГ7:ENTRY
+;===== СДВИГ АРИФМЕТИЧЕСКИЙ ВЛЕВО 64 Р. В МПС И СДВИГАТЕЛЕ; ПАР-Р СДВИГА - В МП
+;   У - РЕЗУЛЬТАТ СДВИГА В МПС; А - В СДВИГАТЕЛЕ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В МПС
+;
+CJP А=PSSH7,МАР=РЕ
+PSSH7:CONT А=Н7,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В РГ.А МПС
+CSH7:CONT А=MNQ,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=22,МАР=РЕ
+;А - СДВИГ В МПС 4 РАЗА ВЛЕВО + 1 ВПРАВО ДЛЯ ВОССТАНОВЛЕНИЯ ЗНАКА - В У
+;ЗАПОМИНАЕМ ЗНАК В МС
+CONT ALUS=ZА,RА=А,Н,ALUD=LSB,RВ=У,SHMUX=LSLSL,СЕМ
+;ПРОСТО СДВИГАЕМ:
+CONT ALUS=ZА,RА=У,Н,ALUD=LSB,RВ=У,SHMUX=ASLLS
+CONT ALUS=ZА,RА=У,Н,ALUD=LSB,RВ=У,SHMUX=ASLLS
+CONT ALUS=ZА,RА=У,Н,ALUD=LSB,RВ=У,SHMUX=ASLLS
+;ВОССТАНАВЛИВАЕМ ЗНАК: СДВИГАЕМ ВПРАВО ВМЕСТЕ С МС
+CONT ALUS=ZА,RА=У,Н,ALUD=RSB,RВ=У,SHMUX=RDSRDS
+;СДВИГАЕМ НА 3 В СДВИГАТЕЛЕ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0-3
+>,SHF=ARIPH
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESH7,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESH7:%J% А=CSH7,МАР=РЕ
+;
+;
+СДВИГ8:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ ВПРАВО 64Р. В МПС И СДВИГАТЕЛЕ, ПАР-Р СДВИГА - В МП
+;   А - СДВИНУТОЕ В СДВИГАТЕЛЕ; У - В МПС
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В МПС
+;
+CJP А=PSSH8,МАР=РЕ
+PSSH8:CONT А=Н8,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В РГ.А МПС
+CSH8:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=22,МАР=РЕ
+;А - СДВИГ В МПС 3 РАЗА - В У
+CONT ALUS=ZА,RА=А,Н,ALUD=RSB,RВ=У,SHMUX=LSLSL
+CONT ALUS=ZА,RА=У,Н,ALUD=RSB,RВ=У,SHMUX=LSLSL
+CONT ALUS=ZА,RА=У,Н,ALUD=RSB,RВ=У,SHMUX=LSLSL
+;СДВИГАЕМ НА 3 В СДВИГАТЕЛЕ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0+3,SHF=LOG
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESH8,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESH8:%J% А=CSH8,МАР=РЕ
+;
+;
+СДВИГ9:ENTRY
+;===== СДВИГ ЦИКЛИЧЕСКИЙ ВПРАВО 64Р. В МПС И СДВИГАТЕЛЕ, ПАРАМЕТР СДВИГА - В МП
+;   А - СДВИНУТОЕ В СДВИГАТЕЛЕ; У - В МПС
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В МПС
+;
+CJP А=PSSH9,МАР=РЕ
+PSSH9:CONT А=Н9,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В РГ.А МПС
+CSH9:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=22,МАР=РЕ
+;А - СДВИГ В МПС 3 РАЗА - В У
+CONT ALUS=ZА,RА=А,Н,ALUD=RSB,RВ=У,SHMUX=RSRS
+CONT ALUS=ZА,RА=У,Н,ALUD=RSB,RВ=У,SHMUX=RSRS
+CONT ALUS=ZА,RА=У,Н,ALUD=RSB,RВ=У,SHMUX=RSRS
+;СДВИГАЕМ НА 3 В СДВИГАТЕЛЕ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0+3,SHF=CICL
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESH9,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESH9:%J% А=CSH9,МАР=РЕ
+;
+;
+СДВИГА:ENTRY
+;===== СДВИГ АРИФМЕТИЧЕСКИЙ ВПРАВО 64Р.В МПС И СДВИГАТЕЛЕ; ПАР-Р СДВИГА - В МП
+;   А - СДВИНУТОЕ В СДВИГАТЕЛЕ; У - В МПС
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В МПС
+;
+CJP А=PSSHA,МАР=РЕ
+PSSHA:CONT А=НА,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В РГ.А МПС
+CSHA:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=22,МАР=РЕ
+;А - СДВИГ В МПС (В РГ.Q) 3 РАЗА ВПРАВО  - В У
+;ПЕРЕСЫЛАЕМ В РГ.Q, ЗАПОМИНАЕМ ЗНАК
+CONT ALUS=ZА,RА=А,Н,ALUD=Q,SТОРС=20,СЕМ
+;СДВИГАЕМ С ЗАГРУЗКОЙ MN НА ОСВОБОЖД. МЕСТО
+CONT ALUS=ZQ,Н,ALUD=RSBQ,RВ=У,SHMUX=ASLLS
+CONT ALUS=ZQ,Н,ALUD=RSBQ,RВ=У,SHMUX=ASLLS
+CONT ALUS=ZQ,Н,ALUD=RSBQ,RВ=У,SHMUX=ASLLS
+;ПЕРЕПИСЫВАЕМ В РГ.Y
+CONT ALUS=ZQ,Н,ALUD=В,RВ=У
+;СДВИГАЕМ НА 3 В СДВИГАТЕЛЕ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0+3
+>,SHF=ARIPH
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESHA,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESHA:%J% А=CSHA,МАР=РЕ
+;
+;
+СДВИГВ:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ ВЛЕВО 64Р. В МПС И СДВИГАТЕЛЕ; ПАРАМЕТР СДВИГА - В РПС
+;   DADR - ПАРАМЕТР СДВИГА; HALF - CONST; А - СДВИГАЕМОЕ В МПС; У - В СДВИГАТЕЛЕ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В СДВИГАТЕЛЕ
+;
+CJP А=PSSHB,МАР=РЕ
+PSSHB:CONT А=НВ,%T%
+%S% А=INITST,МАР=РЕ
+;ПАРАМЕТР СДВИГА НА 0 - В РГ.DADR
+CSHB:CONT А=S0,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В А,HALF
+CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=72,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=HALF
+;ПАРАМЕТР СДВИГА - 1 - В РПС
+CONT ALUS=ZА,RА=DADR,FUNC=SUBR,Н,ALUD=В,RВ=DADR,ALU,YDST=PSHIFT
+;СДВИГАЕМ ИСХОДНОЕ ЗНАЧЕНИЕ CONST ИЗ РГ.HALF В СДВИГАТЕЛЕ - В У
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У,ALU,DSRC=SHIFT,SHF=LOG
+;СДВИГАЕМ В МПС (КАЖДЫЙ ЦИКЛ - ЕЩЕ НА 1 РАЗРЯД)
+CONT ALUS=ZВ,RВ=А,Н,ALUD=LSB,SHMUX=ASLLS
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESHB,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESHB:%J% А=CSHB,МАР=РЕ
+;
+;
+СДВИГС:ENTRY
+;===== СДВИГ ЦИКЛИЧЕСКИЙ ВЛЕВО 64Р. В МПС И СДВИГАТЕЛЕ; ПАРАМЕТР СДВИГА - В РПС
+;   DADR - ПАРАМЕТР СДВИГА; HALF - CONST; А - СДВИГАЕМОЕ В МПС; У - В СДВИГАТЕЛЕ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В СДВИГАТЕЛЕ
+;
+CJP А=PSSHC,МАР=РЕ
+PSSHC:CONT А=НС,%T%
+%S% А=INITST,МАР=РЕ
+;ПАРАМЕТР СДВИГА НА 0 - В РГ.DADR
+CSHC:CONT А=S0,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В HALF И А
+CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=HALF
+PUSH А=72,МАР=РЕ,ALUS=ZА,RА=HALF,Н,ALUD=В,RВ=А
+;ПАР-Р СДВИГА - 1 - В РПС
+CONT ALUS=ZА,RА=DADR,FUNC=SUBR,Н,ALUD=В,RВ=DADR,ALU,YDST=PSHIFT
+;СДВИГАЕМ CONST В СДВИГАТЕЛЕ - В У (КАЖДЫЙ ЦИКЛ - НА 1 РАЗРЯД БОЛЬШЕ)
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У,ALU,DSRC=SHIFT,SHF=CICL
+;СДВИГАЕМ В МПС (КАЖДЫЙ ЦИКЛ - ЕЩЕ НА 1 РАЗРЯД)
+CONT ALUS=ZВ,RВ=А,Н,ALUD=LSB,SHMUX=RSRS
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESHC,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESHC:%J% А=CSHC,МАР=РЕ
+;
+;
+CДBИГD:ENTRY
+;===== СДВИГ АРИФМЕТИЧЕСКИЙ ВЛЕВО 64 Р. В СДВИГАТЕЛЕ И МПС, ПАР-Р СДВИГА - В РПС
+;   DADR - ПАРАМЕТР СДВИГА; HALF - CONST; А - СДВИГАЕМОЕ В МПС; У - В СДВИГАТЕЛЕ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В СДВИГАТЕЛЕ
+;
+CJP А=PSSHD,МАР=РЕ
+PSSHD:CONT А=HD,%T%
+%S% А=INITST,МАР=РЕ
+;ПАРАМЕТР СДВИГА НА 0 - В РГ.DADR
+CSHD:CONT А=S0,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В HALF,А
+CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=72,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=HALF
+;ПАРАМЕТР СДВИГА - 1 -> В РПС
+CONT ALUS=ZВ,RВ=DADR,FUNC=SUBR,Н,ALUD=В,ALU,YDST=PSHIFT
+;ДВИГАЕМ В СДВИГАТЕЛЕ - В У
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У,ALU,DSRC=SHIFT,SHF=ARIPH
+;СДВИГАЕМ АРИФМЕТИЧЕСКИ В МПС: СНАЧАЛА ЗАПОМИНАЕМ ЗНАК
+CONT ALUS=ZВ,RВ=А,Н,ALUD=LSB,SHMUX=LSLSL,SТОРС=20,СЕМ
+;ПОТОМ ПРОСТО СДВИГ
+CONT ALUS=ZВ,RВ=А,Н,ALUD=LSB,SHMUX=ASLLS
+;ВОССТАНАВЛИВАЕМ ЗНАК: СДВИГ ВПРАВО (ОБРАТНО) ВМЕСТЕ С МС
+CONT ALUS=ZВ,RВ=А,Н,ALUD=RSB,SHMUX=CDLDL
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESHD,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESHD:%J% А=CSHD,МАР=РЕ
+;
+;
+СДВИГЕ:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ ВПРАВО 64Р.В МПС И СДВИГАТЕЛЕ; ПАРАМЕТР СДВИГА - В РПС
+;   DADR - ПАРАМЕТР СДВИГА; HALF - CONST; А - СДВИГАЕМОЕ В МПС; У - В СДВИГАТЕЛЕ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В СДВИГАТЕЛЕ
+;
+CJP А=PSSHE,МАР=РЕ
+PSSHE:CONT А=НЕ,%T%
+%S% А=INITST,МАР=РЕ
+;ПАРАМЕТР СДВИГА НА 0 - В РГ.DADR
+CSHE:CONT А=S0,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В HALF,А
+CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=HALF
+PUSH А=72,МАР=РЕ,ALUS=ZА,RА=HALF,Н,ALUD=В,RВ=А
+;ПАР-Р СДВИГА + 1 - В РПС
+CONT ALUS=ZВ,RВ=DADR,Н,CI,ALUD=В,ALU,YDST=PSHIFT
+;ДВИГАЕМ В СДВИГАТЕЛЕ - В У
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У,ALU,DSRC=SHIFT,SHF=LOG
+;СДВИГАЕМ В МПС
+CONT ALUS=ZВ,RВ=А,Н,ALUD=RSB,SHMUX=LSLSL
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESHE,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESHE:%J% А=CSHE,МАР=РЕ
+;
+;
+CДBИГF:ENTRY
+;===== СДВИГ ЦИКЛИЧЕСКИЙ ВПРАВО 64Р. В МПС И СДВИГАТЕЛЕ; ПАРАМЕТР СДВИГА - В РПС
+;   DADR - ПАРАМЕТР СДВИГА; HALF - CONST; А - СДВИГАЕМОЕ В МПС; У - В СДВИГАТЕЛЕ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В СДВИГАТЕЛЕ
+;
+CJP А=PSSHF,МАР=РЕ
+PSSHF:CONT А=HF,%T%
+%S% А=INITST,МАР=РЕ
+;ПАРАМЕТР СДВИГА НА 0 - В РГ.DADR
+CSHF:CONT А=S0,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В HALF,А
+CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=HALF
+PUSH А=72,МАР=РЕ,ALUS=ZА,RА=HALF,Н,ALUD=В,RВ=А
+;ПАР-Р СДВИГА + 1 - В РПС
+CONT ALUS=ZВ,RВ=DADR,Н,CI,ALUD=В,ALU,YDST=PSHIFT
+;ДВИГАЕМ В СДВИГАТЕЛЕ - В У
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У,ALU,DSRC=SHIFT,SHF=CICL
+;СДВИГАЕМ В МПС
+CONT ALUS=ZВ,RВ=А,Н,ALUD=RSB,SHMUX=RSRS
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESHF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESHF:%J% А=CSHF,МАР=РЕ
+;
+;
+СДВИ10:ENTRY
+;===== СДВИГ АРИФМЕТИЧЕСКИЙ ВПРАВО 64Р.В МПС И СДВИГАТЕЛЕ; ПАР-Р СДВИГА - В РПС
+;   DADR - ПАРАМЕТР СДВИГА; HALF - CONST; А - СДВИГАЕМОЕ В МПС; У - В СДВИГАТЕЛЕ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В СДВИГАТЕЛЕ
+;
+CJP А=PSSH10,МАР=РЕ
+PSSH10:CONT А=Н10,%T%
+%S% А=INITST,МАР=РЕ
+;ПАРАМЕТР СДВИГА НА 0 - В РГ.DADR
+CSH10:CONT А=S0,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В HALF, В А; ЗАПОМИНАЕМ ЗНАК
+CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=HALF,SТОРС=20,СЕМ
+PUSH А=72,МАР=РЕ,ALUS=ZА,RА=HALF,Н,ALUD=В,RВ=А
+;ПАР-Р СДВИГА + 1 - В РПС
+CONT ALUS=ZВ,RВ=DADR,Н,CI,ALUD=В,ALU,YDST=PSHIFT
+;ДВИГАЕМ В СДВИГАТЕЛЕ - В У
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У,ALU,DSRC=SHIFT,SHF=ARIPH
+;СДВИГАЕМ АРИФМЕТИЧЕСКИ В МПС С РАЗМНОЖЕНИЕМ ЗНАКА ИЗ MN
+CONT ALUS=ZВ,RВ=А,Н,ALUD=RSB,SHMUX=ADNDL
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESH10,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESH10:%J% А=CSH10,МАР=РЕ
+;
+;
+СДВИ11:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ ДВОЙНОГО СЛОВА В МПС И СДВИГАТЕЛЕ НА 37 РАЗРЯДОВ
+;   А,Q - СДВИГАЕМ В МПС;
+;   HALF(А) СДВИГАЕМ В СДВИГАТЕЛЕ, ПИШЕМ В У (ЛЕВАЯ ПОЛОВИНА РЕЗ-ТА);
+;   ПРАВУЮ ПОЛОВИНУ РЕЗУЛЬТАТА ПОЛУЧАЕМ ЗА 2 ПРИЕМА В DADR
+;   ОШИБКИ: 01 - НЕСОВПАДЕНИЕ ЛЕВОЙ ПОЛОВИНЫ; 02 - ПРАВОЙ.
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y,DADR, ГДЕ РЕЗ-Т СДВИГА В СДВИГАТЕЛЕ
+;
+CJP А=PSSH11,МАР=РЕ
+PSSH11:CONT А=Н11,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА В HALF И Q
+CSH11:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=HALF
+CONT А=MNH,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+PUSH А=36,МАР=РЕ,ALUS=ZА,RА=HALF,Н,ALUD=В,RВ=А
+;СДВИГАЕМ В МПС ДВОЙНОЕ СЛОВО: А(КОПИЯ HALF) И Q
+RFCT ALUS=ZВ,RВ=А,Н,ALUD=RSBQ,SHMUX=LDLD
+;СДВИГАЕМ В СДВИГАТЕЛЕ ДВОЙНОЕ СЛОВО (ПО ЧАСТЯМ); СНАЧАЛА HALF ВПРАВО НА 37
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У,ALU,DSRC=SHIFT,MPS,PSHF=SН0+37
+>,SHF=LOG
+;СРАВНИВАЕМ ЛЕВУЮ ПОЛОВИНУ РЕЗ-ТА
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,CEN
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;СДВИГАЕМ HALF ВЛЕВО НА 64-37=27 (ПОЛУЧАЕМ ТО, ЧТО ВЫДВИНУЛОСЬ ИЗ А В Q)
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=DADR,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0-27,SHF=LOG
+;ЧИТАЕМ ПРАВЫЕ 64 РАЗРЯДА CONST, ЧТО БЫЛИ В Q
+CONT А=MNH,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR1
+;СДВИГАЕМ ВПРАВО НА 37
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU
+>,DSRC=SHIFT,MPS,PSHF=SН0+37,SHF=LOG
+;ОБ'ЕДИНЯЕМ
+CONT ALUS=АВ,RА=WR1,RВ=DADR,FUNC=OR,Н,ALUD=В
+;СРАВНИВАЕМ
+CONT ALUS=AQ,RА=DADR,FUNC=EXOR,Н,CEN
+CONT %ТУРЕ%
+CJS А=ERR8/F,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZA,RA=DADR,H,ALUD=B,RB=WR6
+%J% А=CSH11,МАР=РЕ,%TIK%
+;
+;
+СДВИ12:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ ДВОЙНОГО СЛОВА ВЛЕВО В МПС И СДВИГАТЕЛЕ (НА 12 РАЗРЯДОВ)
+;   А (КОПИЯ HALF) + Q - СДВИГАЕМ В МПС;
+;   HALF СДВИГАЕМ ВЛЕВО В СДВИГАТЕЛЕ = ЛЕВАЯ ПОЛОВИНА РЕЗУЛЬТАТА - В РГ.У;
+;   ПРАВУЮ ПОЛОВИНУ РЕЗУЛЬТАТА ПОЛУЧАЕМ ЗА 2 СДВИГА В СДВИГАТЕЛЕ - В РГ.DADR
+;   ОШИБКИ: 01 - НЕСОВПАДЕНИЕ ПРАВОЙ ПОЛОВИНЫ РЕЗУЛЬТАТА; 02 - ЛЕВОЙ.
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y,DADR, ГДЕ РЕЗ-Т СДВИГА В СДВИГАТЕЛЕ
+;
+CJP А=PSSH12,МАР=РЕ
+PSSH12:CONT А=Н12,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА В А (КОПИЯ А - В WR1); И Q (КОПИЯ Q - В HALF)
+CSH12:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR1
+CONT А=MNH,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+PUSH А=11,МАР=РЕ,ALUS=ZQ,Н,ALUD=В,RВ=HALF
+;СДВИГАЕМ В МПС ДВОЙНОЕ СЛОВО А,Q
+RFCT ALUS=ZВ,RВ=А,Н,ALUD=LSBQ,SHMUX=LDLD
+;СДВИГАЕМ В СДВИГАТЕЛЕ (ПО ЧАСТЯМ): ПРАВУЮ ПОЛОВИНУ ДВОЙНОГО СЛОВА ВЛЕВО НА 12
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У,ALU,DSRC=SHIFT,MPS,PSHF=SН0-12
+>,SHF=LOG
+;СРАВНИВАЕМ ПРАВУЮ ПОЛОВИНУ РЕЗ-ТА
+CONT ALUS=AQ,RА=У,FUNC=EXOR,Н,CEN
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;СДВИГАЕМ HALF ВПРАВО НА 64-12=52 (ПОЛУЧАЕМ ТО, ЧТО ПОПАЛО В ЛЕВУЮ ПОЛОВИНУ)
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=DADR,ALU,DSRC=SHIFT,MPS
+>,PSHF=SН0+52,SHF=LOG
+;СДВИГАЕМ ЛЕВУЮ ПОЛОВИНУ ДВОЙНОЙ CONST ВЛЕВО НА 12
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR1,RВ=WR1,ALU
+>,DSRC=SHIFT,MPS,PSHF=SН0-12,SHF=LOG
+;ОБ'ЕДИНЯЕМ
+CONT ALUS=АВ,RА=WR1,RВ=DADR,FUNC=OR,Н,ALUD=В
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=DADR,FUNC=EXOR,Н,CEN
+CONT %ТУРЕ%
+CJS А=ERR8/F,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZA,RA=DADR,H,ALUD=B,RB=WR6
+%J% А=CSH12,МАР=РЕ,%TIK%
+;
+;
+СДВИ13:ENTRY
+;===== ДВОЙНОЙ СДВИГ ВПРАВО ЛОГИЧЕСКИЙ РЗУ+Q  БОЛЬШЕ 64 РАЗРЯДОВ (НА 96=64+32)
+;   А,Q - РЕЗУЛЬТАТ СДВИГА CONST (HALF) В МПС; У - В СДВИГАТЕЛЕ;
+;   DADR - ПАРАМЕТР СДВИГА (ПИШЕМ В РПС);
+;   ОШИБКИ: 01 - НЕСОВПАДЕНИЕ МЛ.64 РАЗРЯДОВ РЕЗУЛЬТАТА; 02 - СТАРШИХ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В СДВИГАТЕЛЕ
+;
+CJP А=PSSH13,МАР=РЕ
+PSSH13:CONT А=Н13,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА (МОЖНО 2 ВАРИАНТА: ПОЛОЖИТ. И ОТРИЦАТ. CONST)
+CSH13:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=HALF
+;КОПИРУЕМ ЕЕ
+PUSH А=95,МАР=РЕ,ALUS=ZА,RА=HALF,Н,ALUD=В,RВ=А,СЕМ
+;СДВИГ В МПС ЛОГИЧЕСКИЙ ВПРАВО А+Q (96 РАЗ = 64 + 32)
+RFCT ALUS=ZВ,Н,ALUD=RSBQ,RВ=А,SHMUX=LDLD
+;СДВИГ В СДВИГАТЕЛЕ В 2 ЭТАПА: ПАРАМЕТР СДВИГА НА 32 РАЗРЯДА - В DADR, В РПС
+CONT А=SR32,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR,ALU,YDST=PSHIFT
+;СДВИГАЕМ, ПОЛУЧАЕМ МЛАДШИЕ 64 РАЗРЯДА
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У,ALU,DSRC=SHIFT,SHF=LOG
+;СРАВНИВАЕМ
+CONT ALUS=AQ,RА=У,FUNC=EXOR,Н,CEN
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;ПАР-Р СДВИГА НА 32+64=96 РАЗРЯДОВ - В РПС
+CONT А=В7,DSRC=PROM,ALUS=DА,RА=DADR,Н,ALU,YDST=PSHIFT
+;СДВИГАЕМ, ПОЛУЧАЕМ СТАРШИЕ 64 РАЗРЯДА
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У
+>,ALU,DSRC=SHIFT,SHF=LOG
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CSH13,МАР=РЕ,%TIK%
+;
+;
+СДВИ14:ENTRY
+;===== ДВОЙНОЙ СДВИГ ВПРАВО АРИФМЕТИЧЕСКИЙ РЗУ+Q  БОЛЬШЕ 64 РАЗРЯДОВ (НА 96)
+;   А,Q - РЕЗУЛЬТАТ СДВИГА CONST (HALF) В МПС; У - В СДВИГАТЕЛЕ;
+;   DADR - ПАРАМЕТР СДВИГА (ПИШЕМ В РПС);
+;   ОШИБКИ: 01 - НЕСОВПАДЕНИЕ МЛ.64 РАЗРЯДОВ РЕЗУЛЬТАТА; 02 - СТАРШИХ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т СДВИГА В СДВИГАТЕЛЕ
+;
+CJP А=PSSH14,МАР=РЕ
+PSSH14:CONT А=Н14,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА (МОЖНО 2 ВАРИАНТА: ПОЛОЖИТ. И ОТРИЦАТ. CONST)
+CSH14:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=HALF
+;КОПИРУЕМ ЕЕ, ЗАПОМИНАЕМ ЗНАК (ДЛЯ АРИФМ.СДВИГА)
+PUSH А=95,МАР=РЕ,ALUS=ZА,RА=HALF,Н,ALUD=В,RВ=А,СЕМ
+;СДВИГ В МПС АРИФМЕТИЧЕСКИЙ ВПРАВО А+Q (96 РАЗ = 64 + 32)
+RFCT ALUS=ZВ,Н,ALUD=RSBQ,RВ=А,SHMUX=ADNDL
+;СДВИГ В СДВИГАТЕЛЕ В 2 ЭТАПА: ПАРАМЕТР СДВИГА НА 32 РАЗРЯДА - В DADR, В РПС
+CONT А=SR32,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR,ALU,YDST=PSHIFT
+;СДВИГАЕМ, ПОЛУЧАЕМ МЛАДШИЕ 64 РАЗРЯДА
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У,ALU,DSRC=SHIFT,SHF=ARIPH
+;СРАВНИВАЕМ
+CONT ALUS=AQ,RА=У,FUNC=EXOR,Н,CEN
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;ПАР-Р СДВИГА НА 32+64=96 РАЗРЯДОВ - В РПС
+CONT А=В7,DSRC=PROM,ALUS=DА,RА=DADR,Н,ALU,YDST=PSHIFT
+;СДВИГАЕМ, ПОЛУЧАЕМ СТАРШИЕ 64 РАЗРЯДА
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=У
+>,ALU,DSRC=SHIFT,SHF=ARIPH
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CSH14,МАР=РЕ,%TIK%
+;
+;
+СДВИ15:ENTRY
+;===== ЗАГРУЗКА 0/1 ИЗ СУСС ПРИ ДВОЙНОМ СДВИГЕ В МПС ВПРАВО
+;   Y,Q = 0101...01; ПРИ СДВИГЕ С ЗАГРУЗКОЙ 0/1 ИЗ СУСС  Y,Q НЕ МЕНЯЮТСЯ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y (INTR=1) ИЛИ Q (INTR=2), ГДЕ РЕЗ-Т СДВИГА В МПС
+;
+CJP А=PSSH15,МАР=РЕ
+PSSH15:CONT А=Н15,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST=АА...АА (1010...10) - В У,Q
+CONT А=СААА,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=У
+CONT ALUS=ZА,RА=У,Н,ALUD=Q
+;СДВИГ ДВОЙНОЙ ВПРАВО С ЗАГРУЗКОЙ 0
+CSH15:CONT %CLRTYP%
+CONT ALUS=ZВ,RВ=У,Н,ALUD=RSBQ,SHMUX=LDLD
+;СДВИГ ДВОЙНОЙ ВПРАВО С ЗАГРУЗКОЙ 1
+CONT ALUS=ZВ,RВ=У,Н,ALUD=RSBQ,SHMUX=NDNS
+;СРАВНИВАЕМ
+CONT А=СААА,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,Н,CEN
+CONT А=СААА,DSRC=PROM,ALUS=DQ,FUNC=EXOR,Н,СЕМ
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/MZ,%ТУРЕ%
+%J% А=CSH15,МАР=РЕ,%TIK%
+;
+;
+СДВИ16:ENTRY
+;===== ЗАГРУЗКА 0/1 ИЗ СУСС ПРИ ДВОЙНОМ СДВИГЕ В МПС ВЛЕВО(!)
+;   У,Q = 0101...01; ПРИ СДВИГЕ С ЗАГРУЗКОЙ 0/1 ИЗ СУСС  У,Q НЕ МЕНЯЮТСЯ
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y (INTR=1) ИЛИ Q (INTR=2), ГДЕ РЕЗ-Т СДВИГА В МПС
+;
+CJP А=PSSH16,МАР=РЕ
+PSSH16:CONT А=Н16,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST=55...55 (010...101) - В У,Q
+CONT А=С555,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=У
+CONT ALUS=ZА,RА=У,Н,ALUD=Q
+;СДВИГ ДВОЙНОЙ ВЛЕВО С ЗАГРУЗКОЙ 0
+CSH16:CONT %CLRTYP%
+CONT ALUS=ZВ,RВ=У,Н,ALUD=LSBQ,SHMUX=LDLD
+;СДВИГ ДВОЙНОЙ ВЛЕВО С ЗАГРУЗКОЙ 1
+CONT ALUS=ZВ,RВ=У,Н,ALUD=LSBQ,SHMUX=LDLND
+;СРАВНИВАЕМ
+CONT А=С555,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,Н,CEN
+CONT А=С555,DSRC=PROM,ALUS=DQ,FUNC=EXOR,Н,СЕМ
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+CJS А=ERRINQ,МАР=РЕ,COND=СТ,SТОРС=/MZ,%ТУРЕ%
+%J% А=CSH16,МАР=РЕ,%TIK%
+;
+;
+СДВИ17:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ И АРИФМЕТИЧЕСКИЙ ВПРАВО ПОЛОЖИТЕЛЬНЫХ ЧИСЕЛ В СДВИГАТЕЛЕ
+;   А - СДВИНУТОЕ ЛОГЧИЕСКИ; У - АРИФМЕТИЧЕСКИ
+;   ДЛЯ ПОЛОЖИТЕЛЬНЫХ ЧИСЕЛ РЕЗУЛЬТАТ Д.БЫТЬ ОДИНАКОВЫЙ!
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т ЛОГИЧЕСКОГО СДВИГА
+;
+CJP А=PSSH17,МАР=РЕ
+PSSH17:CONT А=Н17,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В РГ.А МПС
+CSH17:CONT А=С555,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=22,МАР=РЕ
+;А - СДВИГ В ЛОГИЧЕСКИЙ НА 3 - В У
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=У,ALU,DSRC=SHIFT,MPS,PSHF=SН0+3,SHF=LOG
+;СДВИГАЕМ НА 3 АРИФМЕТИЧЕСКИ - В РГ.А
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0+3,SHF=ARIPH
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESH17,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESH17:%J% А=CSH17,МАР=РЕ
+;
+;
+СДВИ18:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ,АРИФМЕТИЧЕСКИЙ ВЛЕВО(!) ПОЛОЖИТЕЛЬНЫХ ЧИСЕЛ В СДВИГАТЕЛЕ
+;   А - СДВИНУТОЕ ЛОГЧИЕСКИ; У - АРИФМЕТИЧЕСКИ
+;   ДЛЯ ПОЛОЖИТЕЛЬНЫХ ЧИСЕЛ РЕЗУЛЬТАТ Д.БЫТЬ ОДИНАКОВЫЙ,
+;   ПОКА НЕ СДВИНУЛИ ДО ЗНАЧАЩИХ РАЗРЯДОВ!
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т ЛОГИЧЕСКОГО СДВИГА
+;
+CJP А=PSSH18,МАР=РЕ
+PSSH18:CONT А=Н18,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В РГ.А МПС
+CSH18:CONT А=В4,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=10,МАР=РЕ
+;А - СДВИГ В ЛОГИЧЕСКИЙ НА 3 - В У
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=У,ALU,DSRC=SHIFT,MPS,PSHF=SН0-3,SHF=LOG
+;СДВИГАЕМ НА 3 АРИФМЕТИЧЕСКИ - В РГ.А
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0-3,SHF=ARIPH
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESH18,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESH18:%J% А=CSH18,МАР=РЕ
+;
+;
+СДВИ19:ENTRY
+;===== СДВИГ ЛОГИЧЕСКИЙ,АРИФМЕТИЧЕСКИЙ ВЛЕВО ОТРИЦАТЕЛЬНЫХ(!) ЧИСЕЛ В СДВИГАТЕЛЕ
+;   А - СДВИНУТОЕ ЛОГЧИЕСКИ; У - АРИФМЕТИЧЕСКИ
+;   К РЕЗУЛЬТАТУ ЛОГИЧЕСКОГО СДВИГА ДОБАВЛЯЕМ ЗНАК ПРИ СРАВНЕНИИ.
+;   ПРИ ОШ. 8-15 РГ. БОПП = Y, ГДЕ РЕЗ-Т ЛОГИЧЕСКОГО СДВИГА + ЗНАК
+;
+CJP А=PSSH19,МАР=РЕ
+PSSH19:CONT А=Н19,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В РГ.А МПС
+CSH19:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=22,МАР=РЕ
+;А - СДВИГ В ЛОГИЧЕСКИЙ НА 3 - В У
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=У,ALU,DSRC=SHIFT,MPS,PSHF=SН0-3,SHF=LOG
+;ДОБАВЛЯЕМ ЗНАК
+CONT А=В64,DSRC=PROM,ALUS=DА,RА=У,FUNC=OR,Н,ALUD=В,RВ=У
+;СДВИГАЕМ НА 3 АРИФМЕТИЧЕСКИ - В РГ.А
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0-3,SHF=ARIPH
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESH19,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERRINF,МАР=РЕ
+ESH19:%J% А=CSH19,МАР=РЕ
+;
+;
+СДВИ1А:ENTRY
+;===== ПЕРЕХОД К ФОРМАТУ БЭСМ-6, ПОЛОЖИТЕЛЬНЫЕ ЧИСЛА
+;   У - ЧТО ДОЛЖНО БЫТЬ (ВЫЧИСЛЕННОЕ); А - "РАСХЛОПНУТОЕ"
+;   ДЛЯ КОНТРОЛЯ "РАСХЛАПЫВАНИЯ" ТО ЖЕ САМОЕ СДВИГАЕМ ЛОГИЧЕСКИ ВПРАВО
+;   И ДОБАВЛЯЕМ РЕЗУЛЬТАТ СДВИГА 64-ОГО РАЗРЯДА АРИФМЕТИЧЕСКИ БЕЗ 64-ОГО РАЗРЯДА
+;   ПРИ ОШ. 8-15 РГ. БОПП = WR6, КУДА СКОПИРОВАН "РАСХЛОПНУТЫЙ" РЕЗУЛЬТАТ
+;
+CJP А=PSSH1A,МАР=РЕ
+PSSH1A:CONT А=Н1А,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В РГ.А МПС
+CSH1A:CONT А=С0001,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CONT А=В64,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+PUSH А=22,МАР=РЕ
+;А - СДВИГ В ЛОГИЧЕСКИЙ НА 4 - В У
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=У,ALU,DSRC=SHIFT,MPS,PSHF=SН0+4,SHF=LOG
+;СДВИГАЕМ АРИФМЕТИЧЕСКИ НА СТОЛЬКО ЖЕ ЗНАК
+CONT ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+4,SHF=ARIPH
+;УБИРАЕМ 64 РАЗРЯД, ДОБАВЛЯЕМ ОСТАВШЕЕСЯ К РЕЗУЛЬТАТУ ЛОГИЧЕСКОГО СДВИГА
+CONT А=В64,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=EXOR,Н,ALUD=В,RВ=HALF
+CONT ALUS=АВ,RА=HALF,RВ=У,FUNC=OR,Н,ALUD=В
+;"РАСХЛАПЫВАЕМ" НА 4 - В РГ.А
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0+4,SHF=EMULF
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESH1A,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERR8/F,МАР=РЕ,ALUS=ZA,RA=A,H,ALUD=B,RB=WR6
+ESH1A:%J% А=CSH1A,МАР=РЕ
+;
+;
+СДВИ1В:ENTRY
+;===== ПЕРЕХОД К ФОРМАТУ БЭСМ-6, ОТРИЦАТЕЛЬНЫЕ(!) ЧИСЛА
+;   У - ЧТО ДОЛЖНО БЫТЬ (ВЫЧИСЛЕННОЕ); А - "РАСХЛОПНУТОЕ"
+;   ДЛЯ КОНТРОЛЯ "РАСХЛАПЫВАНИЯ" ТО ЖЕ САМОЕ СДВИГАЕМ АРИФМЕТИЧЕСКИ ВПРАВО
+;   И ОБНУЛЯЕМ РАСДВИНУТЫЕ РАЗРЯДЫ ("ДЫРУ")
+;   ПРИ ОШ. 8-15 РГ. БОПП = WR6, КУДА СКОПИРОВАН "РАСХЛОПНУТЫЙ" РЕЗУЛЬТАТ
+;
+CJP А=PSSH1B,МАР=РЕ
+PSSH1B:CONT А=Н1В,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ДЛЯ СДВИГА - В РГ.А МПС
+CSH1B:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CONT А=В64,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+PUSH А=22,МАР=РЕ
+;А - СДВИГ В АРИФМЕТИЧЕСКИЙ НА 4 - В У
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=У,ALU,DSRC=SHIFT,MPS,PSHF=SН0+4,SHF=ARIPH
+;СДВИГАЕМ АРИФМЕТИЧЕСКИ НА СТОЛЬКО ЖЕ ЗНАК
+CONT ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+4,SHF=ARIPH
+;УБИРАЕМ 64 РАЗРЯД, ИНВЕРТИРУЕМ, ПОЛУЧАЕМ МАСКУ НА "ДЫРУ"
+CONT А=В64,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=EXOR,Н,ALUD=В,RВ=HALF
+CONT ALUS=ZВ,RВ=HALF,FUNC=EXNOR,Н,ALUD=В
+;ОБНУЛЯЕМ "ДЫРУ"
+CONT ALUS=АВ,RА=HALF,RВ=У,FUNC=AND,Н,ALUD=В
+;"РАСХЛАПЫВАЕМ" НА 4 - В РГ.А
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0+4,SHF=EMULF
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+TWB А=ESH1B,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+CJS А=ERR8/F,МАР=РЕ,ALUS=ZA,RA=A,H,ALUD=B,RB=WR6
+ESH1B:%J% А=CSH1B,МАР=РЕ
+;
+;
+СДВИ1С:ENTRY
+;===== СДВИГ ПОЛОВИНЫ(!) CONST ВПРАВО ЛОГИЧ. В МПС НА 16 РАЗР.+ СИГНАЛ RLD(!)
+;   А - CONST; У - РЕЗУЛЬТАТ.
+;   ОШИБКИ: 01: НЕ ТО В 33-64 РАЗРЯДАХ; 02: В 1-16 Р.; 03: В 17-32 Р.
+;   ПРИ ОШ. 8-15 РГ.БОПП = Y, ГДЕ СТ.ПОЛОВИНА = CONST, МЛ. СДВИНУТА ВПРАВО НА 16
+;
+CJP А=PSSH1C,МАР=РЕ
+PSSH1C:CONT А=Н1С,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ИЗ ПЗУ В РГ.А,Y
+CSH1C:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,Н,ALUD=В,RВ=У
+;15 - В РГ/СЧЕТЧИК СУАМ
+CONT А=С15,DSRC=PROM,ALUS=DZ,ALU,RLD
+S1А:RРСТ А=S1А,МАР=РЕ,ALUS=ZВ,RВ=У,ALUD=RSB,SHMUX=LSLSL
+;ПРОВЕРЯЕМ СТАРШИЕ 32 РАЗРЯДА
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MNH,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=Q,CEN
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;ВЫЧИСЛЯЕМ МЛАДШИЕ 16 РАЗРЯДОВ (СДВИГАЕМ В СДВИГАТЕЛЕ), СРАВНИВАЕМ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+16
+>,SHF=LOG
+CONT ALUS=АВ,RА=У,RВ=DADR,FUNC=EXOR,Н,ALUD=Q
+CONT А=MQ,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;ПРОВЕРЯЕМ 17-32 РАЗРЯДЫ; Д.Б.= 0, Т.К.СДВИГ ЛОГИЧЕСКИЙ
+CONT А=MQ2,DSRC=PROM,ALUS=DА,RА=У,FUNC=AND,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CSH1C,МАР=РЕ,%TIK%
+;
+;
+CДBИ1D:ENTRY
+;===== СДВИГ ПОЛОВИНЫ CONST>0 ВПРАВО АРИФМЕТИЧЕСКИЙ(!)  НА 32 РАЗРЯДА + RLD
+;   А - CONST; У - РЕЗУЛЬТАТ, МЛАДШИЕ 32 РАЗРЯДА = РАЗМНОЖЕННОМУ ЗНАКУ!
+;   ОШИБКИ: 01 - ТЕ ТО В СРТАРШЕЙ ПОЛОВИНЕ; 02 - НЕ ТО В МЛАДШЕЙ
+;   ПРИ ОШ. 8-15 РГ.БОПП = Y, ГДЕ СТ.ПОЛОВИНА = CONST, МЛ. СДВИНУТА ВПРАВО НА 32
+;
+CJP А=PSSH1D,МАР=РЕ
+PSSH1D:CONT А=H1D,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ИЗ ПЗУ В РГ.А
+CSH1D:CONT А=С555,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+;ЗАПОМИНАЕМ ЗНАК
+;А - В У, 31 - В РГ/СЧЕТЧИК СУАМ
+CONT А=С31,DSRC=PROM,ЕСА,WRA,ARA=RG3,ЕСВ,BRA=RG3,RLD,ALUS=ZА,RА=А,Н
+>,ALUD=В,RВ=У
+;ЗАПОМИНАЕМ ЗНАК У МЛАДШИХ 32 РАЗРЯДОВ
+CONT ALUS=ZA,RA=Y,CEM
+;СДВИГ
+S1D:RРСТ А=S1D,МАР=РЕ,ALUS=ZВ,RВ=У,ALUD=RSB,SHMUX=ADNDL
+;ПРОВЕРЯЕМ СТАРШИЕ 32 РАЗРЯДА
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MNH,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=Q,CEN
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;ПРОВЕРЯЕМ МЛАДШИЕ 32 РАЗРЯДА, Д.Б.РАВНЫ РАЗМНОЖЕННОМУ ЗНАКУ, Т.Е. 0
+CONT ALUS=ZА,RА=У,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CSH1D,МАР=РЕ,%TIK%
+;
+;
+СДВИ1Е:ENTRY
+;===== СДВИГ ПОЛОВИНЫ CONST<0 (!) ВПРАВО АРИФМЕТИЧЕСКИЙ(!)  НА 32 РАЗРЯДА + RLD
+;   А - CONST; У - РЕЗУЛЬТАТ, МЛАДШИЕ 32 РАЗРЯДА = ЗНАКУ!
+;   ОШИБКИ: 01 - НЕ ТЕ 33-64 РАЗРЯДЫ; 02 - 1-32 РАЗРЯДЫ
+;   ПРИ ОШ. 8-15 РГ.БОПП = Y, ГДЕ СТ.ПОЛОВИНА = CONST, МЛ. СДВИНУТА ВПРАВО НА 32
+;
+CJP А=PSSH1E,МАР=РЕ
+PSSH1E:CONT А=Н1Е,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ИЗ ПЗУ В РГ.А,Y
+CSH1E:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,СЕМ
+CONT ALUS=ZА,RА=А,Н,ALUD=В,RВ=У
+;31 - В РГ/СЧЕТЧИК СУАМ
+PUSH А=С31,DSRC=PROM,ALUS=DZ,ALU,RLD
+;СДВИГ
+RFCT ALUS=ZВ,RВ=У,ALUD=RSB,SHMUX=ADNDL
+;ПРОВЕРЯЕМ СТАРШИЕ 32 РАЗРЯДА
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MNH,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=Q,CEN
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;ПРОВЕРЯЕМ МЛАДШИЕ 32 РАЗРЯДА, Д.Б.РАВНЫ ЗНАКУ: ЗНАК = 1, СРАВНИВАЕМ С FF..FF
+CONT А=МН,DSRC=PROM,ALUS=DА,RА=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CSH1E,МАР=РЕ,%TIK%
+;
+;
+CДBИ1F:ENTRY
+;===== СДВИГ ПОЛОВИНЫ CONST ВПРАВО ЦИКЛИЧЕСКИЙ 2 РАЗА НА 15 И 17 РАЗРЯДОВ + RLD
+;   А - CONST; У - РЕЗУЛЬТАТ
+;   ОШИБКИ: 01,02 - НЕ ТЕ ДАННЫЕ ПРИ 1 И 2 СРАВНЕНИИ
+;   ПРИ ОШ. 8-15 РГ.БОПП = Y, ГДЕ СТ.ПОЛОВИНА = CONST, МЛ. = 5...5 ИЛИ A...A
+;
+CJP А=PSSH1F,МАР=РЕ
+PSSH1F:CONT А=H1F,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ИЗ ПЗУ В РГ.А,Y
+CSH1F:CONT А=СААА,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+;14 - В РГ/СЧЕТЧИК СУАМ
+CONT А=С14,DSRC=PROM,ALUS=DZ,ALU,RLD
+CONT ALUS=ZА,RА=А,Н,ALUD=В,RВ=У
+S1F:RРСТ А=S1F,МАР=РЕ,ALUS=ZВ,RВ=У,ALUD=RSB,SHMUX=RSLRSL
+;ПРОВЕРЯЕМ МЛАДШИЕ 32 РАЗРЯДА НА НЕСОВПАДЕНИЕ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=NZ,%ТУРЕ%
+CONT А=С16,DSRC=PROM,ALUS=DZ,ALU,RLD
+;СДВИГАЕМ ЕЩЕ НА 17 РАЗРЯДОВ ЦИКЛИЧЕСКИ
+SH1F:RРСТ А=SH1F,МАР=РЕ,ALUS=ZВ,RВ=У,ALUD=RSB,SHMUX=RSLRSL
+;ПРОВЕРЯЕМ МЛАДШИЕ 32 РАЗРЯДА НА СОВПАДЕНИЕ!
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CSH1F,МАР=РЕ,%TIK%
+;
+;
+СДВИ20:ENTRY
+;===== СДВИГ ПОЛОВИНЫ CONST ВЛЕВО ЛОГИЧЕСКИЙ НА 16 РАЗРЯДОВ + RLD
+;   А - CONST; У - РЕЗУЛЬТАТ.
+;   ОШИБКИ: 01,02 - НЕСОВПАДЕНИЕ В СТАРШИХ, МЛАДШИХ РАЗРЯДАХ
+;   ПРИ ОШ. 8-15 РГ.БОПП = Y, ГДЕ СТ.ПОЛОВИНА = CONST, МЛ. СДВИНУТА ВЛЕВО НА 16
+;
+CJP А=PSSH20,МАР=РЕ
+PSSH20:CONT А=Н20,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ИЗ ПЗУ В РГ.А,Y
+CSH20:CONT А=СААА,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,Н,ALUD=В,RВ=У
+;15 - В РГ/СЧЕТЧИК СУАМ
+CONT А=С15,DSRC=PROM,ALUS=DZ,ALU,RLD
+SН20:RРСТ А=SН20,МАР=РЕ,ALUS=ZВ,RВ=У,ALUD=LSB,SHMUX=LSLSL
+;ПРОВЕРЯЕМ СТАРШИЕ 32 РАЗРЯДА
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MNH,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=Q,CEN
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;ВЫЧИСЛЯЕМ 1-32 РАЗРЯДЫ (СДВИГАЕМ В СДВИГАТЕЛЕ), СРАВНИВАЕМ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0-16
+>,SHF=LOG
+CONT ALUS=АВ,RА=У,RВ=DADR,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CSH20,МАР=РЕ,%TIK%
+;
+;
+СДВИ21:ENTRY
+;===== СДВИГ ПОЛОВИНЫ CONST ВЛЕВО АРИФМЕТИЧЕСКИЙ НА 32 РАЗРЯДА + RLD
+;   А - CONST; У - РЕЗУЛЬТАТ, ОСТАЕТСЯ ТОЛЬКО ЗНАКОВЫЙ РАЗРЯД!
+;   ВНИМАНИЕ! ПРОВЕРКА АРИФМЕТИЧЕСКОГО СДВИГА ВЛЕВО В МПС
+;   НЕ ИМЕЕТ СМЫСЛА, Т.К. ЗНАК ДОБАВЛАЕТСЯ ДОПОЛНИТЕЛЬНЫМ
+;   СДВИГОМ ВПРАВО! ДОСТАТОЧНО ПРОВЕРКИ ЛОГИЧЕСКОГО СДВИГА.
+;   ОШИБКИ: 01,02 - НЕСОВПАДЕНИЕ В СТАРШЕЙ, МЛАДШЕЙ ПОЛОВИНЕ
+;   ПРИ ОШ. 8-15 РГ.БОПП = Y, ГДЕ СТ.ПОЛОВИНА = CONST, МЛ. СДВИНУТА ВЛЕВО НА 32
+;
+CJP А=PSSH21,МАР=РЕ
+PSSH21:CONT А=Н21,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ИЗ ПЗУ В РГ.А,Y
+CSH21:CONT А=CF530,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,Н,ALUD=В,RВ=У
+;ЗАПОМИНАЕМ ЗНАК
+CONT А=В32,DSRC=PROM,ALUS=DА,RА=А,FUNC=AND,CEN,СЕМ
+;32 - В РГ/СЧЕТЧИК СУАМ
+CONT А=С32,DSRC=PROM,ALUS=DZ,ALU,RLD
+SН21:RРСТ А=SН21,МАР=РЕ,ALUS=ZВ,RВ=У,ALUD=LSB,SHMUX=LSLSL
+;ЗАДВИГАЕМ ОБРАТНО ЗНАК
+CONT ALUS=ZВ,RВ=У,ALUD=RSB,SHMUX=ADNDL
+;ПРОВЕРЯЕМ СТАРШИЕ 32 РАЗРЯДА
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MNH,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=Q,СЕМ
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/MZ,%ТУРЕ%
+;ПРОВЕРЯЕМ МЛАДШИЕ 32 РАЗРЯДА: СТАРШИЙ РАЗРЯД Д.Б.РАВЕН ЗНАКУ, ОСТАЛЬНЫЕ = 0
+CONT А=В32,DSRC=PROM,ALUS=DА,RА=А,FUNC=AND,ALUD=В,RВ=DADR
+CONT ALUS=АВ,RА=DADR,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CSH21,МАР=РЕ,%TIK%
+;
+;
+СДВИ22:ENTRY
+;===== СДВИГ ПОЛОВИНЫ CONST ВЛЕВО ЦИКЛИЧЕСКИЙ 2 РАЗА НА 15 И 17 РАЗРЯДОВ + RLD
+;   А - CONST; У - РЕЗУЛЬТАТ
+;   ОШИБКИ: 01,02 - НЕ ТОТ РЕЗУЛЬТАТ ПОСЛЕ 1,2 СДВИГОВ
+;   ПРИ ОШ. 8-15 РГ.БОПП = Y, ГДЕ СТ.ПОЛОВИНА = CONST, МЛ. = 5...5 ИЛИ A...A
+;
+CJP А=PSSH22,МАР=РЕ
+PSSH22:CONT А=Н22,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ИЗ ПЗУ В РГ.А,Y
+CSH22:CONT А=СААА,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,Н,ALUD=В,RВ=У
+;14 - В РГ/СЧЕТЧИК СУАМ
+CONT А=С14,DSRC=PROM,ALUS=DZ,ALU,RLD
+SН22:RРСТ А=SН22,МАР=РЕ,ALUS=ZВ,RВ=У,ALUD=LSB,SHMUX=RSLRSL
+;ПРОВЕРЯЕМ МЛАДШИЕ 32 РАЗРЯДА НА НЕСОВПАДЕНИЕ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CONT %CLRTYP%
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=NZ,%ТУРЕ%
+CONT А=С16,DSRC=PROM,ALUS=DZ,ALU,RLD
+;СДВИГАЕМ ЕЩЕ НА 17 РАЗРЯДОВ ЦИКЛИЧЕСКИ
+S22:RРСТ А=S22,МАР=РЕ,ALUS=ZВ,RВ=У,ALUD=LSB,SHMUX=RSLRSL
+;ПРОВЕРЯЕМ МЛАДШИЕ 32 РАЗРЯДА НА СОВПАДЕНИЕ!
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CSH22,МАР=РЕ,%TIK%
+;
+;===== ПОСЛЕДНЯЯ КОМАНДА БОЛЬШОГО ТЕСТА
+;
+CJP A=CMPU5,MAP=PE
+;
+;     П/П ДЛЯ ТЕСТОВ
+;     ==============
+;
+;К БМПУ8
+;2-Я, INTR=3
+SUBR1:CJS А=SUBR2,МАР=РЕ,%ТУРЕ%
+CRTN
+CJP А=ERRTST,МАР=РЕ
+;3-Я, INTR=4
+SUBR2:CRTN COND=EMLRG,%ТУРЕ%
+CRTN IСС
+CJS А=SUBR3,МАР=РЕ
+CRTN
+CJP А=ERRTST,МАР=РЕ
+;4-Я, INTR=5
+SUBR3:CJS А=SUBR4,МАР=РЕ,%ТУРЕ%
+CRTN
+CJP А=ERRTST,МАР=РЕ
+;5-Я, INTR=6
+SUBR4:CJS А=SUBR5,МАР=РЕ,%ТУРЕ%
+CRTN IСС
+CRTN
+CJP А=ERRTST,МАР=РЕ
+SUBR5:CRTN
+CJP А=ERRTST,МАР=РЕ
+;
+;К БМПУ9
+SUB1:CJS А=SUB2,МАР=РЕ
+CJP А=ERRTST,МАР=РЕ
+;ОБХОДИМ АДРЕС ВОЗВРАТА, INTR=1-20
+SUB2:CJPP А=S2,МАР=РЕ,%ТУРЕ%
+CJP А=ERRTST,МАР=РЕ
+S2:CRTN
+;2
+SUBE1:CJS А=SUBE2,МАР=РЕ
+CJP А=ERRTST,МАР=РЕ
+;3
+SUBE2:CJS А=SUBE3,МАР=РЕ
+CJP А=ERRTST,МАР=РЕ
+;4
+SUBE3:CJS А=SUBE4,МАР=РЕ
+CJS А=ERRTST,МАР=РЕ
+;5
+SUBE4:CJS А=SUBE5,МАР=РЕ
+CJS А=ERRTST,МАР=РЕ
+;ВОЗВРАТ, INTR=21-25
+SUBE5:CJPP А=R1,МАР=РЕ,%ТУРЕ%
+CJS А=ERRTST,МАР=РЕ
+R1:CJPP А=R2,МАР=РЕ,%ТУРЕ%
+CJS А=ERRTST,МАР=РЕ
+R2:CJPP А=R3,МАР=РЕ,%ТУРЕ%
+CJS А=ERRTST,МАР=РЕ
+R3:CJPP А=R4,МАР=РЕ,%ТУРЕ%
+CJS А=ERRTST,МАР=РЕ
+R4:CJPP А=ERRTST,МАР=РЕ,COND=EMLRG
+CJPP А=ERRTST,МАР=РЕ,IСС
+CRTN
+;
+;ОТ БМПУЕ
+;2
+SU1:CJS А=SU2,МАР=РЕ
+CJP А=ERRTST,МАР=РЕ
+;3
+SU2:CJS А=SU3,МАР=РЕ
+CJP А=ERRTST,МАР=РЕ
+;4
+SU3:CJS А=SU4,МАР=РЕ
+CJP А=ERRTST,МАР=РЕ
+;5
+SU4:CJS А=SU5,МАР=РЕ
+CJP А=ERRTST,МАР=РЕ
+SU5:LDCT А=0,МАР=РЕ
+;5; INTR=3
+TWB А=RR1,МАР=РЕ,COND=EMLRG,%ТУРЕ%
+CJP А=ERRTST,МАР=РЕ
+;4; INTR=4
+RR1:TWB А=RR2,МАР=РЕ,IСС,%ТУРЕ%
+CJP А=ERRTST,МАР=РЕ
+;3; INTR=5
+RR2:TWB А=ERRTST,МАР=РЕ,%ТУРЕ%
+;2; INTR=6
+TWB А=ERRTST,МАР=РЕ,COND=EMLRG,IСС,%ТУРЕ%
+;1
+CRTN
+END
+*NO LIST
+INILD:PROG;
+;===== СПИСОК ЗАГРУЖАЕМЫХ ПРОГРАММ:
+EXTERN MPCONT,INI
+END
+*END
+*NO LIST
+*CALL MICLOA:INILD
+*CALL MPROM
+*END F
+*END FILE

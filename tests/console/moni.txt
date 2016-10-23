@@ -1,0 +1,810 @@
+$OT(3)
+$SB
+$CO
+$TYPE ROM
+$CP
+$MOD86
+monitor:do;
+declare
+	int$vector(5)		pointer;
+declare
+	monitor$stackptr	word,
+	monitor$stackbase	word;
+declare
+	copyright(*)		byte	data('(C) 1978 INTEL CORP');
+declare
+	brk1$flag		byte,
+	brk1$save		byte,
+	char			byte,
+	check$sum		byte,
+	i			byte,
+	end$off			word,
+	word$mode		byte,
+	last$command		byte;
+declare
+	true			literally	'0ffh',
+	false			literally	'000h',
+	break$inst		literally	'0cch',
+	step$trap		literally	'0100h',
+	user$init$sp		literally	'0100h',
+	go$command		literally	'2',
+	ss$command		literally	'3',
+	standard$len		literally	'16',
+	max$delay		literally	'10000';
+declare
+	kb$signon(*)		byte
+				data
+					(5bh,86h,00h,7dh,7fh,00h,00h),
+	sio$break$msg(*)	byte
+				data
+					('br ',0),
+	ascii(*)		byte
+				data	('0123456789ABCDEF'),
+	sio$signon(*)		byte
+				data
+					(0dh,0ah,'SDK-86 MONITOR, V1.2',0),
+	sio$cmnd(*)		byte
+				data
+					('SXGNMDIORW');
+declare
+	sio$stat$port		literally	'0d3h',
+	sio$data$port		literally	'0d1h',
+	ctc$stat$port		literally	'0dfh',
+	ctc$data$port		literally	'0ddh',
+	ctc$8253$mode		literally	'0b6h',
+	ctc$8253$lct		literally	'0b6h',
+	ctc$8253$hct		literally	'0b0h',
+	sio$8251$reset		literally	'065h',
+	sio$8251$mode		literally	'0cfh',
+	sio$8251$cmnd		literally	'025h',
+	sio$8251$dtr$on		literally	'027h',
+	sio$dsrdy		literally	'80h',
+	sio$rxrdy		literally	'02h',
+	sio$txrdy		literally	'01h';
+declare
+	ascr			literally	'0dh',
+	aslf			literally	'0ah',
+	asbl			literally	'20h';
+declare
+	memory$arg1$ptr		pointer,
+	arg1	structure	(off word, seg word)
+		at (@memory$arg1$ptr),
+	memory$arg1 based memory$arg1$ptr byte,
+	memory$word$arg1 based memory$arg1$ptr word,
+	memory$arg3$ptr		pointer,
+	arg3	structure	(off word, seg word)
+		at (@memory$arg3$ptr),
+	memory$arg3 based memory$arg3$ptr byte,
+	memory$brk1$ptr		pointer,
+	brk1	structure	(off word, seg word)
+		at (@memory$brk1$ptr),
+	memory$brk1 based memory$brk1$ptr byte,
+	memory$csip$ptr		pointer,
+	csip	structure	(off word, seg word)
+		at (@memory$csip$ptr),
+	memory$csip based memory$csip$ptr byte,
+	memory$user$stack$ptr	pointer,
+	userstack structure	(off word, seg word)
+    at (@memory$userstack$ptr),
+	memory$userstack based memory$userstack$ptr word;
+declare
+	reg(*)		byte data
+	    ('AXBXCXDXSPBPSIDICSDSSSESIPFL'),
+	reg$index	word,
+	reg$sav(14)	word,
+	reg$ord(*)	byte data
+	   (7,6,1,3,2,0,9,11,12,8,13),
+	sp		literally 'reg$sav( 4)',
+	bp		literally 'reg$sav( 5)',
+	cs		literally 'reg$sav( 8)',
+	ds		literally 'reg$sav( 9)',
+	ss		literally 'reg$sav(10)',
+	es		literally 'reg$sav(11)',
+ 	ip		literally 'reg$sav(12)',
+	fl		literally 'reg$sav(13)';
+declare
+	start$addr literally '00a8h',
+	boot1(*)   byte at (0ffff0h) data (0eah),
+	boot2(*)   word at (0ffff1h) data (start$addr),
+	boot3(*)   word at (0ffff3h) data (0ff00h);
+declare
+	boot4(*)	word data (0e990h,start$addr-4);
+declare
+	block$8089	word	at(0ffff6h) data (00001h),
+	block$8089$ptr  pointer;
+declare
+	f	literally '0ffh',
+	fill1(*) byte at (0fffdbh) data (f,f,f,f,f),
+	fill2(*) byte at (0fffe0h) data (f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f),
+	fill3(*) byte at  (0ffff5h) data (f),
+	fill4(*) byte at (0ffffch) data (f,f,f,f);
+sio$char$rdy:
+	procedure byte;
+	if (input(sio$stat$port) and sio$rxrdy)=0 then return false;
+	return true;
+	end;
+sio$check$control$char:
+	procedure;
+	char = input(sio$data$port) and 07fh;
+	if char=13h then
+	   do while char<>11h;
+	     if sio$char$rdy then
+		do;
+		char = input(sio$data$port) and 07fh;
+		if char=03h then goto error;
+		end;
+            end;
+	else if char = 03h then goto error;
+	end sio$check$control$char;
+sio$out$char:
+	procedure(c);
+		declare c byte;
+		if sio$char$rdy then call sio$check$control$char;
+		do while (input(sio$stat$port) and sio$txrdy)=0;end;
+		output(sio$data$port) =c;
+	end;
+sio$get$char:
+procedure;
+	do while (input(sio$stat$port) and sio$rxrdy)=0;end;
+	char = input(sio$data$port) and 07fh;
+	if char>=asbl then call sio$out$char(char);
+end;
+sio$out$byte:
+procedure(b);
+	declare b byte;
+	call sio$out$char(ascii(shr(b,4) and 0fh));
+	call sio$out$char(ascii(b and 0fh));
+	check$sum = check$sum - b;
+end;
+sio$out$word:
+procedure(w);
+	declare w word;
+	call sio$out$byte(high(w));
+	call sio$out$byte(low(w));
+end;
+sio$out$blank:
+procedure;
+	call sio$out$char(asbl);
+end;
+sio$out$string:
+procedure(ptr);
+	declare ptr pointer, str based ptr(1) byte;
+	i = 0;
+	do while str(i) <> 0;
+		call sio$out$char(str(i));
+		i = i + 1;
+	end;
+end;
+sio$out$header:
+procedure(length,load$addr,rec$type);
+	declare (length,rec$type) byte, load$addr word;
+	call sio$out$char(':');
+	check$sum = 0;
+	call sio$out$byte(length);
+	call sio$out$word(load$addr);
+	call sio$out$byte(rec$type);
+end;
+sio$8251$settling$delay:
+procedure;
+	i = shr(0ffh,0ffh);
+end;
+sio$valid$hex:
+procedure(h) byte;
+	declare h byte;
+	do i = 0 to last(ascii);
+		if h = ascii(i) then return true;
+	end;
+	return false;
+end;
+sio$hex:
+procedure(c) word;
+	declare c byte;
+	if c <= '9' then return double(c-30h);
+	else return double(c-37h);
+end;
+sio$valid$reg$first:
+procedure byte;
+	do i = 0 to 26 by 2;
+		if char = reg(i) then return true;
+	end;
+	return false;
+end;
+sio$valid$reg:
+procedure(c1,c2) byte;
+	declare (c1,c2) byte;
+	do reg$index = 0 to 13;
+		if c1=reg(reg$index*2) and c2=reg(reg$index*2+1) then
+			return true;
+	end;
+	return false;
+end;
+sio$crlf:
+procedure;
+	call sio$out$char(ascr);
+	call sio$out$char(aslf);
+end;
+sio$test$word$mode:
+procedure;
+	word$mode = false;
+	call sio$get$char;
+	if char = 'W' then
+	do;
+		word$mode = true;
+		call sio$get$char;
+	end;
+	if char = asbl then
+		call sio$get$char;
+end;
+sio$scan$blank:
+procedure;
+	call sio$get$char;
+	if char = asbl then
+		call sio$get$char;
+end;
+sio$get$word:
+procedure word;
+	declare (save,w) word, (oper,t) byte;
+	oper = '+';
+	w = 0;
+	do while true;
+		t = char;
+		save = 0;
+		if sio$valid$reg$first then
+		do;
+			call sio$get$char;
+			if sio$valid$reg(t,char) then
+			do;
+				save = reg$sav(reg$index);
+				call sio$get$char;
+				goto eval;
+			end;
+			else
+				save = sio$hex(t);
+		end;
+		if not(sio$valid$hex(t)) then goto error;
+		do while sio$valid$hex(char);
+			save = shl(save,4) + sio$hex(char);
+			call sio$get$char;
+		end;
+eval:		if oper = '+' then
+			w = w + save;
+		else
+			w = w - save;
+		if char = ascr or char = ':' or char = ',' then
+			return w;
+		if char = '+' or char = '-' then
+			oper = char;
+		else goto error;
+		call sio$get$char;
+	end;
+end;
+sio$get$addr:
+procedure(ptr,default$base);
+	declare ptr pointer, default$base word,
+		arg based ptr structure (off word, seg word);
+	arg.seg = default$base;
+	arg.off = sio$get$word;
+	if char = ':' then
+	do;
+		call sio$get$char;
+		arg.seg = arg.off;
+		arg.off = sio$get$word;
+		if char = ':' then goto error;
+	end;
+end;
+sio$update$ip:
+procedure;
+	call sio$out$blank;
+	call sio$out$word(ip);
+	csip.seg = cs;
+	csip.off = ip;
+	call sio$out$char('-');
+	call sio$out$blank;
+	call sio$out$byte(memory$csip);
+	call sio$out$blank;
+	call sio$get$char;
+	if char<>',' and char<>ascr then call sio$get$addr(@csip,cs);
+end;
+sio$read$char:
+procedure byte;
+	declare delay word;
+loop:
+	output(sio$stat$port) = sio$8251$dtr$on;
+	delay = 0;
+	do while (input(sio$stat$port) and sio$dsrdy) = 0;
+		delay = delay + 1;
+		if delay >= max$delay then
+		do;
+			output(sio$stat$port) = sio$8251$cmnd;
+			goto error;
+		end;
+	end;
+	output(sio$stat$port) = sio$8251$cmnd;
+	do while (input(sio$stat$port) and sio$rxrdy)=0; end;
+	call sio$check$control$char;
+	if char = 11h then goto loop;
+	return char;
+end;
+sio$read$byte:
+procedure byte;
+	declare t byte;
+	t = low(sio$hex(sio$read$char));
+	t = shl(t,4) + low(sio$hex(sio$read$char));
+	check$sum = check$sum + t;
+	return t;
+end;
+sio$read$word:
+procedure word;
+	declare t byte;
+	t = sio$read$byte;
+	return shl(double(t),8) + double(sio$read$byte);
+end;
+save$registers:
+procedure;
+	bp = memory$userstack;
+	userstack.off = userstack.off + 4;
+	do i = 0 to 10;
+		reg$sav(reg$ord(i)) = memory$userstack;
+		userstack.off = userstack.off + 2;
+	end;
+	ss = userstack.seg;
+	sp = userstack.off;
+end;
+restore$execute:
+procedure;
+	declare restore$execute$code(*) byte data
+	(08bh,0ech,
+	 08bh,046h,002h,
+	 08bh,05eh,004h,
+	 08eh,0d0h,
+	 08bh,0e3h,
+	 05dh,
+	 05fh,
+	 05eh,
+	 05bh,
+	 05ah,
+	 059h,
+	 058h,
+	 01fh,
+	 007h,
+	 0cfh),
+	restore$execute$code$ptr word data (.restore$execute$code);
+	userstack.seg = ss;
+	userstack.off = sp;
+	do i = 0 to 10;
+		userstack.off = userstack.off - 2;
+		memory$userstack = reg$sav(reg$ord(10-i));
+	end;
+	userstack.off = userstack.off - 2;
+	memory$userstack = bp;
+	call restore$execute$code$ptr(userstack.off,userstack.seg);
+end;
+interrupt1$entry:
+procedure interrupt 1;
+	userstack.off = stackptr;
+	userstack.seg =  stackbase;
+	stackptr = monitor$stackptr;
+	stackbase = monitor$stackbase;
+	call save$registers;
+	fl = fl and (not step$trap);
+	if last$command <> ss$command then
+		call restore$execute;
+	call sio$crlf;
+	call sio$update$ip;
+	if char = ',' then
+	do;
+		ip = csip.off;
+		cs = csip.seg;
+		fl = fl or step$trap;
+		call restore$execute;
+	end;
+	if char <> ascr then goto error;
+	goto next$command;
+end;
+interrupt3$entry:
+procedure interrupt 3;
+	userstack.off = stackptr;
+	userstack.seg = stackbase;
+	stackptr = monitor$stackptr;
+	stackbase = monitor$stackbase;
+	call save$registers;
+	call sio$crlf;
+	goto after$interrupt;
+end;
+init$int$vector:
+procedure(int$vector$ptr,int$routine$offset);
+	declare int$vector$ptr pointer, int$routine$offset word,
+		vector based int$vector$ptr structure (off word, seg word),
+	correction literally '19h',
+	init$int$vector$code(*) byte data
+	(055h,
+	 08bh,0ech,
+	 08ch,0c8h,
+	 0c4h,05eh,004h,
+	 026h,089h,007h,
+ 	 05dh,
+	 0c2h,004h,000h),
+	init$int$vector$code$ptr word data(.init$int$vector$code);
+	call init$int$vector$code$ptr(@vector.seg);
+	vector.off = int$routine$offset - correction;
+end;
+sio$go:
+procedure;
+	call sio$update$ip;
+	if char = ',' then
+	do;
+		call sio$get$char;
+		call sio$get$addr(@brk1,csip.seg);
+		if char <> ascr then goto error;
+		brk1$save = memory$brk1;
+		memory$brk1 = break$inst;
+		if memory$brk1 <> break$inst then goto error;
+		brk1$flag = true;
+	end;
+	else
+		if char <> ascr then goto error;
+	call sio$crlf;
+	ip = csip.off;
+	cs = csip.seg;
+	fl = fl and (not step$trap);
+	call restore$execute;
+end;
+sio$single$step:
+procedure;
+	call sio$update$ip;
+	if char <> ',' then goto error;
+	ip = csip.off;
+	cs = csip.seg;
+	fl = fl or step$trap;
+	call restore$execute;
+end;
+sio$exam$mem:
+procedure;
+	declare w word;
+	call sio$test$word$mode;
+	call sio$get$addr(@arg1,cs);
+	if char <> ',' then goto error;
+	do while true;
+		call sio$out$blank;
+		if word$mode then
+			call sio$out$word(memory$word$arg1);
+		else
+			call sio$out$byte(memory$arg1);
+		call sio$out$char('-');
+		call sio$out$blank;
+		call sio$get$char;
+		if char = ascr then return;
+		if char <> ',' then
+		do;
+			w = sio$get$word;
+			if (char<>',') and (char<>ascr) then goto error;
+			if word$mode then
+			do;
+				memory$word$arg1 = w;
+				if memory$word$arg1<>w then goto error;
+			end;
+			else
+			do;
+				memory$arg1 = low(w);
+				if memory$arg1<>low(w) then goto error;
+			end;
+		end;
+		if char = ascr then return;
+		if word$mode then
+			arg1.off = arg1.off + 2;
+		else
+			arg1.off = arg1.off + 1;
+		call sio$crlf;
+		call sio$out$word(arg1.off);
+	end;
+end;
+sio$exam$reg:
+procedure;
+	declare (t,i) byte, save word;
+	call sio$scan$blank;
+	if char = ascr then
+	do;
+		call sio$crlf;
+		do i = 0 to 13;
+			call sio$out$blank;
+			call sio$out$char(reg(i*2));
+			call sio$out$char(reg(i*2+1));
+			call sio$out$char('=');
+			call sio$out$word(reg$sav(i));
+			if i = 6 then call sio$crlf;
+		end;
+		return;
+	end;
+	if not(sio$valid$reg$first) then goto error;
+	t = char;
+	call sio$get$char;
+	if not(sio$valid$reg(t,char)) then goto error;
+	i = reg$index;
+	do while true;
+		call sio$out$char('=');
+		call sio$out$word(reg$sav(i));
+		call sio$out$char('-');
+		call sio$out$blank;
+		call sio$get$char;
+		if char <> ',' and char <> ascr then
+		do;
+			save = sio$get$word;
+			if (char<>',') and (char<>ascr) then goto error;
+			reg$sav(i) = save;
+		end;
+		if char = ascr or i = 13 then return;
+		i = i + 1;
+		call sio$crlf;
+		call sio$out$char(reg(i*2));
+		call sio$out$char(reg(i*2+1));
+	end;
+end;
+sio$move:
+procedure;
+	call sio$scan$blank;
+	call sio$get$addr(@arg1,cs);
+	if char <> ',' then goto error;
+	call sio$get$char;
+	end$off = sio$get$word;
+	if end$off < arg1.off then goto error;
+	if char <> ',' then goto error;
+	call sio$get$char;
+	call sio$get$addr(@arg3,cs);
+	if char <> ascr then goto error;
+	call sio$crlf;
+loop:
+	memory$arg3 = memory$arg1;
+	if memory$arg3 <> memory$arg1 then goto error;
+	if arg1.off = end$off then return;
+	arg1.off = arg1.off + 1;
+	arg3.off = arg3.off + 1;
+	goto loop;
+end;
+sio$display:
+procedure;
+	declare t byte;
+	call sio$test$word$mode;
+	call sio$get$addr(@arg1,cs);
+	if char = ascr then
+		end$off = arg1.off;
+	else
+	do;
+		if char <> ',' then goto error;
+		call sio$get$char;
+		end$off = sio$get$word;
+		if end$off < arg1.off then goto error;
+		if char <> ascr then goto error;
+	end;
+newline:
+	call sio$crlf;
+	call sio$out$word(arg1.off);
+loop:	call sio$out$blank;
+	if word$mode then
+	do;
+		call sio$out$word(memory$word$arg1);
+		if arg1.off = end$off then return;
+		arg1.off = arg1.off + 1;
+	end;
+	else
+		call sio$out$byte(memory$arg1);
+	if arg1.off >= end$off then return;
+	arg1.off = arg1.off + 1;
+	t = arg1.off and 000fh;
+	if t=0 or (word$mode and t=1) then goto newline;
+	goto loop;
+end;
+sio$input:
+procedure;
+	declare port word;
+	call sio$test$word$mode;
+	port = sio$get$word;
+loop:
+	if char <>',' then goto error;
+	call sio$crlf;
+	if word$mode then
+		call sio$out$word(inword(port));
+	else
+		call sio$out$byte(input(port));
+	call sio$get$char;
+	if char = ascr then return;
+	goto loop;
+end;
+sio$output:
+procedure;
+	declare (datum,port) word;
+	call sio$test$word$mode;
+	port = sio$get$word;
+	if char <> ',' then goto error;
+	call sio$get$char;
+loop:
+	datum = sio$get$word;
+	if char = ':' then goto error;
+	if word$mode then
+		outword(port) = datum;
+	else
+		output(port) = low(datum);
+	if char = ',' then
+	do;
+		call sio$crlf;
+		call sio$out$char('-');
+		call sio$out$blank;
+		call sio$get$char;
+		if char <> ascr then goto loop;
+	end;
+end;
+sio$write:
+procedure;
+	declare (start$rec,mode$8086) byte, (len,index) word;
+	call sio$get$char;
+	mode$8086 =true;
+	if char = 'X' then
+	do;
+		mode$8086 = false;
+		call sio$get$char;
+	end;
+	if char = asbl then call sio$get$char;
+	call sio$get$addr(@arg1,cs);
+	if char <> ',' then goto error;
+	call sio$get$char;
+	end$off = sio$get$word;
+	if end$off <> arg1.off then goto error;
+	if char <> ascr then
+	do;
+		start$rec = true;
+		call sio$get$char;
+		call sio$get$addr(@arg3,cs);
+	end;
+	else
+	do;
+		start$rec = false;
+		arg3.off = 0;
+	end;
+	if char <> ascr then goto error;
+	call sio$crlf;
+	do i = 1 to 60;
+		call sio$out$char(0);
+	end;
+	call sio$crlf;
+	if mode$8086 then
+	do;
+		if start$rec then
+		do;
+			call sio$out$header(04,0,03);
+			call sio$out$word(arg3.seg);
+			call sio$out$word(arg3.off);
+			call sio$out$byte(check$sum);
+			call sio$crlf;
+			arg3.off = 0;
+		end;
+		call sio$out$header(02,0,02);
+		call sio$out$word(arg1.seg);
+		call sio$out$byte(check$sum);
+		call sio$crlf;
+	end;
+	len = standard$len;
+loop:	index = end$off - arg1.off;
+	if index<>standard$len then len = index + 1;
+	call sio$out$header(len,arg1.off,00);
+	do i = 1 to len;
+		call sio$out$byte(memory$arg1);
+		arg1.off = arg1.off + 1;
+	end;
+	call sio$out$byte(check$sum);
+	call sio$crlf;
+	if end$off <> arg1.off-1 then goto loop;
+	call sio$out$header(00,arg3.off,01);
+	call sio$out$byte(check$sum);
+	call sio$crlf;
+	do i = 0 to 60;
+		call sio$out$char(0);
+	end;
+end;
+sio$read:
+procedure;
+	declare bias word, (rec$type,len,i,t) byte, offset word;
+	bias = 0;
+	arg1.seg = 0;
+	call sio$scan$blank;
+	if char <> ascr then bias = sio$get$word;
+	if char <> ascr then goto error;
+	call sio$crlf;
+loop:
+	do while sio$read$char <> ':'; end;
+	check$sum = 0;
+	len = sio$read$byte;
+	offset = sio$read$word;
+	arg1.off = offset + bias;
+	rec$type = sio$read$byte;
+	if rec$type = 03 then
+	do;
+		cs = sio$read$word;
+		ip = sio$read$word;
+	end;
+	if rec$type = 02 then
+		arg1.seg = sio$read$word;
+	if rec$type = 01 then
+		if offset <> 0 then ip = offset;
+	if rec$type = 00 then
+	do i = 1 to len;
+		t,memory$arg1 = sio$read$byte;
+		if memory$arg1 <> t then goto error;
+		arg1.off = arg1.off + 1;
+	end;
+	t = sio$read$byte;
+	if check$sum <> 0 then goto error;
+	if rec$type <> 01 and len <> 0 then goto loop;
+	call sio$out$char(0);
+	call sio$out$char(0);
+end;
+/************************************************************
+	     hia bejinnt diss mehn - projramm
+************************************************************/
+	disable;
+	output(ctc$stat$port) = ctc$8253$mode;
+	output(ctc$data$port) = ctc$8253$lct;
+	output(ctc$data$port) = ctc$8253$hct;
+	output(sio$stat$port) = sio$8251$reset;
+	call sio$8251$settling$delay;
+	output(sio$stat$port) = 25h;
+	call sio$8251settling$delay;
+	output(sio$stat$port) = sio$8251$reset;
+	call sio$8251$settling$delay;
+	output(sio$stat$port) = sio$8251$mode;
+	call sio$8251$settling$delay;
+	output(sio$stat$port) = sio$8251$cmnd;
+	call sio$8251$settling$delay;
+	call sio$out$string(@sio$signon);
+	cs,ss,ds,es,fl,ip = 0;
+	sp = user$init$sp;
+	call init$int$vector(@int$vector(1),.interrupt1$entry);
+	call init$int$vector(@int$vector(2),.interrupt3$entry);
+	call init$int$vector(@int$vector(3),.interrupt3$entry);
+	brk1$flag = false;
+	monitor$stackptr = stackptr;
+	monitor$stackbase = stackbase;
+next$command:
+	call sio$crlf;
+	call sio$out$char(0);
+	call sio$out$char('.');
+	call sio$get$char;
+	do i = 0 to last(sio$cmnd);
+		if char = sio$cmnd(i) then goto dispatch;
+	end;
+	goto error;
+dispatch:
+	last$command = i;
+	do case i;
+		call sio$exam$mem;
+		call sio$exam$reg;
+		call sio$go;
+		call sio$single$step;
+		call sio$move;
+		call sio$display;
+		call sio$input;
+		call sio$output;
+		call sio$read;
+		call sio$write;
+	end;
+	goto next$command;
+error:
+	call sio$out$char('#');
+	goto next$command;
+after$interrupt:
+	if brk1$flag then
+	do;
+		memory$brk1 = brk1$save;
+		brk1$flag = false;
+		if ((ip-1) and 000fh) = (brk1.off and 000fh) and
+			(shr(ip-1,4)+cs) = (shr(brk1.off,4)+brk1.seg) then
+		do;
+			ip = ip - 1;
+			call sio$out$string(@sio$break$msg);
+		end;
+	end;
+	call sio$out$char('@');
+	call sio$out$word(cs);
+	call sio$out$char(':');
+	call sio$out$word(ip);
+	goto next$command;
+end monitor;
+EOF

@@ -1,0 +1,3341 @@
+*NАМЕ 2:SECTEST
+*             ПЛАТА УПРО
+*       ПОИСК ЛЕВОЙ ЕДИНИЦЫ
+*       РНГ, ОЗУ МОДИФИКАТОРОВ (КРОМЕ MNSA=IRA)
+*       РНП+АИСП+РФС+РП+ОЗУ БББ+ПС
+*       БОИ ТЕГА
+*       РЕГИСТР КОП АРБИТРА
+*       ЧАСЫ,ТАЙМЕР СВ
+*       ТГ. СВЯЗИ С ПП
+*TIME:01.00
+*DISC:664/SYSTEM,microb
+*FILE:arc,30,W
+*file:lib,67,r
+*LIBRA:23,25
+*NО LIST
+*CALL ficMEMORY
+*PERSO:67
+*CALL MICROB
+;
+;СПИСОК ВОЗМОЖНЫХ ЗНАЧЕНИЙ ПОЛЕЙ:
+;--------------------------------
+;
+FLIST SQI=JZ,CJS,JМАР,CJP,PUSH,JSRP,CJV,JRP,RFCT,RРСТ,CRTN,CJPP,LDCT,LООР,
+      CONT,TWB
+FLIST МАР=РЕ,GRP,МЕ
+FLIST ALUD=Q,NО,ВА,В,RSBQ,RSB,LSBQ,LSB
+FLIST FUNC=ADD,SUBR,SUBS,OR,AND,NOTRS,EXOR,EXNOR
+FLIST ALUS=AQ,АВ,ZQ,ZВ,ZА,DА,DQ,DZ
+FLIST RА=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST RВ=А,У,INTR,РС,РССОРУ,DADR,HALF,ВУТЕ,EXPN,MANT,WR6,WR5,WR4,WR3,WR2,WR1
+FLIST CI=CI0,CI1,CIX,CIC
+FLIST SHMUX=LSLSL,NSNSL,ASLLS,NDNS,CDLDL,ADNDL,LDLD,LDLND,RSLRSL,RSSRSS,
+      RSRS,IDCS,RDSRDS,RDLRDL,VDCD,RDRD
+FLIST SТОРС=NС,NN,NZ,NV,/NС,/NN,/NZ,/NV,МС,MN,MZ,MV,/МС,/MN,/MZ,/MV,
+      IС,IN,IZ,IV,/IС,/IN,/IZ,/IV,SETNC,SETNN,SETNZ,SETNV,
+      УТОМ,MTON,SЕТМ,SETN,MCN,NСМ,CLRM,CLRN,INVM,CLRNC,CLRNN,CLRNZ,CLRNV
+FLIST MNSA=U,IRA,МР
+FLIST MODNM=М0,М1,М2,М3,М4,М5,М6,М7,М8,М9,М10,М11,М12,М13,М14,SР,С,RR,
+      RRR,SPRADR,СТТ,ACL,ACR,YCL,YCR,РСС,РССС,CTL,CTR,SVFA,PROCNC,MREZ
+FLIST DSRC=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MULRZ1,MULRZ2,СОМА,SHIFT,ОРС,
+      LOS,PROM
+FLIST RTIME=RТ
+FLIST WTIME=WТ
+FLIST YDST=MODGN,PROCN,CNT,PHYSPG,ARBOPC,MUL1,MUL2,ADRREG,PSHIFT,CCLR,BTRCLR
+FLIST SHF=CICL,LOG,ARIPH,EMULF
+FLIST ARBI=CCRD,CCWR,DCRD,DCWR,FЕТСН,DRD,DWR,RDMWR,BTRWR,BTRRD,BICLR,BIRD
+FLIST CYSTR=NТ3,NТ4,NТ5,NТ6,NТ7,NТ8,NТ9,NТ10
+FLIST BRA=RG0,RG1,RG2,RG3
+FLIST ARA=RG0,RG1,RG2,RG3
+FLIST YDEV=PHYSAD,RADRR,PSMEM,МРМЕМ,SТОРМ0,SТОРМ1
+FLIST YDEVT=ECBTAG
+FLIST DDEV=ВВ,MODB,CLRCD,STATUS,РРМЕМ0,РРМЕМ1
+FLIST YDTIM=CTIME
+FLIST FFCNT=LOGGRP,MULGRP,ADDGRP,SЕТС,CLRRCB,SETRCB,CLRJMP,SETJMP,
+      SETEI,CLREI,CLRTR0,SETTR0,CLRTR1,SETTR1,CLRCT,CLRCTT,CLRTKK,SЕТТКК,
+      STRTLD,СНТКК,SETHLT,CLRINT,CLRRUN,LDCPMP,PRGINT,EXTINT,SETNR,SETER
+FLIST MPADR=ADRB1,ADRB2,ADRB3,ADRB4,DАТАВ1,DАТАВ2,DАТАВ3,DАТАВ4,
+      DАТАВ5,DАТАВ6,DАТАВ7,DАТАВ8,INFB1,INFB2,FМР,FСР
+FLIST COND=YES,NORMB,RNDB,OVRIB,BNB,OVRFTB,DRG,EMLRG,RСВ,СВ,CEMLRG,
+      СТ,TR1,INTSTP,RUN,NMLRDY,INT,FULMEM,ARBRDY,СРМР,IR15,ТККВ
+;
+;СПИСОК ОШИБОЧНЫХ КОМБИНАЦИЙ ПОЛЕЙ
+;---------------------------------
+;
+;ШИНА D:
+;-------
+;
+;ИСТОЧНИКИ: DSRC
+;           CSM-WЕМ
+;           ЕСА-WRA
+;           DDEV-WRD
+;
+СНЕСК DSRC+CSM-WЕМ
+СНЕСК DSRC+ЕСА-WRA
+СНЕСК DSRC+DDEV-WRD
+СНЕСК CSM-WЕМ+ЕСА-WRA
+СНЕСК CSM-WЕМ+DDEV-WRD
+СНЕСК ЕСА-WRA+DDEV-WRD
+;
+;ШИНА У:
+;-------
+;
+;ИСТОЧНИКИ: YDEVT-WRB
+;           ALU
+;           ЕСВ-WRB
+;           YDEV-WRY
+;           YDTIM+RTIME
+;
+СНЕСК YDEVT-WRB+ALU
+СНЕСК YDEVT-WRB+ЕСВ-WRB
+СНЕСК YDEVT-WRB+YDEV-WRY
+СНЕСК YDEVT-WRB+YDTIM+RTIME
+СНЕСК ALU+ЕСВ-WRB
+СНЕСК ALU+YDEV-WRY
+СНЕСК ALU+YDTIM+RTIME
+СНЕСК ЕСВ-WRB+YDEV-WRY
+СНЕСК ЕСВ-WRB+YDTIM+RTIME
+СНЕСК YDEV-WRY+YDTIM+RTIME
+;
+;
+;     ============================================
+;     МАКРОСЫ ДЛЯ ОБ'ЕДИНЕНИЯ МЕЛКИХ ТЕСТОВ В ОДИН
+;     ============================================
+;
+;ВАРИАНТ ДЛЯ ОДНОГО БОЛЬШОГО
+;MACRO J CONT
+;MACRO S CONT
+;ВАРИАНТ ДЛЯ ОТДЕЛЬНЫХ ТЕСТОВ
+MACRO J CJP
+MACRO S CJS
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ КОМАНД
+;     ==================
+;
+MACRO МА CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO MAWF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO ARF CSM,MNSA=МР,MODNM=SР,ALUS=DZ,FUNC=SUBS,ALUD=В,RВ=DADR,ALU,YDST=ADRREG
+MACRO SSPRG ЕСВ,WRB,BRA=RG3
+MACRO PHAW YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
+MACRO PHAR YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DRD
+MACRO RСА DSRC=СОМА,ALUS=DZ,ALUD=Q
+MACRO WА МАР=РЕ,COND=ARBRDY,IСС
+MACRO SPRG ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=SР
+MACRO АС CSM,MNSA=МР,MODNM=С,ALUS=DQ,FUNC=ADD,ALUD=Q
+MACRO TRSH DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG
+MACRO R МАР=РЕ,COND=RСВ
+MACRO М МАР=МЕ,COND=ТККВ,DDEV=CLRCD,WRD,ISE
+MACRO MED МАР=МЕ,COND=ТККВ,LЕТС,ISE
+MACRO ML МАР=МЕ,DDEV=CLRCD,WRD,ISE
+MACRO МЕ МАР=МЕ,LЕТС
+MACRO MI МАР=МЕ,COND=ТККВ,DDEV=CLRCD,WRD
+MACRO TODR1 ECB,WRB,BRA=RG1,ECA,ARA=RG1
+MACRO TODR2 ECB,WRB,BRA=RG2,ECA,ARA=RG2
+MACRO TODR3 ECB,WRB,BRA=RG3,ECA,ARA=RG3
+MACRO TOYR1 ECA,WRA,ARA=RG1,ECB,BRA=RG1
+MACRO TOYR2 ECA,WRA,ARA=RG2,ECB,BRA=RG2
+MACRO TOYR3 ECA,WRA,ARA=RG3,ECB,BRA=RG3
+;
+;     ==================
+;     МАКРОСЫ ДЛЯ ТЕСТОВ
+;     ==================
+;
+MACRO TN DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=EXPN,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO Т DSRC=PROM,ALUS=DZ,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=0
+MACRO TIK ALUS=ZВ,RВ=MANT,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO TIK3 ALUS=ZВ,RВ=WR3,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+MACRO CLRTYP ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=INTR,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO ТУРЕ ALUS=ZВ,RВ=INTR,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
+MACRO С3 ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR3,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+;
+;
+*FULL LIST
+SEC:PROG B;
+;
+;     РАСПРЕДЕЛЕНИЕ РЕГИСТРОВ БОПП ДЛЯ ТЕСТОВ:
+;
+;    АДРЕСА РЕГИСТРОВ БОПП:
+;    0   1   2   3   4   5   6   7   8   9   А   В   С   D   Е   F
+;  I-------------------------------I--------------------------------I
+;  I   I   I   I   I          ДОПОЛНИТЕЛЬНАЯ  ИНФОРМАЦИЯ            I
+;  I-------------------------------I--------------------------------I
+;
+;  0 РГ.БОПП: НОМЕР ТЕСТА
+;  1 РГ.БОПП: ТИП ПРОВЕРКИ В ТЕСТЕ, ЕСЛИ ИХ НЕСКОЛЬКО; МЛ.БАЙТ РГ.INTR
+;  2 РГ.БОПП: ТИП ОБРАЩЕНИЯ К БОПП:
+;             00 - ЦИКЛ;
+;             FF - ПРИЗНАК ОШИБКИ;
+;             ХХ = "ЗАПРОС" = ТИП ПРОВЕРКИ (РГ.INTR).
+;  3 РГ.БОПП: НОМЕР ЦИКЛА, МЛ.БАЙТ РГ.MANT
+;
+EXTERNAL INITST,ERRTST,ERRINF,ERRINH,ERRINQ,OUT8/F,RD8/F,ERR8/F
+EXTERNAL RD8/В,OUTC/F,RD4/7,OUTAYH,OUT4/7
+;
+;
+;     ===================
+;     ПОИСК ЛЕВОЙ ЕДИНИЦЫ
+;     ===================
+;
+ПЛЕ23:ENTRY
+;===== ПОИСК ЛЕВОЙ ЕДИНИЦЫ; ДАННЫЕ - ИЗ 8-15 РГ.БОПП, РЕЗУЛЬТАТ - В 7 РГ.БОПП
+;   8-15 РГ.БОПП - ДАННЫЕ, ГДЕ ИЩЕМ ЛЕВУЮ ЕДИНИЦУ;
+;   7 РГ.БОПП: МЛАДШИЕ 6 РАЗРЯДОВ = РЕЗУЛЬТАТ ПОИСКА, 7-Й РАЗРЯД = ФЛАГ
+;
+CJP А=PSLO23,МАР=РЕ
+PSLO23:CONT А=Н23,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ЧИСЛО ИЗ 8-15 РГ.БОПП
+CLO23:CJS А=RD8/F,МАР=РЕ
+CONT ALUS=ZA,RA=WR6,H,ALUD=B,RВ=А
+;ОПРЕДЕЛЯЕМ N ЛЕВОЙ ЕДИНИЦЫ
+CONT ALUS=DZ,Н,ALUD=ВА,RА=A,RВ=Y,ALU,DSRC=LOS
+;УБИРАЕМ МУСОР, ПИШЕМ РЕЗУЛЬТАТ В БОПП
+CONT А=H7F,DSRC=PROM,ALUS=DA,RA=Y,FUNC=AND,H,ALUD=В,RВ=Y,ALU,YDEV=МРМЕМ
+>,WRY,IОМР,MPADR=7
+CJP А=CLO23,МАР=РЕ,%TIK%
+;
+;
+ПЛЕ24:ENTRY
+;===== ПОИСК ЛЕВОЙ ЕДИНИЦЫ; "1" СДВИГАЕТСЯ ОТ СТАРШЕГО РАЗРЯДА К МЛАДШЕМУ
+;   А - ВЫЧИСЛЯЕМЫЙ НОМЕР ЕДИНИЦЫ; У - ПРОЧИТАННЫЙ ИЗ ПЛЕ;
+;   Q - МАСКА НА 6 МЛ.РАЗРЯДОВ (N ЕДИНИЦЫ) И ФЛАГ (7-Й РАЗРЯД!!!)
+;   DADR - ЧИСЛО, У КОТОРОГО ОПРЕДЕЛЯЕМ НОМЕР ЕДИНИЦЫ
+;   01 - НЕВЕРНЫЙ N ЕДИНИЦЫ У ЧИСЛА С ЕДИНИЦАМИ, 02 - У ЧИСЛА = "0"
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ВЫЧИСЛЕННЫЙ N ЕД.), 12-15 = Y (ПРОЧИТАННЫЙ N ЕД.)
+;
+CJP А=PSLO24,МАР=РЕ
+PSLO24:CONT А=Н24,%T%
+CJS А=INITST,МАР=РЕ
+;МАСКА НА 7 МЛАДШИХ РАЗРЯДОВ (6 ИНФОРМАЦИОННЫХ + ФЛАГ) - В РГ.Q
+CONT А=H7F,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+;ЧИТАЕМ ЧИСЛО С "1" В 64 РАЗРЯДЕ, КОТОРУЮ БУДЕМ СДВИГАТЬ
+CLO24:CONT А=В64,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;"0" - В А
+CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=63,МАР=РЕ,%CLRTYP%
+;ЧИТАЕМ N ЛЕВОЙ ЕДИНИЦЫ
+CONT ALUS=DQ,FUNC=AND,Н,ALUD=ВА,RА=DADR,RВ=У,ALU,DSRC=LOS
+;СРАВНИВАЕМ (7-Й РАЗРЯД - ФЛАГ = 0)
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;+1 К ВЫЧИСЛЯЕМОМУ НОМЕРУ ЕДИНИЦЫ (ОТ 0 ДО 63)
+CONT ALUS=ZВ,RВ=А,Н,CI,ALUD=В
+;СДВИГАЕМ "1" НА 1 РАЗРЯД ВПРАВО
+RFCT ALUS=ZВ,RВ=DADR,Н,ALUD=RSB,SHMUX=LSLSL
+;ПРОВЕРЯЕМ ПЛЕ С "0":
+CONT ALUS=DQ,FUNC=AND,Н,ALUD=ВА,RА=DADR,RВ=У,ALU,DSRC=LOS
+;Д.Б.ВСЕ 7 РАЗРЯДОВ = 1, Т.Е. 6 МЛАДШИХ И 7-Й (ФЛАГ); СРАВНИВАЕМ С МАСКОЙ
+CONT ALUS=ZQ,H,ALUD=B,RB=A
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CLO24,МАР=РЕ,%TIK%
+;
+;
+ПЛЕ25:ENTRY
+;===== ПОИСК ЛЕВОЙ ЕДИНИЦЫ; "1" СДВИГАЕТСЯ ОТ МЛАДШЕГО РАЗРЯДА К СТАРШЕМУ
+;   А - ВЫЧИСЛЯЕМЫЙ НОМЕР ЕДИНИЦЫ; У - ПРОЧИТАННЫЙ ИЗ БЛОКА ПЛЕ;
+;   Q - МАСКА НА 6 МЛ.РАЗРЯДОВ (N ЕДИНИЦЫ) И ФЛАГ (7-Й РАЗРЯД!!!)
+;   DADR - ЧИСЛО, У КОТОРОГО ОПРЕДЕЛЯЕМ НОМЕР ЕДИНИЦЫ
+;   01 - НЕВЕРНЫЙ N ЕДИНИЦЫ У ЧИСЛА = "0", 02 - У ЧИСЛА С ЕДИНИЦАМИ
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ВЫЧИСЛЕННЫЙ N ЕД.), 12-15 = Y (ПРОЧИТАННЫЙ N ЕД.)
+;
+CJP А=PSLO25,МАР=РЕ
+PSLO25:CONT А=Н25,%T%
+%S% А=INITST,МАР=РЕ
+;МАСКА НА 7 МЛАДШИХ РАЗРЯДОВ - В РГ. Q
+CLO25:CONT А=H7F,DSRC=PROM,ALUS=DZ,Н,ALUD=Q
+;"0" В DADR
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=DADR
+;ОПРЕДЕЛЯЕМ N СТАРШЕЙ ЕД.
+CONT ALUS=DQ,FUNC=AND,Н,ALUD=ВА,RА=DADR,RВ=У,ALU,DSRC=LOS
+;СРАВНИВАЕМ (6 МЛАДШИХ И 7-Й - ФЛАГ)
+CONT ALUS=ZQ,H,ALUD=B,RB=A
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,CEN
+CONT %CLRTYP%
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+CONT А=М6В,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+;ПИШЕМ "1" В DADR
+PUSH А=63,МАР=РЕ,ALUS=ZВ,RВ=DADR,Н,CI,ALUD=В
+;ОПРЕДЕЛЯЕМ N ЛЕВОЙ ЕДИНИЦЫ, НАЧИНАЯ С "1" В МЛ. РАЗРЯДЕ
+CONT ALUS=DQ,FUNC=AND,Н,ALUD=ВА,RА=DADR,RВ=У,ALU,DSRC=LOS
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;-1 ОТ ВЫЧИСЛЯЕМОГО N ЕДИНИЦЫ
+CONT ALUS=ZВ,RВ=А,FUNC=SUBR,Н,ALUD=В
+;СДВИГАЕМ "1" НА 1 РАЗРЯД ВЛЕВО С ЗАГРУЗКОЙ "1"
+RFCT ALUS=ZВ,RВ=DADR,Н,ALUD=LSB,SHMUX=NDNS
+%J% A=CLO25,MAP=PE,%TIK%
+;
+;     ===========================
+;     Р Н Г  +  ОЗУ МОДИФИКАТОРОВ
+;     ===========================
+;
+РНГ1:ENTRY
+;===== РНГ: ПИШЕМ ИЗ 11 РГ.БОПП - В РНГ, ЧИТАЕМ РНГ, ПИШЕМ В 15 РГ.БОПП
+;   В РНГ ПИШЕМ С 6-10 РАЗР.ШИНЫ У; ЧИТАЕМ 6-11 РАЗР.ШИНЫ D,
+;   ПОЭТОМУ 11-Й РГ.БОПП СДВИГАЕМ НА 5 РАЗР.ВЛЕВО ПЕРЕД ЗАПИСЬЮ,
+;   А ПОСЛЕ ЧТЕНИЯ ПЕРЕД ЗАПИСЬЮ В БОПП - СДВИГАЕМ В МЛ.РАЗРЯДЫ.
+;
+CJP А=PSMOD1,МАР=РЕ
+PSMOD1:CONT А=Н1,%T%
+CJS А=INITST,МАР=РЕ
+;11-Й РЕГИСТР БОПП, СДВИГАЕМ ВЛЕВО НА 5, ПИШЕМ В РНГ
+CMOD1:CONT YDEV=МРМЕМ,IОМР,MPADR=11,DSRC=SHIFT,MPS,PSHF=SН0-5,SHF=LOG
+>,ALUS=DZ,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,ALU,YDST=MODGN
+;ЧИТАЕМ РНГ
+CONT DSRC=MODGN,ALUS=DZ,ALUD=В,RВ=У
+;СДВИГАЕМ В СДВИГАТЕЛЕ В СТ.РАЗРЯДЫ, ПОТОМ В МЛАДШИЕ (УБИРАЕМ МУСОР БЕЗ ПЗУ)
+CONT ALUS=DZ,Н,ALUD=ВА,RА=У,RВ=У,ALU,DSRC=SHIFT,MPS,PSHF=SН0-53,SHF=LOG
+CONT ALUS=DZ,Н,ALUD=ВА,RА=У,RВ=У,ALU,DSRC=SHIFT,MPS,PSHF=SН0+58,SHF=LOG
+;ПИШЕМ В 15 РГ.БОПП 6 РАЗРЯДОВ, 6-Й Р. РНГ (ИЛИ 11-Й ПРИ ЧТЕНИИ РНГ) Д.Б. = 1
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+CJP А=CMOD1,МАР=РЕ,%TIK%
+;
+;
+РНГ2:ENTRY
+;===== РНГ: ПИШЕМ CONST И /CONST (00 ИЛИ FF) В РНГ; ЧТЕНИЕ В МПС; СРАВНЕНИЕ
+;   В РНГ ПИШЕМ С 6-10 РАЗР.ШИНЫ У; ЧИТАЕМ 6-11 РАЗР.ШИНЫ D.
+;   РГ.А - ЧТО ПИШЕМ; У - ЧТО ЧИТАЕМ; DADR = РГ.A C 1 B 11 РАЗРЯДЕ
+;   ПРИ ОШ. 10-11 РГ.БОПП = A (ЧТО ПИШЕМ), 14-15 = Y (ЧТО ПРОЧИТАЛИ);
+;   РГ.A Д.Б. РАВЕН РГ.Y С ТОЧНОСТЬЮ ДО "1" B 11 РАЗРЯДЕ!
+;
+CJP А=PSMOD2,МАР=РЕ
+PSMOD2:CONT А=Н2,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А, BYTE = МАСКА
+CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=B,RB=A
+;ЦИКЛ: ПИШЕМ В РНГ 0 ИЛИ FF ПОПЕРЕМЕННО
+CMOD2:CONT ALUS=ZА,RА=А,FUNC=EXNOR,Н,ALUD=В,RВ=А,ALU,YDST=MODGN
+;ЧИТАЕМ РНГ
+CONT DSRC=MODGN,ALUS=DZ,ALUD=В,RВ=У
+;ДОБАВЛЯЕМ В РГ.А ДЛЯ СРАВНЕНИЯ "1" В 11 РАЗРЯДЕ; СРАВНИВАЕМ
+CONT А=B11,DSRC=PROM,ALUS=DA,RA=A,FUNC=OR,Н,ALUD=B,RB=DADR
+CONT ALUS=АВ,RА=DADR,RВ=Y,FUNC=EXOR,Н,ALUD=Q
+CONT A=MGN,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMOD2,МАР=РЕ,%TIK%
+;
+;
+РНГ3:ENTRY
+;===== РНГ: ПИШЕМ ПЕРЕМЕННОЕ ЧИСЛО В РНГ; ЧТЕНИЕ В МПС; СРАВНЕНИЕ
+;   РГ.А - ЧТО ПИШЕМ; У - ЧТО ЧИТАЕМ; DADR = РГ.A C 1 B 11 РАЗРЯДЕ
+;   ПРИ ОШ. 10-11 РГ.БОПП = A (ЧТО ПИШЕМ), 14-15 = Y (ЧТО ПРОЧИТАЛИ);
+;   РГ.A Д.Б. РАВЕН РГ.Y С ТОЧНОСТЬЮ ДО "1" B 11 РАЗРЯДЕ!
+;
+CJP А=PSMOD3,МАР=РЕ
+PSMOD3:CONT А=Н3,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А, BYTE = МАСКА
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ В РНГ ПЕРЕМННОЕ ЧИСЛО ( + "1" В 6-ОМ РАЗРЯДЕ)
+CMOD3:CONT A=B6,DSRC=PROM,ALUS=DА,RА=А,FUNC=ADD,H,ALUD=B,RB=A,ALU,YDST=MODGN
+;ЧИТАЕМ РНГ
+CONT DSRC=MODGN,ALUS=DZ,ALUD=В,RВ=У
+;ДОБАВЛЯЕМ В РГ.А ДЛЯ СРАВНЕНИЯ "1" В 11 РАЗРЯДЕ; СРАВНИВАЕМ
+CONT А=B11,DSRC=PROM,ALUS=DA,RA=A,FUNC=OR,Н,ALUD=B,RB=DADR
+CONT ALUS=АВ,RА=DADR,RВ=Y,FUNC=EXOR,Н,ALUD=Q
+CONT A=MGN,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMOD3,МАР=РЕ,%TIK%
+;
+;
+МОД4:ENTRY
+;===== ПРОВЕРЯЕМ МОДИФИКАТОРЫ КАК РЕГИСТР: ПИШЕМ, ЧИТАЕМ ПО ФИКСИР.АДРЕСУ.
+;
+;===== ПИШЕМ ИЗ БОПП - В 0-Й МОДИФИКАТОР(!); АДРЕС МОДИФИКАТОРА - В МП; ЧИТАЕМ
+;   ДАННЫЕ - В 8-11 РГ.БОПП; РЕЗУЛЬТАТ - В 12-15 РГ.БОПП
+;   РНГ - КАКОЙ ЕСТЬ!
+;
+CJP А=PSMOD4,МАР=РЕ
+PSMOD4:CONT А=Н4,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ИЗ 8-11 РГ.БОПП
+CMOD4:CJS А=RD8/В,МАР=РЕ
+;ПИШЕМ В 0-Й МОДИФИКТОР
+CONT ALUS=ZА,RА=WR6,ALU,CSM,WЕМ,MNSA=МР,MODNM=М0
+;ЧИТАЕМ, ПИШЕМ В БОПП
+CJS А=OUTC/F,МАР=РЕ,CSM,MNSA=МР,MODNM=М0,ALUS=DZ,ALUD=В,RВ=WR6
+CJP А=CMOD4,МАР=РЕ,%TIK%
+;
+;
+МОД5:ENTRY
+;===== ПИШЕМ ИЗ БОПП - В 7-Й(!) МОДИФИКАТОР; АДРЕС МОДИФИКАТОРА - В МП; ЧИТАЕМ
+;   ЧИТАЕМ 8-11 РГ.БОПП; ПИШЕМ РЕЗУЛЬТАТ - В 12-15 РГ.БОПП
+;   РНГ - КАКОЙ ЕСТЬ!
+;
+CJP А=PSMOD5,МАР=РЕ
+PSMOD5:CONT А=Н5,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ИЗ 8-11 РГ.БОПП
+CMOD5:CJS А=RD8/В,МАР=РЕ
+;ПИШЕМ В 7-Й МОДИФИКТОР
+CONT ALUS=ZА,RА=WR6,ALU,CSM,WЕМ,MNSA=МР,MODNM=М7
+;ЧИТАЕМ, ПИШЕМ В БОПП
+CJS А=OUTC/F,МАР=РЕ,CSM,MNSA=МР,MODNM=М7,ALUS=DZ,ALUD=В,RВ=WR6
+CJP А=CMOD5,МАР=РЕ,%TIK%
+;
+;
+МОД6:ENTRY
+;===== ПИШЕМ ИЗ БОПП - В RR! (НОМЕР > 16); АДРЕС МОДИФИКАТОРА - В МП; ЧИТАЕМ
+;   ЧИТАЕМ 8-11 РГ.БОПП; ПИШЕМ РЕЗУЛЬТАТ - В 12-15 РГ.БОПП
+;   РНГ - КАКОЙ ЕСТЬ!
+;
+CJP А=PSMOD6,МАР=РЕ
+PSMOD6:CONT А=Н6,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ИЗ 8-11 РГ.БОПП
+CMOD6:CJS А=RD8/В,МАР=РЕ
+;ПИШЕМ В РР
+CONT ALUS=ZА,RА=WR6,ALU,CSM,WЕМ,MNSA=МР,MODNM=RR
+;ЧИТАЕМ, ПИШЕМ В БОПП
+CJS А=OUTC/F,МАР=РЕ,CSM,MNSA=МР,MODNM=RR,ALUS=DZ,ALUD=В,RВ=WR6
+CJP А=CMOD6,МАР=РЕ,%TIK%
+;
+;
+МОД7:ENTRY
+;===== ПИШЕМ ИЗ БОПП - В 1-Й МОДИФИКАТОР; АДРЕС МОД. - В АИСП.(!); ЧИТАЕМ
+;   ЧИТАЕМ 8-11 РГ.БОПП; ПИШЕМ РЕЗУЛЬТАТ - В 12-15 РГ.БОПП
+;   РНГ - КАКОЙ ЕСТЬ!
+;
+CJP А=PSMOD7,МАР=РЕ
+PSMOD7:CONT А=Н7,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ИЗ 8-11 РГ.БОПП; 1 - В АИСП.
+CMOD7:CJS А=RD8/В,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,CI,ALU,YDST=ADRREG
+;ПИШЕМ В 1-Й МОДИФИКТОР
+CONT ALUS=ZА,RА=WR6,ALU,CSM,WЕМ,MNSA=U
+;ЧИТАЕМ, ПИШЕМ В БОПП
+CJS А=OUTC/F,МАР=РЕ,CSM,MNSA=U,ALUS=DZ,ALUD=В,RВ=WR6
+CJP А=CMOD7,МАР=РЕ,%TIK%
+;
+;
+МОД8:ENTRY
+;===== ПИШЕМ ИЗ БОПП - В 17-Й МОДИФ.С ПРИЗНАКОМ MOD(!); АДРЕС МОД. - В АИСП.
+;   ЧИТАЕМ 8-11 РГ.БОПП; ПИШЕМ РЕЗУЛЬТАТ - В 12-15 РГ.БОПП
+;   РНГ - КАКОЙ ЕСТЬ!
+;
+CJP А=PSMOD8,МАР=РЕ
+PSMOD8:CONT А=Н8,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ДАННЫЕ ИЗ 8-11 РГ.БОПП; 17 - В АИСП.
+CMOD8:CJS А=RD8/В,МАР=РЕ
+CONT А=H11,DSRC=PROM,ALUS=DZ,ALU,YDST=ADRREG
+;ПИШЕМ В 17-Й МОДИФИКТОР
+CONT ALUS=ZА,RА=WR6,ALU,CSM,WЕМ,MNSA=U,MOD
+;ЧИТАЕМ, ПИШЕМ В БОПП
+CJS А=OUTC/F,МАР=РЕ,CSM,MNSA=U,MOD,ALUS=DZ,ALUD=В,RВ=WR6
+CJP А=CMOD8,МАР=РЕ,%TIK%
+;
+;
+МОДА:ENTRY
+;===== ПИШЕМ 0/F(!) - В 0-Й МОДИФИКАТОР; АДРЕС МОДИФИКАТОРА - В МП; ЧИТАЕМ
+;   РГ.А - ЧТО ПИШЕМ; У - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; РНГ - КАКОЙ ЕСТЬ!
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMODA,МАР=РЕ
+PSMODA:CONT А=НА,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;ЦИКЛ: ИНВЕРТИРУЕМ РГ.А, ПИШЕМ В 0-Й МОДИФИКТОР
+CMODA:CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALUD=В,RB=A,ALU,CSM,WЕМ,MNSA=МР,MODNM=М0
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT CSM,MNSA=МР,MODNM=М0,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMODA,МАР=РЕ,%TIK%
+;
+;
+МОДВ:ENTRY
+;===== ПИШЕМ 0/F - В 5-Й(!) МОДИФИКАТОР; АДРЕС МОДИФИКАТОРА - В МП; ЧИТАЕМ
+;   РГ.А - ЧТО ПИШЕМ; У - ЧТО ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; РНГ - КАКОЙ ЕСТЬ!
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMODB,МАР=РЕ
+PSMODB:CONT А=НВ,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ 0/F В 5-Й МОДИФИКТОР
+CMODB:CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALUD=В,RB=A,ALU,CSM,WЕМ,MNSA=МР,MODNM=М5
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT CSM,MNSA=МР,MODNM=М5,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMODB,МАР=РЕ,%TIK%
+;
+;
+МОДС:ENTRY
+;===== ПИШЕМ 0/F - В RRR(!) (НОМЕР > 16); АДРЕС МОДИФИКАТОРА - В МП; ЧИТАЕМ
+;   А - ЧТО ПИШЕМ; У - ЧТО ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; РНГ - КАКОЙ ЕСТЬ!
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMODC,МАР=РЕ
+PSMODC:CONT А=НС,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ В РРР (СПЕЦ.РЕГИСТР!)
+CMODC:CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALUD=В,RB=A,ALU,CSM,WЕМ,MNSA=МР,MODNM=RRR
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT CSM,MNSA=МР,MODNM=RRR,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMODC,МАР=РЕ,%TIK%
+;
+;
+MOДD:ENTRY
+;===== ПИШЕМ 0/F - В 1-Й МОДИФИКАТОР; АДРЕС МОДИФИКАТОРА - В АИСП.(!); ЧИТАЕМ
+;   РГ.А - ЧТО ПИШЕМ; У - ЧТО ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; РНГ - КАКОЙ ЕСТЬ!
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMODD,МАР=РЕ
+PSMODD:CONT А=HD,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;1 - В АИСП. (НОМЕР РЕГИСТРА)
+CONT ALUS=ZА,RА=А,CI,ALU,YDST=ADRREG
+;ЦИКЛ: ПИШЕМ В 1-Й МОДИФИКТОР (ПО АИСП.), БЕЗ MOD!
+CMODD:CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALUD=В,RВ=А,ALU,CSM,WЕМ,MNSA=U
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT CSM,MNSA=U,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMODD,МАР=РЕ,%TIK%
+;
+;
+МОДЕ:ENTRY
+;===== ПИШЕМ 0/F В МОДИФ.С БОЛЬШИМ N (=12) + ПРИЗНАК MOD; АДРЕС МОДИФ.- В АИСП.
+;   РГ.А - ЧТО ПИШЕМ; У - ЧТО ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; DADR - N РЕГИСТРА
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMODE,МАР=РЕ
+PSMODE:CONT А=НЕ,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;18 - В АИСП. (НОМЕР РЕГИСТРА)
+CONT А=H12,DSRC=PROM,ALUS=DZ,ALUD=B,RB=DADR,ALU,YDST=ADRREG
+;ЦИКЛ: ПИШЕМ В МОДИФИКТОР ПО U
+CMODE:CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALUD=В,RВ=А,ALU,CSM,WЕМ,MNSA=U,MOD
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT CSM,MNSA=U,MOD,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMODE,МАР=РЕ,%TIK%
+;
+;
+МОД10:ENTRY
+;===== ПИШЕМ ПЕРЕМЕННУЮ (!) - В 0-Й МОДИФИКАТОР; АДРЕС МОДИФ.- В МП; ЧИТАЕМ
+;   РГ.А - ЧТО ПИШЕМ; У - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; РНГ - КАКОЙ ЕСТЬ!
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMD10,МАР=РЕ
+PSMD10:CONT А=Н10,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;ЦИКЛ: УВЕЛИЧИВАЕМ РГ.А НА "1", ПИШЕМ В 0-Й МОДИФИКТОР
+CMOD10:CONT ALUS=ZB,RB=А,FUNC=ADD,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М0
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT CSM,MNSA=МР,MODNM=М0,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMOD10,МАР=РЕ,%TIK%
+;
+;
+МОД11:ENTRY
+;===== ПИШЕМ ПЕРЕМЕННУЮ - В 3-Й(!) МОДИФИКАТОР; АДРЕС МОДИФ. - В МП; ЧИТАЕМ
+;   РГ.А - ЧТО ПИШЕМ; У - ЧТО ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; РНГ - КАКОЙ ЕСТЬ!
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMD11,МАР=РЕ
+PSMD11:CONT А=Н11,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ В 3-Й МОДИФИКТОР
+CMOD11:CONT ALUS=ZВ,RВ=А,FUNC=ADD,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М3
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT CSM,MNSA=МР,MODNM=М3,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMOD11,МАР=РЕ,%TIK%
+;
+;
+МОД12:ENTRY
+;===== ПИШЕМ ПЕРЕМЕНУЮ -  В SVFA(!) (НОМЕР > 16); АДРЕС МОД.- В МП; ЧИТАЕМ
+;   А - ЧТО ПИШЕМ; У - ЧТО ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; РНГ - КАКОЙ ЕСТЬ!
+;
+CJP А=PSMD12,МАР=РЕ
+PSMD12:CONT А=Н12,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ В SVFA (СПЕЦ.РЕГИСТР!)
+CMOD12:CONT ALUS=ZВ,RВ=А,FUNC=ADD,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=SVFA
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT CSM,MNSA=МР,MODNM=SVFA,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMOD12,МАР=РЕ,%TIK%
+;
+;
+МОД13:ENTRY
+;===== ПИШЕМ ПЕРЕМЕННУЮ - В 1-Й МОДИФИКАТОР; АДРЕС МОДИФ.- В АИСП.(!); ЧИТАЕМ
+;   РГ.А - ЧТО ПИШЕМ; У - ЧТО ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; РНГ - КАКОЙ ЕСТЬ!
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMD13,МАР=РЕ
+PSMD13:CONT А=Н13,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;1 - В АИСП. (НОМЕР РЕГИСТРА)
+CONT ALUS=ZА,RА=А,CI,ALU,YDST=ADRREG
+;ЦИКЛ: ПИШЕМ В 1-Й МОДИФИКТОР
+CMOD13:CONT ALUS=ZВ,RВ=А,FUNC=ADD,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=U
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT CSM,MNSA=U,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMOD13,МАР=РЕ,%TIK%
+;
+;
+МОД14:ENTRY
+;===== ПИШЕМ ПЕРЕМ.В 19-Й(!) МОД.С ПРИЗНАКОМ MOD; АДРЕС МОД.- В АИСП.;ЧИТАЕМ
+;   РГ.А - ЧТО ПИШЕМ; У - ЧТО ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; DADR - N РЕГИСТРА
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMD14,МАР=РЕ
+PSMD14:CONT А=Н14,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;19 - В АИСП. (НОМЕР РЕГИСТРА)
+CONT А=H13,DSRC=PROM,ALUS=DZ,ALUD=B,RB=DADR,ALU,YDST=ADRREG
+;ЦИКЛ: ПИШЕМ В МОДИФИКТОР ПО U
+CMOD14:CONT ALUS=ZВ,RВ=А,FUNC=ADD,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=U,MOD
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT CSM,MNSA=U,MOD,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CMOD14,МАР=РЕ,%TIK%
+;
+;
+МОД16:ENTRY
+;===== ПРОВЕРЯЕМ МОДИФИКАТОРЫ КАК ПАМЯТЬ: ПИШЕМ, ЧИТАЕМ ПО ВСЕМ АДРЕСАМ ОЗУ
+;
+;===== ПИШЕМ ПЕРЕМЕННУЮ ПО ВСЕМ АДРЕСАМ ПАМЯТИ(!); АДРЕС МОДИФИКАТОРА - В МП
+;   РГ.А - ЧТО ПИШЕМ; У - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; DADR - N МОДИФИКАТОРА
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMD16,МАР=РЕ
+PSMD16:CONT А=Н16,%T%
+%S% А=INITST,МАР=РЕ
+;"-1" - В РГ.DADR (НОМЕР ГРУППЫ); 0 - В РГ.А
+CONT A=MH,DSRC=PROM,ALUS=DZ,ALUD=В,RВ=DADR
+;ЦИКЛ ПО ГРУППАМ:
+PUSH А=15,МАР=РЕ,ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;УВЕЛИЧИВАЕМ НОМЕР ГРУППЫ - И В РНГ
+CONT A=B6,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=ADD,ALUD=B,RB=DADR,ALU,YDST=MODGN
+;ПИШЕМ ПЕРЕМЕННУЮ В РЕГИСТРЫ; АДРЕС - В МП; РЕГИСТРЫ НЕ ПО ПОРЯДКУ (ЧЕРЕЗ 1)
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=MREZ
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=SVFA
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=CTL
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=РСС
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=YCL
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=ACL
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=SPRADR
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=RR
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М13
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М11
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М9
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М7
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М5
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М3
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М1
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=PROCNC
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=CTR
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=РССС
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=YCR
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=ACR
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=СТТ
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=RRR
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=С
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М14
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М12
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М10
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М8
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М6
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М4
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М2
+RFCT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=М0
+;ЧТЕНИЕ: 0 - В РГ.DADR (НОМЕР ГРУППЫ), В РГ.А
+CMOD16:CONT A=MH,DSRC=PROM,ALUS=DZ,ALUD=В,RВ=DADR
+;ЦИКЛ ПО ГРУППАМ:
+PUSH А=15,МАР=РЕ,ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;НОМЕР ГРУППЫ - В РНГ
+CONT A=B6,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=ADD,ALUD=B,RB=DADR,ALU,YDST=MODGN
+;ЧИТАЕМ ПЕРЕМЕННУЮ ИЗ ОЗУ МОД., СРАВНИВАЕМ; ПОРЯДОК РЕГИСТРОВ - ТОТ ЖЕ
+;ОШИБКА - 00
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=MREZ,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;01
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=SVFA,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;02
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=CTL,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;03
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=РСС,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;04
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=YCL,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;05
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=ACL,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;06
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=SPRADR,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;07
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=RR,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;08
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=SР,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;09
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М13,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;0А
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М11,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;0В
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М9,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;0С
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М7,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;0D
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М5,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;0Е
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М3,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;0F
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М1,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;10
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=PROCNC,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;11
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=CTR,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;12
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=РССС,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;13
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=YCR,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;14
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=ACR,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;15
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=СТТ,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;16
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=RRR,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;17
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=С,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;18
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М14,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;19
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М12,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;1А
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М10,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;1В
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М8,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;1С
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М6,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;1D
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М4,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;1Е
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М2,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;1F
+CONT ALUS=ZВ,RВ=А,CI,ALUD=В
+CONT CSM,MNSA=МР,MODNM=М0,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+RFCT %TIK%
+%J% А=CMOD16,МАР=РЕ,%TIK%
+;
+;
+МОД17:ENTRY
+;===== ПИШЕМ 00/FF(!) ПО ВСЕМ АДРЕСАМ ПАМЯТИ; АДРЕС МОДИФИКАТОРА - В АИСП.(!)
+;   РГ.А - ЧТО ПИШЕМ; У - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; РС - N РЕГИСТРА (АИСП)
+;   DADR - НОМЕР ГРУППЫ; 0-Й МОДИФИКАТОР НЕ ПРОВЕРЯЕМ.
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMD17,МАР=РЕ
+PSMD17:CONT А=Н17,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;0 - В РГ.DADR (НОМЕР ГРУППЫ); ЦИКЛ ПО ГРУППАМ:
+PUSH А=31,МАР=РЕ,ALUS=DZ,FUNC=AND,ALUD=В,RВ=DADR,ALU,YDST=MODGN
+;1 - В РС: НОМЕР РЕГИСТРА В ГРУППЕ
+CONT A=C1,DSRC=PROM,ALUS=DZ,ALUD=В,RB=PC,ALU,YDST=ADRREG
+;ПИШЕМ CONST В РЕГИСТРЫ; АДРЕС - ИЗ АИСП.
+LС17:CONT ALUS=ZВ,RВ=А,ALU,CSM,WЕМ,MNSA=U,MOD
+;СРАВНИВАЕМ С 31 (MAX N РЕГИСТРА В ГРУППЕ), УВЕЛИЧИВАЕМ N РЕГ.
+CONT A=H1F,DSRC=PROM,ALUS=DA,RА=РС,FUNC=EXOR,CEN
+CJP А=LС17,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZB,RB=PC,CI,ALUD=B,ALU,YDST=ADRREG
+;УВЕЛИЧИВАЕМ НОМЕР ГРУППЫ
+RFCT A=B6,DSRC=PROM,ALUS=DA,RА=DADR,FUNC=ADD,ALUD=В,RB=DADR,ALU,YDST=MODGN
+;
+;ЧТЕНИЕ
+;0 - В РГ.DADR (НОМЕР ГРУППЫ); ЦИКЛ ПО ГРУППАМ:
+МС17:PUSH А=31,МАР=РЕ,ALUS=DZ,FUNC=AND,ALUD=В,RВ=DADR,ALU,YDST=MODGN
+;АИСП.
+CONT A=C1,DSRC=PROM,ALUS=DZ,ALUD=В,RB=PC,ALU,YDST=ADRREG
+;ЧИТАЕМ ПЕРЕМЕННУЮ ИЗ ОЗУ МОД.,СРАВНИВАЕМ
+NNC17:CONT CSM,MNSA=U,MOD,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;ПИШЕМ В ТОТ ЖЕ РЕГИСТР ИНВЕРТРОВАННУЮ CONST (0 ИЛИ F)
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALU,CSM,WЕМ,MNSA=U,MOD
+;СРАВНИВАЕМ С 31 (MAX N РЕГИСТРА В ГРУППЕ), УВЕЛИЧИВАЕМ N РЕГ.
+CONT A=H1F,DSRC=PROM,ALUS=DA,RА=РС,FUNC=EXOR,CEN
+CJP А=NNC17,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZB,RB=PC,CI,ALUD=B,ALU,YDST=ADRREG
+;УВЕЛИЧИВАЕМ НОМЕР ГРУППЫ
+RFCT A=B6,DSRC=PROM,ALUS=DA,RА=DADR,FUNC=ADD,ALUD=В,RB=DADR,ALU,YDST=MODGN
+;ИНВЕРТИРУЕМ CONST В РГ.А, СНОВА ИДЕМ НА ПРОВЕРКУ
+%J% А=МС17,МАР=РЕ,ALUS=ZВ,RВ=А,FUNC=EXNOR,ALUD=В
+;
+;
+МОД18:ENTRY
+;===== ПИШЕМ ДАННЫЕ=АДРЕСУ(!) ПО ВСЕМ АДРЕСАМ ПАМЯТИ; АДРЕС МОДИФ.- В АИСП.
+;   РГ.А - ЧТО ПИШЕМ; У - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ;
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMD18,МАР=РЕ
+PSMD18:CONT А=Н18,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А (ДАННЫЕ=АДРЕСУ), В РНГ
+PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,ALUD=В,RВ=А,ALU,YDST=MODGN
+;НОМЕР РЕГИСТРА - В АИСП.
+CONT ALUS=ZА,RA=А,ALU,YDST=ADRREG
+;ПИШЕМ АДРЕС В РЕГИСТРЫ
+CONT ALUS=ZВ,RВ=А,ALU,CSM,WЕМ,MNSA=U,MOD
+;ЕСЛИ МЛ.5 РАЗРЯДОВ АДРЕСА РЕГИСТРА = 0, ПИШЕМ ПО MNSA=МР(0-Й РГ.!)
+CONT A=H1F,DSRC=PROM,ALUS=DA,RА=А,FUNC=AND,CEN
+CJP А=ECW18,МАР=РЕ,COND=СТ,SТОРС=/NZ
+CONT ALUS=ZА,RА=А,ALU,CSM,WЕМ,MNSA=МР,MODNM=М0
+;УВЕЛИЧИВАЕМ ПОЛНЫЙ АДРЕС, ПИШЕМ В РНГ
+ECW18:RFCT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,YDST=MODGN
+;ЧТЕНИЕ
+;0 - В РГ.А (ПОЛНЫЙ АДРЕС РЕГИСТРА), ПИШЕМ В РНГ
+МС18:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,ALUD=В,RВ=А,ALU,YDST=MODGN
+;НОМЕР РГ.- В АИСП.
+CONT ALUS=ZА,RА=А,ALU,YDST=ADRREG
+;ЧИТАЕМ ДАННЫЕ=АДРЕСУ ИЗ ОЗУ МОД.,СРАВНИВАЕМ
+CONT CSM,MNSA=U,MOD,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;УВЕЛИЧИВАЕМ ПОЛНЫЙ АДРЕС, ПИШЕМ В РНГ
+RFCT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,YDST=MODGN
+%J% А=МС18,МАР=РЕ,%TIK%
+;
+;
+МОД1А:ENTRY
+;===== ПРОВЕРЯЕМ 0-Й МОДИФИКАТОР
+;
+;===== ПИШЕМ 0/F - В 0-Й МОДИФИКАТОР (АДР.- В МП); ЧИТАЕМ (АДР.- В АИСП.!!)
+;   РГ.А - ЧТО ПИШЕМ; У - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; РНГ - КАКОЙ ЕСТЬ!
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMD1A,МАР=РЕ
+PSMD1A:CONT А=Н1А,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А, В АИСП.!
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А,ALU,YDST=ADRREG
+;ЦИКЛ: ПИШЕМ В 0-Й МОДИФИКТОР
+CMOD1A:CONT ALUS=ZА,RА=А,ALU,CSM,WЕМ,MNSA=МР,MODNM=М0
+;ЧИТАЕМ, СРАВНИВАЕМ, АДРЕС МОДИФИКАТОРА - В АИСП.!
+CONT CSM,MNSA=U,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;ИНВЕРТИРУЕМ РГ.А
+%J% А=CMOD1A,МАР=РЕ,ALUS=ZВ,RВ=А,FUNC=EXNOR,ALUD=В
+;
+;
+МОД1С:ENTRY
+;===== ПРОВЕРЯЕМ ЗАПРЕТ ЗАПИСИ В 0-Й МОДИФИКАТОР ПО АДРЕСУ ИЗ АИСП.
+;   РГ.А - ЧТО ПИШЕМ; У - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ
+;   ОШИБКИ: 00 - НЕТ ЗАПИСИ В 0 МОД.ИЗ МП;
+;   01 - ЕСТЬ ЗАПИСЬ В 0-Й МОДИФИКАТОР ПО АДРЕСУ ИЗ АИСП., ЧИТАЕМ ИЗ МП.
+;   02 -    -   "   -   С ПРИЗНАКОМ MOD, ЧИТАЕМ ПО АДРЕСУ ИЗ МП.
+;   03 -    -   "   -   , ЧИТАЕМ ПО АДРЕСУ ИЗ АИСП.
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMD1C,МАР=РЕ
+PSMD1C:CONT А=Н1С,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А, В АИСП.!
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А,ALU,YDST=ADRREG
+;ЦИКЛ: ПИШЕМ В 0-Й МОДИФИКТОР
+CMOD1C:CONT ALUS=ZА,RА=А,ALU,CSM,WЕМ,MNSA=МР,MODNM=М0
+;INTR = 00: ЧИТАЕМ, СРАВНИВАЕМ, АДРЕС МОДИФИКАТОРА - В АИСП.!
+CONT CSM,MNSA=U,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;ИНВЕРТИРУЕМ РГ.А, ПИШЕМ ПО АИСП.! НЕ Д.БЫТЬ ЗАПИСИ!
+CONT ALUS=ZВ,RВ=А,FUNC=EXNOR,ALUD=В,ALU,CSM,WЕМ,MNSA=U
+;01: ЧИТАЕМ, СРАВНИВАЕМ, АДРЕС МОДИФИКАТОРА - В МП.!
+CONT CSM,MNSA=МР,MODNM=М0,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ СОВПАДЕНИЕ!
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=NZ,%ТУРЕ%
+;ЕЩЕ РАЗ ПИШЕМ ПО АИСП.С ПРИЗНАКОМ MOD! НЕ Д.БЫТЬ ЗАПИСИ!
+CONT ALUS=ZA,RA=А,ALU,CSM,WЕМ,MNSA=U,MOD
+;02: ЧИТАЕМ, СРАВНИВАЕМ, АДРЕС МОДИФИКАТОРА - В МП.!
+CONT CSM,MNSA=МР,MODNM=М0,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ СОВПАДЕНИЕ!
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=NZ,%ТУРЕ%
+;03: ЧИТАЕМ ЕЩЕ РАЗ; АДРЕС МОДИФИКАТОРА - В АИСП.!
+CONT CSM,MNSA=U,MOD,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ СОВПАДЕНИЕ!
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=NZ,%ТУРЕ%
+%J% А=CMOD1C,МАР=РЕ,%TIK%
+;
+;
+МОД1Е:ENTRY
+;===== ПРОВЕРЯЕМ ЗАПРЕТ ЧТЕНИЯ/ЗАПИСИ В МОДИФИКАТОР С N>16 ИЗ АИСП.БЕЗ ПР.MOD
+;   РГ.А - ЧТО ПИШЕМ; У - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ
+;   ОШИБКИ:
+;   00 - НЕТ ЗАПИСИ В 16 МОД.ИЗ МП ИЛИ НЕТ ЧТЕНИЯ ПО АИСП.С ПРИЗНАКОМ MOD;
+;   01 - ЕСТЬ ЗАПИСЬ В 16 МОДИФ.ПО АДРЕСУ ИЗ АИСП.БЕЗ MOD, ЧИТАЕМ ИЗ МП;
+;   02 - НЕТ ЗАПИСИ В 16 МОДИФ.ПО АДР.ИЗ АИСП.С MOD, ЧИТАЕМ ИЗ МП;
+;   03 - ЕСТЬ ЧТЕНИЕ ИЗ 16 МОДИФ.ПО АДР.ИЗ АИСП.БЕЗ ПРИЗНАКА MOD;
+;   04 - НЕТ ЧТЕНИЯ ИЗ 16 МОДИФ.ПО АДР.ИЗ АИСП.С ПРИЗНАКОМ MOD.
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSMD1E,МАР=РЕ
+PSMD1E:CONT А=Н1Е,%T%
+%S% А=INITST,МАР=РЕ
+;1 - В РГ.А; 16 - В РГ.DADR, АИСП.
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+CONT ALUS=ZА,RА=А,CI,ALUD=В,RВ=А
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0-4
+>,SHF=LOG
+CONT ALUS=ZА,RА=DADR,ALU,YDST=ADRREG
+;00:
+;ЦИКЛ: ПИШЕМ В 16-Й МОДИФИКТОР (C)
+CMOD1E:CONT ALUS=ZА,RА=А,ALU,CSM,WЕМ,MNSA=МР,MODNM=C
+;ЧИТАЕМ, СРАВНИВАЕМ, АДРЕС МОДИФИКАТОРА - В АИСП.С ПРИЗНАКОМ MOD!
+CONT CSM,MNSA=U,MOD,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;01:
+;ИНВЕРТИРУЕМ РГ.А, ПИШЕМ ПО АИСП.БЕЗ ПРИЗНАКА MOD! НЕ Д.БЫТЬ ЗАПИСИ!
+CONT ALUS=ZВ,RВ=А,FUNC=EXNOR,ALUD=В,ALU,CSM,WЕМ,MNSA=U
+;ЧИТАЕМ, СРАВНИВАЕМ, АДРЕС МОДИФИКАТОРА - В МП.!
+CONT CSM,MNSA=МР,MODNM=C,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ СОВПАДЕНИЕ!
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=NZ,%ТУРЕ%
+;02:
+;ПИШЕМ ЕЩЕ РАЗ ПО АИСП.С ПРИЗНАКОМ MOD! ЗАПИСЬ ДОЛЖНА ПРОЙТИ!
+CONT ALUS=ZА,RА=А,ALU,CSM,WЕМ,MNSA=U,MOD
+;ЧИТАЕМ, СРАВНИВАЕМ, АДРЕС МОДИФИКАТОРА - В МП.!
+CONT CSM,MNSA=МР,MODNM=C,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ НЕ ЗАПИСАЛОСЬ!
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+;03:
+;ИНВЕРТИРУЕМ  РГ.А, ПИШЕМ ИЗ МП
+CONT ALUS=ZВ,RВ=А,FUNC=EXNOR,ALUD=В,ALU,CSM,WЕМ,MNSA=МР,MODNM=C
+;ЧИТАЕМ, АДРЕС МОДИФИКАТОРА - В АИСП.БЕЗ MOD! НЕ Д.СОВПАСТЬ!
+CONT CSM,MNSA=U,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ СОВПАЛО!
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=NZ,%ТУРЕ%
+;04:
+;ЧИТАЕМ ЕЩЕ РАЗ; АДРЕС МОДИФИКАТОРА - В АИСП.С ПРИЗНАКОМ MOD
+CONT CSM,MNSA=U,MOD,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ НЕ ТО!
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CMOD1E,МАР=РЕ,%TIK%
+;
+;      =======
+;      Р  Н  П
+;      =======
+;
+РНП1:ENTRY
+;===== ПИШЕМ ИЗ 11 РГ.БОПП - В РНП, ЧИТАЕМ РНП, ПИШЕМ В 15 РГ.БОПП
+;
+CJP А=PSADR1,МАР=РЕ
+PSADR1:CONT А=Н1,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ 11-Й РЕГИСТР БОПП, ПИШЕМ В РНП
+CADR1:CONT YDEV=МРМЕМ,IОМР,MPADR=11,YDST=PROCN
+;ЧИТАЕМ РНП, ПИШЕМ В 15 РГ.БОПП
+CONT DSRC=PROCN,ALUS=DZ,ALUD=В,RВ=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+CJP А=CADR1,МАР=РЕ,%TIK%
+;
+;
+РНП2:ENTRY
+;===== ПИШЕМ 00 ИЛИ FF В РНП; ЧТЕНИЕ В МПС; СРАВНЕНИЕ
+;   РГ.А - ЧТО ПИШЕМ; Y - ЧТО ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ;
+;   ПРИ ОШ. 11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSADR2,МАР=РЕ
+PSADR2:CONT А=Н2,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ В РНП 0 ИЛИ FF ПОПЕРЕМЕННО
+CADR2:CONT ALUS=ZB,RB=А,FUNC=EXNOR,H,ALUD=B,ALU,YDST=PROCN
+;ЧИТАЕМ РНП, СРАВНИВАЕМ
+CONT DSRC=PROCN,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MB,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CADR2,МАР=РЕ,%TIK%
+;
+;
+РНП3:ENTRY
+;===== ПИШЕМ ПЕРЕМЕННОЕ ЧИСЛО В РНП; ЧТЕНИЕ В МПС; СРАВНЕНИЕ
+;   А - ЗАПИСЫВАЕМОЕ ЧИСЛО; Y - ПРОЧИТАННОЕ; Q - РЕЗ-Т СРАВНЕНИЯ;
+;   ПРИ ОШ. 11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSADR3,МАР=РЕ
+PSADR3:CONT А=Н3,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В А;
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ В РНП ПЕРЕМННОЕ ЧИСЛО
+CADR3:CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,YDST=PROCN
+;ЧИТАЕМ РНП, СРАВНИВАЕМ
+CONT DSRC=PROCN,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MB,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CADR3,МАР=РЕ,%TIK%
+;
+;     ==========================
+;     РГ. ИСПОЛНИТЕЛЬНОГО АДРЕСА
+;     ==========================
+;
+АИСП4:ENTRY
+;===== ЧИТАЕМ 8-11 РГ.БОПП,ПИШЕМ В АИСП; ЧИТАЕМ АИСП, ПИШЕМ В 12-15 РГ.БОПП,20Р.
+;
+CJP А=PSADR4,МАР=РЕ
+PSADR4:CONT А=Н4,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ 8-11 РЕГИСТРЫ БОПП, ПИШЕМ В АИСП.
+CADR4:CJS А=RD8/В,МАР=РЕ
+CONT ALUS=ZА,RА=WR6,ALU,YDST=ADRREG
+;ЧИТАЕМ АИСП.; СДВИГАЕМ В СТ.РАЗРЯДЫ, ПОТОМ В МЛАДШИЕ (УБИРАЕМ МУСОР БЕЗ ПЗУ)
+CONT YDEV=RADRR,DSRC=SHIFT,MPS,PSHF=SН0-44,SHF=LOG,ALUS=DZ,Н,ALUD=В,RВ=У
+CONT ALUS=DZ,Н,ALUD=ВА,RА=У,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+44,SHF=LOG
+;ПИШЕМ В 12-15 РГ.БОПП., МЛАДШИЕ 20 РАЗРЯДОВ = АИСП.
+CJS А=OUTC/F,МАР=РЕ
+CJP А=CADR4,МАР=РЕ,%TIK%
+;
+;
+АИСП5:ENTRY
+;===== ПИШЕМ 00 ИЛИ FF В АИСП.; ЧТЕНИЕ В МПС; СРАВНЕНИЕ
+;   РГ.А - ЧТО ПИШЕМ; Y - ЧТО ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ.
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSADR5,МАР=РЕ
+PSADR5:CONT А=Н5,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ В АИСП. 0 ИЛИ FFFFF ПОПЕРЕМЕННО
+CADR5:CONT ALUS=ZА,RА=А,FUNC=EXNOR,Н,ALUD=В,RВ=А,ALU,YDST=ADRREG
+;ЧИТАЕМ АИСП. - В РГ.Y, СРАВНИВАЕМ
+CONT YDEV=RADRR,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MADR,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CADR5,МАР=РЕ,%TIK%
+;
+;
+АИСП6:ENTRY
+;===== ПИШЕМ ПЕРЕМЕННОЕ ЧИСЛО В АИСП; ЧТЕНИЕ В МПС; СРАВНЕНИЕ
+;   А - ЧТО ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ.
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSADR6,МАР=РЕ
+PSADR6:CONT А=Н6,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В А
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ В АИСП. ПЕРЕМННОЕ ЧИСЛО
+CADR6:CONT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,YDST=ADRREG
+;ЧИТАЕМ АИСП., СРАВНИВАЕМ
+CONT YDEV=RADRR,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MADR,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CADR6,МАР=РЕ,%TIK%
+;
+;     =====
+;     Р Ф С
+;     =====
+;
+РФС7:ENTRY
+;===== ЧИТАЕМ БОПП, ПИШЕМ В РФС; ЧИТАЕМ РФС, ПИШЕМ В БОПП
+;   ЧИТАЕМ 8-11 РГ.БОПП (32 РАЗРЯДА АДРЕСА), ПИШЕМ 11-20 РАЗРЯДЫ В РФС;
+;   ЧИТАЕМ РФС В 11-20 РАЗРЯДЫ, ОБНУЛЯЕМ ОСТАЛЬНЫЕ РАЗР.,ПИШЕМ В 12-15 РГ.БОПП
+;
+CJP А=PSADR7,МАР=РЕ
+PSADR7:CONT А=Н7,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ 8-11 РГ.БОПП, ПИШЕМ В РФС
+CADR7:CJS А=RD8/В,МАР=РЕ
+CONT ALUS=ZА,RА=WR6,ALU,YDST=PHYSPG
+;ЧИТАЕМ РФС, УБИРАЕМ МУСОР
+CONT DSRC=PHYSPG,ALUS=DZ,ALUD=В,RВ=У
+CONT A=MPG,DSRC=PROM,ALUS=DA,RA=Y,FUNC=AND,H,ALUD=B,RB=WR6
+;ПИШЕМ В 12-15 РГ.БОПП
+CJS А=OUTC/F,МАР=РЕ
+CJP А=CADR7,МАР=РЕ,%TIK%
+;
+;
+РФС8:ENTRY
+;===== ПИШЕМ 00 ИЛИ FF В РФС; ЧТЕНИЕ В МПС; СРАВНЕНИЕ
+;   В РФС ПИШЕМ С 11-20 РАЗР.ШИНЫ У; ЧИТАЕМ 11-20 РАЗР.ШИНЫ D.
+;   РГ.А - ЧТО ПИШЕМ; Y - ЧТО ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ;
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSADR8,МАР=РЕ
+PSADR8:CONT А=Н8,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ В РФС 0 ИЛИ FF ПОПЕРЕМЕННО
+CADR8:CONT ALUS=ZB,RB=А,FUNC=EXNOR,Н,ALUD=В,ALU,YDST=PHYSPG
+;ЧИТАЕМ РФС, СРАВНИВАЕМ
+CONT DSRC=PHYSPG,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPG,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CADR8,МАР=РЕ,%TIK%
+;
+;
+РФС9:ENTRY
+;===== ПИШЕМ ПЕРЕМЕННОЕ ЧИСЛО В РФС; ЧТЕНИЕ В МПС; СРАВНЕНИЕ
+;   В РГ.А - ЗАПИСЫВАЕМОЕ ЧИСЛО; Y - ПРОЧИТАННОЕ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ;
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSADR9,МАР=РЕ
+PSADR9:CONT А=Н9,%T%
+%S% А=INITST,МАР=РЕ
+;ЦИКЛ: ПИШЕМ В РФС ПЕРЕМННОЕ ЧИСЛО
+CADR9:CONT A=B11,DSRC=PROM,ALUS=DА,RА=А,FUNC=ADD,ALUD=B,RB=A,ALU,YDST=PHYSPG
+;ЧИТАЕМ РФС, СРАВНИВАЕМ
+CONT DSRC=PHYSPG,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPG,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CADR9,МАР=РЕ,%TIK%
+;
+;     =================
+;     РЕГИСТРЫ ПРИПИСКИ
+;     =================
+;
+ПРИПА:ENTRY
+;===== ПИШЕМ ИЗ БОПП В РЕГИСТРЫ ПРИПИСКИ ПО ЗАДАННОМУ АДРЕСУ; ЧИТАЕМ В БОПП
+;   4-7 РГ.БОПП - АДРЕС РП (В 11-20 РАЗР.); 8-11 РГ.- ДАННЫЕ ДЛЯ ЗАПИСИ (20 Р.)
+;   12-15 РГ.БОПП - ЧТО ПРОЧИТАЛИ (20 МЛ.РАЗРЯДОВ)
+;
+CJP А=PSADRA,МАР=РЕ
+PSADRA:CONT А=НА,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ 4-7 РГ.БОПП (АДРЕС) И 8-11 РГ.БОПП (ДАННЫЕ)
+CADRA:CJS А=RD4/7,МАР=РЕ
+CJS А=RD8/В,МАР=РЕ,ALUS=ZА,RА=WR6,ALUD=В,RВ=РС,ALU,YDST=ADRREG
+;ПИШЕМ В РЕГИСТРЫ ПРИПИСКИ
+CONT ALUS=ZА,RА=WR6,ALU,YDEV=PSMEM,WRY
+;ЧИТАЕМ, УБИРАЕМ МУСОР, ПИШЕМ В БОПП
+CONT YDEV=PSMEM,%TRSH%,ALUS=DZ,Н,ALUD=В,RВ=У
+CONT A=MADR,DSRC=PROM,ALUS=DA,RA=Y,FUNC=AND,H,ALUD=B,RB=WR6
+CJS А=OUTC/F,МАР=РЕ
+CJP А=CADRА,МАР=РЕ,%TIK%
+;
+;
+ПРИПВ:ENTRY
+;===== ПИШЕМ 0/F(!) В РЕГИСТРЫ ПРИПИСКИ ПО 1 АДРЕСУ, ЧИТАЕМ, СРАВНИВАЕМ
+;   РГ.А - ЧТО ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ
+;   АДРЕС В АИСП. = CONST ИЗ ПЗУ. = 4-7 РГ.БОПП
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ)
+;
+CJP А=PSADRB,МАР=РЕ
+PSADRB:CONT А=НВ,%T%
+%S% А=INITST,МАР=РЕ
+CONT A=H1,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=PC,ALU,YDST=ADRREG
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ РГ.А В РЕГИСТРЫ ПРИПИСКИ
+CADRB:CONT ALUS=ZВ,RВ=А,FUNC=EXNOR,ALUD=В,ALU,YDEV=PSMEM,WRY
+;ПИШЕМ АДРЕС В БОПП
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT YDEV=PSMEM,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MADR,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CADRB,МАР=РЕ,%TIK%
+;
+;
+ПРИПС:ENTRY
+;===== ЗАПИСЬ CONST1,CONST2 В РП ПО 2 АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   1 АДР.- В РС; 2 АДР.- РССОРУ; CONST1-DADR, CONST2-HALF, ПЕРЕПИСЫВАЮТСЯ В А;
+;   Y - ЧТЕНИЕ ПО 1 АДРЕСУ И ПО 2-ОМУ. Q - РЕЗ-Т СРАВНЕНИЯ;
+;   ОШ.: 00 - НЕСОВПАДЕНИЕ ПО 1-ОМУ АДРЕСУ; 01 - ПО 2-ОМУ; АДРЕС = 4-7 РГ.БОПП
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 20 РАЗР.)
+;
+CJP А=PSADRC,МАР=РЕ
+PSADRC:CONT А=НС,%T%
+%S% А=INITST,МАР=РЕ
+;ПИШЕМ: 1-Й АДРЕС ИЗ ПЗУ - В РГ.РС МПС, В АИСП.
+CONT А=С15,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС,ALU,YDST=ADRREG
+;CONST1 - В DADR, В РП
+CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR,ALU,YDEV=PSMEM,WRY
+;2-Й АДРЕС - В РССОРУ, В АИСП.
+CONT А=В13,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РССОРУ,ALU,YDST=ADRREG
+;CONST2 - В HALF, В РП
+CONT А=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=HALF,ALU,YDEV=PSMEM,WRY
+;ЧИТАЕМ: 1-Й АДРЕС - В АИСП., В БОПП
+CADRC:CONT ALUS=ZА,RА=РС,ALU,YDST=ADRREG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+CONT ALUS=ZA,RA=DADR,H,ALUD=B,RB=A
+;ЧИТАЕМ ИЗ РП - ЧЕРЕЗ СДВИГАТЕЛЬ - В РГ.Y МПС, СРАВНИВАЕМ
+CONT YDEV=PSMEM,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MADR,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;АНАЛОГИЧНО СО 2 АДРЕСОМ
+CONT ALUS=ZА,RА=РССОРУ,ALU,YDST=ADRREG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PCCOPY,H,ALUD=B,RB=WR6
+CONT ALUS=ZA,RA=HALF,H,ALUD=B,RB=A
+CONT YDEV=PSMEM,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MADR,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CADRC,МАР=РЕ,%TIK%
+;
+;
+ПPИПD:ENTRY
+;===== ЗАПИСЬ CONST,/CONST В РП ПО ВСЕМ АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А - ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ; РС = АДРЕС РП = 4-7 РГ.БОПП
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 20 РАЗР.)
+;
+CJP А=PSADRD,МАР=РЕ
+PSADRD:CONT А=HD,%T%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ CONST ИЗ ПЗУ
+CONT A=ZER,ALUS=DZ,H,ALUD=B,RB=A
+;"0" - В РГ.РС, В АИСП.
+PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=ADRREG
+;ПИШЕМ "CONST" ИЗ РГ.А - В РП
+CONT ALUS=ZА,RА=А,ALU,YDEV=PSMEM,WRY
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=ADRREG
+;ЦИКЛ НА ЧТЕНИЕ И НОВУЮ ЗАПИСЬ ИНВЕРТИРОВАННОЙ CONST: НАЧ.АДРЕС - В РС, АИСП
+CADRD:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=ADRREG
+;ПИШЕМ АДРЕС В БОПП
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ЧИТАЕМ РП, СРАВНИВАЕМ
+CONT YDEV=PSMEM,%TRSH%,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MADR,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;ПИШЕМ ПО ТОМУ ЖЕ АДРЕСУ ИНВЕРТИРОВАННУЮ CONST, УВЕЛИЧИВАЕМ АДРЕС
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALU,YDEV=PSMEM,WRY
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=ADRREG
+;ИНВЕРТИРУЕМ CONST, ИДЕМ НА НОВУЮ ПРОВЕРКУ
+%J% А=CADRD,МАР=РЕ,ALUS=ZВ,RВ=А,FUNC=EXNOR,Н,ALUD=В
+;
+;
+ПРИПЕ:ENTRY
+;===== ЗАПИСЬ ДАННЫХ=АДРЕСУ В РП ПО ВСЕМ АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А - АДРЕС РП = ЧТО ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ;
+;   4-7 РГ.БОПП = АДРЕС БОПП;
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 20 РАЗР.)
+;
+CJP А=PSADRE,МАР=РЕ
+PSADRE:CONT А=НЕ,%T%
+%S% А=INITST,МАР=РЕ
+;"0" - В РГ.А, В АИСП.
+PUSH A=1023,MAP=PE,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,ALU,YDST=ADRREG
+;ДАННЫЕ = АДРЕСУ - В РП
+CONT ALUS=ZА,RА=А,ALU,YDEV=PSMEM,WRY
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=А,FUNC=ADD,ALUD=В,RB=A,ALU,YDST=ADRREG
+;0 - B РГ.А (АДРЕС И ДАННЫЕ)
+CADRE:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,ALU,YDST=ADRREG
+;ПИШЕМ АДРЕС В БОПП
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=A,H,ALUD=B,RB=WR6
+;ЧИТАЕМ РП, СРАВНИВАЕМ
+CONT YDEV=PSMEM,DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MADR,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=А,FUNC=ADD,ALUD=В,RB=A,ALU,YDST=ADRREG
+%J% А=CADRE,МАР=РЕ
+;
+;
+ПPИПF:ENTRY
+;===== ЗАПИСЬ ДАННЫХ=ИНВЕРТИР.АДРЕСУ В РП ПО ВСЕМ АДРЕСАМ В ОБРАТНОМ НАПРАВЛЕНИИ
+;   А - ЧТО ПИСАЛИ (=/РС); Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ;
+;   РС - АДРЕС РП = 4-7 РГ.БОПП
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 20 РАЗР.)
+;
+CJP А=PSADRF,МАР=РЕ
+PSADRF:CONT А=HF,%T%
+%S% А=INITST,МАР=РЕ
+;"FF..FF" - В РГ.РС, В АИСП (НАЧАЛЬНЫЙ АДРЕС ДЛЯ ЗАПИСИ В ОБРАТНОМ НАПРАВЛЕНИИ)
+CONT A=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС,ALU,YDST=ADRREG
+PUSH А=1023,МАР=РЕ
+;ДАННЫЕ = ИНВЕРТИРОВАННОМУ АДРЕСУ - В РП
+CONT ALUS=ZА,RА=РС,FUNC=EXNOR,ALU,YDEV=PSMEM,WRY
+;УМЕНЬШАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=SUBR,CI,ALUD=В,RB=PC,ALU,YDST=ADRREG
+;"FF..FF" - В РС
+CADRF:CONT A=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС,ALU,YDST=ADRREG
+PUSH А=1023,МАР=РЕ
+;ПИШЕМ АДРЕС В БОПП
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ВЫЧИСЛЯЕМ ИНВЕРТИР.АДРЕС, КОТОРЫЙ = ДАННЫМ
+CONT ALUS=ZА,RА=РС,FUNC=EXNOR,ALUD=В,RВ=А
+;ЧИТАЕМ РП, СРАВНИВАЕМ
+CONT YDEV=PSMEM,DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MADR,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=SUBR,CI,ALUD=В,RB=PC,ALU,YDST=ADRREG
+%J% А=CADRF,МАР=РЕ
+;
+;     =================
+;     Б О Б Р,  Б И З М
+;     =================
+;
+БОБИ10:ENTRY
+;===== ПИШЕМ ИЗ БОПП В БОБР,БИЗМ ПО АДРЕСУ, ЗАДАННОМУ В БОПП; ЧИТАЕМ В БОПП
+;   4-7 РГ.БОПП - АДРЕС (В 11-20 РАЗР.); 11 РГ.- ДАННЫЕ ДЛЯ ЗАПИСИ: 2,3 РАЗР.
+;   15 РГ.БОПП - ЧТО ПРОЧИТАЛИ (2,3 РАЗРЯДЫ)
+;
+CJP А=PSAD10,МАР=РЕ
+PSAD10:CONT А=Н10,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ 4-7 РГ.БОПП (АДРЕС) И 11 РГ.БОПП (ДАННЫЕ)
+CADR10:CJS А=RD4/7,МАР=РЕ
+CONT ALUS=ZА,RА=WR6,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;ПИШЕМ В БОБР,БИЗМ
+CONT YDEV=МРМЕМ,IОМР,MPADR=11,DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG,DDEV=ВВ,WRD
+;ЧИТАЕМ, УБИРАЕМ МУСОР, ПИШЕМ В БОПП
+CONT DDEV=ВВ,ALUS=DZ,Н,ALUD=В,RВ=У
+CONT A=H6,DSRC=PROM,ALUS=DA,RA=Y,FUNC=AND,H,ALUD=B,RB=У,ALU,YDEV=МРМЕМ
+>,WRY,IОМР,MPADR=15
+CJP А=CADR10,МАР=РЕ,%TIK%
+;
+;
+БОБИ11:ENTRY
+;===== ПИШЕМ 0/F В БОБР,БИЗМ ПО 1 АДРЕСУ, ЧИТАЕМ, СРАВНИВАЕМ
+;   РГ.А - ЧТО ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ; AДРЕС В РФС = 4/7 РГ.БОПП
+;   ПРИ ОШ. 11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ, 2,3 РАЗР.)
+;
+CJP А=PSAD11,МАР=РЕ
+PSAD11:CONT А=Н11,%T%
+%S% А=INITST,МАР=РЕ
+;CONST - В РГ.А
+CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=В,RВ=А
+;АДРЕС ИЗ ПЗУ - В РГ.РС МПС, В РФС, В 4-7 РГ.БОПП
+CONT А=B11,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ЦИКЛ: ПИШЕМ РГ.А В БОБР,БИЗМ
+CADR11:CONT ALUS=ZА,RА=А,ALU,%TRSH%,DDEV=ВВ,WRD
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT DDEV=ВВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H6,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;ИНВЕРТИРУЕМ РГ.А
+%J% А=CADR11,МАР=РЕ,ALUS=ZВ,RВ=А,FUNC=EXNOR,ALUD=В
+;
+;
+БОБИ12:ENTRY
+;===== ЗАПИСЬ CONST1,CONST2 В БОБР,БИЗМ ПО 2 АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   1 АДР.- В РС; 2 АДР.- РССОРУ; CONST1-DADR,CONST2-HALF, ПЕРЕПИСЫВАЮТСЯ В А;
+;   Y - ЧТЕНИЕ ПО 1 АДРЕСУ И ПО 2-ОМУ. Q - РЕЗ-Т СРАВНЕНИЯ
+;   ОШИБКИ: 00 - ОШИБОЧНОЕ ЧТЕНИЕ ПО 1-ОМУ АДРЕСУ; 01 - ПО 2-ОМУ;
+;   11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ, 2,3 РАЗР.), 4-7 = АДРЕС.
+;
+CJP А=PSAD12,МАР=РЕ
+PSAD12:CONT А=Н12,%T%
+%S% А=INITST,МАР=РЕ
+;ПИШЕМ: 1-Й АДРЕС ИЗ ПЗУ - В РГ.РС МПС, В РФС
+CONT А=С15,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;CONST1 - В DADR, В БОБР,БИЗМ
+CONT А=ZER,DSRC=PROM,DDEV=ВВ,WRD,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;2-Й АДРЕС - В РССОРУ, В РФС
+CONT А=В13,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РССОРУ,ALU,YDST=PHYSPG
+;CONST2 - В HALF, В БОБР,БИЗМ
+CONT А=CFFF,DSRC=PROM,DDEV=ВВ,WRD,ALUS=DZ,Н,ALUD=В,RВ=HALF
+;ЧИТАЕМ: 1-Й АДРЕС - В РФС, В БОПП
+CADR12:CONT ALUS=ZА,RА=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+CONT ALUS=ZA,RA=DADR,ALUD=B,RB=A
+;ЧИТАЕМ БОБР,БИЗМ В РГ.Y МПС, СРАВНИВАЕМ
+CONT DDEV=ВВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H6,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;АНАЛОГИЧНО СО 2 АДРЕСОМ
+CONT ALUS=ZА,RА=РССОРУ,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PCCOPY,H,ALUD=B,RB=WR6
+CONT ALUS=ZA,RA=HALF,ALUD=B,RB=A
+CONT DDEV=ВВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H6,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CADR12,МАР=РЕ,%TIK%
+;
+;
+БОБИ13:ENTRY
+;===== ЗАПИСЬ CONST,/CONST В БОБР,БИЗМ ПО ВСЕМ АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А - ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ; РС - АДРЕС = 4-7 РГ.БОПП.
+;   ПРИ ОШ. 11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ, 2,3 РАЗР.)
+;
+CJP А=PSAD13,МАР=РЕ
+PSAD13:CONT А=Н13,%T%
+%S% А=INITST,МАР=РЕ
+;CONST - B РГ.A, "0" - В РГ. РС, РФС
+CONT A=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;ПИШЕМ "CONST" ИЗ РГ.А - В БОБР,БИЗМ
+CONT ALUS=ZА,RА=А,ALU,%TRSH%,DDEV=ВВ,WRD
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЦИКЛ НА ЧТЕНИЕ И НОВУЮ ЗАПИСЬ ИНВЕРТИРОВАННОЙ CONST
+;НАЧАЛЬНЫЙ АДРЕС - В РС, В РФС, В БОПП
+CADR13:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ЧИТАЕМ БОБР,БИЗМ, СРАВНИВАЕМ
+CONT DDEV=ВВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H6,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;ПИШЕМ ПО ТОМУ ЖЕ АДРЕСУ ИНВЕРТИРОВАННУЮ CONST, УВЕЛИЧИВАЕМ АДРЕС
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALU,%TRSH%,DDEV=ВВ,WRD
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ИНВЕРТИРУЕМ CONST, ИДЕМ НА НОВУЮ ПРОВЕРКУ
+%J% А=CADR13,МАР=РЕ,ALUS=ZВ,RВ=А,FUNC=EXNOR,Н,ALUD=В
+;
+;
+БОБИ14:ENTRY
+;===== ЗАПИСЬ ДАННЫХ=СДВИНУТОМУ АДРЕСУ В БОБР,БИЗМ ПО ВСЕМ АДРЕСАМ, ПРОВЕРКА
+;   РС - АДРЕС БОБР,БИЗМ = РФС = 4-7 РГ.БОПП;
+;   А = ЧТО ПИШЕМ = РС, СДВИНУТОМУ В МЛ.РАЗРЯДЫ; Y - ЧТО ЧИТАЕМ;
+;   ПРИ ОШ. 11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ, 2,3 РАЗР.)
+;
+CJP А=PSAD14,МАР=РЕ
+PSAD14:CONT А=Н14,%T%
+%S% А=INITST,МАР=РЕ
+;"0" - В РГ.РС, В РФС
+PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;ДАННЫЕ = СДВИНУТОМУ АДРЕСУ - В БОБР,БИЗМ
+CONT ALUS=ZА,RА=РС,ALU,DSRC=SHIFT,MPS,PSHF=SН0+10,SHF=LOG,DDEV=ВВ,WRD
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЧИТАЕМ; 0 - B РС, B БОПП
+CADR14:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ВЫЧИСЛЯЕМ СДВИНУТЫЙ АДРЕС - В РГ.А
+CONT ALUS=DZ,Н,ALUD=ВА,RА=РС,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0+10,SHF=LOG
+;ЧИТАЕМ БОБР,БИЗМ, СРАВНИВАЕМ
+CONT DDEV=ВВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H6,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+%J% А=CADR14,МАР=РЕ
+;
+;
+БОБИ15:ENTRY
+;===== ЗАПИСЬ ДАННЫХ=ИНВЕРТИР.АДРЕСУ В БОБР,БИЗМ В ОБРАТНОМ НАПРАВЛЕНИИ
+;   А - ЧТО ПИСАЛИ (=/РС, СДВИНУТОМУ В МЛ.РАЗРЯДЫ); Q - РЕЗУЛЬТАТ СРАВНЕНИЯ;
+;   Y - ЧИТАЕМ; РС - АДРЕС БОБР,БИЗМ = 4-7 РГ.БОПП;
+;   ПРИ ОШ. 11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ, 2,3 РАЗР.)
+;
+CJP А=PSAD15,МАР=РЕ
+PSAD15:CONT А=Н15,%T%
+%S% А=INITST,МАР=РЕ
+;"FF..FF" - В РГ.РС, В РФС (НАЧАЛЬНЫЙ АДРЕС ДЛЯ ЗАПИСИ В ОБРАТНОМ НАПРАВЛЕНИИ)
+CONT A=CFFF,DSRC=PROM,ALUS=DZ,H,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+PUSH А=1023,МАР=РЕ
+;ДАННЫЕ = ИНВЕРТИРОВАННОМУ АДРЕСУ, СДВИНУТОМУ В МЛ.РАЗРЯДЫ - В БОБР,БИЗМ
+CONT ALUS=ZА,RА=РС,FUNC=EXNOR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+10,SHF=LOG,DDEV=ВВ,WRD
+;УМЕНЬШАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=SUBR,CI,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЧИТАЕМ. "FF..FF" - В РС
+CADR15:CONT A=CFFF,DSRC=PROM,ALUS=DZ,H,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+PUSH А=1023,МАР=РЕ
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ВЫЧИСЛЯЕМ ИНВЕРТИР.АДРЕС, СДВИГАЕМ В МЛАДШИЕ РАЗРЯДЫ
+CONT ALUS=ZА,RА=РС,FUNC=EXNOR,ALUD=В,RВ=А
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0+10,SHF=LOG
+;ЧИТАЕМ БОБР,БИЗМ, СРАВНИВАЕМ
+CONT DDEV=ВВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H6,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=SUBR,CI,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+%J% А=CADR15,МАР=РЕ
+;
+;     =======
+;     Б М С П
+;     =======
+;
+БМСП16:ENTRY
+;===== ПИШЕМ ИЗ БОПП В БМСП ПО АДРЕСУ, ЗАДАННОМУ В БОПП; ЧИТАЕМ В БОПП
+;   4-7 РГ.БОПП - АДРЕС (В 11-20 РАЗР.); 11 РГ.- ДАННЫЕ ДЛЯ ЗАПИСИ (1-Й РАЗР.)
+;   15 РГ.БОПП - ЧТО ПРОЧИТАЛИ (1-Й РАЗРЯД)
+;
+CJP А=PSAD16,МАР=РЕ
+PSAD16:CONT А=Н16,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ 4-7 РГ.БОПП (АДРЕС) И 11 РГ.БОПП (ДАННЫЕ)
+CADR16:CJS А=RD4/7,МАР=РЕ
+CONT ALUS=ZА,RА=WR6,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;ПИШЕМ В БМСП
+CONT YDEV=МРМЕМ,IОМР,MPADR=11,DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG,DDEV=MODB,WRD
+>,ALUS=DZ,ALUD=B,RB=A
+;ЧИТАЕМ, УБИРАЕМ МУСОР, ПИШЕМ В БОПП
+CONT DDEV=MODB,ALUS=DZ,Н,ALUD=В,RВ=У
+CONT A=H1,DSRC=PROM,ALUS=DA,RA=Y,FUNC=AND,H,ALUD=Q,ALU,YDEV=МРМЕМ
+>,WRY,IОМР,MPADR=15
+CJP А=CADR16,МАР=РЕ,%TIK%
+;
+;
+БМСП17:ENTRY
+;===== ПИШЕМ 0/1 В БМСП ПО 1 АДРЕСУ, ЧИТАЕМ, СРАВНИВАЕМ
+;   РГ.А - ЧТО ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ;
+;   АДРЕС В РФС = CONST ИЗ ПЗУ = 4/7 РГ.БОПП;
+;   ПРИ ОШ. 11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ, 1-Й РАЗРЯД)
+;
+CJP А=PSAD17,МАР=РЕ
+PSAD17:CONT А=Н17,%T%
+%S% А=INITST,МАР=РЕ
+;АДРЕС ИЗ ПЗУ - В РГ.РС МПС, В РФС, В 4-7 РГ.БОПП
+CONT А=B12,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ РГ.А В БМСП
+CADR17:CONT ALUS=ZА,RА=А,ALU,%TRSH%,DDEV=MODB,WRD
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H1,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;ИНВЕРТИРУЕМ РГ.А
+%J% А=CADR17,МАР=РЕ,ALUS=ZВ,RВ=А,FUNC=EXNOR,ALUD=В
+;
+;
+БМСП18:ENTRY
+;===== ЗАПИСЬ CONST1,CONST2 В БМСП ПО 2 АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   1 АДР.- В РС; 2 АДР.- РССОРУ; CONST1-DADR; CONST2-HALF, ПЕРЕПИСЫВАЮТСЯ В А!
+;   Y - ЧТЕНИЕ ПО 1 АДРЕСУ И ПО 2-ОМУ. Q - РЕЗ-Т СРАВНЕНИЯ.
+;   ОШИБКИ: 00 - НЕСОВПАДЕНИЕ ПО 1-ОМУ АДРЕСУ; 01 - ПО 2-ОМУ; АДР.= 4-7 РГ.БОПП;
+;   ПРИ ОШ. 11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ, 1-Й РАЗРЯД)
+;
+CJP А=PSAD18,МАР=РЕ
+PSAD18:CONT А=Н18,%T%
+%S% А=INITST,МАР=РЕ
+;ПИШЕМ: 1-Й АДРЕС ИЗ ПЗУ - В РГ.РС МПС, В РФС
+CONT А=С15,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;CONST1 - В DADR, В БМСП
+CONT А=ZER,DSRC=PROM,DDEV=MODB,WRD,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;2-Й АДРЕС - В РССОРУ, В РФС
+CONT А=В13,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РССОРУ,ALU,YDST=PHYSPG
+;CONST2 - В HALF, В БМСП
+CONT А=CFFF,DSRC=PROM,DDEV=MODB,WRD,ALUS=DZ,Н,ALUD=В,RВ=HALF
+;ЧИТАЕМ: 1-Й АДРЕС - В РФС, В БОПП
+CADR18:CONT ALUS=ZА,RА=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+CONT ALUS=ZA,RA=DADR,H,ALUD=B,RB=A
+;ЧИТАЕМ БМСП В РГ.Y МПС, СРАВНИВАЕМ
+CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H1,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;АНАЛОГИЧНО СО 2 АДРЕСОМ
+CONT ALUS=ZА,RА=РССОРУ,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PCCOPY,H,ALUD=B,RB=WR6
+CONT ALUS=ZA,RA=HALF,H,ALUD=B,RB=A
+CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=H1,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CADR18,МАР=РЕ,%TIK%
+;
+;
+БМСП19:ENTRY
+;===== ЗАПИСЬ 0/F В БМСП ПО ВСЕМ АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А - ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ; РС - АДРЕС = 4-7 РГ.БОПП;
+;   ПРИ ОШ. 11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ, 1-Й РАЗРЯД)
+;
+CJP А=PSAD19,МАР=РЕ
+PSAD19:CONT А=Н19,%T%
+%S% А=INITST,МАР=РЕ
+;"0" - В РГ.А, РС, РФС
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;ПИШЕМ ИЗ РГ.А - В БМСП
+CONT ALUS=ZА,RА=А,ALU,%TRSH%,DDEV=MODB,WRD
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЦИКЛ НА ЧТЕНИЕ И НОВУЮ ЗАПИСЬ ИНВЕРТИРОВАННОЙ CONST
+CADR19:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ЧИТАЕМ БМСП В РГ.Y МПС, СРАВНИВАЕМ
+CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H1,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;ПИШЕМ ПО ТОМУ ЖЕ АДРЕСУ ИНВЕРТИРОВАННУЮ CONST
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALU,%TRSH%,DDEV=MODB,WRD
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ИНВЕРТИРУЕМ CONST, ИДЕМ НА НОВУЮ ПРОВЕРКУ
+%J% А=CADR19,МАР=РЕ,ALUS=ZВ,RВ=А,FUNC=EXNOR,Н,ALUD=В
+;
+;
+БМСП1А:ENTRY
+;===== ЗАПИСЬ ДАННЫХ=СДВИНУТОМУ АДРЕСУ В БМСП ПО ВСЕМ АДРЕСАМ, ПРОВЕРКА
+;   РС - АДРЕС БМСП; А = ЧТО ПИШЕМ = РС, СДВИНУТОМУ В МЛ.РАЗР.= 4-7 РГ.БОПП;
+;   Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ;
+;   ПРИ ОШ. 11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ, 1-Й РАЗРЯД)
+;
+CJP А=PSAD1A,МАР=РЕ
+PSAD1A:CONT А=Н1А,%T%
+%S% А=INITST,МАР=РЕ
+;"0" - В РГ.РС, В РФС
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+PUSH А=1023,МАР=РЕ
+;ДАННЫЕ = СДВИНУТОМУ АДРЕСУ - В БМСП
+CONT ALUS=ZА,RА=РС,ALU,DSRC=SHIFT,MPS,PSHF=SН0+10,SHF=LOG,DDEV=MODB,WRD
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЧИТАЕМ. 0 - B РС, В БОПП
+CADR1A:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ВЫЧИСЛЯЕМ СДВИНУТЫЙ АДРЕС - В РГ.А
+CONT ALUS=DZ,Н,ALUD=ВА,RА=РС,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0+10,SHF=LOG
+;ЧИТАЕМ БМСП, СРАВНИВАЕМ
+CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H1,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+%J% А=CADR1A,МАР=РЕ
+;
+;
+БМСП1В:ENTRY
+;===== ЗАПИСЬ ДАННЫХ=ИНВЕРТИР.АДРЕСУ В БМСП В ОБРАТНОМ НАПРАВЛЕНИИ
+;   А - ЧТО ПИСАЛИ (=/РС, СДВИНУТОМУ В МЛ.РАЗРЯДЫ); Q - РЕЗУЛЬТАТ СРАВНЕНИЯ;
+;   Y - ЧИТАЕМ; РС - АДРЕС БМСП = 4-7 РГ.БОПП;
+;   ПРИ ОШ. 11 РГ.БОПП = A (ЧТО ПИШЕМ), 15 = Y (ЧТО ПРОЧИТАЛИ, 1-Й РАЗРЯД)
+;
+CJP А=PSAD1B,МАР=РЕ
+PSAD1B:CONT А=Н1В,%T%
+%S% А=INITST,МАР=РЕ
+;"FF..FF" - В РГ.РС, В РФС (НАЧАЛЬНЫЙ АДРЕС ДЛЯ ЗАПИСИ В ОБРАТНОМ НАПРАВЛЕНИИ)
+CONT A=CFFF,DSRC=PROM,ALUS=DZ,H,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+PUSH А=1023,МАР=РЕ
+;ДАННЫЕ = ИНВЕРТИРОВАННОМУ АДРЕСУ, СДВИНУТОМУ В МЛ.РАЗРЯДЫ - В БМСП
+CONT ALUS=ZА,RА=РС,FUNC=EXNOR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+10,SHF=LOG,DDEV=MODB
+>,WRD
+;УМЕНЬШАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=SUBR,CI,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЧИТАЕМ. "FF..FF" - В РС
+CADR1B:CONT A=CFFF,DSRC=PROM,ALUS=DZ,H,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+PUSH А=1023,МАР=РЕ
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ВЫЧИСЛЯЕМ ИНВЕРТИР.АДРЕС, СДВИГАЕМ В МЛАДШИЕ РАЗРЯДЫ
+CONT ALUS=ZА,RА=РС,FUNC=EXNOR,ALUD=В,RВ=А
+CONT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=А,ALU,DSRC=SHIFT,MPS,PSHF=SН0+10,SHF=LOG
+;ЧИТАЕМ БМСП, СРАВНИВАЕМ
+CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H1,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=SUBR,CI,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+%J% А=CADR1B,МАР=РЕ
+;
+;     ============================
+;     О З У  ПРИОРИТЕТОВ СТРАНИЦ 0
+;     ============================
+;
+ПС01С:ENTRY
+;===== ПИШЕМ ИЗ БОПП В ОЗУ ПРИОРИТЕТОВ СТРАНИЦ 0 ПО ЗАДАННОМУ АДР.;ЧИТАЕМ В БОПП
+;   4-7 РГ.БОПП - АДРЕС ОЗУ (В 11-20 РАЗР.); 8-11 РГ.- ЧТО ПИШЕМ (11-20 РАЗР.)
+;   12-15 РГ.БОПП - ЧТО ПРОЧИТАЛИ (11-20 РАЗРЯДЫ)
+;
+CJP А=PSAD1C,МАР=РЕ
+PSAD1C:CONT А=Н1С,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ 4-7 РГ.БОПП (АДРЕС) И 8-11 РГ.БОПП (ДАННЫЕ)
+CADR1C:CJS А=RD4/7,МАР=РЕ
+CJS А=RD8/В,МАР=РЕ,ALUS=ZА,RА=WR6,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;ПИШЕМ В ОЗУ ПРИОРИТЕТОВ СТРАНИЦ
+CONT ALUS=ZА,RА=WR6,ALU,DDEV=РРМЕМ0,WRD
+;ЧИТАЕМ, УБИРАЕМ МУСОР, ПИШЕМ В БОПП
+CONT DDEV=РРМЕМ0,ALUS=DZ,ALUD=В,RВ=У
+CONT A=MPP,DSRC=PROM,ALUS=DA,RA=Y,FUNC=AND,H,ALUD=B,RB=WR6
+CJS А=OUTC/F,МАР=РЕ
+CJP А=CADR1С,МАР=РЕ,%TIK%
+;
+;
+ПC01D:ENTRY
+;===== ПИШЕМ 0/F В ОЗУ ПРИОРИТЕТОВ СТРАНИЦ 0 ПО 1 АДРЕСУ, ЧИТАЕМ, СРАВНИВАЕМ
+;   РГ.А - ЧТО ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ, СРАВНИВАЕМ 12 РАЗРЯДОВ.
+;   АДРЕС В РФС = CONST ИЗ ПЗУ = 4/7 РГ.БОПП;
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 11-20 PАЗР.)
+;
+CJP А=PSAD1D,МАР=РЕ
+PSAD1D:CONT А=H1D,%T%
+%S% А=INITST,МАР=РЕ
+;АДРЕС ИЗ ПЗУ - В РГ.РС МПС, В РФС, В 4-7 РГ.БОПП
+CONT А=B12,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ РГ.А В ОЗУ ПС0
+CADR1D:CONT ALUS=ZА,RА=А,ALU,DDEV=РРМЕМ0,WRD
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT DDEV=PPMEM0,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;ИНВЕРТИРУЕМ РГ.А
+%J% А=CADR1D,МАР=РЕ,ALUS=ZВ,RВ=А,FUNC=EXNOR,ALUD=В
+;
+;
+ПС01Е:ENTRY
+;===== ЗАПИСЬ CONST1,CONST2 В ОЗУ ПС0 ПО 2 АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   1 АДР.- РС; 2 АДР.- РССОРУ; CONST1-DADR; CONST2-HALF; ПЕРЕПИСЫВАЮТСЯ В РГ.A
+;   Y - ЧТЕНИЕ ПО 1 АДРЕСУ И ПО 2-ОМУ. Q - РЕЗ-Т СРАВНЕНИЯ.
+;   ОШИБКИ: 0 - НЕСОВПАДЕНИЕ ПО 1-ОМУ АДРЕСУ; 1 - ПО 2-ОМУ; АДРЕС = 4-7 РГ.БОПП
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 11-20 PАЗР.)
+;
+CJP А=PSAD1E,МАР=РЕ
+PSAD1E:CONT А=Н1Е,%T%
+%S% А=INITST,МАР=РЕ
+;ПИШЕМ: 1-Й АДРЕС ИЗ ПЗУ - В РГ.РС МПС, В РФС
+CONT А=С15,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;CONST1 - В DADR, В ОЗУ ПС0
+CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR,ALU,DDEV=РРМЕМ0,WRD
+;2-Й АДРЕС - В РССОРУ, В РФС
+CONT А=В13,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РССОРУ,ALU,YDST=PHYSPG
+;CONST2 - В HALF, В ОЗУ ПС0
+CONT А=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=HALF,ALU,DDEV=РРМЕМ0,WRD
+;ЧИТАЕМ: 1-Й АДРЕС - В РФС, В БОПП
+CADR1E:CONT ALUS=ZА,RА=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+CONT ALUS=ZA,RA=DADR,H,ALUD=B,RB=A
+;ЧИТАЕМ ИЗ ОЗУ ПС0 - В РГ.Y МПС, СРАВНИВАЕМ
+CONT DDEV=PPMEM0,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;АНАЛОГИЧНО СО 2 АДРЕСОМ
+CONT ALUS=ZА,RА=РССОРУ,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PCCOPY,H,ALUD=B,RB=WR6
+CONT ALUS=ZA,RA=HALF,H,ALUD=B,RB=A
+CONT DDEV=PPMEM0,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CADR1E,МАР=РЕ,%TIK%
+;
+;
+ПC01F:ENTRY
+;===== ЗАПИСЬ 0/F В ОЗУ ПС0 ПО ВСЕМ АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А - ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ; РС - АДРЕС ОЗУ = 4-7 РГ.БОПП
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 11-20 PАЗР.)
+;
+CJP А=PSAD1F,МАР=РЕ
+PSAD1F:CONT А=H1F,%T%
+%S% А=INITST,МАР=РЕ
+;"0" - В РГ.А, РС, РФС
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;ПИШЕМ "0" ИЗ РГ.А - В ОЗУ ПС0
+CONT ALUS=ZА,RА=А,ALU,DDEV=РРМЕМ0,WRD
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЦИКЛ НА ЧТЕНИЕ И НОВУЮ ЗАПИСЬ ИНВЕРТИРОВАННОЙ CONST
+CADR1F:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ЧИТАЕМ ОЗУ ПС0, СРАВНИВАЕМ
+CONT DDEV=PPMEM0,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;ПИШЕМ ПО ТОМУ ЖЕ АДРЕСУ ИНВЕРТИРОВАННУЮ CONST, УВЕЛИЧИВАЕМ АДРЕС
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALU,DDEV=РРМЕМ0,WRD
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ИНВЕРТИРУЕМ CONST, ИДЕМ НА НОВУЮ ПРОВЕРКУ
+%J% А=CADR1F,МАР=РЕ,ALUS=ZВ,RВ=А,FUNC=EXNOR,Н,ALUD=В
+;
+;
+ПС020:ENTRY
+;===== ЗАПИСЬ ДАННЫХ=АДРЕСУ В ОЗУ ПС0 ПО ВСЕМ АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А - АДРЕС ОЗУ = 4-7 РГ.БОПП = ЧТО ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 11-20 PАЗР.)
+;
+CJP А=PSAD20,МАР=РЕ
+PSAD20:CONT А=Н20,%T%
+%S% А=INITST,МАР=РЕ
+;"0" - В РГ.А, В РФС.
+PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,ALU,YDST=PHYSPG
+;ПИШЕМ ДАННЫЕ = АДРЕСУ
+CONT ALUS=ZА,RА=А,ALU,DDEV=РРМЕМ0,WRD
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЧИТАЕМ; 0 - В РГ.А, В 4-7 РГ.БОПП
+CADR20:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=A,H,ALUD=B,RB=WR6
+;ЧИТАЕМ ОЗУ ПС0, СРАВНИВАЕМ
+CONT DDEV=PPMEM0,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+%J% А=CADR20,МАР=РЕ
+;
+;
+ПС021:ENTRY
+;===== ЗАПИСЬ ДАННЫХ=ИНВЕРТ.АДРЕСУ В ОЗУ ПС0 ПО ВСЕМ АДРЕСАМ В ОБРАТНОМ НАПРАВЛ.
+;   А - ЧТО ПИСАЛИ (=/РС); Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ;
+;   РС - АДРЕС ОЗУ = 4-7 РГ.БОПП;
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 11-20 PАЗР.)
+;
+CJP А=PSAD21,МАР=РЕ
+PSAD21:CONT А=Н21,%T%
+%S% А=INITST,МАР=РЕ
+;"FF..FF" - В РГ.РС, В РФС (НАЧАЛЬНЫЙ АДРЕС ДЛЯ ЗАПИСИ В ОБРАТНОМ НАПРАВЛЕНИИ)
+CONT A=CFFF,DSRC=PROM,ALUS=DZ,H,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+PUSH А=1023,МАР=РЕ
+;ДАННЫЕ = ИНВЕРТИРОВАННОМУ АДРЕСУ - В ОЗУ ПС0
+CONT ALUS=ZА,RА=РС,FUNC=EXNOR,ALU,DDEV=РРМЕМ0,WRD
+;УМЕНЬШАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=SUBR,CI,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЧИТАЕМ. "FF..FF" - В РС
+CADR21:CONT A=CFFF,DSRC=PROM,ALUS=DZ,H,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+PUSH А=1023,МАР=РЕ
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ВЫЧИСЛЯЕМ ИНВЕРТИР.АДРЕС
+CONT ALUS=ZА,RА=РС,FUNC=EXNOR,ALUD=В,RВ=А
+;ЧИТАЕМ ОЗУ ПС0, СРАВНИВАЕМ
+CONT DDEV=PPMEM0,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=SUBR,CI,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+%J% А=CADR21,МАР=РЕ
+;
+;     ============================
+;     О З У  ПРИОРИТЕТОВ СТРАНИЦ 1
+;     ============================
+;
+ПС122:ENTRY
+;===== ПИШЕМ ИЗ БОПП В ОЗУ ПРИОРИТЕТОВ СТРАНИЦ 1 ПО ЗАДАННОМУ АДР.;ЧИТАЕМ В БОПП
+;   4-7 РГ.БОПП - АДРЕС ОЗУ (В 11-20 РАЗР.); 8-11 РГ.- ЧТО ПИШЕМ (11-20 РАЗРЯДЫ)
+;   12-15 РГ.БОПП - ЧТО ПРОЧИТАЛИ (11-20 РАЗРЯДЫ)
+;
+CJP А=PSAD22,МАР=РЕ
+PSAD22:CONT А=Н22,%T%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ 4-7 РГ.БОПП (АДРЕС) И 8-11 РГ.БОПП (ДАННЫЕ)
+CADR22:CJS А=RD4/7,МАР=РЕ
+CJS А=RD8/В,МАР=РЕ,ALUS=ZА,RА=WR6,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;ПИШЕМ В ОЗУ ПРИОРИТЕТОВ СТРАНИЦ
+CONT ALUS=ZА,RА=WR6,ALUD=B,RB=A,ALU,DDEV=РРМЕМ1,WRD
+;ЧИТАЕМ, УБИРАЕМ МУСОР, ПИШЕМ В БОПП
+CONT DDEV=РРМЕМ1,ALUS=DZ,ALUD=В,RВ=У
+CONT A=MPP,DSRC=PROM,ALUS=DA,RA=Y,FUNC=AND,H,ALUD=B,RB=WR6
+CJS А=OUTC/F,МАР=РЕ
+CJP А=CADR22,МАР=РЕ,%TIK%
+;
+;
+ПС123:ENTRY
+;===== ПИШЕМ CONST,/CONST В ОЗУ ПРИОРИТЕТОВ СТРАНИЦ 1 ПО 1 АДРЕСУ
+;   РГ.А - ЧТО ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗ-Т СРАВНЕНИЯ, СРАВНИВАЕМ 12 РАЗРЯДОВ.
+;   АДРЕС В РФС = CONST ИЗ ПЗУ = 4/7 РГ.БОПП;
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 11-20 PАЗР.)
+;
+CJP А=PSAD23,МАР=РЕ
+PSAD23:CONT А=Н23,%T%
+%S% А=INITST,МАР=РЕ
+;АДРЕС ИЗ ПЗУ - В РГ.РС МПС, В РФС, В 4-7 РГ.БОПП
+CONT А=B12,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;CONST - В РГ.А
+CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=В,RВ=А
+;ЦИКЛ: ПИШЕМ РГ.А В ОЗУ ПС1
+CADR23:CONT ALUS=ZА,RА=А,ALU,DDEV=РРМЕМ1,WRD
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ЧИТАЕМ, СРАВНИВАЕМ
+CONT DDEV=PPMEM1,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;ИНВЕРТИРУЕМ РГ.А
+%J% А=CADR23,МАР=РЕ,ALUS=ZВ,RВ=А,FUNC=EXNOR,ALUD=В
+;
+;
+ПС124:ENTRY
+;===== ЗАПИСЬ CONST1,CONST2 В ОЗУ ПС1 ПО 2 АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   1 АДР.- РС; 2 АДР.- РССОРУ; CONST1-DADR, CONST2-HALF, ПЕРЕПИСЫВАЮТСЯ В А.
+;   Y - ЧТЕНИЕ ПО 1 АДРЕСУ И ПО 2-ОМУ. Q - РЕЗ=Т СРАВНЕНИЯ.
+;   ОШИБКИ: 0 - НЕСОВПАДЕНИЕ ПО 1-ОМУ АДРЕСУ; 1 - ПО 2-ОМУ; АДРЕС = 4-7 РГ.БОПП
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 11-20 PАЗР.)
+;
+CJP А=PSAD24,МАР=РЕ
+PSAD24:CONT А=Н24,%T%
+%S% А=INITST,МАР=РЕ
+;ПИШЕМ: 1-Й АДРЕС ИЗ ПЗУ - В РГ.РС МПС, В РФС
+CONT А=С15,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;CONST1 - В DADR, В ОЗУ ПС1
+CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR,ALU,DDEV=РРМЕМ1,WRD
+;2-Й АДРЕС - В РССОРУ, В РФС
+CONT А=В13,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РССОРУ,ALU,YDST=PHYSPG
+;CONST2 - В HALF, В ОЗУ ПС1
+CONT А=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=HALF,ALU,DDEV=РРМЕМ1,WRD
+;ЧИТАЕМ: 1-Й АДРЕС - В РФС
+CADR24:CONT ALUS=ZА,RА=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+CONT ALUS=ZA,RA=DADR,H,ALUD=B,RB=A
+;ЧИТАЕМ ИЗ ОЗУ ПС1 - В РГ.Y МПС, СРАВНИВАЕМ
+CONT DDEV=PPMEM1,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
+;АНАЛОГИЧНО СО 2 АДРЕСОМ
+CONT ALUS=ZА,RА=РССОРУ,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PCCOPY,H,ALUD=B,RB=WR6
+CONT ALUS=ZA,RA=HALF,H,ALUD=B,RB=A
+CONT DDEV=PPMEM1,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
+%J% А=CADR24,МАР=РЕ,%TIK%
+;
+;
+ПС125:ENTRY
+;===== ЗАПИСЬ CONST,/CONST В ОЗУ ПС1 ПО ВСЕМ АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А - ПИШЕМ; Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ; РС - АДРЕС ОЗУ = 4-7 РГ.БОПП
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 11-20 PАЗР.)
+;
+CJP А=PSAD25,МАР=РЕ
+PSAD25:CONT А=Н25,%T%
+%S% А=INITST,МАР=РЕ
+;CONST - В РГ.А; "0" - В РГ.РС, В РФС
+CONT A=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+;ПИШЕМ CONST ИЗ РГ.А - В ОЗУ ПС1
+CONT ALUS=ZА,RА=А,ALU,DDEV=РРМЕМ1,WRD
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЦИКЛ НА ЧТЕНИЕ И НОВУЮ ЗАПИСЬ ИНВЕРТИРОВАННОЙ CONST
+CADR25:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ЧИТАЕМ ОЗУ ПС1, СРАВНИВАЕМ
+CONT DDEV=PPMEM1,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+;ПИШЕМ ПО ТОМУ ЖЕ АДРЕСУ ИНВЕРТИРОВАННУЮ CONST, УВЕЛИЧИВАЕМ АДРЕС
+CONT ALUS=ZА,RА=А,FUNC=EXNOR,ALU,DDEV=РРМЕМ1,WRD
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ИНВЕРТИРУЕМ CONST, ИДЕМ НА НОВУЮ ПРОВЕРКУ
+%J% А=CADR25,МАР=РЕ,ALUS=ZВ,RВ=А,FUNC=EXNOR,Н,ALUD=В
+;
+;
+ПС126:ENTRY
+;===== ЗАПИСЬ ДАННЫХ=АДРЕСУ В ОЗУ ПС1 ПО ВСЕМ АДРЕСАМ, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А - АДРЕС ОЗУ ПС1 = ЧТО ПИШЕМ; Y - ЧТО ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ;
+;   РС - АДРЕС ОЗУ = 4-7 РГ.БОПП;
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 11-20 PАЗР.)
+;
+CJP А=PSAD26,МАР=РЕ
+PSAD26:CONT А=Н26,%T%
+%S% А=INITST,МАР=РЕ
+;"0" - В РГ.А, В РФС
+PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,ALU,YDST=PHYSPG
+;ДАННЫЕ = АДРЕСУ - В ОЗУ ПС1
+CONT ALUS=ZА,RА=А,ALU,DDEV=РРМЕМ1,WRD
+;УВЕЛИЧИВАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЧИТАЕМ. 0 - В РГ.А
+CADR26:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=A,H,ALUD=B,RB=WR6
+;ЧИТАЕМ ОЗУ ПС1, СРАВНИВАЕМ
+CONT DDEV=PPMEM1,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+%J% А=CADR26,МАР=РЕ
+;
+;
+ПС127:ENTRY
+;===== ЗАПИСЬ ДАННЫХ=ИНВЕРТ.АДРЕСУ В ОЗУ ПС1 ПО ВСЕМ АДРЕСАМ В ОБРАТНОМ НАПРАВЛ.
+;   А - ЧТО ПИСАЛИ (=/РС); Y - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ;
+;   РС - АДРЕС ОЗУ = 4-7 РГ.БОПП;
+;   ПРИ ОШ. 8-11 РГ.БОПП = A (ЧТО ПИШЕМ), 12-15 = Y (ЧТО ПРОЧИТАЛИ, 11-20 PАЗР.)
+;
+CJP А=PSAD27,МАР=РЕ
+PSAD27:CONT А=Н27,%T%
+%S% А=INITST,МАР=РЕ
+;"FF..FF" - В РГ.РС, В РФС (НАЧАЛЬНЫЙ АДРЕС ДЛЯ ЗАПИСИ В ОБРАТНОМ НАПРАВЛЕНИИ)
+CONT A=CFFF,DSRC=PROM,ALUS=DZ,H,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+PUSH А=1023,МАР=РЕ
+;ДАННЫЕ = ИНВЕРТИРОВАННОМУ АДРЕСУ - В ОЗУ ПС1
+CONT ALUS=ZА,RА=РС,FUNC=EXNOR,ALU,DDEV=РРМЕМ1,WRD
+;УМЕНЬШАЕМ АДРЕС
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=SUBR,CI,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЧИТАЕМ. "FF..FF" - В РС
+CADR27:CONT A=CFFF,DSRC=PROM,ALUS=DZ,H,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+PUSH А=1023,МАР=РЕ
+;ВЫЧИСЛЯЕМ ИНВЕРТИР.АДРЕС
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+CONT ALUS=ZА,RА=РС,FUNC=EXNOR,ALUD=В,RВ=А
+;ЧИТАЕМ ОЗУ ПС1, СРАВНИВАЕМ
+CONT DDEV=PPMEM1,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=MPP,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT A=B11,DSRC=PROM,ALUS=DA,RА=РС,FUNC=SUBR,CI,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+%J% А=CADR27,МАР=РЕ
+;
+;
+LD2C:ENTRY
+;===== ПРОВЕРКА АВТОМАТИЧЕСКОЙ ЗАГРУЗКИ ОЗУ БМСП "1", НАЧИНАЯ С 0-ОГО АДРЕСА
+;   A - ЧТО Д.БЫТЬ; У - ПРОЧИТАННОЕ ИЗ БМСП; ПРОВЕРЯЕМ АДРЕСА, = ОБ'ЕМУ ПАМЯТИ
+;   PC - АДРЕС = АДРЕС В 11-20 РАЗРЯДАХ, = 4-7 РГ.БОПП
+;   ПРИ ОШ. 11 РГ.БОПП = ЧТО Д.БЫТЬ; 15РГ., МЛ.РАЗРЯД = ЧТО ПРОЧИТАЛИ;
+;   INTR = 00 - ПРОВЕРЯЕМ ЗАПИСЬ "0" В ОЗУ; 01: ЖДЕМ КОНЦА ЗАГРУЗКИ;
+;          02 - ПРОВЕРЯЕМ ЗАГРУЗКУ "1" В ОЗУ.
+;
+CJP А=PSAD2C,МАР=РЕ
+PSAD2C:CONT А=Н2С,%T%
+%S% А=INITST,МАР=РЕ
+;ЗАПИСЫВАЕМ В ОЗУ БМСП 0:
+CAD2C:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,H,ALUD=В,RВ=PC,ALU,YDST=PHYSPG
+CONT А=ZER,DSRC=PROM,DDEV=MODB,WRD,ALUS=DZ,ALUD=B,RB=A
+RFCT А=В11,DSRC=PROM,ALUS=DА,RА=PC,FUNC=ADD,ALUD=В,RВ=PC,ALU,YDST=PHYSPG
+;00: ПРОВЕРЯЕМ ЗАПИСАННЫЙ 0
+CONT %CLRTYP%
+PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ЧИТАЕМ БМСП В РГ.Y МПС, СРАВНИВАЕМ
+CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H1,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЗАПИСЫВАЕМ В РФС "0"
+CONT А=ZER,DSRC=PROM,ALUS=DZ,ALU,YDST=PHYSPG
+;ЗАПУСКАЕМ ЗАГРУЗКУ
+CONT FFCNT=STRTLD
+;01: ЖДЕМ КОНЦА ЗАГРУЗКИ
+CONT %TYPE%
+WЕ2С:CJP А=WЕ2С,МАР=РЕ,COND=FULMEM,IСС
+;02: ПРОВЕРЯЕМ ЗАГРУЖЕННУЮ "1"
+CONT %TYPE%
+CONT А=С1,DSRC=PROM,ALUS=DZ,ALUD=В,RВ=A
+PUSH А=127,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=PC,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=H1,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT А=В11,DSRC=PROM,ALUS=DА,RА=PC,FUNC=ADD,ALUD=В,RВ=PC,ALU,YDST=PHYSPG
+%J% А=CAD2C,МАР=РЕ
+;
+;
+LD2D:ENTRY
+;===== ПРОВЕРКА АВТОМАТИЧЕСКОЙ ЗАГРУЗКИ ОЗУ БМСП "1",НАЧИНАЯ С НЕНУЛЕВОГО АДРЕСА
+;   A - ЧТО Д.БЫТЬ; У - ПРОЧИТАННОЕ ИЗ БМСП; ПРОВЕРЯЕМ АДРЕСА, = ОБ'ЕМУ ПАМЯТИ
+;   PC - АДРЕС В 11-20 РАЗРЯДАХ, = 4-7 РГ.БОПП
+;   ПРИ ОШ. 11 РГ.БОПП = ЧТО Д.БЫТЬ; 15РГ., МЛ.РАЗРЯД = ЧТО ПРОЧИТАЛИ;
+;   INTR = 00 - ПРОВЕРЯЕМ ЗАПИСЬ "0" В ОЗУ; 01: ЖДЕМ КОНЦА ЗАГРУЗКИ;
+;          02 - ПРОВЕРЯЕМ "0" В 1-Й ПОЛОВИНЕ ПАМЯТИ; 03 - "1" ВО 2-Й ПОЛОВИНЕ.
+;
+CJP А=PSAD2D,МАР=РЕ
+PSAD2D:CONT А=H2D,%T%
+%S% А=INITST,МАР=РЕ
+;ЗАПИСЫВАЕМ В ОЗУ БМСП 0:
+CAD2D:PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,H,ALUD=В,RВ=PC,ALU,YDST=PHYSPG
+CONT А=ZER,DSRC=PROM,DDEV=MODB,WRD,ALUS=DZ,ALUD=B,RB=A
+RFCT А=В11,DSRC=PROM,ALUS=DА,RА=PC,FUNC=ADD,ALUD=В,RВ=PC,ALU,YDST=PHYSPG
+;00: ПРОВЕРЯЕМ ЗАПИСАННЫЙ 0
+CONT %CLRTYP%
+PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=PHYSPG
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+;ЧИТАЕМ БМСП В РГ.Y МПС, СРАВНИВАЕМ
+CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+;УБИРАЕМ МУСОР, ПРОВЕРЯЕМ НА 0
+CONT A=H1,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT A=B11,DSRC=PROM,ALUS=DA,RA=РС,FUNC=ADD,ALUD=В,RB=PC,ALU,YDST=PHYSPG
+;ЗАПИСЫВАЕМ В РФС НЕ РАВНЫЙ 0 АДРЕС:
+CONT А=В17,DSRC=PROM,ALUS=DZ,ALU,YDST=PHYSPG
+;ЗАПУСКАЕМ ЗАГРУЗКУ
+CONT FFCNT=STRTLD
+;01: ЖДЕМ КОНЦА ЗАГРУЗКИ
+CONT %ТУРЕ%
+WE2D:CJP А=WE2D,МАР=РЕ,COND=FULMEM,IСС
+;02: ПРОВЕРЯЕМ 1-Ю ПОЛОВИНУ ПАМЯТИ НА 0
+;НАЧИНАЕМ С "1", Т.К. ПОКА СРАБОТАЕТ АППАРАТНЫЙ ОСТАНОВ ЗАГРУЗКИ,
+;УСПЕВАЕТ ЗАГРУЗИТЬСЯ "1" ПО ЛИШНЕМУ АДРЕСУ, В ЧАСТНОСТИ, ПО 0-ОМУ!!!
+CONT A=C1,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=PC,ALU,YDST=PHYSPG
+PUSH А=62,МАР=РЕ,%ТУРЕ%
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=H1,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT А=В11,DSRC=PROM,ALUS=DА,RА=PC,FUNC=ADD,ALUD=В,RВ=PC,ALU,YDST=PHYSPG
+;03: ПРОВЕРЯЕМ 2-Ю ПОЛОВИНУ ПАМЯТИ НА 1 (В РФС - ТО, ЧТО НАДО!)
+CONT А=С1,DSRC=PROM,ALUS=DZ,ALUD=В,RВ=A
+PUSH А=63,МАР=РЕ,%ТУРЕ%
+CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
+CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
+CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=H1,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+RFCT А=В11,DSRC=PROM,ALUS=DА,RА=PC,FUNC=ADD,ALUD=В,RВ=PC,ALU,YDST=PHYSPG
+%J% А=CAD2D,МАР=РЕ
+;
+;     ===========
+;     Б О И  ТЕГА
+;     ===========
+;
+ТЕГ1:ENTRY
+;===== ЗАПИСЬ CONST ИЗ 11 РГ.БОПП В RG1 БОИ ТЕГА, ЧТЕНИЕ В 15 РГ.БОПП
+;
+CJP А=PSTAG1,МАР=РЕ
+PSTAG1:CONT А=Н1,%T%
+CJS А=INITST,МАР=РЕ
+;CONST ИЗ 11 РГ.БОПП - В RG1 ТЕГА
+CTAG1:CONT YDEV=MPMEM,IOMP,MPADR=11,%TRSH%,ALUS=DZ,ALUD=B,RB=A
+CONT ALUS=ZA,RA=A,ALU,YDEVT=ECBTAG,WRB,BRA=RG1
+;ЧИТАЕМ ЧЕРЕЗ СДВИГАТЕЛЬ В РГ.У МПС, ИЗ РГ.У - В 15 РГ.БОПП
+CONT YDEVT=ECBTAG,BRA=RG1,%TRSH%,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=ZA,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+CJP А=CTAG1,МАР=РЕ,%TIK%
+;
+ТЕГ2:ENTRY
+;===== ЗАПИСЬ CONST ИЗ 11 РГ.БОПП В RG1-3 БОИ ТЕГА, ЧТЕНИЕ В 13-15 РГ.БОПП
+;
+CJP А=PSTAG2,МАР=РЕ
+PSTAG2:CONT А=Н2,%T%
+CJS А=INITST,МАР=РЕ
+;CONST ИЗ 11 РГ.БОПП - В RG1-3 ТЕГА
+CTAG2:CONT YDEV=MPMEM,IOMP,MPADR=11,%TRSH%,ALUS=DZ,ALUD=B,RB=A
+CONT ALUS=ZA,RA=A,ALU,YDEVT=ECBTAG,WRB,BRA=RG1
+CONT ALUS=ZA,RA=A,ALU,YDEVT=ECBTAG,WRB,BRA=RG2
+CONT ALUS=ZA,RA=A,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
+;ЧИТАЕМ ЧЕРЕЗ СДВИГАТЕЛЬ В РГ.У МПС, ИЗ РГ.У - В 13-15 РГ.БОПП
+CONT YDEVT=ECBTAG,BRA=RG1,%TRSH%,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=ZA,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=13
+CONT YDEVT=ECBTAG,BRA=RG2,%TRSH%,ALUS=DZ,ALUD=В,RВ=DADR
+CONT ALUS=ZA,RА=DADR,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=14
+CONT YDEVT=ECBTAG,BRA=RG3,%TRSH%,ALUS=DZ,ALUD=В,RВ=HALF
+CONT ALUS=ZA,RА=HALF,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+CJP А=CTAG2,МАР=РЕ,%TIK%
+;
+;
+ТЕГ3:ENTRY
+;===== ЗАПИСЬ РАЗНЫХ CONST В RG1-3 БОИ ТЕГА, ЧТЕНИЕ, ПРОВЕРКА
+;   11 РГ.БОПП - ЧТО ПИСАЛИ, 15 РГ.БОПП - ЧТО ПРОЧИТАЛИ
+;   TYPE = 1,2,3 - СООТВЕТСТВУЕТ НОМЕРУ РЕГИСТРА БОИ ТЕГА
+;
+CJP А=PSTAG3,МАР=РЕ
+PSTAG3:CONT А=Н3,%T%
+CJS А=INITST,МАР=РЕ
+;CONST ИЗ ПЗУ - В РЕГИСТРЫ МПС И В RG1-3 ТЕГА
+OCTCKL:CONT A=CFFF,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A,ALU,YDEVT=ECBTAG,WRB,BRA=RG1
+CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=DADR,ALU,YDEVT=ECBTAG,WRB,BRA=RG2
+CONT A=CAAA,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=HALF,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
+;ЧИТАЕМ ЧЕРЕЗ СДВИГАТЕЛЬ В РГ.У МПС
+CTAG3: CONT %CLRTYP%
+;1 - RG1
+CONT YDEVT=ECBTAG,BRA=RG1,%TRSH%,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=MB,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=BA,RA=A,RB=WR6,ALU,YDEV=MPMEM
+>,WRY,IOMP,MPADR=11,CEN
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;2 - RG2
+CONT YDEVT=ECBTAG,BRA=RG2,%TRSH%,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+CONT ALUS=AB,RA=DADR,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=MB,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=BA,RA=DADR,RB=WR6,ALU,YDEV=MPMEM
+>,WRY,IOMP,MPADR=11,CEN
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+;3 - RG3
+CONT YDEVT=ECBTAG,BRA=RG3,%TRSH%,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=ZА,RА=У,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+CONT ALUS=AB,RA=HALF,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=MB,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=BA,RA=HALF,RB=WR6,ALU,YDEV=MPMEM
+>,WRY,IOMP,MPADR=11,CEN
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+%J% А=CTAG3,МАР=РЕ,%TIK%
+;
+;
+БOИ4:ENTRY
+;===== ПИШЕМ 0/F В RG1-3 БОИ ТЕГА
+;   А - ПИШЕМ; У - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ
+;   ПРИ ОШ. 11 РГ.БОПП - ЧТО ПИСАЛИ, 15 РГ.БОПП - ЧТО ПРОЧИТАЛИ
+;   TYPE = 1,2,3 - СООТВЕТСТВУЕТ НОМЕРУ РЕГИСТРА БОИ ТЕГА
+;
+CJP А=PSBOI4,МАР=РЕ
+PSBOI4:CONT А=H4,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В А
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+;ПИШЕМ
+CBOI4:CONT %CLRTYP%
+CONT ALUS=ZA,RA=А,FUNC=EXNOR,Н,ALUD=В,RB=A,ALU,YDEVT=ECBTAG,WRB,BRA=RG1
+CONT ALUS=ZA,RA=А,FUNC=EXNOR,Н,ALUD=В,RB=A,ALU,YDEVT=ECBTAG,WRB,BRA=RG2
+CONT ALUS=ZA,RA=А,FUNC=EXNOR,Н,ALUD=В,RB=A,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
+;ЧИТАЕМ, СРАВНИВАЕМ
+;TYPE = 1
+CONT YDEVT=ECBTAG,BRA=RG1,%TRSH%,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=MB,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+CONT ALUS=ZA,RA=А,FUNC=EXNOR,Н,ALUD=В,RB=A
+;TYPE = 2
+CONT YDEVT=ECBTAG,BRA=RG2,%TRSH%,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=MB,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+CONT ALUS=ZA,RA=А,FUNC=EXNOR,Н,ALUD=В,RB=A
+;TYPE = 3
+CONT YDEVT=ECBTAG,BRA=RG3,%TRSH%,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=MB,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+CONT ALUS=ZA,RA=А,FUNC=EXNOR,Н,ALUD=В,RB=A
+%J% А=CBOI4,МАР=РЕ,%TIK%
+;
+;
+БОИ5:ENTRY
+;===== ПИШЕМ ПЕРЕМЕННУЮ В RG1-3 ТЕГА
+;   А - ПИШЕМ; У - ЧИТАЕМ; Q - РЕЗУЛЬТАТ СРАВНЕНИЯ
+;   ПРИ ОШ. 11 РГ.БОПП - ЧТО ПИСАЛИ, 15 РГ.БОПП - ЧТО ПРОЧИТАЛИ
+;   TYPE = 1,2,3 - СООТВЕТСТВУЕТ НОМЕРУ РЕГИСТРА БОИ ТЕГА
+;
+CJP А=PSBOI5,МАР=РЕ
+PSBOI5:CONT А=Н5,%T%
+%S% А=INITST,МАР=РЕ
+;0 - В А
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+;ПИШЕМ
+CBOI5:CONT %CLRTYP%
+CONT ALUS=ZВ,RВ=А,Н,CI,ALUD=В,ALU,YDEVT=ECBTAG,WRB,BRA=RG1
+;1: ЧИТАЕМ RG1, СРАВНИВАЕМ
+CONT YDEVT=ECBTAG,BRA=RG1,%TRSH%,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=MB,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+CONT ALUS=ZВ,RВ=А,Н,CI,ALUD=В,ALU,YDEVT=ECBTAG,WRB,BRA=RG2
+;2: ЧИТАЕМ RG2, СРАВНИВАЕМ
+CONT YDEVT=ECBTAG,BRA=RG2,%TRSH%,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=MB,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+CONT ALUS=ZВ,RВ=А,Н,CI,ALUD=В,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
+;3: ЧИТАЕМ RG3, СРАВНИВАЕМ
+CONT YDEVT=ECBTAG,BRA=RG3,%TRSH%,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT A=MB,DSRC=PROM,ALUS=DQ,FUNC=AND,H,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TYPE%
+%J% А=CBOI5,МАР=РЕ,%TIK%
+;
+;     ===================
+;     РГ.  К О П  АРБИТРА
+;     ===================
+;
+КОПА1:ENTRY
+;===== 11 РГ.БОПП - В РГ. КОП АРБИТРА, ЧТЕНИЕ, ЗАПИСЬ В 15 РГ.БОПП
+;
+CJP А=CONTA1,МАР=РЕ
+CONTA1:CONT А=Н1,%Т%
+CJS А=INITST,МАР=РЕ
+CARB1:CONT YDEV=МРМЕМ,IОМР,MPADR=11,YDST=ARBOPC
+CONT DSRC=ARBOPC,ALUS=DZ,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=15
+CJP А=CARB1,MАР=РЕ,%TIK%
+;
+;
+КОПА2:ENTRY
+;===== ЗАПИСЬ 0/F В РГ.КОП АРБИТРА, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А = ЗАПИСЫВАЕМОЕ; У = ПРОЧИТАННОЕ; ВУТЕ - МАСКА НА 4 РАЗРЯДА
+;   ПРИ ОШ.: 11 РГ.БОПП - ЗАПИСЫВАЕМОЕ; 15 РГ.БОПП - ПРОЧИТАННОЕ
+;
+CJP А=CONTA2,МАР=РЕ
+CONTA2:CONT А=Н2,%Т%
+%S% А=INITST,МАР=РЕ
+;0 - В РГ.А
+CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А
+;ПИШЕМ 0/F В РГ.КОП АРБИТРА
+СА2:CONT ALUS=ZA,RA=A,FUNC=EXNOR,H,ALUD=B,RB=A,ALU,YDST=ARBOPC
+;ЧИТАЕМ
+CONT DSRC=ARBOPC,ALUS=DZ,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q
+CONT A=HF,DSRC=PROM,ALUS=DQ,FUNC=AND,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=СА2,МАР=РЕ,%TIK%
+;
+;
+КОПА3:ENTRY
+;===== ЗАПИСЬ ПЕРЕМЕННОЙ В РГ.КОП АРБИТРА, ЧТЕНИЕ, СРАВНЕНИЕ
+;   А = ЗАПИСЫВАЕМОЕ; У = ПРОЧИТАННОЕ; ВУТЕ - МАСКА НА 4 РАЗРЯДА
+;   ПРИ ОШ.: 11 РГ.БОПП - ЗАПИСЫВАЕМОЕ; 15 РГ.БОПП - ПРОЧИТАННОЕ
+;
+CJP А=CONTA3,МАР=РЕ
+CONTA3:CONT А=Н3,%Т%
+%S% А=INITST,МАР=РЕ
+CONT А=HF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=ВУТЕ
+;0 - В РГ.А, В ЦИКЛЕ ПИШЕМ 0-15 В РГ.КОП АРБИТРА
+СА3:PUSH А=15,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=А,ALU,YDST=ARBOPC
+;ЧИТАЕМ
+CONT DSRC=ARBOPC,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,ALUD=Q,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+RFCT ALUS=ZВ,RВ=А,CI,ALUD=В,ALU,YDST=ARBOPC
+%J% А=СА3,МАР=РЕ,%TIK%
+;
+;      ==============================
+;      ЧАСЫ И ТАЙМЕР СЧЕТНОГО ВРЕМЕНИ
+;      ==============================
+;
+;===== ВНИМАНИЕ!
+; - ЗАПИСЫВАТЬ И ЧИТАТЬ ПО 2 БАЙТА В ЧАСЫ И ТАЙМЕРЫ
+;   ЛУЧШЕ С МАСКОЙ ПРЕРЫВАНИЙ, Т.К. ЗАПИСЬ ИДЕТ НЕСКОЛЬКО МИКРОКОМАНД!
+; - НЕТ ЗАЕМА ИЗ СТАРШЕГО КВАДРАНТА ПРИ ПЕРВОМ ВЫЧИТАНИИ 1 ИЗ 0,
+;   ПОЭТОМУ ПРОБЛЕМА, КАКУЮ CONST ЗАГРУЖАТЬ В ЧАСЫ.
+;   НАПРИМЕР, 8000 8000 8000 8000, ЗАТЕМ ДЕЛАТЬ УПАКОВКУ НА 60 РАЗРЯДОВ;
+;   ИЛИ FFFF FFFF FFFF FFFF, А НЕ 0;
+;   ИЛИ СЧИТАТЬ В РЕЖИМЕ 3 БЕЗ УПАКОВКИ ?!?.
+; - В ТАЙМЕРАХ ИСПОЛЬЗУЕМ ТОЛЬКО 16 РАЗРЯДОВ, Т.К. ВО ВСЕХ РЕЖИМАХ
+;   СЧЕТЧИКИ ЛИБО ПЕРЕСТАЮТ СЧИТАТЬ ПОСЛЕ ДОСТИЖЕНИЯ ТЕРМИНАЛЬНОГО КОДА,
+;   ЛИБО ПРИ ПЕРЕХОДЕ ЧЕРЕЗ "0" ПЕРЕЗАГРУЖАЮТСЯ СТАРЫМ ЗНАЧЕНИЕМ
+;   СЧЕТЧИКА (А НЕ FFFF); И ПОЭТОМУ НА СЕГОДНЯ НЕ СДЕЛАН СИГНАЛ ЗАПИСИ
+;   В СТАРШУЮ ПОЛОВИНУ ТАЙМЕРА (ГДЕ 17-32 РАЗРЯДЫ)
+;
+ЧАСЫ1:ENTRY
+;===== ИЗ БОПП - В ЧАСЫ СЧ.ВРЕМЕНИ (64Р.),КОМ.СЛОВО ЗАДАЕМ В БОПП; ЧИТАЕМ В БОПП
+;   7 РГ.БОПП - КОМ.СЛОВО ДЛЯ КАНАЛА 0, ОБЯЗАТЕЛЬНО ДВОЙНОЕ ОБР-Е! (0011 RRRD)
+;   ТО ЖЕ КОМ.СЛОВО - ДЛЯ КАНАЛА 1 С ТОЧНОСТЬЮ ДО НОМЕРА КАНАЛА (ВЫЧИСЛЯЕМ В МП)
+;   КОМАНДНОЕ СЛОВО НА КОПИРОВАНИЕ = N КАНАЛА
+;   8-15 РГ.БОПП - ЗАПИСЫВАЕМОЕ ЧИСЛО; ТАМ ЖЕ - ПРОЧИТАННОЕ; 15 РГ.= МЛ.БАЙТУ
+;
+CJP А=CONT1,МАР=РЕ
+CONT1:CONT А=Н1,%Т%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ ДАННЫЕ ДЛЯ ЗАПИСИ В ЧАСЫ ИЗ 8-15 РГ.БОПП - В РГ.А (ЧЕРЕЗ WR6)
+CJS А=RD8/F,МАР=РЕ
+CONT ALUS=ZА,RА=WR6,Н,ALUD=В,RВ=А
+;ЧИТАЕМ ИЗ 7 РГ.БОПП КОМАНДНОЕ СЛОВО ДЛЯ КАНАЛА 0, КОПИРУЕМ В 17-24 РАЗРЯДЫ
+CONT А=МВ,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+CONT YDEV=МРМЕМ,IОМР,MPADR=7,DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG,ALUS=DА,RА=WR6
+>,FUNC=AND,ALUD=В,RВ=WR6
+;П/У НА П/П ЗАПИСИ РГ.А В ЧАСЫ СЧ.ВРЕМЕНИ С ЗАДАННЫМ КОМ.СЛОВОМ
+CJS А=CTWRM,МАР=РЕ,YDEV=МРМЕМ,IОМР,MPADR=7,DSRC=SHIFT,MPS,PSHF=SН0-16,SHF=LOG
+>,ALUS=DА,RА=WR6,FUNC=OR,ALUD=В,RВ=WR6
+;ЗАДЕРЖКА
+PUSH A=100,MAP=PE
+RFCT
+;ЧТЕНИЕ РГ.СЧЕТНОГО ВРЕМЕНИ В РГ.Y, ВЫДАЧА В 8-15 РГ.БОПП
+CJS А=CTRD,МАР=РЕ
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+SТР1:CJP А=SТР1,МАР=РЕ
+;
+;
+ЧАСЫ2:ENTRY
+;===== ИЗ БОПП - В ТАЙМЕР СВ (16Р.), КОМ.СЛОВО ЗАДАЕМ В БОПП; ЧИТАЕМ В БОПП
+;   КОМАНДНОЕ СЛОВО, В ЧАСТНОСТИ РЕЖИМ, МОЖНО МЕНЯТЬ!
+;   КОМАНДНОЕ СЛОВО ДЛЯ КОПИРОВАНИЯ В БУФЕРНЫЙ РЕГИСТР = N КАНАЛА (80).
+;   7 РГ.БОПП - КОМАНДНОЕ СЛОВО ДЛЯ КАНАЛА 2, ДВОЙНОЕ ОБРАЩЕНИЕ (1011 RRR D)
+;   10,11 - ЧТО ПИШЕМ; 14,15 - ЧТО ЧИТАЕМ
+;
+CJP А=CONT2,МАР=РЕ
+CONT2:CONT А=Н2,%Т%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ 10-11 РГ.БОПП - В РГ.А (ЧЕРЕЗ WR6)
+CJS А=RD8/В,МАР=РЕ
+CONT ALUS=ZА,RА=WR6,Н,ALUD=В,RВ=А
+;ЧИТАЕМ КОМ.СЛОВО ДЛЯ КАНАЛА 2
+CONT А=МВ,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+;П/У НА П/П ЗАПИСИ В ТАЙМЕР СЧ.ВРЕМЕНИ С ЗАДАННЫМ КОМ.СЛОВОМ
+CJS А=CTTWRM,МАР=РЕ,YDEV=МРМЕМ,IОМР,MPADR=7,DSRC=SHIFT,MPS,PSHF=SН0,SHF=LOG
+>,ALUS=DА,RА=WR6,FUNC=AND,ALUD=В,RВ=WR6
+;ЗАДЕРЖКA
+PUSH A=100,MAP=PE
+RFCT
+;ЧТЕНИЕ ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ В РГ.У, ВЫДАЧА РГ.У В 14-15 РГ.БОПП
+CJS А=CTTRD,МАР=РЕ
+CJS А=OUTC/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+SТР2:CJP А=SТР2,МАР=РЕ
+;
+;
+ЧАСЫ3:ENTRY
+;===== ИЗ 8-15 РГ.БОПП (64 РАЗРЯДА) - В РГ.А И В РГ.СЧЕТНОГО ВРЕМЕНИ;
+;   ЧТЕНИЕ РГ.СЧЕТНОГО ВРЕМЕНИ - В РГ.У, ВЫДАЧА РГ.У - В 8-15 РГ.БОПП
+;   РЕЖИМ В ТЕСТАХ ДЛЯ ЧАСОВ = 3!
+;
+CJP А=CONT3,МАР=РЕ
+CONT3:CONT А=Н3,%Т%
+CJS А=INITST,МАР=РЕ
+;ЧТЕНИЕ 8-15 РГ.БОПП В РГ.А (ЧЕРЕЗ РГ.WR6)
+CJS А=RD8/F,МАР=РЕ
+;ЗАПИСЬ РГ.А В РГ.СЧЕТНОГО ВРЕМЕНИ
+CJS А=CTWR,МАР=РЕ,ALUS=ZА,RА=WR6,Н,ALUD=В,RВ=А
+;ЗАДЕРЖКА
+PUSH A=100,MAP=PE
+RFCT
+;ЧТЕНИЕ РГ.СЧЕТНОГО ВРЕМЕНИ В РГ.Y, ВЫДАЧА В 8-15 РГ.БОПП
+CJS А=CTRD,МАР=РЕ
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+SТР3:CJP А=SТР3,МАР=РЕ
+;
+;
+ЧАСЫ4:ENTRY
+;===== ЧТЕНИЕ РГ.СЧЕТНОГО ВРЕМЕНИ - В РГ.У, ВЫДАЧА РГ.У В 8-15 РГ.БОПП
+;
+CJP А=CONT4,МАР=РЕ
+CONT4:CONT А=Н4,%Т%
+CJS А=INITST,МАР=РЕ
+CC4:CJS А=CTRD,МАР=РЕ
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+CJP А=CC4,МАР=РЕ,%TIK%
+;
+;
+ЧАСЫ5:ENTRY
+;===== ИЗ 10-11 РГ.БОПП - В РГ.А И В ТАЙМЕР СЧЕТНОГО ВРЕМЕНИ;
+;   ЧТЕНИЕ ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ - В РГ.У, ВЫДАЧА РГ.У - В 14-15 РГ.БОПП
+;   РЕЖИМ ДЛЯ ТАЙМЕРОВ - 0!
+;
+CJP А=CONT5,МАР=РЕ
+CONT5:CONT А=Н5,%Т%
+CJS А=INITST,МАР=РЕ
+;П/У НА ЧТЕНИЕ 10-11 РГ.БОПП В РГ.А ЧЕРЕЗ WR6
+CJS А=RD8/В,МАР=РЕ
+;П/У НА П/П ЗАПИСИ РГ.А - В РГ.СЧЕТНОГО ВРЕМЕНИ
+CJS А=CTTWR,МАР=РЕ,ALUS=ZА,RА=WR6,Н,ALUD=В,RВ=А
+;ЗАДЕРЖКA
+PUSH A=100,MAP=PE
+RFCT
+;ЧТЕНИЕ ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ В РГ.У, ВЫДАЧА РГ.У В 14-15 РГ.БОПП
+CJS А=CTTRD,МАР=РЕ
+CJS А=OUTC/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+SТР5:CJP А=SТР5,МАР=РЕ
+;
+;
+ЧАСЫ6:ENTRY
+;===== ЧТЕНИЕ ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ В РГ.У, ВЫДАЧА РГ.У - В 14-15 РГ.БОПП
+;
+CJP А=CONT6,МАР=РЕ
+CONT6:CONT А=Н6,%Т%
+CJS А=INITST,МАР=РЕ
+CC6:CJS А=CTTRD,МАР=РЕ
+CJS А=OUTC/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+CJP А=CC6,МАР=РЕ,%TIK%
+;
+;
+ЧАСЫ7:ENTRY
+;===== ВЫДАЧА СОДЕРЖИМОГО СЧЕТЧИКА В РГ.МПС И ЧАСОВ СЧЕТНОГО ВРЕМЕНИ
+;   А - СЧЕТЧИК В РГ.МПС, У - ПРОЧИТАННОЕ С ЧАСОВ
+;   4-7 РГ.БОПП - МЛАДШАЯ ПОЛОВИНА СЧЕТЧИКА В РГ.МПС, 8-15 РГ.БОПП - ЧАСЫ.
+;   СРАВНИВАТЬ НЕЛЬЗЯ, Т.К. У СЧЕТЧИКОВ 1-Й РАЗ НЕТ ЗАЕМА!!!
+;
+CJP А=CONT7,МАР=РЕ
+CONT7:CONT А=Н7,%Т%
+CJS А=INITST,МАР=РЕ
+;CONST - В РГ.А, В ЧАСЫ СЧЕТНОГО ВРЕМЕНИ (ИЗ РГ.А)
+CONT А=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTWR,МАР=РЕ
+;ЗАДЕРЖКА: 2 МК ЦИКЛА = 1 МКСЕК, КОТОРЫЕ ВЫЧИТАЮТСЯ ЗА 1 ЦИКЛ ИЗ ЧАСОВ
+CICL7:PUSH A=200,MAP=PE
+CONT А=С1,DSRC=PROM,ALUS=DА,RА=А,FUNC=SUBR,Н,CI,ALUD=В,RВ=А
+RFCT %TIK%
+;ЧИТАЕМ ЧАСЫ; П/У НА ВЫДАЧУ ЧАСОВ И СЧЕТЧИКА В МПС - В БОПП
+CJS А=CTRD,МАР=РЕ
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+CJS А=OUT4/7,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR6
+;КОРРЕКТИРУЕМ ПОКАЗАНИЯ СЧЕТЧИКА В МПС НА ВРЕМЯ ОБРАЩЕНИЯ К П/П
+CONT А=B6,DSRC=PROM,ALUS=DА,RА=А,FUNC=SUBR,Н,CI,ALUD=В,RВ=А
+CJP А=CICL7,МАР=РЕ
+;
+;
+ЧАСЫ8:ENTRY
+;===== ВЫДАЧА СОДЕРЖИМОГО СЧЕТЧИКА В РГ.МПС И ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ
+;   А - СЧЕТЧИК В РГ.МПС, У - ПРОЧИТАННОЕ С ТАЙМЕРА
+;   10-11 РГ.БОПП - СЧЕТЧИК В РГ.МПС, 14-15 РГ.БОПП - ТАЙМЕР
+;
+CJP А=CONT8,МАР=РЕ
+CONT8:CONT А=Н8,%Т%
+CJS А=INITST,МАР=РЕ
+;CONST - В РГ.А, В ТАЙМЕР СЧЕТНОГО ВРЕМЕНИ (ИЗ РГ.А)
+CONT А=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTTWR,МАР=РЕ
+;КОРРЕКТИРУЕМ ПОКАЗАНИЯ СЧЕТЧИКА В МПС ЗА 1 ПРОХОД ТЕСТА
+CICL8:CONT А=С1,DSRC=PROM,ALUS=DА,RА=А,FUNC=SUBR,Н,CI,ALUD=В,RВ=А
+;ЧИТАЕМ ТАЙМЕР; П/У НА ВЫДАЧУ ТАЙМЕРА И СЧЕТЧИКА В РГ.МПС - В БОПП
+CJS А=CTTRD,МАР=РЕ
+CJS А=OUTAYH,МАР=РЕ
+CJP А=CICL8,МАР=РЕ,%TIK%
+;
+;
+ЧАСЫ9:ENTRY
+;===== ВЫДАЧА В БОПП СЧЕТА ЧАСОВ И ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ
+;   8-15 РГ.БОПП - ЧАСЫ СЧЕТНОГО ВРЕМЕНИ (ЗАПИСЫВАЮТСЯ, ЧИТАЮТСЯ ВТОРЫМИ)
+;   4-7 РГ.БОПП - ТАЙМЕР СЧЕТНОГО ВРЕМЕНИ; ТАЙМЕР Д.СЧИТАТЬ В 10 РАЗ МЕДЛЕННЕЕ!
+;   В КОМ.СЛОВЕ ЗАДАЕМ СЧЕТ ДВОИЧНО-ДЕСЯТИЧНЫЙ! РЕЖИМ ЧАСОВ - 2, ТАЙМЕРОВ - 0.
+;
+CJP А=CONT9,МАР=РЕ
+CONT9:CONT А=Н9,%Т%
+CJS А=INITST,МАР=РЕ
+;ЧИТАЕМ НАЧАЛЬНУЮ CONST ДЛЯ ЗАГРУЗКИ, ПИШЕМ ЕЕ В ЧАСЫ И ТАЙМЕР
+CONT А=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+;КОМАНДНОЕ СЛОВО С ДВ.-ДЕС.РЕЖИМОМ - В WR6
+CONT А=R0СН2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+CONT А=В17,DSRC=PROM,ALUS=DА,RА=WR6,Н,CI,ALUD=В,RВ=WR6
+CJS А=CTTWRM,МАР=РЕ
+CONT А=R2СН0,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+CONT А=В17,DSRC=PROM,ALUS=DА,RА=WR6,Н,CI,ALUD=В,RВ=WR6
+CJS А=CTWRM,МАР=РЕ
+;ЧИТАЕМ ЧАСЫ И ТАЙМЕР, ПЕРЕСЫЛАЕМ В БОПП
+CICL9:CJS А=CTTRD,МАР=РЕ
+CJS А=CTRD,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=А
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+CJS А=OUT4/7,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR6
+;ЗАДЕРЖКА
+PUSH A=200,MAP=PE
+RFCT %TIK%
+CJP А=CICL9,МАР=РЕ
+;
+;
+ЧАСЫА:ENTRY
+;===== СРАВНЕНИЕ ДВОИЧНО-ДЕСЯТИЧНОГО СЧЕТА ЧАСОВ И ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ
+;   ЧАСЫ - СДВИГ ВПРАВО НА 4 РАЗРЯДA, Т.К. СЧИТАЮТ В 10 РАЗ МЕДЛЕННЕЕ!
+;   В СЛУЧАЕ НЕСОВПАДЕНИЯ:
+;   8-15 РГ.БОПП - ЧАСЫ СЧЕТНОГО ВРЕМЕНИ (ЗАПИСЫВАЮТСЯ, ЧИТАЮТСЯ ВТОРЫМИ)
+;   4-7 РГ.БОПП - ТАЙМЕР СЧЕТНОГО ВРЕМЕНИ
+;   В КОМ.СЛОВЕ ЗАДАЕМ СЧЕТ ДВОИЧНО-ДЕСЯТИЧНЫЙ! РЕЖИМ ЧАСОВ - 2, ТАЙМЕРОВ - 0!
+;
+CJP А=CONTA,МАР=РЕ
+CONTA:CONT А=НА,%Т%
+%S% А=INITST,МАР=РЕ
+;ЧИТАЕМ НАЧАЛЬНУЮ CONST ДЛЯ ЗАГРУЗКИ ЧАСОВ, ПИШЕМ ЕЕ В ЧАСЫ И ТАЙМЕР
+CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+;КОМАНДНОЕ СЛОВО С ДВ.-ДЕС. РЕЖИМОМ - В WR6
+CONT А=R0СН2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+CONT А=В17,DSRC=PROM,ALUS=DА,RА=WR6,Н,CI,ALUD=В,RВ=WR6
+CJS А=CTTWRM,МАР=РЕ
+CONT А=R2СН0,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+CONT А=В17,DSRC=PROM,ALUS=DА,RА=WR6,Н,CI,ALUD=В,RВ=WR6
+CJS А=CTWRM,МАР=РЕ
+;ЧИТАЕМ, СДВИГАЕМ ЧАСЫ (У) НА 4 РАЗРЯДА ВПРАВО (Т.К.ОНИ В 10 РАЗ МЕДЛЕННЕЕ!)
+CICLA:CJS А=CTTRD,МАР=РЕ
+CJS А=CTRD,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=А
+CONT ALUS=DZ,Н,ALUD=ВА,RА=У,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+4,SHF=LOG
+;СРАВНИВАЕМ
+CONT ALUS=АВ,RА=А,RВ=DADR,FUNC=EXOR,Н,ALUD=Q
+;МАСКА НА 16-4=12 РАЗРЯДОВ
+CONT А=МРР,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=Q,CEN
+;ОК, ЕСЛИ СОВПАЛО
+CJP А=NХТА,МАР=РЕ,COND=СТ,SТОРС=NZ
+;ПЕРЕСЫЛАЕМ В БОПП:
+CJS А=OUT4/7,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR6
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+CJS А=ERRTST,МАР=РЕ
+NХТА:%J% А=CICLA,МАР=РЕ,%TIK%
+;
+;
+ЧАСЫВ:ENTRY
+;===== ПИШЕМ CONST ИЗ ПЗУ В ЧАСЫ СВ, СРАВНИВАЕМ С ТОЧНОСТЬЮ ДО МЛ. РАЗРЯДОВ
+;   КОЛИЧЕСТВО УБИРАЕМЫХ РАЗРЯДОВ - РАЗНОЕ, В ЗАВИСИМОСТИ ОТ ЗАПИСЫВАЕМОЙ CONST!
+;   0 - НЕСОВПАДЕНИЕ НА 16 РАЗР.,Т.К. МЛ.ТЕТРАДА СРАЗУ = FFFF;
+;   FF..FF - НЕСОВПАДЕНИЕ 5Р., АА..АА - 6Р., 55..55 - 6P.
+;   4-7 РГ.БОПП - МЛ.ПОЛОВИНА ТОГО, ЧТО ПИСАЛИ; 8-15 РГ.БОПП - ЧТО ПРОЧИТАЛИ.
+;
+CJP А=CONTB,МАР=РЕ
+CONTB:CONT А=НВ,%Т%
+%S% А=INITST,МАР=РЕ
+;TYPE = 1: ЧИТАЕМ CONST = AAAA ИЗ ПЗУ В РГ.А, ПИШЕМ В ЧАСЫ
+CKLB:CONT А=СААА,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTWR,МАР=РЕ,%CLRTYP%
+;ЧИТАЕМ, СРАВНИВАЕМ
+CJS А=CTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+;УБИРАЕМ МЛАДШИЕ РАЗРЯДЫ (СКОЛЬКО РАЗ СДВИНЕМ)
+CONT ALUS=DZ,Н,ALUD=ВА,RА=У,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+6,SHF=LOG,CEN
+;ПРОВЕРЯЕМ НА 0
+CJP A=NXTB1,MAP=PE,COND=CT,STOPC=/NZ
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+CJS А=OUT4/7,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR6
+CJS А=ERRTST,МАР=РЕ
+;2: ПРОВЕРЯЕМ CONST = FFFF
+NXTB1:CONT А=СFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTWR,МАР=РЕ
+CJS А=CTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT ALUS=DZ,Н,ALUD=ВА,RА=У,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+5,SHF=LOG,CEN
+CJP A=NXTB2,MAP=PE,COND=CT,STOPC=/NZ
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+CJS А=OUT4/7,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR6
+CJS А=ERRTST,МАР=РЕ
+;3: ПРОВЕРЯЕМ CONST = 5555
+NXTB2:CONT А=С555,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTWR,МАР=РЕ
+CJS А=CTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT ALUS=DZ,Н,ALUD=ВА,RА=У,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+6,SHF=LOG,CEN
+CJP A=NXTB3,MAP=PE,COND=CT,STOPC=/NZ
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+CJS А=OUT4/7,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR6
+CJS А=ERRTST,МАР=РЕ
+;4: ПРОВЕРЯЕМ CONST = 0000
+NXTB3:CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTWR,МАР=РЕ
+CJS А=CTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT ALUS=DZ,Н,ALUD=ВА,RА=У,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+16,SHF=LOG,CEN
+CJP A=NXTB4,MAP=PE,COND=CT,STOPC=/NZ
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+CJS А=OUT4/7,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR6
+CJS А=ERRTST,МАР=РЕ
+;5: ПРОВЕРЯЕМ CONST = 00..1F
+NXTB4:CONT А=H1F,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTWR,МАР=РЕ
+CJS А=CTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT ALUS=DZ,Н,ALUD=ВА,RА=У,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+5,SHF=LOG,CEN
+CJP A=NXTB5,MAP=PE,COND=CT,STOPC=/NZ
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+CJS А=OUT4/7,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR6
+CJS А=ERRTST,МАР=РЕ
+NXTB5:%J% А=CKLB,МАР=РЕ,%TIK%
+;
+;
+ЧАСЫС:ENTRY
+;===== ПИШЕМ CONST ИЗ ПЗУ В ТАЙМЕР СВ, СРАВНИВАЕМ С ТОЧН.ДО N МЛ. РАЗРЯДОВ
+;   10-11 РГ.БОПП - ЧТО ПИСАЛИ; 14-15  РГ.БОПП - ЧТО ПРОЧИТАЛИ.
+;
+CJP А=CONTC,МАР=РЕ
+CONTC:CONT А=НС,%Т%
+%S% А=INITST,МАР=РЕ
+;TYPE = 1: ЧИТАЕМ CONST = AAAA ИЗ ПЗУ В РГ.А, ПИШЕМ В ТАЙМЕР
+CKLC:CONT А=СААА,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTTWR,МАР=РЕ,%CLRTYP%
+;ЧИТАЕМ, СРАВНИВАЕМ
+CJS А=CTTRD,МАР=РЕ,%TYPE%
+CJS А=OUTAYH,МАР=РE,ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+;МАСКА НА 16 РАЗРЯДОВ
+CONT А=MQ,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=B,RB=DADR
+;УБИРАЕМ МЛАДШИЕ РАЗРЯДЫ (СКОЛЬКО РАЗ СДВИНЕМ)
+CONT ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+3
+>,SHF=LOG,CEN
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;2: CONST = FFFF
+CONT А=СFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTTWR,МАР=РЕ
+CJS А=CTTRD,МАР=РЕ,%TYPE%
+CJS А=OUTAYH,МАР=РE,ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MQ,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=B,RB=DADR
+CONT ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+2
+>,SHF=LOG,CEN
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;3: CONST = 5555
+CONT А=С555,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTTWR,МАР=РЕ
+CJS А=CTTRD,МАР=РЕ,%TYPE%
+CJS А=OUTAYH,МАР=РE,ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MQ,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=B,RB=DADR
+CONT ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+2
+>,SHF=LOG,CEN
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;4: CONST = H3
+CONT А=H3,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTTWR,МАР=РЕ
+CJS А=CTTRD,МАР=РЕ,%TYPE%
+CJS А=OUTAYH,МАР=РE,ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MQ,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=B,RB=DADR
+CONT ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=DADR,ALU,DSRC=SHIFT,MPS,PSHF=SН0+2
+>,SHF=LOG,CEN
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CKLC,МАР=РЕ,%TIK%
+;
+;
+ЧACЫD:ENTRY
+;===== ПРОВЕРЯЕМ ИЗМЕНЕНИЕ СЧЕТА ЧАСОВ СЧЕТНОГО ВРЕМЕНИ
+;   4-7 РГ.БОПП - МЛ.ПОЛОВИНА ТОГО, ЧТО БЫЛО; 8-15 РГ.БОПП - ЧТО ПРОЧИТАЛИ
+;
+CJP А=CONTD,МАР=РЕ
+CONTD:CONT А=HD,%Т%
+%S% А=INITST,МАР=РЕ
+CONT А=ZER,МАР=РЕ,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTWR,МАР=РЕ
+;ЖДЕМ 2 МК = 1 MKS, ПОСЛЕ ЧЕГО ЧАСЫ МОЖНО ЧИТАТЬ (ПОКЗАНИЯ ДОЛЖНЫ ИЗМЕНИТЬСЯ!)
+PUSH А=0,МАР=РЕ
+RFCT
+;ЧИТАЕМ, КОПИРУЕМ В БОПП, СРАВНИВАЕМ
+CCD:CJS А=CTRD,МАР=РЕ
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6
+CJS А=OUT4/7,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR6
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ ПОКАЗАНИЯ ЧАСОВ НЕ ИЗМЕНИЛИСЬ (СОВПАЛИ)
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=NZ,%TIK%
+;ПОСЛЕ ИЗМЕНЕНИЯ СЧЕТА В НОВОМ ЦИКЛЕ СРАВНЕНИЕ ПРОСХОДИТ С ВНОВЬ ПРОЧИТАННЫМ!
+%J% А=CCD,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=А
+;
+;
+ЧАСЫЕ:ENTRY
+;===== ПРОВЕРЯЕМ ИЗМЕНЕНИЕ СЧЕТА ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ
+;   ЧТОБ ТАЙМЕР НЕ ОСТАНАВЛИВАЛСЯ, ЗАДАЕМ РЕЖИМ 2 ПРИ ЗАПИСИ!
+;
+CJP А=CONTE,МАР=РЕ
+CONTE:CONT А=НЕ,%Т%
+%S% А=INITST,МАР=РЕ
+CONT А=ZER,МАР=РЕ,ALUS=DZ,Н,ALUD=В,RВ=А
+;ЧИТАЕМ КОМ.СЛОВО С РЕЖИМОМ 2
+CONT А=R2СН2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+CJS А=CTTWRM,МАР=РЕ
+;ЖДЕМ 20 МК = 10 MKS, ПОСЛЕ ЧЕГО ТАЙМЕР МОЖНО ЧИТАТЬ, ПОКЗАНИЯ ДОЛЖНЫ ИЗМЕНИТЬСЯ
+ССЕ:PUSH А=20,МАР=РЕ
+RFCT
+;ЧИТАЕМ, СРАВНИВАЕМ
+CJS А=CTTRD,МАР=РЕ
+CJS А=OUTAYH,МАР=РE
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MQ,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ ПОКАЗАНИЯ ТАЙМЕРА НЕ ИЗМЕНИЛИСЬ
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=NZ,%TIK%
+;ПОСЛЕ ИЗМЕНЕНИЯ СЧЕТА В НОВОМ ЦИКЛЕ СРАВНЕНИЕ ПРОСХОДИТ С ВНОВЬ ПРОЧИТАННЫМ!
+%J% А=ССЕ,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=А
+;
+;
+ЧACЫF:ENTRY
+;===== ПРОВЕРКА МОНОТОННОГО УМЕНЬШЕНИЯ СЧЕТА ЧАСОВ СЧЕТНОГО ВРЕМЕНИ
+;   А - НАЧАЛЬНОЕ ЗНАЧЕНИЕ (ИЛИ ТОЧКА ОТСЧЕТА ПРИ ОЧЕРЕДНОЙ ИТЕРАЦИИ)
+;   Y - ПРОЧИТАННОЕ С ЧАСОВ В П/П ЧТЕНИЯ; Q - РАЗНИЦА
+;
+CJP А=CONTF,МАР=РЕ
+CONTF:CONT А=HF,%Т%
+%S% А=INITST,МАР=РЕ
+;CONST (FFFF) - В ЧАСЫ
+CONT A=CFFF,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
+CJS А=CTWR,МАР=РЕ
+;ЗАДЕРЖКА ПОСЛЕ ЗАПИСИ
+PUSH A=0,MAP=PE
+RFCT
+;ЧИТАЕМ
+CCF:CJS А=CTRD,МАР=РЕ
+CJS A=OUT8/F,MAP=PE,ALUS=ZA,RA=Y,H,ALUD=B,RB=WR6
+;ВЫЧИСЛЯЕМ РАЗНИЦУ, КОТОРАЯ Д.Б. МЕНЬШЕ 0
+CONT ALUS=АВ,RА=А,RВ=Y,FUNC=SUBS,Н,CI,ALUD=Q,CEN
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=11,%TIK%
+%J% А=CCF,МАР=РЕ,ALUS=ZА,RА=Y,Н,ALUD=В,RВ=A
+;
+;
+ЧACЫ10:ENTRY
+;===== ПРОВЕРКА МОНОТОННОГО УМЕНЬШЕНИЯ СЧЕТА ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ
+;   А - НАЧАЛЬНОЕ ЗНАЧЕНИЕ (ИЛИ ТОЧКА ОТСЧЕТА ПРИ ОЧЕРЕДНОЙ ИТЕРАЦИИ)
+;   Y - ПРОЧИТАННОЕ С ТАЙМЕРА В П/П ЧТЕНИЯ; Q - РАЗНИЦА
+;
+CJP А=CONT10,МАР=РЕ
+CONT10:CONT А=H10,%Т%
+%S% А=INITST,МАР=РЕ
+;CONST (FFFF) - В ТАЙМЕР
+CBEG10:CONT A=MQ,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
+CJS А=CTTWR,МАР=РЕ
+;ЗАДЕРЖКА ПОСЛЕ ЗАПИСИ
+PUSH A=20,MAP=PE
+RFCT
+;ЧИТАЕМ
+CC10:CJS А=CTTRD,МАР=РЕ
+CJS A=OUT8/F,MAP=PE,ALUS=ZA,RA=Y,H,ALUD=B,RB=WR6
+;ВЫЧИСЛЯЕМ РАЗНИЦУ, КОТОРАЯ Д.Б. МЕНЬШЕ 0
+CONT ALUS=АВ,RА=А,RВ=Y,FUNC=SUBS,Н,CI,ALUD=Q,CEN
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=11,%TIK%
+;ECЛИ ЧИСЛО МАЛЕНЬКОЕ, ПЕРЕЗАГРУЖАЕМ ТАЙМЕР САМИ
+CONT A=H3F,DSRC=PROM,ALUS=DA,RA=Y,FUNC=NOTRS,H,ALUD=B,RB=DADR,CEN
+CJP A=CBEG10,MAP=PE,COND=CT,STOPC=NZ
+%J% А=CC10,МАР=РЕ,ALUS=ZА,RА=Y,Н,ALUD=В,RВ=A
+;
+;
+ЧACЫ11:ENTRY
+;===== ПРОВЕРКА ОТНОСИТЕЛЬНОГО ИЗМЕНЕНИЯ СЧЕТА ЧАСОВ СЧЕТНОГО ВРЕМЕНИ В 2 РАЗА
+;   ЗА N И N+N МИКРОПРОГРАММНЫХ ЦИКЛА
+;   А - НАЧАЛЬНОЕ ЗНАЧЕНИЕ (ИЛИ ТОЧКА ОТСЧЕТА ПРИ ОЧЕРЕДНОЙ ИТЕРАЦИИ)
+;   Y - ПРОЧИТАННОЕ С ЧАСОВ В П/П ЧТЕНИЯ;
+;   DADR - ПРОЧИТАННОЕ 1-Й РАЗ; Y - ПРОЧИТАННОЕ 2-Й РАЗ
+;   EXPN - 1-Я РАЗНИЦА, УМНОЖЕННАЯ НА 2; Q - 2-Я РАЗНИЦА, HALF - РЕЗ-Т СРАВНЕНИЯ
+;
+CJP А=CONT11,МАР=РЕ
+CONT11:CONT А=H11,%Т%
+%S% А=INITST,МАР=РЕ
+;CONST (0) - В ЧАСЫ
+CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
+CJS А=CTWR,МАР=РЕ
+;ЖДЕМ
+CC11:PUSH А=$FFF,МАР=РЕ
+RFCT
+;ЧИТАЕМ 1-Й РАЗ
+CJS А=CTRD,МАР=РЕ
+;ЖДЕМ ЕЩЕ СТОЛЬКО ЖЕ, ПЕРЕПИСЫВЕМ ПРОЧИТАННОЕ 1-Й РАЗ В DADR
+PUSH А=$FFF,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=DADR
+RFCT
+;ЧИТАЕМ 2-Й РАЗ
+CJS А=CTRD,МАР=РЕ
+;ВЫЧИСЛЯЕМ 1-УЮ РАЗНИЦУ, УМНОЖАЕМ НА 2, ПИШЕМ В EXPN
+CONT ALUS=АВ,RА=А,RВ=DADR,FUNC=SUBS,Н,CI,ALUD=Q
+CONT ALUS=ZQ,Н,ALUD=LSB,RВ=EXPN,SHMUX=LSLSL
+;ВЫЧИСЛЯЕМ 2-УЮ РАЗНИЦУ, ПИШЕМ В Q
+CONT ALUS=АВ,RА=A,RВ=Y,FUNC=SUBS,Н,CI,ALUD=Q
+;СРАВНИВАЕМ РАЗНИЦУ С ПРЕДЫДУЩЕЙ
+CONT ALUS=АQ,RА=EXPN,FUNC=EXOR,Н,ALUD=B,RB=HALF
+;СДВИГАЕМ НА N РАЗРЯДОВ ВПРАВО (СРАВНИВАЕМ С ТОЧНОСТЬЮ ДО N РАЗРЯДОВ)
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+2,SHF=LOG,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;ЧИТАЕМ СНОВА ДЛЯ СЛЕДУЮЩЕЙ ИТЕРАЦИИ
+CJS А=CTRD,МАР=РЕ,%TIK%
+%J% А=CC11,МАР=РЕ,ALUS=ZА,RА=Y,Н,ALUD=В,RВ=A
+;
+;
+ЧАСЫ12:ENTRY
+;===== ПРОВЕРКА ОТНОСИТЕЛЬНОГО ИЗМЕНЕНИЯ СЧЕТА ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ В 2 РАЗА
+;   ЗА N И N+N МИКРОПРОГРАММНЫХ ЦИКЛА
+;   А - НАЧАЛЬНОЕ ЗНАЧЕНИЕ (ИЛИ ТОЧКА ОТСЧЕТА ПРИ ОЧЕРЕДНОЙ ИТЕРАЦИИ)
+;   Y - ПРОЧИТАННОЕ С ТАЙМЕРА В П/П ЧТЕНИЯ;
+;   DADR - ПРОЧИТАННОЕ 1-Й РАЗ; Y - ПРОЧИТАННОЕ 2-Й РАЗ
+;   EXPN - 1-Я РАЗНИЦА, УМНОЖЕННАЯ НА 2; Q - 2-Я РАЗНИЦА, HALF - РЕЗ-Т СРАВНЕНИЯ
+;
+CJP А=CONT12,МАР=РЕ
+CONT12:CONT А=Н12,%Т%
+%S% А=INITST,МАР=РЕ
+;CONST (0) - В ТАЙМЕР
+CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
+CJS А=CTTWR,МАР=РЕ
+;ЖДЕМ
+СС12:PUSH А=$FFF,МАР=РЕ
+RFCT
+;ЧИТАЕМ 1-Й РАЗ
+CJS А=CTTRD,МАР=РЕ
+;ЖДЕМ ЕЩЕ СТОЛЬКО ЖЕ, ПЕРЕПИСЫВЕМ ПРОЧИТАННОЕ 1-Й РАЗ В DADR
+PUSH А=$FFF,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=DADR
+RFCT
+;ЧИТАЕМ 2-Й РАЗ
+CJS А=CTTRD,МАР=РЕ
+;ВЫЧИСЛЯЕМ 1-УЮ РАЗНИЦУ, УМНОЖАЕМ НА 2, ПИШЕМ В EXPN
+CONT ALUS=АВ,RА=А,RВ=DADR,FUNC=SUBS,Н,CI,ALUD=Q
+CONT ALUS=ZQ,Н,ALUD=LSB,RВ=EXPN,SHMUX=LSLSL
+;ВЫЧИСЛЯЕМ 2-УЮ РАЗНИЦУ, ПИШЕМ В Q
+CONT ALUS=АВ,RА=A,RВ=Y,FUNC=SUBS,Н,CI,ALUD=Q
+;СРАВНИВАЕМ РАЗНИЦУ С ПРЕДЫДУЩЕЙ, МАСКА НА 16 РАЗРЯДОВ
+CONT ALUS=АQ,RА=EXPN,FUNC=EXOR,Н,ALUD=B,RB=HALF
+CONT А=MQ,DSRC=PROM,ALUS=DA,RA=HALF,FUNC=AND,Н,ALUD=B,RB=HALF
+;СДВИГАЕМ НА N РАЗРЯДОВ ВПРАВО (СРАВНИВАЕМ С ТОЧНОСТЬЮ ДО N РАЗРЯДОВ)
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+1,SHF=LOG,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;ЧИТАЕМ СНОВА ДЛЯ СЛЕДУЮЩЕЙ ИТЕРАЦИИ
+CJS А=CTTRD,МАР=РЕ,%TIK%
+%J% А=CC12,МАР=РЕ,ALUS=ZА,RА=Y,Н,ALUD=В,RВ=A
+;
+;
+ЧACЫ13:ENTRY
+;===== ПРОВЕРЯЕМ ОТСУТСТВИЕ ИЗМЕНЕНИЯ СЧЕТА ЧАСОВ СВ ПОСЛЕ УСТАНОВКИ ТГ.HALT
+;   8-15 РГ.БОПП - ЧТО ПРОЧИТАЛИ C ЧАСОВ СВ.
+;   ОШ.: 1 - ДО УСТАНОВКИ ТГ.HALT ПОКАЗАНИЯ ЧАСОВ СВ НЕ МЕНЯЮТСЯ;
+;        2 - ПОСЛЕ УСТАНОВКИ ТГ.HALT ЧАСЫ ПРОДОЛЖАЮТ СЧИТАТЬ.
+;   НЕ ЗАБЫВАТЬ СБРАСЫВАТЬ ТГ.HALT ПРИ ЗАПУСКЕ ТЕСТА КОМАНДОЙ G1000:
+;   7-Й РАЗРЯД СТАТУСНОГО РЕГИСТРА Д.Б. РАВЕН 1!
+;
+CJP А=CONT13,МАР=РЕ
+CONT13:CONT А=H13,%Т%
+%S% А=INITST,МАР=РЕ
+CONT А=CFFF,МАР=РЕ,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTWR,МАР=РЕ,%CLRTYP%
+;ЖДЕМ 2 МК = 1 MKS, ПОСЛЕ ЧЕГО ЧАСЫ МОЖНО ЧИТАТЬ (ПОКЗАНИЯ ДОЛЖНЫ ИЗМЕНИТЬСЯ!)
+PUSH А=0,МАР=РЕ,%TYPE%
+RFCT
+;УСТАНАВЛИВАЕМ HALT, ЧИТАЕМ ЧАСЫ CB, КОПИРУЕМ В БОПП, СРАВНИВАЕМ
+CJS А=CTRD,МАР=РЕ,FFCNT=SETHLT
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ ПОКАЗАНИЯ ЧАСОВ НЕ ИЗМЕНИЛИСЬ (СОВПАЛИ С ЗАПИСЫВАЕМЫМ)
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=NZ,%TIK%
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZA,RA=Y,H,ALUD=B,RB=WR6
+CONT %TYPE%
+;ЕЩЕ РАЗ ЧИТАЕМ, СРАВНИВАЕМ
+CC13:CJS А=CTRD,МАР=РЕ,ALUS=ZA,RA=Y,H,ALUD=B,RB=A
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ ПОКАЗАНИЯ ЧАСОВ ИЗМЕНИЛИСЬ
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+%J% А=CC13,МАР=РЕ
+;
+;
+ЧACЫ14:ENTRY
+;===== ПРОВЕРЯЕМ ОТСУТСТВИЕ ИЗМЕНЕНИЯ СЧЕТА ТАЙМЕРА СВ ПОСЛЕ УСТАНОВКИ ТГ.HALT
+;   8-15 РГ.БОПП - ЧТО ПРОЧИТАЛИ C ТАЙМЕРА СВ.
+;   ОШ.: 1 - ДО УСТАНОВКИ ТГ.HALT ПОКАЗАНИЯ ТАЙМЕРА СВ НЕ МЕНЯЮТСЯ;
+;        2 - ПОСЛЕ УСТАНОВКИ ТГ.HALT ТАЙМЕР СВ ПРОДОЛЖАЕТ СЧИТАТЬ.
+;   НЕ ЗАБЫВАТЬ СБРАСЫВАТЬ ТГ.HALT ПРИ ЗАПУСКЕ ТЕСТА КОМАНДОЙ G1000:
+;   7-Й РАЗРЯД СТАТУСНОГО РЕГИСТРА Д.Б. РАВЕН 1!
+;
+CJP А=CONT14,МАР=РЕ
+CONT14:CONT А=H14,%Т%
+%S% А=INITST,МАР=РЕ
+CONT А=MQ,МАР=РЕ,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTTWR,МАР=РЕ,%CLRTYP%
+;ЖДЕМ 20 МК = 10 MKS, ПОСЛЕ ЧЕГО ТАЙМЕР МОЖНО ЧИТАТЬ (ПОКЗАНИЯ Д. ИЗМЕНИТЬСЯ!)
+PUSH А=20,МАР=РЕ,%TYPE%
+RFCT
+;УСТАНАВЛИВАЕМ HALT, ЧИТАЕМ ТАЙМЕР CB, КОПИРУЕМ В БОПП, СРАВНИВАЕМ
+CJS А=CTTRD,МАР=РЕ,FFCNT=SETHLT
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ ПОКАЗАНИЯ ТАЙМЕРА НЕ ИЗМЕНИЛИСЬ (СОВПАЛИ С ЗАПИСЫВАЕМЫМ)
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=NZ,%TIK%
+CJS А=OUT8/F,МАР=РЕ,ALUS=ZA,RA=Y,H,ALUD=B,RB=WR6
+CONT %TYPE%
+;ЕЩЕ РАЗ ЧИТАЕМ, СРАВНИВАЕМ
+CC14:CJS А=CTTRD,МАР=РЕ,ALUS=ZA,RA=Y,H,ALUD=B,RB=A
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+;ОШИБКА, ЕСЛИ ПОКАЗАНИЯ ТАЙМЕРА ИЗМЕНИЛИСЬ
+CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=/NZ,%TIK%
+%J% А=CC14,МАР=РЕ
+;
+;
+ЧАСЫ15:ENTRY
+;===== ПИШЕМ CONST ИЗ ПЗУ В ЧАСЫ СВ ПРИ ТГ.HALT=1, СРАВНИВАЕМ ВСЕ 64 РАЗРЯДА!
+;   ПРИ ОШ.: 8-15 РГ.БОПП - ЧТО ПРОЧИТАЛИ.
+;
+CJP А=CONT15,МАР=РЕ
+CONT15:CONT А=Н15,%Т%
+%S% А=INITST,МАР=РЕ
+;TYPE = 1: ЧИТАЕМ CONST = AAAA ИЗ ПЗУ В РГ.А, ПИШЕМ В ЧАСЫ
+CKL15:CONT А=СААА,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А,FFCNT=SETHLT
+CJS А=CTWR,МАР=РЕ,%CLRTYP%
+;ЧИТАЕМ, СРАВНИВАЕМ
+CJS А=CTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS A=ERRINF,MAP=PE,COND=CT,STOPC=/NZ
+;2: CONST = FFFF
+CONT А=СFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTWR,МАР=РЕ
+CJS А=CTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS A=ERRINF,MAP=PE,COND=CT,STOPC=/NZ
+;3: CONST = 5555
+CONT А=С555,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTWR,МАР=РЕ
+CJS А=CTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS A=ERRINF,MAP=PE,COND=CT,STOPC=/NZ
+;4: CONST = 0000
+CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTWR,МАР=РЕ
+CJS А=CTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q,CEN
+CJS A=ERRINF,MAP=PE,COND=CT,STOPC=/NZ
+%J% А=CKL15,МАР=РЕ,%TIK%
+;
+;
+ЧАСЫ16:ENTRY
+;===== ПИШЕМ CONST ИЗ ПЗУ В ТАЙМЕР СВ ПРИ ТГ.HALT=1, СРАВНИВАЕМ ВСЕ 16 РАЗАЯДОВ! РАЗРЯДОВ
+;
+CJP А=CONT16,МАР=РЕ
+CONT16:CONT А=Н16,%Т%
+%S% А=INITST,МАР=РЕ
+;TYPE = 1: ЧИТАЕМ CONST = AAAA ИЗ ПЗУ В РГ.А, ПИШЕМ В ТАЙМЕР
+CKL16:CONT А=СААА,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTTWR,МАР=РЕ,%CLRTYP%
+;ЧИТАЕМ, СРАВНИВАЕМ
+CJS А=CTTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+;МАСКА НА 16 РАЗРЯДОВ
+CONT А=MQ,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=B,RB=DADR,CEN
+CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;2: CONST = FFFF
+CONT А=СFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTTWR,МАР=РЕ
+CJS А=CTTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MQ,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=B,RB=DADR,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;3: CONST = 5555
+CONT А=С555,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTTWR,МАР=РЕ
+CJS А=CTTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MQ,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=B,RB=DADR,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ
+;4: CONST = 0
+CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
+CJS А=CTTWR,МАР=РЕ
+CJS А=CTTRD,МАР=РЕ,%TYPE%
+CONT ALUS=АВ,RА=А,RВ=У,FUNC=EXOR,Н,ALUD=Q
+CONT А=MQ,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=B,RB=DADR,CEN
+CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ
+%J% А=CKL16,МАР=РЕ,%TIK%
+;
+;
+;===== ПОСЛЕДНЯЯ КОМАНДА БОЛЬШОГО ТЕСТА
+;
+CJP A=PSLO24,MAP=PE
+;
+;===== ПОДПРОГРАММЫ ДЛЯ ЧАСОВ И ТАЙМЕРА СВ
+;
+CTWR:ENTRY
+;===== П/П ЗАПИСИ РГ.А В ЧАСЫ СЧЕТНОГО ВРЕМЕНИ (64 РАЗРЯДА), РЕЖИМ 3!
+;   ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ К СТАРШЕМУ И МЛАДШЕМУ БАЙТАМ
+;   РГ.А - ЧТО ПИШЕМ; WR6 - КОМ.СЛОВО; WR5 - РАБОЧИЙ РЕГИСТР
+;
+;ПИШЕМ В ЧАСЫ КОМАНДНОЕ СЛОВО: NN ОО RRR D = 00 11 011 0 = 36Н
+;NN=00: N КАНАЛА 0 (МЛАДШИЕ 32 РАЗРЯДА ЧАСОВ)
+;ОО=11: ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ
+;RRR=011: РЕЖИМ 3 (ДЕЛИТЕЛЬ ЧАСТОТЫ) - В ТЕСТАХ, В РАБОТЕ - Д.Б. 2!!!
+;D=0: ДВОИЧНЫЙ СЧЕТ
+CONT А=R3СН0,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+;
+CTWRM:ENTRY
+;===== ЗАПИСЬ РГ.А В ЧАСЫ СЧ.ВРЕМЕНИ С КОМ.СЛОВОМ,ЗАДАННЫМ В РГ.WR6 ДЛЯ КАНАЛА 0
+;
+CONT ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+CONT ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=3
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+RFCT
+;ПИШЕМ 1-8, 17-24 РАЗРЯДЫ В ЧАСЫ, А1,А0=00
+CONT ALUS=ZА,RА=А,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=0
+CONT ALUS=ZА,RА=А,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=0
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=А,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=0
+;ПИШЕМ СТАРШИЕ БАЙТЫ, 9-16, 25-32 РАЗРЯДЫ
+RFCT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=WR5,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=0
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=0
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=0
+;ТО ЖЕ САМОЕ - ДЛЯ СТАРШЕЙ ПОЛОВИНЫ ЧАСОВ (КАНАЛ 1), МЛАДШИЙ БАЙТ
+;КОМАНДНОЕ СЛОВО УВЕЛИЧИВАЕМ НА НОМЕР КАНАЛА: + 01 00 000 0 = 40Н
+CONT А=СОРС1,DSRC=PROM,ALUS=DА,RА=WR6,Н,ALUD=В,RВ=WR6
+CONT ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+CONT ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=3
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+RFCT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=WR5,ALU,DSRC=SHIFT,MPS,PSHF=SН0+32,SHF=LOG
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=1
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=1
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=1
+;СТАРШАЯ ПОЛОВИНА ЧАСОВ, СТАРШИЙ БАЙТ
+RFCT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=WR5,ALU,DSRC=SHIFT,MPS,PSHF=SН0+40,SHF=LOG
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=1
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=1
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=1
+;CLOCK НА ЗАПИСЬ
+PUSH А=1,МАР=РЕ,FFCNT=22
+RFCT
+CRTN FFCNT=20
+;
+;
+CTRD:ENTRY
+;===== П/П ЧТЕНИЯ РГ.СЧЕТНОГО ВРЕМЕНИ (64 РАЗРЯДА) - В РГ.У
+;   СЧИТАЕМ, ЧТО ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ К СТАРШЕМУ И МЛАДШЕМУ БАЙТАМ
+;   ЗАДАНО ВО ВРЕМЯ ЗАПИСИ ДАННЫХ (ВСЕ РАВНО ДРУГОГО ПУТИ НЕТ).
+;   ПИШЕМ ТОЛЬКО КОМАНДНОЕ СЛОВО НА КОПИРОВАНИЕ
+;   РГ.У - ЧТО ПРОЧИТАЛИ; WR6 - РАБОЧИЙ РЕГИСТР
+;
+;ПИШЕМ КОМАНДНОЕ СЛОВО НА КОПИРОВАНИЕ 0 КАНАЛА
+CONT ALUS=ZА,FUNC=AND,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+CONT ALUS=ZА,FUNC=AND,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=3
+PUSH А=1,МАР=РЕ,ALUS=ZА,FUNC=AND,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+RFCT
+;ЧИТАЕМ 1-8, 17-24 РАЗРЯДЫ В РГ.У, А1,А0=00
+CONT А= MTIME,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6,YDTIM=CTIME,IОМР,FFCNT=0
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=0
+PUSH А=1,МАР=РЕ,YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=0,ЕСВ,WRB,BRA=RG3,ЕСА,ARA=RG3
+>,ALUS=DА,RА=WR6,FUNC=AND,Н,ALUD=В,RВ=У
+RFCT
+;ЧИТАЕМ 9-16, 25-32 РАЗРЯДЫ, ОБ'ЕДИНЯЕМ
+CONT А=MTIME,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+>,YDTIM=CTIME,IОМР,FFCNT=0
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=0
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=0,ЕСВ,WRB,BRA=RG3,ЕСА,ARA=RG3
+>,ALUS=DА,RА=WR6,FUNC=AND,Н,ALUD=В,RВ=WR6
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0-8,SHF=LOG
+CONT ALUS=АВ,RА=WR6,RВ=У,FUNC=OR,Н,ALUD=В
+;ТО ЖЕ САМОЕ - ДЛЯ СТАРШЕЙ ПОЛОВИНЫ ЧАСОВ (КАНАЛ 1), МЛАДШИЙ БАЙТ
+;КОМ.СЛОВО НА КОПИРОВАНИЕ 1 КАНАЛА
+CONT А=СОРС1,DSRC=PROM,ALUS=DZ,ALUD=В,RВ=WR6
+CONT ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+CONT ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=3
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+RFCT
+;СТАРШАЯ ПОЛОВИНА ЧАСОВ, МЛАДШИЙ БАЙТ
+CONT А=MTIME,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+>,YDTIM=CTIME,IОМР,FFCNT=1
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=1
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=1,ЕСВ,WRB,BRA=RG3,ЕСА,ARA=RG3
+>,ALUS=DА,RА=WR6,FUNC=AND,Н,ALUD=В,RВ=WR6
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0-32,SHF=LOG
+CONT ALUS=АВ,RА=WR6,RВ=У,Н,ALUD=В
+;СТАРШАЯ ПОЛОВИНА ЧАСОВ, СТАРШИЙ БАЙТ
+CONT А=MTIME,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+>,YDTIM=CTIME,IОМР,FFCNT=1
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=1
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=1,ЕСВ,WRB,BRA=RG3,ЕСА,ARA=RG3
+>,ALUS=DА,RА=WR6,FUNC=AND,Н,ALUD=В,RВ=WR6
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0-40,SHF=LOG
+CRTN ALUS=АВ,RА=WR6,RВ=У,FUNC=OR,Н,ALUD=В
+;
+;
+CTTWR:ENTRY
+;===== П/П ЗАПИСИ РГ.А В ТАЙМЕР СЧЕТНОГО ВРЕМЕНИ (16 РАЗРЯДОВ), РЕЖИМ 0!
+;   ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ К СТАРШЕМУ И МЛАДШЕМУ БАЙТАМ, КАНАЛ 2
+;   РГ.А - ЧТО ПИШЕМ; WR6 - КОМ.СЛОВО; WR5 - РАБОЧИЙ
+;
+;ПИШЕМ В ТАЙМЕР КОМАНДНОЕ СЛОВО: NN ОО RRR D = 10 11 000 0 = В0Н
+;NN=10: N КАНАЛА 2
+;ОО=11: ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ
+;RRR=000: РЕЖИМ 0 (ГЕНЕРАЦИЯ ЗАДЕРЖАННОГО СИГНАЛА ПРЕРЫВАНИЯ)
+;D=0: ДВОИЧНЫЙ СЧЕТ
+CONT А=R0СН2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+;
+CTTWRM:ENTRY
+;===== ЗАПИСЬ РГ.А В ТАЙМЕР СЧ.ВРЕМЕНИ С КОМ.СЛОВОМ,ЗАДАННЫМ В РГ.WR6, КАНАЛ 2
+;
+CONT ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+CONT ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=3
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+RFCT
+;ПИШЕМ 1-8 РАЗРЯДЫ, А1,А0=10
+CONT ALUS=ZА,RА=А,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=2
+CONT ALUS=ZА,RА=А,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=2
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=А,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=2
+;ПИШЕМ СТАРШИЕ БАЙТЫ, 9-16 РАЗРЯДЫ
+RFCT ALUS=DZ,Н,ALUD=ВА,RА=А,RВ=WR5,ALU,DSRC=SHIFT,MPS,PSHF=SН0+8,SHF=LOG
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=2
+CONT ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=2
+PUSH А=30,МАР=РЕ,ALUS=ZА,RА=WR5,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=2
+;ЖДЕМ ЗАПИСИ
+;СИГНАЛ CLOCK, ПО КОТОРОМУ ДЕЛАЕТСЯ ЗАПИСЬ, ПРИХОДИТ 1 РАЗ В 10 MKS = 20 МК
+RFCT
+CRTN
+;
+;
+CTTRD:ENTRY
+;===== П/П ЧТЕНИЯ ТАЙМЕРА СЧЕТНОГО ВРЕМЕНИ (16 РАЗРЯДОВ) - В РГ.У
+;   СЧИТАЕМ, ЧТО ПОСЛЕДОВАТЕЛЬНОЕ ОБРАЩЕНИЕ К СТАРШЕМУ И МЛАДШЕМУ БАЙТАМ
+;   ЗАДАНО ВО ВРЕМЯ ЗАПИСИ ДАННЫХ (ВСЕ РАВНО ДРУГОГО ПУТИ НЕТ).
+;   ПИШЕМ ТОЛЬКО КОМАНДНОЕ СЛОВО НА КОПИРОВАНИЕ ( = НОМЕРУ КАНАЛА)
+;   У - ЧТО ЧИТАЕМ; WR6 - РАБОЧИЙ
+;
+;КОМ.СЛОВО НА КОПИРОВАНИЕ 2 КАНАЛА
+CONT А=СОРС2,DSRC=PROM,ALUS=DZ,ALUD=В,RВ=WR6
+CONT ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+CONT ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,WRD,IОМР,FFCNT=3
+PUSH А=1,МАР=РЕ,ALUS=ZА,RА=WR6,ALU,YDTIM=CTIME,WTIME=WТ,IОМР,FFCNT=3
+RFCT
+;ЧИТАЕМ 1-8 РАЗРЯДЫ В РГ.У, А1,А0=10
+CONT А=МВ,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+>,YDTIM=CTIME,IОМР,FFCNT=2
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=2
+PUSH А=1,МАР=РЕ,YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=2,ЕСВ,WRB,BRA=RG3,ЕСА,ARA=RG3
+>,ALUS=DА,RА=WR6,FUNC=AND,Н,ALUD=В,RВ=У
+RFCT
+;ЧИТАЕМ 9-16 РАЗРЯДЫ, ОБ'ЕДИНЯЕМ
+CONT А=МВ,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
+>,YDTIM=CTIME,IОМР,FFCNT=2
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=2
+CONT YDTIM=CTIME,RTIME=RТ,IОМР,FFCNT=2,ЕСВ,WRB,BRA=RG3,ЕСА,ARA=RG3
+>,ALUS=DА,RА=WR6,FUNC=AND,Н,ALUD=В,RВ=WR6
+CONT ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0-8,SHF=LOG
+CRTN ALUS=АВ,RА=WR6,RВ=У,FUNC=OR,Н,ALUD=В
+;
+;     =======================
+;     ПРОВЕРКА ТГ. СВЯЗИ С ПП
+;     =======================
+;
+ТГ/ПП1:ENTRY
+;===== ПРОВЕРКА ТГ.СВЯЗИ С ПП
+; - ЖДЕМ НАЧАЛЬНОЙ УСТАНОВКИ ТГ."ОЗУ ЦП->ПП СВОБОДНО",
+;   ТИП ПРОВЕРКИ = РГ.INTR = 01; 2 РГ.БОПП = "ЗАПРОС";
+; - УСТАНАВЛИВАЕМ ТГ."ОЗУ ЦП->ПП ЗАНЯТО"; ПРОВЕРЯЕМ; ЕСЛИ СВОБОДНО - ОШИБКА:
+;   ТИП ПРОВЕРКИ = РГ.INTR = 02, 2 РГ.БОПП = 00 (ОК) ИЛИ FF (ОШИБКА);
+; - ЖДЕМ СБРОСА ТГ."ОЗУ ЦП->ПП ЗАНЯТО;
+;   ТИП ПРОВЕРКИ = РГ.INTR = 03; 2 РГ.БОПП = "ЗАПРОС".
+;
+CJP А=PSTG1,МАР=РЕ
+;"1" - НОМЕР ТЕСТА - В РГ.EXPN; ИДЕМ НА НАЧАЛЬНУЮ УСТАНОВКУ РГ.МПС И БОПП
+PSTG1:CONT А=Н1,%T%
+CJS А=INITST,МАР=РЕ
+;НАЧИНАЕМ СНАЧАЛА: ТИП ПРОВЕРКИ = 0
+CTG1:CONT %CLRTYP%
+;ЖДЕМ НАЧ.СБРОСА ТГ."ОЗУ ЦП->ПП ЗАНЯТО": INTR (ТИП) = 01 - В 1 РГ.БОПП
+CONT %ТУРЕ%
+;01 = "ЗАПРОС" -> ВО 2 РГ.БОПП
+WTTG1:CJP А=WTTG1,МАР=РЕ,COND=СРМР,IСС,ALUS=ZА,RА=INTR,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=2
+;УБИРАЕМ ЗАПРОС
+CONT ALUS=DZ,FUNC=AND,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=2
+;ПРОВЕРЯЕМ УСТАНОВКУ ТГ."ОЗУ ЦП->ПП ЗАНЯТО", INTR = 2
+CONT FFCNT=LDCPMP
+CONT %ТУРЕ%
+CONT %TIK%
+;ОШИБКА, ЕСЛИ НЕ ЗАНЯТО
+CJS А=ERRTST,МАР=РЕ,COND=СРМР,IСС
+;ЖДЕМ СБРОСА ТГ."ОЗУ ЦП->ПП ЗАНЯТО", INTR = 1 РГ.БОПП = 03
+CONT %ТУРЕ%
+;03 = INTR -> ВО 2 РГ.БОПП - "ЗАПРОС"
+WTTG2:CJP А=WTTG2,МАР=РЕ,COND=СРМР,IСС,ALUS=ZА,RА=INTR,ALU,YDEV=МРМЕМ,WRY
+>,IОМР,MPADR=2
+;УБИРАЕМ ЗАПРОС, ИДЕМ НА НАЧАЛО
+CJP А=CTG1,МАР=РЕ,ALUS=DZ,FUNC=AND,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=2
+END
+*NO LIST
+SECLD:PROG;
+;===== СПИСОК ЗАГРУЖАЕМЫХ ПРОГРАММ:
+EXTERN MPCONT,SEC
+END
+*END
+*NO LIST
+*CALL MICLOA:SECLD
+*CALL MPROM
+*END F
+*END FILE
