@@ -114,6 +114,25 @@ def do_macro(op):
     return ''
 
 #
+# Generate PROM labels
+#
+def do_prom(list, offset):
+    for arg in list:
+        pair = arg.split('-')
+        if len(pair) > 1:
+            # Range
+            n = int(pair[0], 16)
+            k = int(pair[1], 16)
+            for i in range(n, k+1):
+                #print "--- @%04x = %d" % (i, offset)
+                label_define("@%04x" % i, offset)
+        else:
+            # Single index
+            n = int(pair[0], 16)
+            #print "--- @%04x = %d" % (n, offset)
+            label_define("@%04x" % n, offset)
+
+#
 # Define a label.
 #
 def label_define(name, offset):
@@ -146,6 +165,7 @@ def do_instruction(op):
         label_local[name] = 1
         name = op[1]
         op = op[1:]
+
     op = op[1:]
     op = expand_macro(op)
     generate_code(name, op)
@@ -184,6 +204,10 @@ def translate(a):
 
         if len(op) > 1 and op[1] == "ENTRY":
             label_define(op[0], len(code))
+            continue
+
+        if op[0] == "PROM":
+            do_prom(op[1:], len(code))
             continue
 
         # Regular microinstruction

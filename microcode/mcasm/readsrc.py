@@ -7,10 +7,13 @@ import re
 #
 # Process an input line;
 # strip out comments and monitor instructions.
+# Replace 'PROM:' pseudo-comment with PROM instruction.
 #
 def remove_comments(s):
-    if s[0] == ';' or s[0] == '*':
+    if s[0] == '*':
         return ''
+    if s[0:6] == ";PROM:":
+        return s[1:]
     idx = s.find(";")
     if idx >= 0:
         s = s[:idx]
@@ -68,6 +71,8 @@ def join_continuations(a):
 def read_sources(filename):
     file = open(filename)
     a = file.readlines()
+
+    # Remove comments, replace PROM pseudo-comment
     a = map(remove_comments, a)
 
     # Convert encoding, strip white space.

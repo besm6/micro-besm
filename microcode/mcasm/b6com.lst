@@ -1,6 +1,8 @@
 ======== b6com ========
 
 ATX:
+@0000:
+@0400:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         LDCT LCW      PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     DWR   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
@@ -8,6 +10,7 @@ WA:
         CJP  WA       PE  ALU BA   -     ZB   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   ECB WRB -   -   -   -   -      -   -      -   -    -      ARBRDY -
         JRP  -        ME  -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   -    -   -   -   ISE -   -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    CLRJMP TKKB   -
 ATXF:
+@0200:
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         LDCT LCW      PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     DWR   -   -    -   -   -   -   -   CEN -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
 PSATXF:
@@ -17,12 +20,17 @@ WAF:
         JRP  -        ME  ALU -    -     ZA   - -    DADR CI1 -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   ISE -   -   CSM WEM -   -   -   -   -   -   -      -   CLRCD  WRD -    CLRJMP TKKB   -
 --------
 ATXFE:
+@0600:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         LDCT LCW      PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     DWR   -   -    -   -   -   -   -   CEN -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
         CJP  PSATXF   PE  ALU BA   -     ZB   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   ECB WRB -   -   -   -   -      -   -      -   -    -      -      -
 --------
 STX:
+@0001:
+@0201:
+@0401:
+@0601:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     DWR   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    -      -      -
@@ -36,6 +44,10 @@ RDOPER:
         CRTN -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    SCI -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
 --------
 XTS:
+@0003:
+@0203:
+@0403:
+@0603:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  XTSF     PE  -   B    -     ZA   - WR5  DADR CI1 -      -     -   -    -    -     -      -      -     DWR   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    -      IR15   -
@@ -49,10 +61,13 @@ XTSF:
         JRP  -        ME  ALU BA   -     DZ   H A    WR5  -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   ISE CEM -   CSM WEM -   -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 --------
 XTA:
+@0008:
+@0408:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  RDOPER   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         JRP  -        ME  -   B    -     DZ   H A    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 XTAF:
+@0208:
         LDCT LCW      PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSXTAF:
         CJP  XTA      PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
@@ -60,27 +75,32 @@ PSXTAF:
         JRP  -        ME  ALU BA   -     DZ   H A    DADR -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   ISE CEM -   CSM WEM -   -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 --------
 XTAFE:
+@0608:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         LDCT LCW      PE  -   B    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  PSXTAF   PE  ALU BA   -     DZ   H -    WR6  -   -      -     -   -49  U    C     SHIFT  -      LOG   -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
 --------
 AAX:
+@0009:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  RDOPER   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         JRP  -        ME  -   B    AND   DA   H A    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 AAXF:
+@0209:
         LDCT LCW      PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  AAX      PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  -        PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    SCI ICI -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
         JRP  -        ME  -   B    AND   DA   H A    -    -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   ISE CEM -   CSM WEM ECB -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 --------
 AAXE:
+@0409:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  LOGER    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CONT -        -   -   B    AND   AB   H WR2  WR1  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSAAXE:
         JRP  -        ME  ALU BA   -     DZ   H A    WR2  -   -      -     -   4    -    PCC   SHIFT  -      EMULF -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    -      TKKB   MPS
 AAXFE:
+@0609:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  AAXE     PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  LOGER    PE  ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    CLRTR1 -      -
@@ -122,22 +142,26 @@ WO:
         CRTN -        -   -   B    AND   DZ   H WR2  -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 AEX:
+@000a:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         LDCT LCW      PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJS  -        PE  -   B    -     ZA   H Y    -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    SCI ICI -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
         JRP  -        ME  -   B    EXOR  DA   H A    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 AEXF:
+@020a:
         LDCT LCW      PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  AEX      PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  -        PE  -   B    -     ZA   H Y    -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    SCI ICI -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
         JRP  -        ME  -   B    EXOR  DA   H A    -    -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   ISE CEM -   CSM WEM ECB -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 --------
 AEXE:
+@040a:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJS  LOGER    PE  -   B    -     ZA   H Y    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CJP  PSAAXE   PE  -   B    EXOR  AB   H WR2  WR1  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 AEXFE:
+@060a:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  AEXE     PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CONT -        -   ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    -      -      -
@@ -145,11 +169,13 @@ AEXFE:
         CJP  PSAAXE   PE  -   B    EXOR  AB   H WR2  WR1  -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM ECB -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 ARX:
+@000b:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  RDOPER   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT -        -   -   B    -     DA   H A    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   ECA -   RG2 -      -   -      -   -    -      -      -
         JRP  -        ME  -   B    -     ZA   H A    -    CIC -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    MULGRP TKKB   -
 ARXF:
+@020b:
         LDCT LCW      PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  ARX      PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  -        PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    SCI ICI -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
@@ -157,6 +183,7 @@ ARXF:
         JRP  -        ME  -   B    -     ZA   H A    -    CIC -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   ISE CEM -   CSM WEM ECB -   -   -   -   -   -      -   CLRCD  WRD -    MULGRP TKKB   -
 --------
 ARXE:
+@040b:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  LOGER    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CONT -        -   -   B    -     AB   H WR2  WR1  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    MULGRP -      -
@@ -165,32 +192,38 @@ PSARXE:
         CONT -        -   ALU BA   -     DZ   H A    -    -   -      -     -   -16  IRA  SP    SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
         CJP  PSAAXE   PE  -   B    -     AB   H WR2  -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 ARXFE:
+@060b:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  ARXE     PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  LOGER    PE  ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CJP  PSARXE   PE  -   B    -     AB   H WR2  WR1  -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   CEN CSM WEM ECB -   -   -   -   -   -      -   -      -   -    MULGRP -      -
 --------
 AOX:
+@000d:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  RDOPER   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         JRP  -        ME  -   B    OR    DA   H A    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 AOXF:
+@020d:
         LDCT LCW      PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  AOX      PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  -        PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    SCI ICI -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
         JRP  -        ME  -   B    OR    DA   H A    -    -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   ISE CEM -   CSM WEM ECB -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 --------
 AOXE:
+@040d:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  LOGER    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CJP  PSAAXE   PE  -   B    OR    AB   H WR2  WR1  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 AOXFE:
+@060d:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  AOXE     PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  LOGER    PE  ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CJP  PSAAXE   PE  -   B    OR    AB   H WR2  WR1  -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM ECB -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 APX:
+@0010:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT -        -   -   B    AND   DZ   H WR3  -    -   -      -     -   48   MP   SP    -      -      -     DRD   -   -    -   -   -   -   -   -   CSM -   ECB WRB RG0 ECA WRA -   PHYSAD -   -      -   -    -      -      -
@@ -206,11 +239,13 @@ ISC1:
 OUT:
         JRP  JQ       PE  -   B    -     ZA   H A    WR3  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   -   -   -   -      -   CLRCD  -   -    CLRJMP TKKB   -
 APXF:
+@0210:
         CONT -        -   -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  APX      PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    -      CT     -
         CJP  WA       PE  -   B    AND   DZ   H WR3  -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    -      -      -
 --------
 APXE:
+@0410:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  LOGER    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CONT -        -   -   B    AND   DZ   H WR3  -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -227,12 +262,14 @@ ISC1E:
 PSAPXE:
         JRP  JQ       PE  ALU BA   -     DZ   H A    WR3  -   -      -     -   4    -    PCC   SHIFT  -      EMULF -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    -      TKKB   MPS
 APXFE:
+@0610:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  APXE     PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  LOGER    PE  ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CJP  APXCC    PE  -   B    AND   DZ   H WR3  -    -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM ECB -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 AUX:
+@0011:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT -        -   -   Q    AND   DZ   H -    -    -   -      -     -   48   MP   SP    -      -      -     DRD   -   -    -   -   -   -   -   -   CSM -   ECB WRB RG0 ECA WRA -   PHYSAD -   -      -   -    -      -      -
@@ -250,11 +287,13 @@ OUT:
         CJP  LCW      PE  -   B    -     ZQ   H A    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC ISE CEM -   -   -   -   -   -   -   -   -   -      -   CLRCD  -   -    -      TKKB   -
         CJP  -        ME  -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   LETC -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 AUXF:
+@0211:
         CONT -        -   -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  AUX      PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    -      CT     -
         CJP  WA       PE  -   Q    AND   DZ   H -    -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    -      -      -
 --------
 AUXE:
+@0411:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  LOGER    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CONT -        -   -   Q    AND   DZ   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -269,12 +308,14 @@ OUTE:
         LDCT LCW      PE  -   B    -     ZQ   H WR3  -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  PSAPXE   PE  ALU BA   -     DZ   H WR3  WR3  -   -      -     -   -16  IRA  SP    SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
 AUXFE:
+@0611:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  AUXE     PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  LOGER    PE  ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CJP  AUXCE    PE  -   Q    AND   DZ   H -    -    -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM ECB -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 ACX:
+@0012:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  ACXN     PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         LDCT LCW      PE  -   B    -     DA   H A    WR3  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   ECA -   RG2 -      -   -      -   -    -      -      -
@@ -289,6 +330,7 @@ WAS:
         CJP  WAS      PE  -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP ARBRDY -
         CRTN -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 ACXF:
+@0212:
         CONT -        -   -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  ACX      PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  ACXN     PE  ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    -      -      -
@@ -296,6 +338,7 @@ ACXF:
         JRP  -        ME  -   B    -     ZB   H A    -    CIC -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   ISE CEM -   CSM WEM ECB -   -   -   -   -   -      -   CLRCD  WRD -    LOGGRP TKKB   -
 --------
 ACXE:
+@0412:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  LOGER    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
 ACXNE:
@@ -306,12 +349,14 @@ PSACXE:
         LDCT LCW      PE  ALU BA   -     DZ   H WR1  WR3  -   -      -     -   -16  IRA  SP    SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
         CJP  PSARXE   PE  -   B    -     AB   H WR2  WR1  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 ACXFE:
+@0612:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  ACXE     PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  LOGER    PE  ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CJP  ACXNE    PE  -   -    -     -    - -    -    -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM ECB -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 ANX:
+@0013:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  ANXN     PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         JRP  -        ME  -   B    -     ZB   H A    -    CIC -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    -      TKKB   -
@@ -325,12 +370,14 @@ WAS:
         CJP  WAS      PE  -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP ARBRDY -
         CRTN -        -   -   B    -     DA   H A    WR3  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   ECA -   RG2 -      -   -      -   -    LOGGRP -      -
 ANXF:
+@0213:
         CONT -        -   -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  ANX      PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  ANXN     PE  ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    -      -      -
         JRP  -        ME  -   B    -     ZB   H A    -    CIC -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   ISE CEM -   CSM WEM ECB -   -   -   -   -   -      -   CLRCD  WRD -    -      TKKB   -
 --------
 ANXE:
+@0413:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  LOGER    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
 ANXNE:
@@ -340,12 +387,14 @@ ANXNE:
         CONT -        -   ALU BA   -     DZ   H Y    WR1  -   -      -     -   -    -    -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  PSACXE   PE  ALU BA   -     DZ   H Y    Y    -   -      -     -   4    -    PCC   SHIFT  -      EMULF -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
 ANXFE:
+@0613:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  ANXE     PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  LOGER    PE  ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CJP  ANXNE    PE  -   -    -     -    - -    -    -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM ECB -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 ASX:
+@0016:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT -        -   -   B    -     ZA   H WR1  -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
@@ -362,6 +411,7 @@ PSSH:
 RSH:
         CJP  PSSH     PE  ALU -    SUBS  AB   - WR3  WR2  CI1 -      -     -   -    -    -     -      PSHIFT -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 ASXF:
+@0216:
         CONT -        -   -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  ASX      PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CONT -        -   -   B    -     ZA   H WR1  -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
@@ -370,6 +420,7 @@ WALF:
         CJP  ASXS     PE  ALU -    -     ZA   - -    DADR -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 ASXE:
+@0416:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  LOGER    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
 ASXSE:
@@ -386,12 +437,15 @@ PSSHE:
 RSHE:
         CJP  PSSHE    PE  ALU -    SUBS  AB   H WR3  WR2  CI1 -      -     -   -    -    -     -      PSHIFT -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 ASXFE:
+@0616:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  ASXE     PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  LOGER    PE  ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    CLRTR1 -      -
         CJP  ASXSE    PE  ALU -    -     ZA   - -    DADR -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 ASN:
+@0816:
+@0a16:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         LDCT RSH      PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      PSHIFT -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT 26       -   -   -    AND   DA   - -    DADR -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -404,6 +458,8 @@ LSH:
         CRTN 164      -   ALU -    -     DA   - -    DADR -   -      -     -   -    -    -     PROM   PSHIFT -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 ASNE:
+@041e:
+@061e:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT 222      -   -   B    NOTRS DA   H WR1  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT -        -   -   B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    SETTR1 -      -
@@ -411,17 +467,25 @@ ASNE:
         CJP  ASXSE    PE  -   -    -     -    - -    -    -   -      -     -   4    -    PCC   SHIFT  -      EMULF -     -   -    -   -   -   -   -   -   -   -   ECB -   -   ECA WRA RG2 -      -   -      -   -    CLRTR1 -      MPS
 --------
 ATI:
+@0820:
+@0a20:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         LDCT LCWISE   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         JRP  JIQ      PE  ALU -    -     ZA   - -    -    -   -      -     -   -64  U    -     -      -      -     -     -   -    -   -   ICC -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    CHTKK  RCB    -
 --------
 ATIE:
+@0420:
+@0620:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         LDCT LCW      PE  ALU -    -     ZA   H -    -    -   -      -     -   12   -    SPRAD SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   -   ECA WRA -   -      -   -      -   -    CHTKK  -      MPS
         JRP  -        ME  -   Q    -     DZ   - -    -    -   -      -     -   -64  U    -     COMA   -      -     -     -   -    -   -   -   ISE -   -   CSM WEM ECB -   -   -   -   -   -      -   CLRCD  WRD -    CLRJMP TKKB   -
 --------
 STI:
+@0821:
+@0a21:
+@0421:
+@0621:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   -   B    -     DQ   - WR5  -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT 115      -   -   B    EXOR  DA   - WR4  WR5  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -454,12 +518,16 @@ WAF:
         JRP  -        ME  -   BA   -     DZ   H A    DADR -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 --------
 ITA:
+@0880:
+@0a80:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         LDCT LCW      PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      EMLRG  -
 PSITA:
         CJP  PSUTA    PE  -   -    -     DZ   - -    -    -   -      -     -   -64  U    -     -      -      -     -     -   -    -   -   -   -   -   CEN CSM -   -   -   -   ECA WRA RG2 -      -   -      -   -    CLRJMP -      -
 --------
 ITAE:
+@0422:
+@0622:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         LDCT LCW      PE  -   B    -     DZ   - WR1  -    -   -      -     -   -64  U    -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP -      -
@@ -468,6 +536,10 @@ ITAE:
         JRP  JQ       PE  ALU BA   OR    DQ   H A    WR1  -   -      -     -   -12  IRA  M11   SHIFT  -      LOG   -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    LOGGRP TKKB   MPS
 --------
 ITS:
+@0822:
+@0a22:
+@0423:
+@0623:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         LDCT LCW      PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     DWR   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    -      -      -
@@ -484,28 +556,42 @@ ITSE:
         JRP  -        ME  -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   -    -   -   -   ISE -   -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    -      TKKB   -
 --------
 MTJ:
+@0824:
+@0a24:
+@0424:
+@0624:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   -   -    -     -    - -    -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   ECA WRA -   -      -   -      -   -    -      -      -
         LDCT LCW      PE  ALU B    -     ZQ   - DADR -    -   -      -     -   -    -    -     -      ADRREG -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CHTKK  -      -
         JRP  -        ME  -   Q    -     DZ   - -    -    -   -      -     -   -64  U    -     COMA   -      -     -     -   -    -   -   -   ISE -   -   CSM WEM ECB -   -   -   -   -   -      -   CLRCD  WRD -    CLRJMP TKKB   -
 --------
 JDM:
+@0825:
+@0a25:
+@0425:
+@0625:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     ZQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   ECA WRA -   -      -   -      -   -    -      -      -
         LDCT LCW      PE  -   B    -     DZ   - WR1  -    -   -      -     -   -64  U    -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CHTKK  -      -
         JRP  JQ       PE  ALU -    -     DA   - -    WR1  -   -      -     -   -64  U    -     -      -      -     -     -   -    -   -   -   ISE -   -   CSM WEM -   -   -   ECA -   -   -      -   CLRCD  WRD -    CLRJMP TKKB   -
 --------
 UTC:
+@0090:
+@0290:
+@0490:
+@0690:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   -   B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP -      -
         LDCT LCW      PE  ALU -    -     ZA   - -    DADR -   -      -     -   47   MP   C     -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    CHTKK  -      -
         JRP  JQ       PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETC   TKKB   -
 --------
 WTC:
+@003b:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  RDOPER   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP -      -
         JRP  JQ       PE  -   -    -     -    - -    -    -   -      -     -   47   MP   C     -      -      -     -     -   -    -   -   -   ISE -   -   CSM WEM ECB -   RG2 -   -   -   -      -   -      -   -    SETC   TKKB   -
 WTCF:
+@023b:
         LDCT LCW      PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  WTC      PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  -        PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    SCI ICI -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
@@ -513,28 +599,42 @@ WTCF:
         JRP  -        ME  ALU -    -     ZA   - -    DADR -   -      -     -   48   MP   SP    -      -      -     -     -   LETC -   -   -   ISE -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    CLRJMP TKKB   -
 --------
 WTCE:
+@0498:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  RDOPER   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSWTCE:
         LDCT LCW      PE  -   B    -     DZ   H WR1  -    -   -      -     -   12   -    SPRAD SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    SETC   -      MPS
         JRP  -        ME  ALU -    -     ZA   - -    WR1  -   -      -     -   47   MP   C     -      -      -     -     -   LETC -   -   -   ISE -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      TKKB   -
 WTCFE:
+@0698:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  WTCE     PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  -        PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    SCI ICI -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
         CJP  PSWTCE   PE  ALU -    -     ZA   - -    DADR -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 VTM:
+@003c:
+@023c:
+@04a0:
+@06a0:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         LDCT LCWISE   PE  ALU B    -     ZQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
 JRPCH:
         JRP  JIQ      PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CHTKK  RCB    -
 --------
 UTM:
+@003d:
+@023d:
+@04a8:
+@06a8:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  VTM      PE  -   Q    -     DQ   - -    -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 UZA:
+@00eb:
+@02eb:
+@04b0:
+@06b0:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   -   Q    -     DQ   - -    -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    SETTR0 -      -
         LDCT JNNZ     PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
@@ -542,13 +642,20 @@ UZA:
 --------
 UZAPNA:
 UZAMUL:
+@180a:
+@180b:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         JRP  79       -   -   -    AND   DA   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   ICC -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
 UZALOG:
+@1809:
         CJP  JNZ      PE  -   -    -     ZA   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 EMLRG  -
         CJP  JNZ      PE  -   -    AND   AB   H WR1  -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 UIA:
+@00ec:
+@02ec:
+@04b8:
+@06b8:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   -   Q    -     DQ   - -    -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTR0 -      -
         LDCT JNZ      PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETTR1 -      -
@@ -556,39 +663,60 @@ UIA:
 --------
 UIAPNA:
 UIAMUL:
+@1812:
+@1813:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         JRP  79       -   -   -    AND   DA   H -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   ICC -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
 UIALOG:
+@1811:
         CJP  JNNZ     PE  -   -    -     ZA   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 EMLRG  -
         CJP  JNNZ     PE  -   -    AND   AB   H WR1  -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 JAMP:
+@0018:
+@0218:
+@04c0:
+@06c0:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  LCWJMP   PE  -   Q    -     DQ   - -    -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 VJM:
+@0019:
+@0219:
+@04c8:
+@06c8:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  LCWJMP   PE  ALU -    -     ZA   - -    PC   CI1 -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 JMEQ:
+@0020:
+@0220:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  JNZ      PE  -   -    -     DZ   - -    -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   CEN CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP -      -
 --------
 JMEQE:
+@04e0:
+@06e0:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT 209      -   -   B    -     DZ   H WR1  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  JNZ      PE  -   -    AND   DA   - -    WR1  -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   CEN CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP -      -
 --------
 JMNE:
+@0021:
+@0221:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  JNNZ     PE  -   -    -     DZ   - -    -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   CEN CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP -      -
 --------
 JMNEE:
+@04e8:
+@06e8:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT 209      -   -   B    -     DZ   H WR1  -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  JNNZ     PE  -   -    AND   DA   - -    WR1  -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   CEN CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP -      -
 --------
 VLM:
+@001b:
+@021b:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         LDCT LCWISE   PE  -   B    -     DZ   - WR1  -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   CEN CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSVLM:
@@ -598,11 +726,15 @@ VLMJMP:
         CJP  LCWJMP   PE  ALU -    -     ZA   - -    WR1  CI1 -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 VLME:
+@04f8:
+@06f8:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         LDCT LCWISE   PE  -   B    -     DZ   - WR1  -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  PSVLM    PE  ALU BA   -     DZ   H -    WR1  -   -      -     -   -49  U    C     SHIFT  -      LOG   -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
 --------
 XTR:
+@00db:
+@0417:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  SXTR     PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         JRP  JIQ      PE  ALU -    OR    AB   - WR2  WR1  -   -      -     -   46   MP   RR    -      CNT    -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      TKKB   -
@@ -614,6 +746,8 @@ WA:
         CJP  WA       PE  -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
         CRTN -        -   -   B    AND   DA   - WR2  WR3  -   -      -     -   53   MP   M10   SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   ECB -   RG2 -   -   -   -      -   -      -   -    -      -      MPS
 XTRF:
+@02db:
+@0617:
         CONT -        -   -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  XTR      PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CJS  SXTR     PE  ALU B    SUBS  DZ   - DADR -    -   -      -     -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -621,6 +755,10 @@ XTRF:
         JRP  -        ME  ALU -    -     ZA   - -    DADR -   -      -     -   48   MP   SP    -      -      -     -     -   LETC -   -   -   ISE -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      TKKB   -
 --------
 NTR:
+@0882:
+@0a82:
+@041f:
+@061f:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         LDCT LCWISE   PE  -   B    -     DZ   - WR1  -    -   -      -     -   46   MP   RR    -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT 215      -   -   B    AND   DA   - WR1  WR1  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -629,6 +767,10 @@ NTR:
         JRP  JIQ      PE  ALU -    OR    -    - -    WR1  -   -      -     -   46   MP   RR    -      CNT    -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      TKKB   -
 --------
 RTE:
+@0883:
+@0a83:
+@0418:
+@0618:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   -   B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT 100      -   -   Q    AND   DA   - -    DADR -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -643,6 +785,8 @@ PSEM:
         CRTN 212      -   -   B    OR    DA   H WR2  WR2  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 RMOD:
+@00f0:
+@02f0:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  EXTDR    PE  ALU B    -     DQ   - WR1  -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   ICC -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 DRG    -
         LDCT LCW      PE  -   B    -     ZA   - DADR WR1  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR0 -      -
@@ -650,6 +794,8 @@ RMOD:
         JMAP -        -   -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP -      -
 --------
 WMOD:
+@00f1:
+@02f1:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  EXTDR    PE  ALU B    -     DQ   - WR1  -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   ICC -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 DRG    -
         LDCT LCW      PE  -   B    -     ZA   - DADR WR1  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETTR0 -      -
@@ -657,6 +803,8 @@ WMOD:
         JMAP -        -   -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP -      -
 --------
 SETR:
+@00f2:
+@02f2:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  CHRR     PE  -   B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         JRP  JIQ      PE  ALU -    OR    AB   - WR2  WR1  -   -      -     -   46   MP   RR    -      CNT    -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      TKKB   -
@@ -669,6 +817,8 @@ CHRR:
         CRTN -        -   -   B    OR    AB   - WR2  WR3  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CHTKK  -      -
 --------
 CLRR:
+@00f3:
+@02f3:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  CHRR     PE  -   B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSCLRR:
@@ -676,6 +826,8 @@ PSCLRR:
         JRP  JIQ      PE  ALU -    AND   AB   - WR2  WR1  -   -      -     -   46   MP   RR    -      CNT    -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      TKKB   -
 --------
 SEMR:
+@00f4:
+@02f4:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  EXTDR    PE  ALU B    -     DQ   - DADR -    -   -      MCN   -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   ICC -   -   CEN CSM -   -   -   -   -   -   -   -      -   -      -   -    -      DRG    -
         PUSH JIQ      PE  -   B    AND   DA   H WR2  BYTE -   -      CLRNC -   -    -    -     PROCN  -      -     RDMWR -   -    -   -   -   -   -   CEN -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CLRJMP -      -
@@ -694,6 +846,8 @@ ZAX:
         JRP  -        ME  -   Q    -     DZ   - -    -    -   -      MCN   -   -    -    -     COMA   -      -     -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    -      TKKB   -
 --------
 SEMW:
+@00f7:
+@02f7:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  EXTDR    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   ICC -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      DRG    -
         PUSH JIQ      PE  -   B    AND   DA   H WR2  BYTE -   -      -     -   -    -    -     PROCN  -      -     DRD   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CLRJMP -      -
@@ -707,6 +861,8 @@ MIP:
         JRP  -        ME  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE -   -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    -      TKKB   -
 --------
 SMON:
+@00f8:
+@02f8:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  CHRR     PE  -   B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT 426      -   ALU -    OR    DA   - -    WR2  -   -      -     -   46   MP   RR    PROM   CNT    -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -729,6 +885,8 @@ WRR:
         CJP  -        ME  -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   -    -   -   -   ISE -   -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    CLRJMP -      -
 --------
 CMON:
+@00f9:
+@02f9:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  CHRR     PE  -   B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT 426      -   ALU -    OR    DA   - -    WR2  -   -      -     -   46   MP   RR    PROM   CNT    -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -753,6 +911,7 @@ WAEX:
         JRP  JQ       PE  -   B    OR    AB   H INTR WR5  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE -   -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    CLRJMP TKKB   -
 --------
 TTX:
+@00f5:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  EXTDR    PE  ALU -    -     ZA   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   ECB WRB -   -   -   -   -      -   -      -   -    -      DRG    -
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -762,6 +921,7 @@ WW:
         CJP  WW       PE  -   Q    -     DZ   - -    -    -   -      -     -   -    -    -     COMA   -      -     -     -   -    -   -   ICC -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      ARBRDY -
         JRP  -        ME  ALU -    -     DZ   - -    -    -   -      -     -   45   MP   RRR   -      -      -     -     -   -    -   -   -   ISE -   -   CSM -   -   WRB -   -   -   -   ECBTAG -   CLRCD  WRD -    CLRJMP TKKB   -
 TTXF:
+@02f5:
         CJP  EXTDR    PE  ALU -    -     ZA   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   -   -   -   ECB WRB -   -   -   -   -      -   -      -   -    -      DRG    -
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT -        -   -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     DWR   -   -    -   -   -   -   -   CEN -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
@@ -772,6 +932,7 @@ WWF:
         JRP  -        ME  ALU -    -     ZA   - -    DADR CI1 -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   ISE -   -   CSM WEM -   -   -   -   -   -   -      -   CLRCD  WRD -    CLRJMP TKKB   -
 --------
 TTA:
+@00f6:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  EXTDR    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   ICC -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      DRG    -
         CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
@@ -780,6 +941,7 @@ WA:
         LDCT LCW      PE  -   B    AND   DA   H Y    BYTE -   -      -     -   -    -    -     SHIFT  -      LOG   -     -   -    -   -   -   -   -   -   -   -   -   -   RG2 -   -   -   ECBTAG -   -      -   -    CLRJMP -      MPS
         JRP  -        ME  -   B    -     DZ   H A    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 TTAF:
+@02f6:
         CJP  EXTDR    PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   ICC -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      DRG    -
         CJP  TTA      PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
         CONT -        -   -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    CHTKK  -      -
@@ -789,6 +951,8 @@ WALF:
         JRP  -        ME  ALU BA   -     DZ   H A    DADR -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   ISE CEM -   CSM WEM -   -   -   ECA -   RG2 -      -   CLRCD  WRD -    LOGGRP TKKB   -
 --------
 HLT:
+@08ff:
+@0aff:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  EXTDR    PE  -   B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   ICC -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    CLRJMP DRG    -
         CONT 222      -   -   B    AND   DA   - DADR DADR -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    CHTKK  -      -

@@ -1,6 +1,8 @@
 ======== fltcom ========
 
 ADX:
+@00e5:
+@0404:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  RDFLT    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSADX:
@@ -8,8 +10,10 @@ PSADX:
         CONT -        -   -   B    -     AB   H WR2  WR4  -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  NORMX    PE  -   B    -     ZA   H A    -    CIC -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   CEM -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
 ADXF:
+@02e5:
         CJP  PSFE     PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 ADXFE:
+@0604:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSFE:
         CJP  ADX      PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
@@ -194,6 +198,8 @@ KEMR:
         JRP  -        ME  -   Q    -     DZ   - -    -    -   -      MCN   -   -    -    -     COMA   -      -     -     -   -    -   -   -   ISE CEM -   -   -   -   -   -   -   -   -   -      -   CLRCD  WRD -    CLRTR1 TKKB   -
 --------
 ABX:
+@00e6:
+@0405:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  RDFLT    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT -        -   -   B    EXNOR ZB   H A    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -202,8 +208,10 @@ PSABX:
         CONT -        -   -   B    -     ZB   H WR4  -    CI1 -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  PSADX    PE  -   B    -     ZB   H A    -    CIC -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 ABXF:
+@02e6:
         CJP  PSFE     PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 ABXFE:
+@0605:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSFE:
         CJP  ABX      PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
@@ -211,6 +219,8 @@ PSFE:
         CJP  PSABX    PE  ALU BA   EXNOR ZB   H A    DADR -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 XBA:
+@00e7:
+@0406:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  RDFLT    PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT -        -   -   B    EXNOR ZB   H WR1  -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
@@ -219,8 +229,10 @@ PSXBA:
         CONT -        -   -   B    -     ZB   H WR2  -    CI1 -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  PSADX    PE  -   B    -     ZB   H WR1  -    CIC -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   CEM -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 XBAF:
+@02e7:
         CJP  PSFE     PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 XBAFE:
+@0606:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSFE:
         CJP  XBA      PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
@@ -228,6 +240,8 @@ PSFE:
         CJP  PSXBA    PE  ALU BA   EXNOR ZB   H WR1  DADR -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 AMX:
+@00e8:
+@0407:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CONT -        -   -   B    AND   DZ   H WR2  -    -   -      -     -   -    -    -     -      -      -     DRD   -   -    -   -   -   -   -   -   -   -   ECB WRB RG0 -   -   -   PHYSAD -   -      -   -    -      -      -
@@ -244,8 +258,10 @@ PSAMX:
         CONT -        -   -   B    -     ZB   H WR4  -    CI1 -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  PSADX    PE  -   B    -     ZA   H A    WR3  CIC -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 AMXF:
+@02e8:
         CJP  PSFE     PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 AMXFE:
+@0607:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSFE:
         CJP  AMX      PE  ALU B    SUBS  DZ   - DADR -    -   -      /NZ   -   48   MP   SP    -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
@@ -259,12 +275,16 @@ PRAF:
         CJP  PSAMX    PE  ALU BA   -     ZB   H A    DADR -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   CEN CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 AVX:
+@00e9:
+@040c:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  SUBAVX   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  NORMA    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
 AVXF:
+@02e9:
         CJP  PSFE     PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 AVXFE:
+@060c:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSFE:
         CJP  AVX      PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
@@ -330,6 +350,8 @@ ZRRZAE:
         CJP  OUTE     PE  -   Q    AND   DZ   H -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 A*X:
+@00ea:
+@040f:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  MDXSUB   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 MULX:
@@ -352,8 +374,10 @@ PSMUL:
 ADDM:
         TWB  NORMMD   PE  -   B    -     AB   H A    WR1  -   -      MCN   -   -    -    -     -      -      -     -     -   -    -   -   ICC -   CEM CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 A*XF:
+@02ea:
         CJP  A*XFAN   PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 A*XFE:
+@060f:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 A*XFAN:
         CJP  A*X      PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
@@ -433,6 +457,8 @@ DBLNEG:
         CJP  PSNOR    PE  -   B    AND   DZ   H WR2  -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 A/X:
+@000e:
+@040e:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  MDXSUB   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 DIVX:
@@ -473,8 +499,10 @@ ENDCKL:
         CONT 435      -   -   B    EXOR  DA   H Y    Y    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  NORMA    PE  -   B    -     ZB   H Y    -    CI1 -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 A/XF:
+@020e:
         CJP  PSFE     PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 A/XFE:
+@060e:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSFE:
         CJP  A/X      PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
@@ -482,6 +510,8 @@ PSFE:
         CJP  DIVX     PE  ALU -    -     ZA   - -    DADR -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------
 EDX:
+@0014:
+@0414:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  SUBEDX   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  NORMA    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
@@ -493,8 +523,10 @@ SUBEDX:
         CONT -        -   -   B    AND   DA   H WR5  EXPN -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   ECA -   RG2 -      -   -      -   -    -      -      -
         CRTN 79       -   -   B    -     DA   H WR5  WR5  -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    MULGRP -      -
 EDXF:
+@0214:
         CJP  PSFE     PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 EDXFE:
+@0614:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSFE:
         CJP  EDX      PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
@@ -502,12 +534,16 @@ PSFE:
         CJP  NORMA    PE  ALU -    -     ZA   - -    DADR -   -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
 --------
 EBX:
+@0015:
+@0415:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  SUBEDX   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      ADRREG -     -     -   -    -   -   -   -   -   -   CSM -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
         CJP  NORMA    PE  -   B    SUBS  ZB   H WR5  -    CI1 -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
 EBXF:
+@0215:
         CJP  PSFE     PE  -   -    -     ZQ   - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 EBXFE:
+@0615:
         CONT 209      -   -   -    AND   DQ   - -    -    -   -      -     -   -    -    -     PROM   -      -     -     -   -    -   -   -   -   -   CEN -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 PSFE:
         CJP  EBX      PE  -   -    -     -    - -    -    -   -      /NZ   -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      CT     -
@@ -515,6 +551,10 @@ PSFE:
         CJP  NORMA    PE  ALU BA   SUBS  ZB   H WR5  DADR CI1 -      -     -   48   MP   SP    -      -      -     -     -   -    -   -   -   -   -   -   CSM WEM -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
 --------
 EDN:
+@081c:
+@0a1c:
+@041c:
+@061c:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  SUBEDN   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    -      -      -
         CJP  NORMA    PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
@@ -532,11 +572,19 @@ SUBEML:
         CJP  RETSUB   PE  ALU BA   -     DZ   H WR5  WR5  -   -      -     -   4    -    PCC   SHIFT  -      EMULF -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      MPS
 --------
 EBN:
+@081d:
+@0a1d:
+@041d:
+@061d:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJS  SUBEDN   PE  ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    -      -      -
         CJP  NORMA    PE  -   B    SUBS  ZB   H WR5  -    CI1 -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    CLRTR1 -      -
 --------
 YTA:
+@0881:
+@0a81:
+@0419:
+@0619:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CONT -        -   ALU B    -     DQ   - DADR -    -   -      -     -   -32  IRA  -     -      -      -     -     -   -    -   -   -   -   -   -   CSM -   ECB WRB -   -   -   -   -      -   -      -   -    SETTR1 -      -
         LDCT LCW      PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    SETTR0 -      -
@@ -554,10 +602,18 @@ YTAL:
 --------
 YTAPNA:
 YTAADD:
+@181c:
+@181d:
+@181e:
+@181f:
 YTAZER:
+@1818:
 YTAMUL:
+@181a:
+@181b:
 --------sqi--addr-----map-alu-alud-func--alus-h-rb---ra---ci--shmux--stopc-mod-pshf-mnsa-modnm-dsrc---ydst---shf---arbi--rld-letc-sci-ici-icc-ise-cem-cen-csm-wem-ecb-wrb-bra-eca-wra-ara-ydev---wry-ddev---wrd-iomp-ffcnt--cond---mps
         CJP  YTAD     PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 YTALOG:
+@1819:
         CJP  YTAL     PE  -   -    -     -    - -    -    -   -      -     -   -    -    -     -      -      -     -     -   -    -   -   -   -   -   -   -   -   -   -   -   -   -   -   -      -   -      -   -    -      -      -
 --------

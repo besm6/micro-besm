@@ -53,7 +53,8 @@ def main(filenames):
     resolve()
     relocate()
     annotate()
-    write_results("microcode.out")
+    write_microcode("microcode.out")
+    write_optab("optab.out")
 
 #
 # Main linker loop: resolve all undefined symbols,
@@ -152,9 +153,33 @@ def annotate():
         code[addr].append(name)
 
 #
-# Write the resulting PROM contents.
+# Find the nearest label
 #
-def write_results(filename):
+def find_label(addr):
+    min_offset = 999999
+    min_name = ""
+    for name in symtab.keys():
+        if name[0] == '@':
+            # Ignore PROM references
+            continue
+
+        value = symtab[name]
+        if value > addr or name[:3] == "END":
+            continue
+
+        if value == addr:
+            # Exact match
+            return name
+
+        if addr-value < min_offset:
+            min_offset = addr - value
+            min_name = name
+    return "%s + %u" % (min_name, min_offset)
+
+#
+# Write the resulting microcode PROM contents.
+#
+def write_microcode(filename):
     file = open(filename, 'w')
     offset = 0
     for s in code:
@@ -171,6 +196,26 @@ def write_results(filename):
         offset += 1
     file.close()
     print "%s: %d words" % (filename, len(code))
+
+#
+# Write the table of opcode addresses.
+#
+def write_optab(filename):
+    # Build a list of optab names
+    optab = []
+    for name in symtab.keys():
+        if name[0] == '@':
+            optab.append([int(name[1:], 16), symtab[name]])
+    optab.sort()
+
+    file = open(filename, 'w')
+    for s in optab:
+        op = s[0]
+        offset = s[1]
+        name = find_label(offset)
+        file.write("'h%02x_%02x: %4d,  // %s\n" % (op >> 8, op & 0xff, offset, name))
+    file.close()
+    print "%s: %d opcodes" % (filename, len(optab))
 
 if __name__ == "__main__":
     main(sys.argv[1:])

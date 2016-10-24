@@ -6,6 +6,8 @@
 *.json
 *.pyc
 microcode.out
+optab.out
+output.trace
 work-obj93.cf
 testbench
 .DS_Store
