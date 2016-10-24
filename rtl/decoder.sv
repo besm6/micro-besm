@@ -1,13 +1,16 @@
 `default_nettype none
 
+//
+// Instruction decoder for micro-BESM
+//
 module decoder(
-    input  wire        clk,
     input  wire  [64:1] dc,     // instruction word
     input  wire         pe,     // besm6 compatibility
     input  wire         tkk,    // right half
     output logic  [3:0] ir,     // modifier index
     output logic  [7:0] op,     // opcode
     output logic        extop,  // extended opcode flag
+    output logic        ir15,   // stack mode flag
     output logic [19:0] addr    // address
 );
 logic [7:0] bop, xop;
@@ -18,6 +21,8 @@ assign ir =
              : {dc[64], dc[59:57]}          // besm6 left half
        : tkk ? dc[32:29]                    // right half
              : dc[64:61];                   // left half
+
+assign ir15 = (ir == 15);                   // stack mode
 
 // Base opcode
 assign bop =

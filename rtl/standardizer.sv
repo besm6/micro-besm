@@ -1,5 +1,9 @@
 `default_nettype none
 
+//
+// 'Standardizer', or instruction decoder for micro-BESM,
+// originally implemented as a set of programmable logic (PAL) chips.
+//
 module standardizer(
     input  wire        clk,
     input  wire [64:1] dc,      // ,BB1

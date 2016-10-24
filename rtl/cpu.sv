@@ -26,14 +26,14 @@ logic  [3:0] ARBOPC;            // код операции арбитра
 logic [31:0] UREG;              // регистр исполнительного адреса (запись)
 logic  [6:0] PSHIFT;            // регистр параметра сдвига (только запись)
 logic        CCLR;              // запуск сброса кэша
+logic  [7:0] instr_code;        // код операции команды
+logic [19:0] instr_addr;        // адресная часть команды
+logic [11:0] jump_addr;         // ПНА КОП основного или дополнительного формата
 
 //TODO:
-logic  [7:0] OPC;               // код операции команды
-logic [31:0] COMA;              // адресная часть команды
 logic [63:0] SHIFT;             // результат сдвига
 logic  [6:0] LOS;               // результат поиска левой единицы
-logic [11:0] BADDR;             // ПНА КОП основного или дополнительного формата
-logic [11:0] GRADDR;            // ПНА групп
+logic [11:0] grp_addr;          // ПНА групп
 
 // Instruction fields
 logic  [3:0] SQI;
@@ -161,8 +161,8 @@ assign control_CI = (SCI ? condition : '1) ^ ICI;
 // 12-bit data input
 assign control_D =
     (MAP == 0) ? A :            // PE, конвейерный регистр
-    (MAP == 1) ? BADDR :        // ME, ПНА КОП основного или дополнительного формата
-    (MAP == 2) ? GRADDR :       // GRP, ПНА групп и микропрограммные признаки "След0" И "След1"
+    (MAP == 1) ? jump_addr :    // ME, ПНА КОП основного или дополнительного формата
+    (MAP == 2) ? grp_addr :     // GRP, ПНА групп и микропрограммные признаки "След0" И "След1"
                  '0;            // вход D не используется
 
 //TODO:
@@ -298,9 +298,9 @@ assign alu_D =
     (DSRC == 3)  ? CNT :        // регистр режимов и триггеры признаков
     (DSRC == 4)  ? {PHYSPG, 11'd0} : // регистр физической страницы
     (DSRC == 5)  ? ARBOPC :     // регистр КОП арбитра
-    (DSRC == 8)  ? COMA :       // адресная часть команды
+    (DSRC == 8)  ? instr_addr : // COMA, адресная часть команды
     (DSRC == 9)  ? SHIFT :      // результат сдвига
-    (DSRC == 10) ? OPC :        // код операции команды
+    (DSRC == 10) ? instr_code : // OPC, код операции команды
     (DSRC == 11) ? LOS :        // результат поиска левой единицы
     (DSRC == 12) ? PROM :       // ПЗУ констант
                    '0;          // шина D не используется
@@ -322,7 +322,7 @@ always @(posedge clk)
      3: CNT    <= Y[31:0];      // регистр режимов и триггеры признаков
      4: PHYSPG <= Y[20:11];     // регистр физической страницы
      5: ARBOPC <= Y[3:0];       // код операции арбитра
-     8: UREG   <= Y[31:0];      // регистр исполнительного адреса (запись)
+     8: UREG   <= Y[31:0];      // ADRREG, регистр исполнительного адреса (запись)
      9: PSHIFT <= Y[6:0];       // регистр параметра сдвига (только запись)
     endcase
 
@@ -352,15 +352,13 @@ assign SHIFT = PSHF[6] ? Y<<PSHF[5:0] : Y>>PSHF[5:0];
 //--------------------------------------------------------------
 // Modifier memory.
 //
-logic [3:0] IRA;                // поле модификатора команды TODO
+logic [3:0] instr_reg;          // поле модификатора команды
 logic [31:0] irmem[1024];       // память регистров-модификаторов
 logic [4:0] mn;                 // номер модификатора
 
-assign IRA = `TODO;
-
 assign mn =
     (MNSA == 0) ? UREG[3:0] :   // регистр исполнительного адреса
-    (MNSA == 1) ? IRA :         // поле модификатора команды
+    (MNSA == 1) ? instr_reg :   // поле модификатора команды
     (MNSA == 3) ? ~MODNM :      // поле MODNM микрокоманды
                   '0;           // не используется
 
@@ -407,5 +405,33 @@ assign o_astb = '0;
 assign o_rd = '0;
 assign o_wr = '0;
 `endif
+
+//--------------------------------------------------------------
+// Instruction decoder
+//
+logic instr_ext;                // extended opcode flag
+logic instr_ir15;               // stack mode flag
+
+logic uflag;                    //TODO: признак изменения адресом (ПИА)
+
+logic besm6_mode;               //TODO
+logic tkk;                      //TODO
+
+decoder dec(
+    bus_oDC[63:0],              // instruction word
+    besm6_mode,                 // besm6 compatibility (РЭ)
+    tkk,                        // right half flag (ТКК)
+    instr_reg,                  // modifier index
+    instr_code,                 // instruction code (КОП)
+    instr_ext,                  // extended opcode flag
+    instr_ir15,                 // stack mode flag
+    instr_addr                  // address
+);
+
+logic [11:0] optab[4096] = '{
+    `include "../microcode/optab.v"
+    default: '0
+};
+assign jump_addr = optab[{instr_ext, besm6_mode, instr_ir15, uflag, instr_code}];
 
 endmodule
