@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- encoding: utf-8 -*-
 #
 # Link a set of Micro-BESM microcode object files into a PROM image.
 #
@@ -54,7 +55,7 @@ def main(filenames):
     relocate()
     annotate()
     write_microcode("microcode.out")
-    write_optab("optab.out")
+    write_optab()
 
 #
 # Main linker loop: resolve all undefined symbols,
@@ -188,7 +189,8 @@ def write_microcode(filename):
         if len(s) > 2:
             # Print label(s)
             for label in s[2:]:
-                file.write("// %s\n" % label)
+                if label[0] != '@':
+                    file.write("// %s\n" % label)
         file.write("%8d: 112'h%028x," % (offset, op))
         if ref:
             file.write("    // a= " + ref)
@@ -200,22 +202,67 @@ def write_microcode(filename):
 #
 # Write the table of opcode addresses.
 #
-def write_optab(filename):
+def write_optab():
     # Build a list of optab names
     optab = []
+    rwiotab = []
+    grouptab = []
+    intrtab = []
     for name in symtab.keys():
         if name[0] == '@':
-            optab.append([int(name[1:], 16), symtab[name]])
+            index = int(name[1:], 16)
+            if index < 0x1000:
+                optab.append([index, symtab[name]])
+            elif index < 0x1800:
+                rwiotab.append([index - 0x1000, symtab[name]])
+            elif index < 0x2000:
+                grouptab.append([index - 0x1800, symtab[name]])
+            else:
+                intrtab.append([index - 0x2000, symtab[name]])
     optab.sort()
+    rwiotab.sort()
+    grouptab.sort()
+    intrtab.sort()
 
-    file = open(filename, 'w')
+    file = open("optab.out", 'w')
+    file.write("// ПНА: память начальных адресов машинных инструкций\n")
     for s in optab:
         op = s[0]
         offset = s[1]
         name = find_label(offset)
-        file.write("'h%02x_%02x: %4d,  // %s\n" % (op >> 8, op & 0xff, offset, name))
+        file.write("'h%x_%02x: %4d,   // %s\n" % (op >> 8, op & 0xff, offset, name))
     file.close()
-    print "%s: %d opcodes" % (filename, len(optab))
+    print "Instruction table: %d opcodes" % (len(optab))
+
+    file = open("rwiotab.out", 'w')
+    file.write("// ПНА: память начальных адресов операций обмена с пультовым процессором\n")
+    for s in rwiotab:
+        op = s[0]
+        offset = s[1]
+        name = find_label(offset)
+        file.write("'h%03x: %4d,    // %s\n" % (op, offset, name))
+    file.close()
+    print "RW/IO table: %d entries" % (len(rwiotab))
+
+    file = open("grouptab.out", 'w')
+    file.write("// ПНА групп: память начальных адресов для условных операций\n")
+    for s in grouptab:
+        op = s[0]
+        offset = s[1]
+        name = find_label(offset)
+        file.write("'h%02x: %4d,     // %s\n" % (op, offset, name))
+    file.close()
+    print "Group table: %d entries" % (len(grouptab))
+
+    file = open("intrtab.out", 'w')
+    file.write("// ПНА прерываний: память начальных адресов для переходов при внешних прерываниях\n")
+    for s in intrtab:
+        op = s[0]
+        offset = s[1]
+        name = find_label(offset)
+        file.write("'h%02x: %4d,     // %s\n" % (op, offset, name))
+    file.close()
+    print "Interrupt table: %d entries" % (len(intrtab))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
