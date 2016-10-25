@@ -1,0 +1,65 @@
+
+Команды микро-БЭСМ основного формата
+
+-----0-----1-----2-----3-----4-----5-----6-----7-----8-----9-----a-----b-----c-----d-----e-----f--
+ 0  ATX   STX         XTS                           XTA   AAX   AEX   ARX         AOX   A/X
+ 1  APX   AUX   ACX   ANX   EDX   EBX   ASX         JAMP  VJM         VLM
+ 2  JMEQ  JMNE  JMGE  JMLT  JMLE  JMGT
+ 3                                                                    WTC   VTM   UTM
+ 4                    UTS                           UTA   AAU   AEU               AOU
+ 5              ACU   ANU
+ 6
+ 7
+ 8  EXT/  ADU   ABU   UBA               A/U   A*U   UTY
+ 9  UTC                     XTY   YAX   YEX   YOX   YTX   ADL   ABL   LBA               A/L   A*L
+ a  VTMH  VTMQ  VTMB  VTMF  UTCS                          VRM   UZAS  UIAS  JOVR  JCRY  JAGT  JAGE
+ b  JALT  JALE  JAEQ  JANE        JMPS  ATH   STH   HTA   HTS   ADH   ABH   HBAC              A/H
+ c  A*H   AAH   AEH   AOH   ATQ   STQ   QTA   QTS   AEQ   AAQ   AOQ   ATB   STB   BTA   BTS   AEB
+ d  AAB   AOB   ATF   STF   FTA   FTS   AEF   AAF   AOF   SETF  CLRF  XTR   ATD   DTA
+ e                                ADX   ABX   XBA   AMX   AVX   A*X   UZA   UIA
+ f  RMOD  WMOD  SETR  CLRR  SEMR  TTX   TTA   SEMW  SMON  CMON                    IJP
+-----0-----1-----2-----3-----4-----5-----6-----7-----8-----9-----a-----b-----c-----d-----e-----f--
+
+
+Команды микро-БЭСМ расширенного формата
+
+-----0-----1-----2-----3-----4-----5-----6-----7-----8-----9-----a-----b-----c-----d-----e-----f--
+ 0  EXTC
+ 1                                      ASN                                 EDN   EBN
+ 2  ATI   STI   ITS         MTJ   JDM         JBM
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8  ITA   YTA   NTR   RTE   AAY   AEY   AOY         RETS
+ 9  MCJ   MSN               MPAC  MUNP  ASNA
+ a        EXTF  ADI   ABI   IBA               A/I   A*I   AAI   AEI   AOI
+ b  NTA   NTSC  AEN   AAN   AON
+ c
+ d
+ e
+ f                                                                                      RET   HLT
+-----0-----1-----2-----3-----4-----5-----6-----7-----8-----9-----a-----b-----c-----d-----e-----f--
+
+
+Команды режима БЭСМ-6
+
+-----0-----1-----2-----3-----4-----5-----6-----7-----8-----9-----a-----b-----c-----d-----e-----f--
+ 0  ATX   STX         XTS   ADX   ABX   XBA   AMX   XTA   AAXE  AEXE  ARXE  AVX   AOXE  A/X   A*X
+ 1  APXE  AUXE  ACXE  ANXE  EDX   EBX   ASXE  XTR   RTE   YTA               EDN   EBN   ASNE  NTR
+ 2  ATIE  STI   ITAE  ITS   MTJ   JDM               EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6
+ 3  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6  EXT6
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9  UTC                                             WTCE
+ a  VTM                                             UTM
+ b  UZA                                             UIA
+ c  JAMP                                            VJM
+ d
+ e  JMEQE                                           JMNEE
+ f                                                  VLME
+-----0-----1-----2-----3-----4-----5-----6-----7-----8-----9-----a-----b-----c-----d-----e-----f--
