@@ -44,7 +44,7 @@ def convert_encoding(s):
     s = s.strip()
     s = unicode(s, "utf-8")
     s = ''.join(map(replace_char, s))
-    s = s.encode("ascii")
+    s = s.encode("utf-8")
     return s
 
 #

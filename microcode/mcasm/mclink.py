@@ -18,7 +18,11 @@ undefined = []                  # List of undefined symbols
 
 def main(filenames):
     # Read link script.
-    script = read_sources(filenames[0])
+    if filenames[0][:2] == "-p":
+        # Single prog name
+        script = [["EXTERNAL", filenames[0][2:]]]
+    else:
+        script = read_sources(filenames[0])
 
     # Load object files.
     global library
@@ -190,7 +194,7 @@ def write_microcode(filename):
             # Print label(s)
             for label in s[2:]:
                 if label[0] != '@':
-                    file.write("// %s\n" % label)
+                    file.write("// %s\n" % label.encode("utf-8"))
         file.write("%8d: 112'h%028x," % (offset, op))
         if ref:
             file.write("    // a= " + ref)
@@ -224,45 +228,49 @@ def write_optab():
     grouptab.sort()
     intrtab.sort()
 
-    file = open("optab.out", 'w')
-    file.write("// ПНА: память начальных адресов машинных инструкций\n")
-    for s in optab:
-        op = s[0]
-        offset = s[1]
-        name = find_label(offset)
-        file.write("'h%x_%02x: %4d,   // %s\n" % (op >> 8, op & 0xff, offset, name))
-    file.close()
-    print "Instruction table: %d opcodes" % (len(optab))
+    if optab:
+        file = open("optab.out", 'w')
+        file.write("// ПНА: память начальных адресов машинных инструкций\n")
+        for s in optab:
+            op = s[0]
+            offset = s[1]
+            name = find_label(offset)
+            file.write("'h%x_%02x: %4d,   // %s\n" % (op >> 8, op & 0xff, offset, name))
+        file.close()
+        print "Instruction table: %d opcodes" % (len(optab))
 
-    file = open("rwiotab.out", 'w')
-    file.write("// ПНА: память начальных адресов операций обмена с пультовым процессором\n")
-    for s in rwiotab:
-        op = s[0]
-        offset = s[1]
-        name = find_label(offset)
-        file.write("'h%03x: %4d,    // %s\n" % (op, offset, name))
-    file.close()
-    print "RW/IO table: %d entries" % (len(rwiotab))
+    if rwiotab:
+        file = open("rwiotab.out", 'w')
+        file.write("// ПНА: память начальных адресов операций обмена с пультовым процессором\n")
+        for s in rwiotab:
+            op = s[0]
+            offset = s[1]
+            name = find_label(offset)
+            file.write("'h%03x: %4d,    // %s\n" % (op, offset, name))
+        file.close()
+        print "RW/IO table: %d entries" % (len(rwiotab))
 
-    file = open("grouptab.out", 'w')
-    file.write("// ПНА групп: память начальных адресов для условных операций\n")
-    for s in grouptab:
-        op = s[0]
-        offset = s[1]
-        name = find_label(offset)
-        file.write("'h%02x: %4d,     // %s\n" % (op, offset, name))
-    file.close()
-    print "Group table: %d entries" % (len(grouptab))
+    if grouptab:
+        file = open("grouptab.out", 'w')
+        file.write("// ПНА групп: память начальных адресов для условных операций\n")
+        for s in grouptab:
+            op = s[0]
+            offset = s[1]
+            name = find_label(offset)
+            file.write("'h%02x: %4d,     // %s\n" % (op, offset, name))
+        file.close()
+        print "Group table: %d entries" % (len(grouptab))
 
-    file = open("intrtab.out", 'w')
-    file.write("// ПНА прерываний: память начальных адресов для переходов при внешних прерываниях\n")
-    for s in intrtab:
-        op = s[0]
-        offset = s[1]
-        name = find_label(offset)
-        file.write("'h%02x: %4d,     // %s\n" % (op, offset, name))
-    file.close()
-    print "Interrupt table: %d entries" % (len(intrtab))
+    if intrtab:
+        file = open("intrtab.out", 'w')
+        file.write("// ПНА прерываний: память начальных адресов для переходов при внешних прерываниях\n")
+        for s in intrtab:
+            op = s[0]
+            offset = s[1]
+            name = find_label(offset)
+            file.write("'h%02x: %4d,     // %s\n" % (op, offset, name))
+        file.close()
+        print "Interrupt table: %d entries" % (len(intrtab))
 
 if __name__ == "__main__":
     main(sys.argv[1:])

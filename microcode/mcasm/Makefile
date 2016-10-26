@@ -3,7 +3,7 @@ OBJ             = ATX.json ADX.json IJP.json INIC.json ADU.json PSRWIO.json
 all:            microcode.out
 
 clean:
-		rm -f *.json *.pyc
+		rm -f *.json *.pyc *.out
 
 define.json:    mcdef.py ../define.src
 		./mcdef.py ../define.src

@@ -111,6 +111,7 @@ stopc_name = {
     36:"MZ",    37:"/MZ",   38:"MV",    39:"/MV",
                             42:"MC",    43:"/MC",
                             46:"MN",    47:"/MN",
+    48:"48",
     52:"IZ",    53:"/IZ",   54:"IV",    55:"/IV",
                             58:"IC",    59:"/IC",
                             62:"IN",    63:"/IN",
@@ -141,6 +142,7 @@ ydst_name = {
     0: "-",     1: "MODGN", 2: "PROCN", 3: "CNT",
     4: "PHYSPG",5: "ARBOPC",6: "MUL1",  7: "MUL2",
     8: "ADRREG",9: "PSHIFT",10:"CCLR",  11:"BTRCLR",
+    12: "12",
 }
 shf_name = {
     0: "-",     1: "LOG",   2: "ARIPH", 3: "EMULF",
@@ -215,7 +217,7 @@ iomp_name = {
 }
 ffcnt_name = {
     0: "-",     1: "LOGGRP",2: "MULGRP",3: "ADDGRP",
-                5: "SETC",  6: "CLRRCB",7: "SETRCB",
+    4: "4",     5: "SETC",  6: "CLRRCB",7: "SETRCB",
     8: "CLRJMP",9: "SETJMP",10:"SETEI", 11:"CLREI",
     12:"CLRTR0",13:"SETTR0",14:"CLRTR1",15:"SETTR1",
     16:"CLRCT", 17:"CLRCTT",18:"CLRTKK",19:"SETTKK",
@@ -234,8 +236,10 @@ cond_name = {
     4: "BNB",   5: "OVRFTB",6: "DRG",   7: "EMLRG",
     8: "RCB",   9: "CB",    10:"CEMLRG",11:"CT",
     12:"TR1",   13:"INTSTP",14:"IR15",  15:"TKKB",
-    16:"RUN",   17:"NMLRDY",            19:"INT",
+    16:"RUN",   17:"NMLRDY",18:"18",    19:"INT",
     20:"FULMEM",21:"ARBRDY",22:"TR0",   23:"CPMP",
+    24:"24",    25:"25",    26:"26",    27:"27",
+    28:"28",    29:"29",    30:"30",    31:"31",
 }
 mps_name = {
     0: "-",     1: "MPS",

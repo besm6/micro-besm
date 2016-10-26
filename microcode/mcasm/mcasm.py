@@ -153,6 +153,7 @@ def label_ref(name):
 #
 def do_instruction(op):
     global label_local
+    op = expand_macro(op)
     name = op[0]
     if not name in flist['SQI']:
         # Probably a label. Try next field.
@@ -167,7 +168,6 @@ def do_instruction(op):
         op = op[1:]
 
     op = op[1:]
-    op = expand_macro(op)
     generate_code(name, op)
 
 #
@@ -245,9 +245,12 @@ def expand_macro(list):
         elem = list[i]
         if elem[0] == "%" and elem[-1] == "%":
             name = elem.split('%')[1]
-            #print "--- Macro", elem, "expand", name
-            list.extend(macro[name])
-            del list[i]
+            #print "--- Macro", elem, "expand", macro[name]
+            if len(macro[name]) == 1:
+                list[i] = macro[name][0]
+            else:
+                list.extend(macro[name])
+                del list[i]
         else:
             i += 1
     return list
