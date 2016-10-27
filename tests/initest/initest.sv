@@ -39,6 +39,7 @@ string wavefile = "output.vcd";
 int limit;
 int trace;                              // Trace level
 int tracefd;                            // Trace file descriptor
+time ctime;                             // Current time
 
 //
 // Generate clock at 100MHz.
@@ -91,27 +92,43 @@ end
 //
 initial begin
     forever begin
+        logic [11:0] pc_x;
+
         // Wait for instruction, valid on leading edge of clk
         wait(clk);
+        ctime = $time;
+        pc_x = tr.pc_x;
 
         // Wait until everything is stable
         wait(!clk);
 
-        if (tr.pc_x == 7) begin
+        #1;
+
+        if (pc_x == 7) begin
             // At label ERRINI
-            $display("Test CONT+CJP failed!");
-            $fdisplay(tracefd, "Test CONT+CJP failed!");
+            $display("*** Test CONT+CJP failed!");
+            $fdisplay(tracefd, "(%0d) *** Test CONT+CJP failed!", ctime);
             $finish(1);
         end
-        if (tr.pc_x == 6 && tr.pc_f == 1) begin
+        if (pc_x == 6 && tr.pc_f == 1) begin
             // Jump from MPU1 to label PSBU1
-            $display("Test CONT+CJP pass");
-            $fdisplay(tracefd, "Test CONT+CJP pass");
+            $display("*** Test CONT+CJP pass");
+            $fdisplay(tracefd, "(%0d) *** Test CONT+CJP pass", ctime);
 
             // Next test
-            tr.pc_x <= tr.pc_x + 2;
-            cpu.control.uPC <= tr.pc_x + 2;
-            cpu.opcode <= cpu.memory[tr.pc_x + 2];
+            tr.pc_x <= pc_x + 2;
+            cpu.control.uPC <= pc_x + 2;
+            cpu.opcode <= cpu.memory[pc_x + 2];
+        end
+        if (pc_x == 'h14 && tr.pc_f == 9) begin
+            // Jump from LBU2 to label PSBU2
+            $display("*** Test LDCT+RPCT pass");
+            $fdisplay(tracefd, "(%0d) *** Test LDCT+RPCT pass", ctime);
+
+            // Next test
+            tr.pc_x <= pc_x + 2;
+            cpu.control.uPC <= pc_x + 2;
+            cpu.opcode <= cpu.memory[pc_x + 2];
         end
     end
 end

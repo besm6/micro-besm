@@ -26,10 +26,7 @@ assign fd = testbench.tracefd;
 //
 logic [11:0] pc_f;                      // PC at fetch stage
 logic [11:0] pc_x;                      // PC at execute stage
-
 logic [112:1] opcode_x;                 // Opcode at execute stage
-
-assign pc_f = reset ? 0 : cpu.control_Y;
 
 // Current time
 time ctime;
@@ -48,6 +45,7 @@ initial begin
 
         // Get time
         ctime = $time;
+        pc_f = cpu.control_Y;
 
         // Wait until everything is stable
         wait(!clk);
@@ -92,14 +90,14 @@ initial begin
 
         //TODO: print_insn();               // Print instruction
 
-        if (testbench.trace > 1 && !$isunknown(pc_x)) begin
+        if (testbench.trace > 1 && !reset) begin
             // Print changed busio state _last_,
             // as it actually comes from the _next_ microinstruction.
             print_changed_bb1();
         end
 
         // Get data from fetch stage
-        pc_x = reset ? 'x : pc_f;
+        pc_x = pc_f;
         opcode_x = cpu.opcode;
         const_value = cpu.PROM;
         const_addr = cpu.A[8:0];
@@ -567,14 +565,14 @@ task print_changed_2910();
     assign stack4 = cpu.control.stack[4];
     assign stack5 = cpu.control.stack[5];
 
-    if (sp !== old_sp) begin $fdisplay(fd, "(%0d)               Write control.SP = %h", ctime, sp); old_sp = sp; end
-    if (cnt != old_cnt) begin $fdisplay(fd, "(%0d)               Write control.Cnt = %h", ctime, cnt); old_cnt = cnt; end
-    if (stack0 !== old_stack0) begin $fdisplay(fd, "(%0d)               Write control.Stack0 = %h", ctime, stack0); old_stack0 = stack0; end
-    if (stack1 !== old_stack1) begin $fdisplay(fd, "(%0d)               Write control.Stack1 = %h", ctime, stack1); old_stack1 = stack1; end
-    if (stack2 !== old_stack2) begin $fdisplay(fd, "(%0d)               Write control.Stack2 = %h", ctime, stack2); old_stack2 = stack2; end
-    if (stack3 !== old_stack3) begin $fdisplay(fd, "(%0d)               Write control.Stack3 = %h", ctime, stack3); old_stack3 = stack3; end
-    if (stack4 !== old_stack4) begin $fdisplay(fd, "(%0d)               Write control.Stack4 = %h", ctime, stack4); old_stack4 = stack4; end
-    if (stack5 !== old_stack5) begin $fdisplay(fd, "(%0d)               Write control.Stack5 = %h", ctime, stack5); old_stack5 = stack5; end
+    if (sp !== old_sp) begin $fdisplay(fd, "(%0d)               Write cu.SP = %h", ctime, sp); old_sp = sp; end
+    if (cnt != old_cnt) begin $fdisplay(fd, "(%0d)               Write cu.Cnt = %h", ctime, cnt); old_cnt = cnt; end
+    if (stack0 !== old_stack0) begin $fdisplay(fd, "(%0d)               Write cu.Stack0 = %h", ctime, stack0); old_stack0 = stack0; end
+    if (stack1 !== old_stack1) begin $fdisplay(fd, "(%0d)               Write cu.Stack1 = %h", ctime, stack1); old_stack1 = stack1; end
+    if (stack2 !== old_stack2) begin $fdisplay(fd, "(%0d)               Write cu.Stack2 = %h", ctime, stack2); old_stack2 = stack2; end
+    if (stack3 !== old_stack3) begin $fdisplay(fd, "(%0d)               Write cu.Stack3 = %h", ctime, stack3); old_stack3 = stack3; end
+    if (stack4 !== old_stack4) begin $fdisplay(fd, "(%0d)               Write cu.Stack4 = %h", ctime, stack4); old_stack4 = stack4; end
+    if (stack5 !== old_stack5) begin $fdisplay(fd, "(%0d)               Write cu.Stack5 = %h", ctime, stack5); old_stack5 = stack5; end
 endtask
 
 //
