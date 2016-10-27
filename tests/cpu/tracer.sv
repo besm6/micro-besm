@@ -24,16 +24,13 @@ assign fd = testbench.tracefd;
 //
 // Last fetch address
 //
-logic [11:0] pc_f;
-always @(posedge clk)
-    if (reset)
-        pc_f <= '0;
-    else
-        pc_f <= cpu.control_Y;
+logic [11:0] pc_f;                      // PC at fetch stage
+logic [11:0] pc_x;                      // PC at execute stage
+
+assign pc_f = reset ? 0 : cpu.control_Y;
 
 initial begin
     static bit old_reset = 0;
-    static logic [11:0] pc_x;           // PC address at execute stage
     static logic [112:1] opcode;        // Opcode at execute stage
     static logic [63:0] const_value;    // Constant value
     static logic [8:0] const_addr;      // Constant address
@@ -411,7 +408,6 @@ task print_uop(
           4: $fdisplay(fd, "(%0d) *** cond=BNB not implemented yet!", $time);
           5: $fdisplay(fd, "(%0d) *** cond=OVRFTB not implemented yet!", $time);
           6: $fdisplay(fd, "(%0d) *** cond=DRG not implemented yet!", $time);
-          7: $fdisplay(fd, "(%0d) *** cond=EMLRG not implemented yet!", $time);
           8: $fdisplay(fd, "(%0d) *** cond=RCB not implemented yet!", $time);
           9: $fdisplay(fd, "(%0d) *** cond=CB not implemented yet!", $time);
          10: $fdisplay(fd, "(%0d) *** cond=CEMLRG not implemented yet!", $time);

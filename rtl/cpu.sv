@@ -181,7 +181,7 @@ assign control_D =
 
 assign control_nCC = condition;
 
-assign condition = condmux ^ ICC;
+assign condition = ICC ? condmux : ~condmux;
 
 // Выбор условия, подлежащего проверке.
 always_comb case (COND)
@@ -221,9 +221,10 @@ logic [111:0] memory[4096] = '{
 logic [112:1] opcode;           // 112-bit registered opcode
 
 always @(posedge clk)
-    if (reset)
+    if (reset) begin
         opcode <= '0;           // Reset state
-    else
+        besm6_mode <= 0;        // Изначально РЭ=0
+    end else
         opcode <= memory[control_Y];
 
 //
