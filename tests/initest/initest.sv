@@ -40,6 +40,7 @@ int limit;
 int trace;                              // Trace level
 int tracefd;                            // Trace file descriptor
 time ctime;                             // Current time
+logic [11:0] pc_x;                      // Current PC address at execution stage
 
 //
 // Generate clock at 100MHz.
@@ -88,12 +89,41 @@ initial begin
 end
 
 //
+// Print a message to stdout and trace file
+//
+task message(string msg);
+    $display("*** %s", msg);
+    $fdisplay(tracefd, "(%0d) *** %s", ctime, msg);
+endtask
+
+//
+// Check for a jump from label `from' to label `to'.
+// When jump detected, consider the test passed and
+// go instead to the target address.
+//
+task check_pass(int label_from, int label_to, int target, string msg);
+    if (pc_x == label_from && tr.pc_f == label_to) begin
+        message(msg);
+        tr.pc_x = target;
+        cpu.control.uPC = target;
+        cpu.opcode = cpu.memory[target];
+    end
+endtask
+
+//
+// Addresses of initest.
+//
+localparam LABEL_PSBU1  = 1;
+localparam LABEL_MPU1   = 6;
+localparam LABEL_ERRINI = 7;
+localparam LABEL_PSBU2  = 9;
+localparam LABEL_LBU2   = 'h14;
+
+//
 // Test switcher.
 //
 initial begin
     forever begin
-        logic [11:0] pc_x;
-
         // Wait for instruction, valid on leading edge of clk
         wait(clk);
         ctime = $time;
@@ -101,35 +131,16 @@ initial begin
 
         // Wait until everything is stable
         wait(!clk);
-
         #1;
 
-        if (pc_x == 7) begin
+        if (pc_x == LABEL_ERRINI) begin
             // At label ERRINI
-            $display("*** Test CONT+CJP failed!");
-            $fdisplay(tracefd, "(%0d) *** Test CONT+CJP failed!", ctime);
+            message("Test CONT+CJP failed!");
             $finish(1);
         end
-        if (pc_x == 6 && tr.pc_f == 1) begin
-            // Jump from MPU1 to label PSBU1
-            $display("*** Test CONT+CJP pass");
-            $fdisplay(tracefd, "(%0d) *** Test CONT+CJP pass", ctime);
-
-            // Next test
-            tr.pc_x <= pc_x + 2;
-            cpu.control.uPC <= pc_x + 2;
-            cpu.opcode <= cpu.memory[pc_x + 2];
-        end
-        if (pc_x == 'h14 && tr.pc_f == 9) begin
-            // Jump from LBU2 to label PSBU2
-            $display("*** Test LDCT+RPCT pass");
-            $fdisplay(tracefd, "(%0d) *** Test LDCT+RPCT pass", ctime);
-
-            // Next test
-            tr.pc_x <= pc_x + 2;
-            cpu.control.uPC <= pc_x + 2;
-            cpu.opcode <= cpu.memory[pc_x + 2];
-        end
+        check_pass(LABEL_MPU1, LABEL_PSBU1, pc_x+2, "Test CONT+CJP pass");
+        check_pass(LABEL_LBU2, LABEL_PSBU2, pc_x+2, "Test LDCT+RPCT pass");
+        //TODO
     end
 end
 
