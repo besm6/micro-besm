@@ -1,5 +1,5 @@
 
-all:            initest.out
+all:            initest.v
 
 clean:
 		rm -f *.json *.pyc *.lst *.out
@@ -7,7 +7,7 @@ clean:
 define.json:    ../../../microcode/define.src
 		../../../microcode/mcasm/mcdef.py $<
 
-initest.out:    INI.json INOUT.json
+initest.v:      INI.json INOUT.json
 		../../../microcode/mcasm/mclink.py -pINI INI.json INOUT.json
 		mv microcode.out $@
 

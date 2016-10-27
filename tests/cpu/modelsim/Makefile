@@ -28,5 +28,8 @@ work:           $(SOURCES)
 run:            work
 		$(MODELSIM)/vsim -c -l run.log -do 'run 1000us;quit' testbench +trace=2 +dump +limit=1000
 
+initest:        work
+		$(MODELSIM)/vsim -c -l run.log -do 'run 1000us;quit' testbench +trace=2 +dump +limit=1000 +uprog=../../microcode/$@.v
+
 view:
 		gtkwave output.vcd test.gtkw &
