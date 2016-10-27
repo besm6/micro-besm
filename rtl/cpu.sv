@@ -163,7 +163,7 @@ am2910 control(clk,
     control_D, control_Y, , control_nVE, control_nME, control_nFULL);
 
 assign control_I    = SQI;      // Four-bit instruction
-assign control_nRLD = RLD;      // Unconditional load bit for register/counter
+assign control_nRLD = ~RLD;     // Unconditional load bit for register/counter
 
 // Carry-in bit for microprogram counter
 assign control_CI = (SCI ? condition : '1) ^ ICI;
@@ -185,7 +185,7 @@ assign condition = ICC ? condmux : ~condmux;
 
 // Выбор условия, подлежащего проверке.
 always_comb case (COND)
-      0: condmux = 0;           // YES, "да"
+      0: condmux = 1;           // YES, "да"
       1: condmux = normb;       // NORMB, блокировка нормализации (БНОР)
       2: condmux = rndb;        // RNDB, блокировка округления (БОКР)
       3: condmux = ovrib;       // OVRIB, блокировка прерывания по переполнению (БПП)

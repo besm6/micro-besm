@@ -19,101 +19,152 @@ module am2910(
     output logic        nFULL       // Stack full flag
 );
 
-logic [2:0] sp;
-logic R_sel, D_sel, uPC_sel, stack_sel, decr, load, Rzero_bar, clear, push, pop;
-logic [11:0] Y_temp, RE, uPC;
-logic [11:0] reg_file[5:0];
+enum bit [3:0] {
+    JZ,     // 0 - Jump to Zero
+    CJS,    // 1 - Conditional jump to subroutine using pipeline register address
+    JMAP,   // 2 - Jump to Map (mapping PROM input)
+    CJP,    // 3 - Conditional jump to address in pipeline register
+    PUSH,   // 4 - PUSH stack; conditional load counter
+    JSRP,   // 5 - Conditional jump to subroutine from piepline register address
+    CJV,    // 6 - Conditional jump to vector mappin PROM address
+    JRP,    // 7 - Conditional jump to register or pipeline
+    RFCT,   // 8 - Repeat loop stack address until counter not 0
+    RPCT,   // 9 - Repeat loop pipeline address until counter not 0
+    CRTN,   // 10 - Conditional Return
+    CJPP,   // 11 - Conditional jump to Subroutine and POP stack
+    LDCT,   // 12 - Load counter and continue
+    LOOP,   // 13 - Test for end of loop. If fails, repeat loop
+    CONT,   // 14 - Continue
+    TWB     // 15 - Three-way branch
+} opcode_t;
 
-always_comb case (1'b1)
-    R_sel: Y_temp = RE;
-    D_sel: Y_temp = D;
-  uPC_sel: Y_temp = uPC;
-stack_sel: Y_temp = reg_file[sp];
-  default: Y_temp = '0;
-endcase
+reg   [2:0] SP;                 // Stack pointer
+reg  [11:0] stack[5:0];         // Stack: six words
+reg  [11:0] uPC;                // Microprogram PC
+reg  [11:0] Cnt;                // Loop counter
+wire [11:0] Y_out;              // Data output
 
-assign Y = nOE ? 'z : Y_temp;
+wire R_sel, D_sel, uPC_sel, stack_sel, decr, load, nonzero, clear, push, pop;
+
+assign Y_out = R_sel ? Cnt :
+               D_sel ? D :
+             uPC_sel ? uPC :
+           stack_sel ? stack[SP] :
+                       '0;
+
+assign Y = nOE ? 'z : Y_out;
 
 always @(posedge clk) begin
-    if (load || !nRLD)
-        RE <= D;
-    else if (decr && nRLD)
-        RE <= RE - 1;
+    if (load | !nRLD)
+        Cnt <= D;
+    else if (decr & nRLD)
+        Cnt <= Cnt - 1;
 end
 
-assign Rzero_bar = RE != 0;
+assign nonzero = (Cnt != 0);
 
 always @(posedge clk) begin
     if (clear)
         uPC <= 0;
     else
-        uPC <= Y_temp + CI;
+        uPC <= Y_out + CI;
 end
 
 logic [2:0] write_address;
 
 always @(posedge clk) begin
-    if (pop && sp != 0)
-        sp <= sp - 1;
-    else if (push && sp != 5)
-        sp <= sp + 1;
+    if (pop && SP != 0)
+        SP <= SP - 1;
+    else if (push && SP != 5)
+        SP <= SP + 1;
     else if (clear)
-        sp <= 0;
+        SP <= 0;
 
     if (push)
-        reg_file[write_address] <= uPC;
+        stack[write_address] <= uPC;
 end
 
-assign write_address = (sp == 5) ? sp : sp+1;
+assign write_address = (SP == 5) ? SP : SP+1;
 
-assign nFULL = (sp != 5);
+assign nFULL = (SP != 5);
 
 logic fail;
 
 assign fail = (nCC & !nCCEN);
 
-assign D_sel = (I == 'b0010) ||
-               (Rzero_bar && I == 'b1001) ||
-               (!Rzero_bar && fail && I == 'b1111) ||
-               (!fail && ((I == 'b0001) || (I == 'b0011) ||
-                          (I == 'b0101) || (I == 'b0110) ||
-                          (I == 'b0111) || (I == 'b1011)
-                         )
-               );
+assign D_sel = (I == JMAP) ||
+               (nonzero &&
+                    I == RPCT) ||
+               (!nonzero && fail &&
+                    I == TWB) ||
+               (!fail &&
+                    (I == CJS ||
+                     I == CJP ||
+                     I == JSRP ||
+                     I == CJV ||
+                     I == JRP ||
+                     I == CJPP));
 
-assign uPC_sel = (I == 'b0100) || (I == 'b1100) || (I == 'b1110) ||
-                 (fail && ((I == 'b0001) || (I == 'b0011) ||
-                           (I == 'b0110) || (I == 'b1010) ||
-                           (I == 'b1011) || (I == 'b1110)
-                          )
-                 ) || (!Rzero_bar && ((I == 'b1000) || (I == 'b1001))) ||
-                      (!fail && ((I == 'b1111) || (I == 'b1101)));
+assign uPC_sel = (I == PUSH) ||
+                 (I == LDCT) ||
+                 (I == CONT) ||
+                 (fail &&
+                    (I == CJS ||
+                     I == CJP ||
+                     I == CJV ||
+                     I == CRTN ||
+                     I == CJPP ||
+                     I == CONT)) ||
+                (!nonzero &&
+                    (I == RFCT ||
+                     I == RPCT)) ||
+                (!fail &&
+                    (I == TWB ||
+                     I == LOOP));
 
+assign stack_sel = (nonzero &&
+                        I == RFCT) ||
+                   (!fail &&
+                        I == CRTN) ||
+                   (fail &&
+                        I == LOOP) ||
+                   (nonzero && fail &&
+                        I == TWB);
 
-assign stack_sel = (Rzero_bar  && I == 'b1000) ||
-                   (!fail && I == 'b1010) ||
-                   (fail && I == 'b1101) ||
-                   (Rzero_bar && fail && I == 'b1111);
+assign R_sel = (fail &&
+                    (I == JSRP ||
+                     I == JRP));
 
-assign R_sel = (fail && ((I == 'b0101) || (I == 'b0111)));
+assign push = (I == PUSH) ||
+              (I == JSRP) ||
+              (!fail &&
+                    I == CJS);
 
-assign push = (!fail && (I == 'b0001)) || (I == 'b0100) || (I == 'b0101);
+assign pop = (!fail &&
+                (I == CRTN ||
+                 I == CJPP ||
+                 I == LOOP ||
+                 I == TWB)) ||
+             (!nonzero &&
+                (I == RFCT ||
+                 I == TWB));
 
-assign pop = (!fail && ((I == 'b1010) || (I == 'b1011) ||
-                        (I == 'b1101) || (I == 'b1111)
-                       )
-             ) || (!Rzero_bar && ((I == 'b1000) || (I == 'b1111)));
+assign load = (I == LDCT) ||
+              (!fail &&
+                    I == PUSH);
 
-assign load = ((I == 'b1100) || (I == 'b0100 && !fail));
+assign decr = (nonzero &&
+                    (I == RFCT ||
+                     I == RPCT ||
+                     I == TWB));
 
-assign decr = (Rzero_bar && ((I == 'b1000) || (I == 'b1001) || (I == 'b1111)));
+assign nMAP = (I != JMAP);
 
-assign nMAP = (I != 4'b0010);
+assign nVECT = (I != CJV);
 
-assign nVECT = (I != 4'b0110);
+assign nPL = (I == JMAP) ||
+             (I == CJV);
 
-assign nPL = (I == 4'b0010) || (I == 4'b0110);
-
-assign clear = (I == 4'b0000);
+assign clear = (I == JZ);
 
 endmodule

@@ -76,7 +76,7 @@ initial begin
     reset = 1;
 
     // Hold reset for a while.
-    #20 reset = 0;
+    #10 reset = 0;
 
     // Run until limit.
     #limit begin
@@ -94,6 +94,9 @@ initial begin
         // Wait for instruction, valid on leading edge of clk
         wait(clk);
 
+        // Wait until everything is stable
+        wait(!clk);
+
         if (tr.pc_x == 7) begin
             // At label ERRINI
             $display("Test CONT+CJP failed!");
@@ -110,8 +113,6 @@ initial begin
             cpu.control.uPC <= tr.pc_x + 2;
             cpu.opcode <= cpu.memory[tr.pc_x + 2];
         end
-
-        wait(!clk);
     end
 end
 
