@@ -26,7 +26,7 @@ work:           $(SOURCES)
 		$(MODELSIM)/vlog -sv -nologo $(SOURCES)
 
 run:            work
-		$(MODELSIM)/vsim -c -l run.log -do 'run 1000us;quit' testbench +limit=1000
+		$(MODELSIM)/vsim -c -l run.log -do 'run 1000us;quit' testbench +limit=13000
 
 view:
 		gtkwave output.vcd test.gtkw &

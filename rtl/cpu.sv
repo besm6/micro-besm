@@ -163,7 +163,7 @@ am2910 control(clk,
     control_D, control_Y, , control_nVE, control_nME, control_nFULL);
 
 assign control_I    = SQI;      // Four-bit instruction
-assign control_nRLD = RLD;      // Unconditional load bit for register/counter
+assign control_nRLD = ~RLD;     // Unconditional load bit for register/counter
 
 // Carry-in bit for microprogram counter
 assign control_CI = (SCI ? condition : '1) ^ ICI;
