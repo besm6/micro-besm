@@ -388,9 +388,6 @@ task print_uop(
     //
     // Some features not implemented yet
     //
-    if (MNSA == 1)
-        $fdisplay(fd, "(%0d) *** mnsa=%0s not implemented yet!",
-            ctime, mnsa_name[MNSA]);
     if (DSRC==8 || DSRC==9 || DSRC==10 || DSRC==11)
         $fdisplay(fd, "(%0d) *** dsrc=%0s not implemented yet!",
             ctime, dsrc_name[DSRC]);
