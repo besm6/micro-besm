@@ -35,7 +35,6 @@ logic [111:0] memory[4096] = '{
 };
 
 string tracefile = "output.trace";
-string wavefile = "output.vcd";
 int limit;
 int trace;                              // Trace level
 int tracefd;                            // Trace file descriptor
@@ -55,7 +54,7 @@ initial begin
     $display("--------------------------------");
 
     // Dump waveforms.
-    $dumpfile(wavefile);
+    $dumpfile("output.vcd");
     $dumpvars();
 
     // Enable detailed instruction trace to file.
@@ -91,7 +90,7 @@ end
 //
 // Print a message to stdout and trace file
 //
-task message(string msg);
+task message(input string msg);
     $display("*** %s", msg);
     $fdisplay(tracefd, "(%0d) *** %s", ctime, msg);
 endtask
@@ -101,7 +100,12 @@ endtask
 // When jump detected, consider the test passed and
 // go instead to the target address.
 //
-task check_pass(int label_from, int label_to, int target, string msg);
+task check_pass(
+    input int label_from,
+    input int label_to,
+    input int target,
+    input string msg
+);
     if (pc_x == label_from && tr.pc_f == label_to) begin
         message(msg);
         tr.pc_x = target;

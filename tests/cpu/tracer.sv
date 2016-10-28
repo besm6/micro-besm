@@ -108,10 +108,10 @@ end
 // Print micro-instruction.
 //
 task print_uop(
-    logic [11:0] pc,
-    logic [112:1] opcode,
-    logic [8:0] const_addr,
-    logic [63:0] const_value
+    input logic [11:0] pc,
+    input logic [112:1] opcode,
+    input logic [8:0] const_addr,
+    input logic [63:0] const_value
 );
     static string sqi_name[16] = '{
          0: "jz",   1: "cjs",   2: "jmap",  3: "cjp",
@@ -611,7 +611,7 @@ endtask
 // Print changed state of internal CPU registers
 //
 task print_changed_cpu(
-    logic [112:1] opcode
+    input logic [112:1] opcode
 );
     logic  [5:0] modgn;
     logic  [7:0] procn;
