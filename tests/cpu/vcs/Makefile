@@ -1,5 +1,5 @@
 #
-# Using Mentor ModelSim
+# Using Synopsys VCS
 #
 SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/datapath.sv \
@@ -11,22 +11,21 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/k1802bb1.sv \
                   ../../../rtl/decoder.sv \
                   ../tracer.sv \
-		  ../test_cpu.sv
+                  ../test_cpu.sv
 
-# Altera Quartus toolchain
-MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
+VCS             = vcs -l vcs.log -sverilog -debug_all
 
-all:            work
+all:            simv
 
 clean:
-		rm -rf *.o *.vcd work
+		rm -rf simv.daidir csrc
+		rm -rf *.o *.vcd *~ simv vcs.log ucli.key
 
-work:           $(SOURCES)
-		[ -d word ] || $(MODELSIM)/vlib work
-		$(MODELSIM)/vlog -sv -nologo $(SOURCES)
+simv:           $(SOURCES)
+		$(VCS) $(SOURCES)
 
-run:            work
-		$(MODELSIM)/vsim -c -l run.log -do 'run 1000us;quit' testbench +trace=2 +dump +limit=200000
+run:            simv
+		./simv +trace=2 +dump +limit=200000 2>&1 | tee run.log
 
 view:
-		gtkwave output.vcd test.gtkw &
+		gtkwave simv.vcd databus.gtkw

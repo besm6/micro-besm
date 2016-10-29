@@ -13,6 +13,8 @@ module decoder(
     output logic        ir15,   // stack mode flag
     output logic [19:0] addr    // address
 );
+timeunit 1ns / 10ps;
+
 logic [7:0] bop, xop;
 
 // Modifier index

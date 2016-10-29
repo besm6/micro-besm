@@ -18,6 +18,7 @@ module am2910(
     output logic        nMAP,       // Mapping PROM output enable
     output logic        nFULL       // Stack full flag
 );
+timeunit 1ns / 10ps;
 
 enum bit [3:0] {
     JZ,     // 0 - Jump to Zero

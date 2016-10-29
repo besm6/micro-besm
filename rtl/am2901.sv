@@ -27,6 +27,7 @@ module am2901(
     output logic        F3,         // MSB of the ALU output
     output logic        F30         // Zero signal
 );
+timeunit 1ns / 10ps;
 
 logic [3:0] ram[15:0];
 logic [3:0] re, s;

@@ -16,6 +16,7 @@ module cpu(
     output logic        o_rd,       // read op
     output logic        o_wr        // write op
 );
+timeunit 1ns / 10ps;
 
 // Internal registers
 logic  [4:0] MODGN;             // РНГ: регистр номера группы памяти модификаторов

@@ -14,6 +14,8 @@ module standardizer(
     output reg         extop,   // extended opcode flag
     output reg  [20:1] addr
 );
+timeunit 1ns / 10ps;
+
     wire  [5:1] outA;
     wire  [8:1] outB;
     wire [20:1] outC;

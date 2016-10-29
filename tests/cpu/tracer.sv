@@ -5,8 +5,7 @@
 //
 module tracer();
 
-timeunit 1ns;
-timeprecision 10ps;
+timeunit 1ns / 10ps;
 
 //
 // Global clock and reset

@@ -19,6 +19,7 @@ module am2902(
     output logic nG,        // Generate term output
     output logic nP         // Propagate term output
 );
+timeunit 1ns / 10ps;
 
 // According to datasheet:
 // Cout1 = G0 | (P0 & Cin)

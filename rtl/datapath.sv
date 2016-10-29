@@ -22,6 +22,7 @@ module datapath(
     output logic        CT,     // Conditional test output
     output logic        Css     // Carry multiplexer output
 );
+timeunit 1ns / 10ps;
 
 // Internal carry signals
 logic c4, c8, c12, c16, c20, c24, c28, c32, c36, c40, c44, c48, c52, c56, c60, c64;

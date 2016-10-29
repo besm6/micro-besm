@@ -29,6 +29,7 @@ module extbus(
     input  wire         WC,     // C write enable
     input  wire         WX      // X write enable
 );
+timeunit 1ns / 10ps;
 
 // Inverted output data
 logic [71:0] onDA;

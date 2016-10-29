@@ -1,10 +1,9 @@
 `default_nettype none
 
-// Global time parameters.
-timeunit 1ns;
-timeprecision 10ps;
-
 module testbench();
+
+// Global time parameters.
+timeunit 1ns / 10ps;
 
 // Inputs.
 logic        clk, reset;
@@ -47,7 +46,6 @@ always @(posedge clk) begin
 end
 
 string tracefile = "output.trace";
-string wavefile = "output.vcd";
 string uprog = "micro-BESM";            // Input file name with microprogram
 int limit;
 int trace;                              // Trace level
@@ -72,7 +70,7 @@ initial begin
         $display("    +trace=2          Trace micro-instructions");
         $display("    +uprog=NAME       Load microprogram code");
         $display("    +limit=NUM        Limit execution to a number of cycles (default %0d)", limit);
-        $display("    +dump             Dump waveforms to file %s", wavefile);
+        $display("    +dump             Dump waveforms as output.vcd");
         $display("");
         $finish(1);
     end
@@ -85,7 +83,7 @@ initial begin
 
     // Dump waveforms.
     if ($test$plusargs("dump")) begin
-        $dumpfile(wavefile);
+        $dumpfile("output.vcd");
         $dumpvars();
     end
 
@@ -138,7 +136,7 @@ task load_uprog();
 
     // Clear the microprogram memory.
     for (i=0; i<4096; i+=1) begin
-        cpu.memory[4096] = '0;
+        cpu.memory[i] = '0;
     end
 
     // Read microcode image.

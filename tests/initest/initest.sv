@@ -1,10 +1,9 @@
 `default_nettype none
 
-// Global time parameters.
-timeunit 1ns;
-timeprecision 10ps;
-
 module testbench();
+
+// Global time parameters.
+timeunit 1ns / 10ps;
 
 // Inputs.
 logic        clk, reset;

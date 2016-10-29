@@ -43,6 +43,7 @@ module am2904(
     output logic oQIO0,     // --//--
     output logic oQIOn      // --//--
 );
+timeunit 1ns / 10ps;
 
 //------------------------------------------------------
 // Micro Status Register

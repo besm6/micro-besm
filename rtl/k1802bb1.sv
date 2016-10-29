@@ -37,6 +37,7 @@ module k1802bb1(
     output logic       nCO,     // counter overflow
     output logic       E        // counter equal flag RG0==RG3
 );
+timeunit 1ns / 10ps;
 
 // Internal RAM.
 // Register RG0 is edge-sensitive,
