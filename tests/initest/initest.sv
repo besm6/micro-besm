@@ -39,6 +39,7 @@ int trace;                              // Trace level
 int tracefd;                            // Trace file descriptor
 time ctime;                             // Current time
 logic [11:0] pc_x;                      // Current PC address at execution stage
+logic [112:1] opcode_x;                 // Current opcode at execution stage
 
 //
 // Generate clock at 100MHz.
@@ -98,7 +99,13 @@ endtask
 // Print message when test passes the label.
 //
 task check_pass(input int label, input string msg);
-    if (pc_x == label)
+    logic  [3:0] sqi;
+    logic [11:0] a;
+    assign sqi = opcode_x[112:109];
+    assign a   = opcode_x[108:97];
+
+    // Look for CONT operation with given address
+    if (sqi == 14 && a == label)
         message(msg);
 endtask
 
@@ -281,6 +288,7 @@ initial begin
         wait(clk);
         ctime = $time;
         pc_x = tr.pc_x;
+        opcode_x = tr.opcode_x;
 
         // Wait until everything is stable
         wait(!clk);
