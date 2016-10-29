@@ -241,9 +241,10 @@ task print_uop(
         4: "BNB",   5: "OVRFTB",6: "DRG",   7: "EMLRG",
         8: "RCB",   9: "CB",    10:"CEMLRG",11:"CT",
         12:"TR1",   13:"INTSTP",14:"IR15",  15:"TKKB",
-        16:"RUN",   17:"NMLRDY",            19:"INT",
+        16:"RUN",   17:"NMLRDY",18:"18",    19:"INT",
         20:"FULMEM",21:"ARBRDY",22:"TR0",   23:"CPMP",
-        default: "???"
+        24:"24",    25:"25",    26:"26",    27:"27",
+        28:"28",    29:"29",    30:"30",    31:"31"
     };
 
     // Instruction fields

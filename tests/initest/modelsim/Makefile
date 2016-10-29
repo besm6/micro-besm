@@ -13,6 +13,10 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../cpu/tracer.sv \
 		  ../initest.sv
 
+INCLUDES        = ../../microcode/initest.v \
+                  ../../../microcode/constants.v \
+                  ../../../microcode/optab.v
+
 # Altera Quartus toolchain
 MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
 
@@ -21,12 +25,12 @@ all:            work
 clean:
 		rm -rf *.o *.vcd work
 
-work:           $(SOURCES)
+work:           $(SOURCES) $(INCLUDES)
 		[ -d word ] || $(MODELSIM)/vlib work
 		$(MODELSIM)/vlog -sv -nologo $(SOURCES)
 
 run:            work
-		$(MODELSIM)/vsim -c -l run.log -do 'run 1000us;quit' testbench +limit=13000
+		$(MODELSIM)/vsim -c -l run.log -do 'run 1000us;quit' testbench +limit=200000
 
 view:
 		gtkwave output.vcd test.gtkw &
