@@ -28,7 +28,7 @@ $(NC)sim.dir:   $(SOURCES)
 		$(NCSIM)elab --nolog testbench
 
 run:            $(NC)sim.dir
-		$(NCSIM)sim --R --log run.log testbench --testplusarg limit=13000
+		$(NCSIM)sim --R --log run.log testbench --testplusarg limit=200000
 
 view:
 		gtkwave testbench.vcd databus.gtkw

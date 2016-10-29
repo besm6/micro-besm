@@ -22,7 +22,7 @@ clean:
 		rm -rf *.o *.vcd *~ simv vcs.log ucli.key
 
 simv:           $(SOURCES)
-		$(VCS) $(SOURCES)
+		$(VCS) +incdir+..+../../../rtl $(SOURCES)
 
 run:            simv
 		./simv +trace=2 +dump +limit=200000 2>&1 | tee run.log

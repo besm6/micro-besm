@@ -22,10 +22,10 @@ clean:
 		rm -rf *.o *.vcd *~ simv vcs.log ucli.key
 
 simv:           $(SOURCES)
-		$(VCS) $(SOURCES)
+		$(VCS) +incdir+..+../../../rtl $(SOURCES)
 
 run:            simv
-		./simv +limit=13000 2>&1 | tee run.log
+		./simv +limit=200000 2>&1 | tee run.log
 
 view:
 		gtkwave simv.vcd databus.gtkw
