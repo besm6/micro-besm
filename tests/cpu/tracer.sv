@@ -113,10 +113,10 @@ task print_uop(
     input logic [63:0] const_value
 );
     static string sqi_name[16] = '{
-         0: "jz",   1: "cjs",   2: "jmap",  3: "cjp",
-         4: "push", 5: "jsrp",  6: "cjv",   7: "jrp",
-         8: "rfct", 9: "rpct",  10: "crtn", 11: "cjpp",
-        12: "ldct", 13: "loop", 14: "cont", 15: "twb"
+        0: "jz  ", 1: "cjs ",  2: "jmap", 3: "cjp ",
+        4: "push", 5: "jsrp",  6: "cjv ", 7: "jrp ",
+        8: "rfct", 9: "rpct",  10:"crtn", 11:"cjpp",
+        12:"ldct", 13:"loop",  14:"cont", 15:"twb "
     };
     static string map_name[4] = '{
         0: "PE",    1: "ME",    2: "GRP",   3: "-"
@@ -325,7 +325,7 @@ task print_uop(
     assign COND  = opcode[6:2];     // Выбор условия, подлежащего проверке
     assign MPS   = opcode[1];       // Выбор источника параметра сдвига
 
-    $fwrite(fd, "(%0d) %h: %-4s", ctime, pc, sqi_name[SQI]);
+    $fwrite(fd, "(%0d) %h: %4s", ctime, pc, sqi_name[SQI]);
 
     if (A != 0) $fwrite(fd, " %h", A);
     else        $fwrite(fd, "    ");
@@ -406,25 +406,10 @@ task print_uop(
         $fdisplay(fd, "(%0d) *** ddev=%0s not implemented yet!",
             ctime, ddev_name[DDEV]);
     case (COND)
-          1: $fdisplay(fd, "(%0d) *** cond=NORMB not implemented yet!", ctime);
-          2: $fdisplay(fd, "(%0d) *** cond=RNDB not implemented yet!", ctime);
-          3: $fdisplay(fd, "(%0d) *** cond=OVRIB not implemented yet!", ctime);
-          4: $fdisplay(fd, "(%0d) *** cond=BNB not implemented yet!", ctime);
-          5: $fdisplay(fd, "(%0d) *** cond=OVRFTB not implemented yet!", ctime);
-          6: $fdisplay(fd, "(%0d) *** cond=DRG not implemented yet!", ctime);
-          8: $fdisplay(fd, "(%0d) *** cond=RCB not implemented yet!", ctime);
-          9: $fdisplay(fd, "(%0d) *** cond=CB not implemented yet!", ctime);
-         10: $fdisplay(fd, "(%0d) *** cond=CEMLRG not implemented yet!", ctime);
-         12: $fdisplay(fd, "(%0d) *** cond=TR1 not implemented yet!", ctime);
-         13: $fdisplay(fd, "(%0d) *** cond=INTSTP not implemented yet!", ctime);
-         14: $fdisplay(fd, "(%0d) *** cond=IR15 not implemented yet!", ctime);
-         15: $fdisplay(fd, "(%0d) *** cond=TKKB not implemented yet!", ctime);
          16: $fdisplay(fd, "(%0d) *** cond=RUN not implemented yet!", ctime);
          17: $fdisplay(fd, "(%0d) *** cond=NMLRDY not implemented yet!", ctime);
          19: $fdisplay(fd, "(%0d) *** cond=INT not implemented yet!", ctime);
          20: $fdisplay(fd, "(%0d) *** cond=FULMEM not implemented yet!", ctime);
-         21: $fdisplay(fd, "(%0d) *** cond=ARBRDY not implemented yet!", ctime);
-         22: $fdisplay(fd, "(%0d) *** cond=TR0 not implemented yet!", ctime);
          23: $fdisplay(fd, "(%0d) *** cond=CPMP not implemented yet!", ctime);
     endcase
     case (YDEV)
@@ -655,7 +640,7 @@ task print_changed_cpu(
     assign procn  = cpu.PROCN;
     assign cnt    = cpu.CNT;
     assign physpg = cpu.PHYSPG;
-    assign arbopc = cpu.ARBOPC;
+    assign arbopc = cpu.arb_req;
     assign ureg   = cpu.UREG;
     assign pshift = cpu.PSHIFT;
     assign stopm0 = cpu.stopm0;

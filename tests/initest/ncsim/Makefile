@@ -16,18 +16,19 @@ SOURCES         = ../../../rtl/cpu.sv \
 # Xilinx Vivado toolchain
 NC              = x
 NCSIM           = /opt/Xilinx/Vivado/2016.2/bin/$(NC)
+PROG            = $(NC)sim.dir/work.testbench/xsimk
 
-all:            $(NC)sim.dir
+all:            $(PROG)
 
 clean:
 		rm -rf $(NC)sim.dir .Xil
 		rm -f *.o *.vcd $(NC)vhdl.pb $(NC)vlog.pb $(NC)elab.pb $(NC)sim*.jou webtalk*.jou webtalk*.log run_*.log
 
-$(NC)sim.dir:   $(SOURCES)
+$(PROG):        $(SOURCES)
 		$(NCSIM)vlog --nolog --sv $(SOURCES)
 		$(NCSIM)elab --nolog testbench
 
-run:            $(NC)sim.dir
+run:            $(PROG)
 		$(NCSIM)sim --R --log run.log testbench --testplusarg limit=200000
 
 view:
