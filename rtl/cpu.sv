@@ -406,7 +406,7 @@ extbus busio(
 //--------------------------------------------------------------
 // Arbiter
 //
-arbiter arb(clk, reset,
+arbiter arb(clk,
     arb_req,                            // input request
     bus_ARX, bus_ECX, bus_WRX,          // X bus control
     o_astb, o_rd, o_wr,                 // external memory interface
@@ -414,9 +414,12 @@ arbiter arb(clk, reset,
 );
 
 always @(posedge clk)                   // arbiter request
-    arb_req <= arb_rdy ? '0 :           // idle
-           (YDST == 5) ? Y[3:0] :       // from Y data bus
-                         ARBI;          // from opcode
+    if (arb_rdy)
+        arb_req <= '0;                  // clear request when ready
+    else if (YDST == 5)
+        arb_req <= Y[3:0];              // set from Y data bus
+    else if (ARBI != 0)
+        arb_req <= ARBI;                // set from microinstruction
 
 //--------------------------------------------------------------
 // Instruction decoder

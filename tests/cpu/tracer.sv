@@ -394,9 +394,6 @@ task print_uop(
     if (YDST == 9)
         $fdisplay(fd, "(%0d) *** ydst=%0s not implemented yet!",
             ctime, ydst_name[YDST]);
-    if (ARBI != 0)
-        $fdisplay(fd, "(%0d) *** arbi=%0s not implemented yet!",
-            ctime, arbi_name[ARBI]);
     if (FFCNT != 0 && !IOMP)
         $fdisplay(fd, "(%0d) *** ffcnt=%0s not implemented yet!",
             ctime, ffcnt_name[FFCNT]);
@@ -634,6 +631,12 @@ task print_changed_cpu(
         8: "DATAB1",9: "DATAB2",10:"DATAB3",11:"DATAB4",
         12:"DATAB5",13:"DATAB6",14:"DATAB7",15:"DATAB8"
     };
+    static string arbopc_name[16] = '{
+        0: "RST",   1: "CCRD",  2: "CCWR",  3: "DCRD",
+        4: "DCWR",  5: "?",     6: "?",     7: "?",
+        8: "FЕТСН", 9: "DRD",   10:"DWR",   11:"RDMWR",
+        12:"BTRWR", 13:"BTRRD", 14:"BICLR", 15:"BIRD"
+    };
     logic csm, wem, wry;
 
     assign modgn  = cpu.MODGN;
@@ -653,7 +656,7 @@ task print_changed_cpu(
     if (procn  !== old_procn)  begin $fdisplay(fd, "(%0d)               Write PROCN = %h",  ctime, procn);  old_procn  = procn;  end
     if (cnt    !== old_cnt)    begin $fdisplay(fd, "(%0d)               Write CNT = %h",    ctime, cnt);    old_cnt    = cnt;    end
     if (physpg !== old_physpg) begin $fdisplay(fd, "(%0d)               Write PHYSPG = %h", ctime, physpg); old_physpg = physpg; end
-    if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d)               Write ARBOPC = %h", ctime, arbopc); old_arbopc = arbopc; end
+    if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d)               Write ARBOPC = %h (%0s)", ctime, arbopc, arbopc_name[arbopc]); old_arbopc = arbopc; end
     if (ureg   !== old_ureg)   begin $fdisplay(fd, "(%0d)               Write UREG = %h",   ctime, ureg);   old_ureg   = ureg;   end
     if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d)               Write PSHIFT = %h", ctime, pshift); old_pshift = pshift; end
     if (stopm0 !== old_stopm0) begin $fdisplay(fd, "(%0d)               Write STOPM0 = %h", ctime, stopm0); old_stopm0 = stopm0; end
