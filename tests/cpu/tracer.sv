@@ -332,12 +332,12 @@ task print_uop(
 
     if (MAP   != 3)  $fwrite(fd, " map=%0s", map_name[MAP]);
     if (ALU   != 0)  $fwrite(fd, " ALU");
-    if (ALUD  != 1)  $fwrite(fd, " alud=%0s", alud_name[ALUD]);
-    if (FUNC  != 0)  $fwrite(fd, " func=%0s", func_name[FUNC]);
     if (ALUS  != 0)  $fwrite(fd, " alus=%0s", alus_name[ALUS]);
-    if (H     != 0)  $fwrite(fd, " H");
-    if (RB    != 10) $fwrite(fd, " rb=%0s", rb_name[RB]);
     if (RA    != 0)  $fwrite(fd, " ra=%0s", ra_name[RA]);
+    if (FUNC  != 0)  $fwrite(fd, " func=%0s", func_name[FUNC]);
+    if (H     != 0)  $fwrite(fd, " H");
+    if (ALUD  != 1)  $fwrite(fd, " alud=%0s", alud_name[ALUD]);
+    if (RB    != 10) $fwrite(fd, " rb=%0s", rb_name[RB]);
     if (CI    != 0)  $fwrite(fd, " ci=%0s", ci_name[CI]);
     if (SHMUX != 0)  $fwrite(fd, " shmux=%0s", shmux_name[SHMUX]);
     if (STOPC != 20) $fwrite(fd, " stopc=%0s", stopc_name[STOPC]);
@@ -532,8 +532,9 @@ endtask
 task print_changed_2910();
     logic [2:0] sp;
     logic [11:0] stack0, stack1, stack2, stack3, stack4, stack5, cnt;
-    static logic [2:0] old_sp, old_cnt;
-    static logic [11:0] old_stack0, old_stack1, old_stack2, old_stack3, old_stack4, old_stack5;
+    static logic [2:0] old_sp;
+    static logic [11:0] old_stack0, old_stack1, old_stack2, old_stack3;
+    static logic [11:0] old_stack4, old_stack5, old_cnt;
 
     assign sp = cpu.control.SP;
     assign cnt = cpu.control.Cnt;
@@ -544,8 +545,8 @@ task print_changed_2910();
     assign stack4 = cpu.control.stack[4];
     assign stack5 = cpu.control.stack[5];
 
-    if (sp !== old_sp) begin $fdisplay(fd, "(%0d)               Write cu.SP = %h", ctime, sp); old_sp = sp; end
-    if (cnt != old_cnt) begin $fdisplay(fd, "(%0d)               Write cu.Cnt = %h", ctime, cnt); old_cnt = cnt; end
+    if (sp     !== old_sp)     begin $fdisplay(fd, "(%0d)               Write cu.SP = %h",  ctime, sp);  old_sp  = sp;  end
+    if (cnt    !== old_cnt)    begin $fdisplay(fd, "(%0d)               Write cu.Cnt = %h", ctime, cnt); old_cnt = cnt; end
     if (stack0 !== old_stack0) begin $fdisplay(fd, "(%0d)               Write cu.Stack0 = %h", ctime, stack0); old_stack0 = stack0; end
     if (stack1 !== old_stack1) begin $fdisplay(fd, "(%0d)               Write cu.Stack1 = %h", ctime, stack1); old_stack1 = stack1; end
     if (stack2 !== old_stack2) begin $fdisplay(fd, "(%0d)               Write cu.Stack2 = %h", ctime, stack2); old_stack2 = stack2; end
