@@ -163,9 +163,9 @@ end
 assign Y = nOE ? 'z : (I[8:6] == 'b010) ? a : f;
 
 // Generate bidirectional shifter signals.
-assign oRAM0 = (I[8:7] == 'b10) ? f[0] : 'z;
-assign oRAM3 = (I[8:7] == 'b11) ? f[3] : 'z;
-assign oQ3   = (I[8:7] == 'b11) ? q[3] : 'z;
-assign oQ0   = (I[8:7] == 'b10) ? q[0] : 'z;
+assign oRAM0 = (I[8:7] == 'b10) ? f[0] : '0;
+assign oRAM3 = (I[8:7] == 'b11) ? f[3] : '0;
+assign oQ3   = (I[8:7] == 'b11) ? q[3] : '0;
+assign oQ0   = (I[8:7] == 'b10) ? q[0] : '0;
 
 endmodule

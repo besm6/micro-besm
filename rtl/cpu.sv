@@ -318,6 +318,7 @@ assign alu_D =
     (DSRC == 10) ? instr_code :     // OPC, код операции команды
     (DSRC == 11) ? LOS :            // результат поиска левой единицы
     (DSRC == 12) ? PROM :           // ПЗУ констант
+    (DDEV == 5)  ? {ss_Y, 6'd0} :   // STATUS, Y bus output from Status/Shift
                    instr_addr;      // источник не указан: адресная часть команды?
 
 assign Y =
@@ -356,8 +357,6 @@ assign CCLR = (YDST == 10);     // запуск сброса кэша
 assign ss_I = {CI, alu_I[7], SHMUX, STOPC};
 assign ss_nCEM = !CEM;
 assign ss_nCEN = !CEN;
-
-//TODO: ss_Y;                   // Y bus output from Status/Shift
 
 //--------------------------------------------------------------
 // Shifter.

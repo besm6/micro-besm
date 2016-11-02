@@ -123,14 +123,14 @@ assign C = mode32 ? c32 : c64;
 // Двунаправленная шина У (УС, YN, YV, YZ) соединена через ШФ со
 // входной шиной D ЦП для выдачи информации из СУСС, и с выходной
 // шиной У для чтения информации.
-assign Yz =   D[0];
-assign Yn =   D[1];
-assign Yovr = D[2];
-assign Yc =   D[3];
+assign Yovr = D[6];
+assign Yc =   D[7];
+assign Yn =   D[8];
+assign Yz =   D[9];
 
-assign oYss[0] = oYz;
-assign oYss[1] = oYn;
-assign oYss[2] = oYovr;
-assign oYss[3] = oYc;
+assign oYss[0] = oYovr;
+assign oYss[1] = oYc;
+assign oYss[2] = oYn;
+assign oYss[3] = oYz;
 
 endmodule

@@ -399,7 +399,7 @@ task print_uop(
             ctime, ffcnt_name[FFCNT]);
     if (WRD != 0)
         $fdisplay(fd, "(%0d) *** WRD not implemented yet!", ctime);
-    if (DDEV != 0)
+    if (DDEV != 0 && DDEV != 5)
         $fdisplay(fd, "(%0d) *** ddev=%0s not implemented yet!",
             ctime, ddev_name[DDEV]);
     case (COND)
