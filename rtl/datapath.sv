@@ -10,7 +10,7 @@ module datapath(
     input  wire   [3:0] A,      // A register address, from RA
     input  wire   [3:0] B,      // B register address, from RB
     input  wire  [63:0] D,      // D bus input
-    input  wire         C0,     // Carry input, from CI
+    input  wire         Cin,    // Carry input, from COND mux
     input  wire         mode32, // 32-bit mode flag, from H
     output logic [63:0] oYalu,  // Y bus output from ALU
 
@@ -19,13 +19,12 @@ module datapath(
     input  wire         nCEM,   // Machine status register enable, from CEM
     input  wire         nCEN,   // Micro status register enable, from CEN
     output logic  [3:0] oYss,   // Y bus output from Status/Shift
-    output logic        CT,     // Conditional test output
-    output logic        Css     // Carry multiplexer output
+    output logic        CT      // Conditional test output
 );
 timeunit 1ns / 10ps;
 
 // Internal carry signals
-logic c4, c8, c12, c16, c20, c24, c28, c32, c36, c40, c44, c48, c52, c56, c60, c64;
+logic c0, c4, c8, c12, c16, c20, c24, c28, c32, c36, c40, c44, c48, c52, c56, c60, c64;
 
 // Internal shift signals
 logic r3, r7, r11, r15, r19, r23, r27, r31, r35, r39, r43, r47, r51, r55, r59;
@@ -66,7 +65,7 @@ logic Yz, Yn, Yovr, Yc, oYz, oYn, oYovr, oYc;
 // Q0, Q3 передаются на схему управления состоянием и сдвигами
 // К1804ВР2, и далее - на мультиплексор условий; /Р и G
 // используются для формирования ускоренного переноса.
-am2901 p3_0  (Ialu, A, B, D[3:0],   oYalu[3:0],   PR0, r4,  PQ0, q4,  oR0, r3,  oQ0, q3,  clk, C0,  '0, ,    nG0,  nP0,  ,    ,    z3_0);
+am2901 p3_0  (Ialu, A, B, D[3:0],   oYalu[3:0],   PR0, r4,  PQ0, q4,  oR0, r3,  oQ0, q3,  clk, c0,  '0, ,    nG0,  nP0,  ,    ,    z3_0);
 am2901 p7_4  (Ialu, A, B, D[7:4],   oYalu[7:4],   r3,  r8,  q3,  q8,  r4,  r7,  q4,  q7,  clk, c4,  '0, ,    nG4,  nP4,  ,    ,    z7_4);
 am2901 p11_8 (Ialu, A, B, D[11:8],  oYalu[11:8],  r7,  r12, q7,  q12, r8,  r11, q8,  q11, clk, c8,  '0, ,    nG8,  nP8,  ,    ,    z11_8);
 am2901 p15_12(Ialu, A, B, D[15:12], oYalu[15:12], r11, r16, q11, q16, r12, r15, q12, q15, clk, c12, '0, ,    nG12, nP12, ,    ,    z15_12);
@@ -91,11 +90,11 @@ assign z64 = z32 &
              z51_48 & z55_52 & z59_56 & z63_60;
 
 // Carry lookahead
-am2902 s0(C0,  nG0,  nP0,  nG4,  nP4,  nG8,  nP8,  nG12, nP12, c4,  c8,  c12, nGx0, nPx0);
+am2902 s0(c0,  nG0,  nP0,  nG4,  nP4,  nG8,  nP8,  nG12, nP12, c4,  c8,  c12, nGx0, nPx0);
 am2902 s1(c16, nG16, nP16, nG20, nP20, nG24, nP24, nG28, nP28, c20, c24, c28, nGx1, nPx1);
 am2902 s2(c32, nG32, nP32, nG36, nP36, nG40, nP40, nG44, nP44, c36, c40, c44, nGx2, nPx2);
 am2902 s3(c48, nG48, nP48, nG52, nP52, nG56, nP56, nG60, nP60, c52, c56, c60, nGx3, nPx3);
-am2902 sx(C0,  nGx0, nPx0, nGx1, nPx1, nGx2, nPx2, nGx3, nPx3, c16, c32, c48, ,     );
+am2902 sx(c0,  nGx0, nPx0, nGx1, nPx1, nGx2, nPx2, nGx3, nPx3, c16, c32, c48, ,     );
 
 // Выход кода условия СТ подается
 // на мультиплексор условий. Входы /OEy, /EZ, /ЕС, /EN, /EV, СХ,
@@ -107,7 +106,7 @@ am2904 status(
     C, V, N, Z, '0, '0, '0, '0,
     Yz, Yc, Yn, Yovr, oYz, oYc, oYn, oYovr,
     '0, CT,
-    '0, Css,
+    Cin, c0,
     !Ialu[8],
     oR0, oR63, oQ0, oQ63, PR0, PR63, PQ0, PQ63);
 

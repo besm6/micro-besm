@@ -82,7 +82,6 @@ logic        ss_nCEN;           // Micro status register enable, from CEN
 
 logic  [3:0] ss_Y;              // Y bus output from Status/Shift
 logic        ss_CT;             // Conditional test output
-logic        ss_CO;             // Carry multiplexer output
 
 // Global data bus Y
 logic [63:0] Y;
@@ -298,7 +297,7 @@ assign PROM = const_ROM[A[8:0]];
 //
 datapath alu(clk,
     alu_I, alu_A, alu_B, alu_D, alu_C0, alu_mode32, alu_Y,
-    ss_I, ss_nCEM, ss_nCEN, ss_Y, ss_CT, ss_CO);
+    ss_I, ss_nCEM, ss_nCEN, ss_Y, ss_CT);
 
 assign alu_I = {ALUD, FUNC, ALUS};
 assign alu_A = RA;
