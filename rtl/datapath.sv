@@ -18,6 +18,7 @@ module datapath(
     input  wire  [12:0] Iss,    // Status/Shift instruction, from SHMUX and STOPC
     input  wire         nCEM,   // Machine status register enable, from CEM
     input  wire         nCEN,   // Micro status register enable, from CEN
+    input  wire   [3:0] Yss,    // Y bus input
     output logic  [3:0] oYss,   // Y bus output from Status/Shift
     output logic        CT      // Conditional test output
 );
@@ -122,10 +123,10 @@ assign C = mode32 ? c32 : c64;
 // Двунаправленная шина У (УС, YN, YV, YZ) соединена через ШФ со
 // входной шиной D ЦП для выдачи информации из СУСС, и с выходной
 // шиной У для чтения информации.
-assign Yovr = D[6];
-assign Yc =   D[7];
-assign Yn =   D[8];
-assign Yz =   D[9];
+assign Yovr = Yss[0];
+assign Yc   = Yss[1];
+assign Yn   = Yss[2];
+assign Yz   = Yss[3];
 
 assign oYss[0] = oYovr;
 assign oYss[1] = oYc;

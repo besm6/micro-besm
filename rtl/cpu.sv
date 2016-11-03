@@ -80,7 +80,8 @@ logic [12:0] ss_I;              // Status/Shift instruction, from SHMUX and STOP
 logic        ss_nCEM;           // Machine status register enable, from CEM
 logic        ss_nCEN;           // Micro status register enable, from CEN
 
-logic  [3:0] ss_Y;              // Y bus output from Status/Shift
+logic  [3:0] ss_Y;              // Y bus input
+logic  [3:0] ss_oY;             // Y bus output from Status/Shift
 logic        ss_CT;             // Conditional test output
 
 // Global data bus Y
@@ -297,7 +298,7 @@ assign PROM = const_ROM[A[8:0]];
 //
 datapath alu(clk,
     alu_I, alu_A, alu_B, alu_D, alu_C0, alu_mode32, alu_Y,
-    ss_I, ss_nCEM, ss_nCEN, ss_Y, ss_CT);
+    ss_I, ss_nCEM, ss_nCEN, ss_Y, ss_oY, ss_CT);
 
 assign alu_I = {ALUD, FUNC, ALUS};
 assign alu_A = RA;
@@ -317,7 +318,7 @@ assign alu_D =
     (DSRC == 10) ? instr_code :     // OPC, код операции команды
     (DSRC == 11) ? LOS :            // результат поиска левой единицы
     (DSRC == 12) ? PROM :           // ПЗУ констант
-    (DDEV == 5)  ? {ss_Y, 6'd0} :   // STATUS, Y bus output from Status/Shift
+    (DDEV == 5)  ? {ss_oY, 6'd0} :  // STATUS, Y bus output from Status/Shift
                    instr_addr;      // источник не указан: адресная часть команды?
 
 assign Y =
@@ -353,9 +354,10 @@ always @(posedge clk)
 
 assign CCLR = (YDST == 10);     // запуск сброса кэша
 
-assign ss_I = {CI, alu_I[7], SHMUX, STOPC};
+assign ss_I = {CI, ~alu_I[7], SHMUX, STOPC};
 assign ss_nCEM = !CEM;
 assign ss_nCEN = !CEN;
+assign ss_Y = Y[9:6];           // status bits: Z N C V
 
 //--------------------------------------------------------------
 // Shifter.
