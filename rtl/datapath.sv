@@ -28,9 +28,9 @@ timeunit 1ns / 10ps;
 logic c0, c4, c8, c12, c16, c20, c24, c28, c32, c36, c40, c44, c48, c52, c56, c60, c64;
 
 // Internal shift signals
-logic r3, r7, r11, r15, r19, r23, r27, r31, r35, r39, r43, r47, r51, r55, r59;
+logic r3, r7, r11, r15, r19, r23, r27, r31, r35, r39, r43, r47, r51, r55, r59, r63;
 logic r4, r8, r12, r16, r20, r24, r28, r32, r36, r40, r44, r48, r52, r56, r60;
-logic q3, q7, q11, q15, q19, q23, q27, q31, q35, q39, q43, q47, q51, q55, q59;
+logic q3, q7, q11, q15, q19, q23, q27, q31, q35, q39, q43, q47, q51, q55, q59, q63;
 logic q4, q8, q12, q16, q20, q24, q28, q32, q36, q40, q44, q48, q52, q56, q60;
 
 // Internal zero signals
@@ -48,7 +48,7 @@ logic v32, v64;
 logic C, V, N, Z;
 
 // Shift signals for am2904
-logic PR0, PQ0, PR63, PQ63, oR0, oR63, oQ0, oQ63;
+logic PR0, PQ0, PRH, PQH, PR31, PQ31, oR0, oQ0, oRH, oQH;
 
 // Generate and propagate signals for Am2902
 logic nG0,  nG4,  nG8,  nG12, nG16, nG20, nG24, nG28,
@@ -73,7 +73,7 @@ am2901 p15_12(Ialu, A, B, D[15:12], oYalu[15:12], r11, r16, q11, q16, r12, r15, 
 am2901 p19_16(Ialu, A, B, D[19:16], oYalu[19:16], r15, r20, q15, q20, r16, r19, q16, q19, clk, c16, '0, ,    nG16, nP16, ,    ,    z19_16);
 am2901 p23_20(Ialu, A, B, D[23:20], oYalu[23:20], r19, r24, q19, q24, r20, r23, q20, q23, clk, c20, '0, ,    nG20, nP20, ,    ,    z23_20);
 am2901 p27_24(Ialu, A, B, D[27:24], oYalu[27:24], r23, r28, q23, q28, r24, r27, q24, q27, clk, c24, '0, ,    nG24, nP24, ,    ,    z27_24);
-am2901 p31_28(Ialu, A, B, D[31:28], oYalu[31:28], r27, r32, q27, q32, r28, r31, q28, q31, clk, c28, '0, ,    nG28, nP28, v32, n32, z31_28);
+am2901 p31_28(Ialu, A, B, D[31:28], oYalu[31:28], r27, PR31,q27, PQ31,r28, r31, q28, q31, clk, c28, '0, ,    nG28, nP28, v32, n32, z31_28);
 am2901 p35_32(Ialu, A, B, D[35:32], oYalu[35:32], r31, r36, q31, q36, r32, r35, q32, q35, clk, c32, '0, ,    nG32, nP32, ,    ,    z35_32);
 am2901 p39_36(Ialu, A, B, D[39:36], oYalu[39:36], r35, r40, q35, q40, r36, r39, q36, q39, clk, c36, '0, ,    nG36, nP36, ,    ,    z39_36);
 am2901 p43_40(Ialu, A, B, D[43:40], oYalu[43:40], r39, r44, q39, q44, r40, r43, q40, q43, clk, c40, '0, ,    nG40, nP40, ,    ,    z43_40);
@@ -81,7 +81,7 @@ am2901 p47_44(Ialu, A, B, D[47:44], oYalu[47:44], r43, r48, q43, q48, r44, r47, 
 am2901 p51_48(Ialu, A, B, D[51:48], oYalu[51:48], r47, r52, q47, q52, r48, r51, q48, q51, clk, c48, '0, ,    nG48, nP48, ,    ,    z51_48);
 am2901 p55_52(Ialu, A, B, D[55:52], oYalu[55:52], r51, r56, q51, q56, r52, r55, q52, q55, clk, c52, '0, ,    nG52, nP52, ,    ,    z55_52);
 am2901 p59_56(Ialu, A, B, D[59:56], oYalu[59:56], r55, r60, q55, q60, r56, r59, q56, q59, clk, c56, '0, ,    nG56, nP56, ,    ,    z59_56);
-am2901 p63_60(Ialu, A, B, D[63:60], oYalu[63:60], r59, PR63,q59, PQ63,r60, oR63,q60, oQ63,clk, c60, '0, c64, nG60, nP60, v64, n64, z63_60);
+am2901 p63_60(Ialu, A, B, D[63:60], oYalu[63:60], r59, PRH, q59, PQH, r60, r63, q60, q63, clk, c60, '0, c64, nG60, nP60, v64, n64, z63_60);
 
 // Global zero flag
 assign z32 = z3_0   & z7_4   & z11_8  & z15_12 &
@@ -109,7 +109,7 @@ am2904 status(
     '0, CT,
     Cin, c0,
     !Ialu[8],
-    oR0, oR63, oQ0, oQ63, PR0, PR63, PQ0, PQ63);
+    oR0, oRH, oQ0, oQH, PR0, PRH, PQ0, PQH);
 
 // Выходы признаков состояния старшей МПС С4, OVR, F3, Z соединены
 // с соответствующими входами признаков состояния СУСС. При этом
@@ -119,6 +119,12 @@ assign Z = mode32 ? z32 : z64;
 assign N = mode32 ? n32 : n64;
 assign V = mode32 ? v32 : v64;
 assign C = mode32 ? c32 : c64;
+
+// Switch shift signals based on 32/64 bit mode
+assign oRH  = mode32 ? r31 : r63;
+assign oQH  = mode32 ? q31 : q63;
+assign PR31 = mode32 ? PRH : r32;
+assign PQ31 = mode32 ? PQH : q32;
 
 // Двунаправленная шина У (УС, YN, YV, YZ) соединена через ШФ со
 // входной шиной D ЦП для выдачи информации из СУСС, и с выходной

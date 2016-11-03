@@ -354,7 +354,7 @@ always @(posedge clk)
 
 assign CCLR = (YDST == 10);     // запуск сброса кэша
 
-assign ss_I = {CI, ~alu_I[7], SHMUX, STOPC};
+assign ss_I = {CI, alu_I[7], SHMUX, STOPC};
 assign ss_nCEM = !CEM;
 assign ss_nCEN = !CEN;
 assign ss_Y = Y[9:6];           // status bits: Z N C V

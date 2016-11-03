@@ -221,7 +221,7 @@ assign oSIOn = nSE ? 'z : shift_op[4];
 assign oQIO0 = nSE ? 'z : shift_op[3];
 assign oQIOn = nSE ? 'z : shift_op[2];
 
-assign MC_override = shift_op[1];
+assign MC_override = !nSE & shift_op[1];
 assign MC_new      = shift_op[0];
 
 always_comb case (I[10:6])
