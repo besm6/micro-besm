@@ -389,15 +389,17 @@ task print_uop(
     //
     // Some features not implemented yet
     //
-    if (DSRC==8 || DSRC==10 || DSRC==11)
+    if (DSRC==10 || DSRC==11)
         $fdisplay(fd, "(%0d) *** dsrc=%0s not implemented yet!",
             ctime, dsrc_name[DSRC]);
-    if (FFCNT != 0 && !IOMP)
+    if (!IOMP && (FFCNT == 16 || FFCNT == 17 || FFCNT == 21 || FFCNT == 24 ||
+                  FFCNT == 25 || FFCNT == 26 || FFCNT == 27 || FFCNT == 28 ||
+                  FFCNT == 29 || FFCNT == 30 || FFCNT == 31))
         $fdisplay(fd, "(%0d) *** ffcnt=%0s not implemented yet!",
             ctime, ffcnt_name[FFCNT]);
     if (WRD != 0)
         $fdisplay(fd, "(%0d) *** WRD not implemented yet!", ctime);
-    if (DDEV != 0 && DDEV != 5)
+    if (DDEV != 0 && DDEV != 3 && DDEV != 5)
         $fdisplay(fd, "(%0d) *** ddev=%0s not implemented yet!",
             ctime, ddev_name[DDEV]);
     case (COND)
@@ -594,26 +596,6 @@ endtask
 task print_changed_cpu(
     input logic [112:1] opcode
 );
-    logic  [5:0] modgn;
-    logic  [7:0] procn;
-    logic [31:0] cnt;
-    logic  [9:0] physpg;
-    logic  [3:0] arbopc;
-    logic [31:0] ureg;
-    logic  [6:0] pshift;
-    logic  [2:0] ydev;
-    logic        stopm0, stopm1;
-    static logic  [5:0] old_modgn;
-    static logic  [7:0] old_procn;
-    static logic [31:0] old_cnt;
-    static logic  [9:0] old_physpg;
-    static logic  [3:0] old_arbopc;
-    static logic [31:0] old_ureg;
-    static logic  [6:0] old_pshift;
-    static logic [31:0] old_irmem[1024];
-    static logic  [7:0] old_mpmem[16];
-    static logic [19:0] old_psmem[1024];
-    static logic        old_stopm0, old_stopm1;
     static string ir_name[32] = '{
         0:"М0",     1:"М1",     2:"М2",     3:"М3",
         4:"М4",     5:"М5",     6:"М6",     7:"М7",
@@ -636,27 +618,41 @@ task print_changed_cpu(
         8: "FЕТСН", 9: "DRD",   10:"DWR",   11:"RDMWR",
         12:"BTRWR", 13:"BTRRD", 14:"BICLR", 15:"BIRD"
     };
-    logic csm, wem, wry;
+    static logic  [5:0] old_modgn;
+    static logic  [7:0] old_procn;
+    static logic  [9:0] old_physpg;
+    static logic  [3:0] old_arbopc;
+    static logic [31:0] old_ureg;
+    static logic  [6:0] old_pshift;
+    static logic [31:0] old_rr;
+    static logic [31:0] old_irmem[1024];
+    static logic  [7:0] old_mpmem[16];
+    static logic [19:0] old_psmem[1024];
+    static logic        old_stopm0, old_stopm1;
 
-    assign modgn  = cpu.MODGN;
-    assign procn  = cpu.PROCN;
-    assign cnt    = cpu.CNT;
-    assign physpg = cpu.PHYSPG;
-    assign arbopc = cpu.arb_req;
-    assign ureg   = cpu.UREG;
-    assign pshift = cpu.PSHIFT;
-    assign stopm0 = cpu.stopm0;
-    assign stopm1 = cpu.stopm1;
+    automatic logic [5:0] modgn  = cpu.MODGN;
+    automatic logic  [7:0] procn  = cpu.PROCN;
+    automatic logic  [9:0] physpg = cpu.PHYSPG;
+    automatic logic  [3:0] arbopc = cpu.arb_req;
+    automatic logic [31:0] ureg   = cpu.UREG;
+    automatic logic  [6:0] pshift = cpu.PSHIFT;
+    automatic logic [31:0] rr     = cpu.RR;
+    automatic logic        stopm0 = cpu.stopm0;
+    automatic logic        stopm1 = cpu.stopm1;
+    automatic logic        csm    = opcode[30];    // Управление обращением к ОЗУ модификаторов
+    automatic logic        wem    = opcode[29];    // Разрешение записи в ОЗУ модификаторов
+    automatic logic  [2:0] ydev   = opcode[20:18]; // Выбор источника или приемника информации с шины Y
+    automatic logic        wry    = opcode[17];    // Запись в источники или приемники шины Y
 
     //
     // Internal registers
     //
     if (modgn  !== old_modgn)  begin $fdisplay(fd, "(%0d)               Write MODGN = %h",  ctime, modgn);  old_modgn  = modgn;  end
     if (procn  !== old_procn)  begin $fdisplay(fd, "(%0d)               Write PROCN = %h",  ctime, procn);  old_procn  = procn;  end
-    if (cnt    !== old_cnt)    begin $fdisplay(fd, "(%0d)               Write CNT = %h",    ctime, cnt);    old_cnt    = cnt;    end
     if (physpg !== old_physpg) begin $fdisplay(fd, "(%0d)               Write PHYSPG = %h", ctime, physpg); old_physpg = physpg; end
     if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d)               Write ARBOPC = %h (%0s)", ctime, arbopc, arbopc_name[arbopc]); old_arbopc = arbopc; end
     if (ureg   !== old_ureg)   begin $fdisplay(fd, "(%0d)               Write UREG = %h",   ctime, ureg);   old_ureg   = ureg;   end
+    if (rr     !== old_rr)     begin $fdisplay(fd, "(%0d)               Write RR = %h",     ctime, rr);     old_rr     = rr;     end
     if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d)               Write PSHIFT = %h", ctime, pshift); old_pshift = pshift; end
     if (stopm0 !== old_stopm0) begin $fdisplay(fd, "(%0d)               Write STOPM0 = %h", ctime, stopm0); old_stopm0 = stopm0; end
     if (stopm1 !== old_stopm1) begin $fdisplay(fd, "(%1d)               Write STOPM1 = %h", ctime, stopm1); old_stopm1 = stopm1; end
@@ -664,8 +660,6 @@ task print_changed_cpu(
     //
     // Index-registers
     //
-    assign csm = opcode[30];        // Управление обращением к ОЗУ модификаторов
-    assign wem = opcode[29];        // Разрешение записи в ОЗУ модификаторов
     if (csm & wem) begin
         int i;
         for (i=old_modgn*32; i<old_modgn*32+32; i+=1)
@@ -679,8 +673,6 @@ task print_changed_cpu(
     //
     // I/O memory for console processor
     //
-    assign wry = opcode[17];        // Запись в источники или приемники шины Y
-    assign ydev = opcode[20:18];    // Выбор источника или приемника информации с шины Y
     if (wry && ydev==5) begin
         int i;
         for (i=0; i<16; i+=1)
