@@ -367,6 +367,12 @@ initial begin
         check_jump(LABEL_STSH3,    LABEL_STSH3,  pc_x+1,  "Test arith.shift-left pass");
         check_jump(LABEL_STSH4,    LABEL_STSH4,  pc_x+1,  "Test arith.shift-right pass");
 
+        if (pc_x == LABEL_PSMI20+3 && tr.pc_f == LABEL_PSMI20) begin
+            // Before shift-left test, we need to provide
+            // a shift count in mpmem[7] byte.
+            cpu.mpmem[7] <= 3;
+        end
+
         //
         // Чтение, запись блока обмена с ПП
         //

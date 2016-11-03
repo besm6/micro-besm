@@ -199,7 +199,7 @@ task print_uop(
         default: "???"
     };
     static string shf_name[4] = '{
-        0: "-",     1: "LOG",   2: "ARIPH", 3: "EMULF"
+        0: "CYCL",  1: "LOG",   2: "ARIPH", 3: "EMULF"
     };
     static string arbi_name[16] = '{
         0: "-",     1: "CCRD",  2: "CCWR",  3: "DCRD",
@@ -342,12 +342,13 @@ task print_uop(
     if (SHMUX != 0)  $fwrite(fd, " shmux=%0s", shmux_name[SHMUX]);
     if (STOPC != 20) $fwrite(fd, " stopc=%0s", stopc_name[STOPC]);
     if (MOD   != 0)  $fwrite(fd, " MOD");
-    if (PSHF  != 64) $fwrite(fd, " pshf=%0d", int'(PSHF) - 64);
+    if (DSRC  != 0)  $fwrite(fd, " dsrc=%0s", dsrc_name[DSRC]);
+    if (DSRC  == 9)  $fwrite(fd, " shf=%0s", shf_name[SHF]);
+    if (DSRC  == 9 ||
+        PSHF  != 64) $fwrite(fd, " pshf=%0d", int'(PSHF) - 64);
+    if (YDST  != 0)  $fwrite(fd, " ydst=%0s", ydst_name[YDST]);
     if (MNSA  != 2)  $fwrite(fd, " mnsa=%0s", mnsa_name[MNSA]);
     if (MODNM != 0)  $fwrite(fd, " modnm=%0s", modnm_name[MODNM]);
-    if (DSRC  != 0)  $fwrite(fd, " dsrc=%0s", dsrc_name[DSRC]);
-    if (YDST  != 0)  $fwrite(fd, " ydst=%0s", ydst_name[YDST]);
-    if (SHF   != 0)  $fwrite(fd, " shf=%0s", shf_name[SHF]);
     if (ARBI  != 0)  $fwrite(fd, " arbi=%0s", arbi_name[ARBI]);
     if (RLD   != 0)  $fwrite(fd, " RLD");
     if (LETC  != 0)  $fwrite(fd, " LETC");
@@ -391,9 +392,6 @@ task print_uop(
     if (DSRC==8 || DSRC==10 || DSRC==11)
         $fdisplay(fd, "(%0d) *** dsrc=%0s not implemented yet!",
             ctime, dsrc_name[DSRC]);
-    if (YDST == 9)
-        $fdisplay(fd, "(%0d) *** ydst=%0s not implemented yet!",
-            ctime, ydst_name[YDST]);
     if (FFCNT != 0 && !IOMP)
         $fdisplay(fd, "(%0d) *** ffcnt=%0s not implemented yet!",
             ctime, ffcnt_name[FFCNT]);
