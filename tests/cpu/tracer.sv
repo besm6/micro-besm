@@ -388,7 +388,7 @@ task print_uop(
     //
     // Some features not implemented yet
     //
-    if (DSRC==8 || DSRC==9 || DSRC==10 || DSRC==11)
+    if (DSRC==8 || DSRC==10 || DSRC==11)
         $fdisplay(fd, "(%0d) *** dsrc=%0s not implemented yet!",
             ctime, dsrc_name[DSRC]);
     if (YDST == 9)

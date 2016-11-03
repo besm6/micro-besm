@@ -362,7 +362,7 @@ assign ss_Y = Y[9:6];           // status bits: Z N C V
 //--------------------------------------------------------------
 // Shifter.
 //
-assign SHIFT = PSHF[6] ? Y<<PSHF[5:0] : Y>>PSHF[5:0];
+shifter sh(Y, PSHF, SHIFT);
 
 //--------------------------------------------------------------
 // Modifier memory.
