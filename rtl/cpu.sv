@@ -71,7 +71,7 @@ logic  [3:0] alu_A;             // A register address, from RA
 logic  [3:0] alu_B;             // B register address, from RB
 logic [63:0] alu_D;             // D bus input
 logic        alu_C0;            // Carry input
-logic        alu_mode32;        // 32-bit mode flag, from H
+logic        alu_mode64;        // 64-bit mode flag, from H
 
 logic [63:0] alu_Y;             // Y bus output from ALU
 
@@ -297,13 +297,13 @@ assign PROM = const_ROM[A[8:0]];
 // Datapath: register file, ALU and status/shifts
 //
 datapath alu(clk,
-    alu_I, alu_A, alu_B, alu_D, alu_C0, alu_mode32, alu_Y,
+    alu_I, alu_A, alu_B, alu_D, alu_C0, alu_mode64, alu_Y,
     ss_I, ss_nCEM, ss_nCEN, ss_Y, ss_oY, ss_CT);
 
 assign alu_I = {ALUD, FUNC, ALUS};
 assign alu_A = RA;
 assign alu_B = RB;
-assign alu_mode32 = H;
+assign alu_mode64 = H;
 assign alu_C0 = condition;
 
 // Управление источниками информации на шину D.

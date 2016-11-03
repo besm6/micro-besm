@@ -11,7 +11,7 @@ module datapath(
     input  wire   [3:0] B,      // B register address, from RB
     input  wire  [63:0] D,      // D bus input
     input  wire         Cin,    // Carry input, from COND mux
-    input  wire         mode32, // 32-bit mode flag, from H
+    input  wire         mode64, // 64-bit mode flag, from H
     output logic [63:0] oYalu,  // Y bus output from ALU
 
     // Signals for am2904
@@ -60,6 +60,10 @@ logic nGx0, nGx1, nGx2, nGx3, nPx0, nPx1, nPx2, nPx3;
 // Data signals for am2904
 logic Yz, Yn, Yovr, Yc, oYz, oYn, oYovr, oYc;
 
+// Disable modification of upper half in 32-bit mode
+logic [8:0] Ihi;
+assign Ihi = { mode64 ? Ialu[8:6] : 3'b001, Ialu[5:0] };
+
 // Сигналами I0-I8, А0-А3, В0-В3, /ОЕ, С0 управляет
 // микропрограмма; сигналы D0-D3 поступают с входной шины D ЦП;
 // У0-У3 выходят на шину У ЦП; сигналы С4, F3, OVR, Z, R0, R3,
@@ -74,14 +78,14 @@ am2901 p19_16(Ialu, A, B, D[19:16], oYalu[19:16], r15, r20, q15, q20, r16, r19, 
 am2901 p23_20(Ialu, A, B, D[23:20], oYalu[23:20], r19, r24, q19, q24, r20, r23, q20, q23, clk, c20, '0, ,    nG20, nP20, ,    ,    z23_20);
 am2901 p27_24(Ialu, A, B, D[27:24], oYalu[27:24], r23, r28, q23, q28, r24, r27, q24, q27, clk, c24, '0, ,    nG24, nP24, ,    ,    z27_24);
 am2901 p31_28(Ialu, A, B, D[31:28], oYalu[31:28], r27, PR31,q27, PQ31,r28, r31, q28, q31, clk, c28, '0, ,    nG28, nP28, v32, n32, z31_28);
-am2901 p35_32(Ialu, A, B, D[35:32], oYalu[35:32], r31, r36, q31, q36, r32, r35, q32, q35, clk, c32, '0, ,    nG32, nP32, ,    ,    z35_32);
-am2901 p39_36(Ialu, A, B, D[39:36], oYalu[39:36], r35, r40, q35, q40, r36, r39, q36, q39, clk, c36, '0, ,    nG36, nP36, ,    ,    z39_36);
-am2901 p43_40(Ialu, A, B, D[43:40], oYalu[43:40], r39, r44, q39, q44, r40, r43, q40, q43, clk, c40, '0, ,    nG40, nP40, ,    ,    z43_40);
-am2901 p47_44(Ialu, A, B, D[47:44], oYalu[47:44], r43, r48, q43, q48, r44, r47, q44, q47, clk, c44, '0, ,    nG44, nP44, ,    ,    z47_44);
-am2901 p51_48(Ialu, A, B, D[51:48], oYalu[51:48], r47, r52, q47, q52, r48, r51, q48, q51, clk, c48, '0, ,    nG48, nP48, ,    ,    z51_48);
-am2901 p55_52(Ialu, A, B, D[55:52], oYalu[55:52], r51, r56, q51, q56, r52, r55, q52, q55, clk, c52, '0, ,    nG52, nP52, ,    ,    z55_52);
-am2901 p59_56(Ialu, A, B, D[59:56], oYalu[59:56], r55, r60, q55, q60, r56, r59, q56, q59, clk, c56, '0, ,    nG56, nP56, ,    ,    z59_56);
-am2901 p63_60(Ialu, A, B, D[63:60], oYalu[63:60], r59, PRH, q59, PQH, r60, r63, q60, q63, clk, c60, '0, c64, nG60, nP60, v64, n64, z63_60);
+am2901 p35_32(Ihi,  A, B, D[35:32], oYalu[35:32], r31, r36, q31, q36, r32, r35, q32, q35, clk, c32, '0, ,    nG32, nP32, ,    ,    z35_32);
+am2901 p39_36(Ihi,  A, B, D[39:36], oYalu[39:36], r35, r40, q35, q40, r36, r39, q36, q39, clk, c36, '0, ,    nG36, nP36, ,    ,    z39_36);
+am2901 p43_40(Ihi,  A, B, D[43:40], oYalu[43:40], r39, r44, q39, q44, r40, r43, q40, q43, clk, c40, '0, ,    nG40, nP40, ,    ,    z43_40);
+am2901 p47_44(Ihi,  A, B, D[47:44], oYalu[47:44], r43, r48, q43, q48, r44, r47, q44, q47, clk, c44, '0, ,    nG44, nP44, ,    ,    z47_44);
+am2901 p51_48(Ihi,  A, B, D[51:48], oYalu[51:48], r47, r52, q47, q52, r48, r51, q48, q51, clk, c48, '0, ,    nG48, nP48, ,    ,    z51_48);
+am2901 p55_52(Ihi,  A, B, D[55:52], oYalu[55:52], r51, r56, q51, q56, r52, r55, q52, q55, clk, c52, '0, ,    nG52, nP52, ,    ,    z55_52);
+am2901 p59_56(Ihi,  A, B, D[59:56], oYalu[59:56], r55, r60, q55, q60, r56, r59, q56, q59, clk, c56, '0, ,    nG56, nP56, ,    ,    z59_56);
+am2901 p63_60(Ihi,  A, B, D[63:60], oYalu[63:60], r59, PRH, q59, PQH, r60, r63, q60, q63, clk, c60, '0, c64, nG60, nP60, v64, n64, z63_60);
 
 // Global zero flag
 assign z32 = z3_0   & z7_4   & z11_8  & z15_12 &
@@ -115,16 +119,16 @@ am2904 status(
 // с соответствующими входами признаков состояния СУСС. При этом
 // старшей может считаться МПС, содержащая 32-28 или 64-60 разряды
 // в зависимости от типа операций, производимых в АЛУ.
-assign Z = mode32 ? z32 : z64;
-assign N = mode32 ? n32 : n64;
-assign V = mode32 ? v32 : v64;
-assign C = mode32 ? c32 : c64;
+assign Z = mode64 ? z64 : z32;
+assign N = mode64 ? n64 : n32;
+assign V = mode64 ? v64 : v32;
+assign C = mode64 ? c64 : c32;
 
 // Switch shift signals based on 32/64 bit mode
-assign oRH  = mode32 ? r31 : r63;
-assign oQH  = mode32 ? q31 : q63;
-assign PR31 = mode32 ? PRH : r32;
-assign PQ31 = mode32 ? PQH : q32;
+assign oRH  = mode64 ? r63 : r31;
+assign oQH  = mode64 ? q63 : q31;
+assign PR31 = mode64 ? r32 : PRH;
+assign PQ31 = mode64 ? q32 : PQH;
 
 // Двунаправленная шина У (УС, YN, YV, YZ) соединена через ШФ со
 // входной шиной D ЦП для выдачи информации из СУСС, и с выходной
