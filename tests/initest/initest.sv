@@ -54,8 +54,11 @@ initial begin
     $display("--------------------------------");
 
     // Dump waveforms.
-    $dumpfile("output.vcd");
-    $dumpvars();
+    // Dump waveforms.
+    if ($test$plusargs("dump")) begin
+        $dumpfile("output.vcd");
+        $dumpvars();
+    end
 
     // Enable detailed instruction trace to file.
     trace = 2;
