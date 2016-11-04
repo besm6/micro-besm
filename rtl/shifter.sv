@@ -25,27 +25,29 @@ always_comb
     if (right)
         case (op)                           // Right shift
 
-        0: out = {in, in} >> n[5:0];        // cyclic shift
+         0: out = {in, in} >> n[5:0];       // cyclic shift
 
-        1: out = in >> n;                   // logical shift
+         1: out = in >> n;                  // logical shift
 
-        2: out = n < 64 ?                   // arithmetic shift
+         2: out = n < 64 ?                  // arithmetic shift
                     {{64{in[63]}}, in} >> n :
                     {64{in[63]}};
 
-/*TODO*/3: out = in >> n;                   // conversion to BESM-6 format
-
+         3: begin                           // conversion to BESM-6 format
+                out = in >> n;
+                out = {in[63], {4{~in[63]}}, out[58:0]};
+            end
         endcase
     else
         case (op)                           // Left shift
 
-        0: out = {in, in} << n[5:0] >> 64;  // cyclic shift
+         0: out = {in, in} << n[5:0] >> 64; // cyclic shift
 
-        1: out = in << n;                   // logical shift
+         1: out = in << n;                  // logical shift
 
-        2: out = {in[63], in[62:0] << n};   // arithmetic shift
+         2: out = {in[63], in[62:0] << n};  // arithmetic shift
 
-/*TODO*/3: out = in << n;                   // conversion to BESM-6 format
+         3: out = in << n;                  // not used
 
         endcase
 endmodule
