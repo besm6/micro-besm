@@ -149,7 +149,7 @@ wire  [1:0] MNSA  = opcode[62:61];   // Адрес источника номер
 wire  [4:0] MODNM = opcode[60:56];   // Номер модификатора в группе регистров
 wire  [3:0] DSRC  = opcode[55:52];   // Управление источниками информации на шину D
 wire  [3:0] YDST  = opcode[51:48];   // Управление приемниками информации с шины Y ЦП
-wire  [1:0] SHF   = opcode[47:46];   // Код операции сдвигателя
+wire  [1:0] sh_op = opcode[47:46];   // Код операции сдвигателя: CYCL, LOG, ARIPH или EMULF
 wire  [3:0] ARBI  = opcode[45:42];   // Код операции арбитра общей шины
 wire        RLD   = opcode[41];      // Загрузка регистра селектора адреса СУАМ и ШФ шин Y ЦП и D СУАМ
 wire        LETC  = opcode[40];      // Прохождение признака ПИА на вход ПНА команд
@@ -336,7 +336,7 @@ assign ss_Y = Y[9:6];           // status bits: Z N C V
 //
 wire [6:0] sh_param = (PSHF == 64) ? (PSHIFT ^ 7'h40) : PSHF;
 
-shifter sh(Y, sh_param, sh_out);
+shifter sh(Y, sh_param, sh_op, sh_out);
 
 always @(posedge clk)
     if (YDST == 9)
