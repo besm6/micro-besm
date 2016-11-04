@@ -10,6 +10,7 @@ module shifter(
     input  wire   [1:0] op,         // shift mode
     output logic [63:0] out         // output data
 );
+timeunit 1ns / 10ps;
 
 wire right =
     (param == 64) ? wide_param[10]

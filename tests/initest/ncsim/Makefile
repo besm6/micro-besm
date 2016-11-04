@@ -10,6 +10,8 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/am2910.sv \
                   ../../../rtl/k1802bb1.sv \
                   ../../../rtl/decoder.sv \
+                  ../../../rtl/arbiter.sv \
+                  ../../../rtl/shifter.sv \
                   ../../cpu/tracer.sv \
                   ../initest.sv
 

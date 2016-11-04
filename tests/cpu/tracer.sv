@@ -189,24 +189,22 @@ task print_uop(
         0: "-",     1: "MODGN", 2: "PROCN", 3: "CNT",
         4: "PHYSPG",5: "ARBOPC",6: "MULRZ1",7: "MULRZ2",
         8: "COMA",  9: "SHIFT", 10: "OPC",  11: "LOS",
-        12: "PROM",             14: "RT",   15: "WT",
-        default: "???"
+        12: "PROM", 13:"13",    14: "RT",   15: "WT"
     };
     static string ydst_name[16] = '{
         0: "-",     1: "MODGN", 2: "PROCN", 3: "CNT",
         4: "PHYSPG",5: "ARBOPC",6: "MUL1",  7: "MUL2",
         8: "ADRREG",9: "PSHIFT",10:"CCLR",  11:"BTRCLR",
-        default: "???"
+        12:"12",    13:"13",    14:"14",    15:"15"
     };
     static string shf_name[4] = '{
         0: "CYCL",  1: "LOG",   2: "ARIPH", 3: "EMULF"
     };
     static string arbi_name[16] = '{
         0: "-",     1: "CCRD",  2: "CCWR",  3: "DCRD",
-        4: "DCWR",
+        4: "DCWR",  5: "5",     6: "6",     7: "7",
         8: "FETCH", 9: "DRD",   10:"DWR",   11:"RDMWR",
-        12:"BTRWR", 13:"BTRRD", 14:"BICLR", 15:"BIRD",
-        default: "???"
+        12:"BTRWR", 13:"BTRRD", 14:"BICLR", 15:"BIRD"
     };
     static string bra_name[4] = '{
         0: "RG0",   1: "RG1",   2: "RG2",   3: "-"
@@ -221,14 +219,13 @@ task print_uop(
     };
     static string ffcnt_name[32] = '{
         0: "-",     1: "LOGGRP",2: "MULGRP",3: "ADDGRP",
-                    5: "SETC",  6: "CLRRCB",7: "SETRCB",
+        4: "4",     5: "SETC",  6: "CLRRCB",7: "SETRCB",
         8: "CLRJMP",9: "SETJMP",10:"SETEI", 11:"CLREI",
         12:"CLRTR0",13:"SETTR0",14:"CLRTR1",15:"SETTR1",
         16:"CLRCT", 17:"CLRCTT",18:"CLRTKK",19:"SETTKK",
         20:"SETNR", 21:"STRTLD",22:"SETER", 23:"CHTKK",
         24:"SETHLT",25:"CLRINT",26:"CLRRUN",27:"RDMPCP",
-        28:"LDMPCP",29:"LDCPMP",30:"PRGINT",31:"EXTINT",
-        default: "???"
+        28:"LDMPCP",29:"LDCPMP",30:"PRGINT",31:"EXTINT"
     };
     static string mpadr_name[16] = '{
         0: "INFB1", 1: "INFB2", 2: "FCP",   3: "FMP",
