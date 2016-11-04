@@ -10,6 +10,8 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/am2910.sv \
                   ../../../rtl/k1802bb1.sv \
                   ../../../rtl/decoder.sv \
+                  ../../../rtl/arbiter.sv \
+                  ../../../rtl/shifter.sv \
                   ../../cpu/tracer.sv \
                   ../initest.sv
 
@@ -28,4 +30,4 @@ run:            simv
 		./simv +limit=200000 2>&1 | tee run.log
 
 view:
-		gtkwave simv.vcd databus.gtkw
+		gtkwave output.vcd test.gtkw &

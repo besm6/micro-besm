@@ -33,23 +33,16 @@ logic [3:0] ram[15:0];
 logic [3:0] re, s;
 logic [3:0] a, b, q, f;
 
-`ifdef TODO
-// According to datasheet, A and B outputs should have a latch:
-always @(clk, Aadd)
+// According to datasheet, A and B outputs have a latch
+always @(*)
     if (clk == 1)
         a = ram[Aadd];
 
-always @(clk, Badd)
+always @(*)
     if (clk == 1)
         b = ram[Badd];
-`else
-// Simplified variant
-assign a = ram[Aadd];
-assign b = ram[Badd];
-`endif
 
 // Select the source operands for ALU. Selected operands are "re" and "s".
-
 always_comb case (I[2:0])
   'b000,
   'b001: re = a;

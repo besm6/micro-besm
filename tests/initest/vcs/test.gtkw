@@ -1,0 +1,61 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Fri Nov  4 19:50:58 2016
+[*]
+[dumpfile] "/home/sergev/Project/micro-besm/tests/initest/vcs/output.vcd"
+[dumpfile_mtime] "Fri Nov  4 19:50:27 2016"
+[dumpfile_size] 22372499
+[savefile] "/home/sergev/Project/micro-besm/tests/initest/vcs/test.gtkw"
+[timestart] 12680000
+[size] 1000 704
+[pos] -12 -1
+*-13.927478 12694930 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testbench.
+[treeopen] testbench.cpu.
+[treeopen] testbench.cpu.alu.
+[sst_width] 235
+[signals_width] 151
+[sst_expanded] 1
+[sst_vpaned_height] 197
+@28
+testbench.clk
+testbench.reset
+@22
+testbench.cpu.control_D[11:0]
+testbench.cpu.A[11:0]
+testbench.cpu.alu_D[63:0]
+testbench.cpu.alu_Y[63:0]
+@28
+testbench.cpu.ICC
+@22
+testbench.tr.pc_f[11:0]
+testbench.cpu.control_I[3:0]
+testbench.cpu.control.uPC[11:0]
+testbench.cpu.control.Y[11:0]
+@200
+-
+@22
+testbench.cpu.alu.A[3:0]
+testbench.cpu.alu.B[3:0]
+@28
+testbench.cpu.alu.C
+testbench.cpu.alu.CT
+testbench.cpu.alu.Cin
+@22
+testbench.cpu.alu.D[63:0]
+testbench.cpu.alu.Ialu[8:0]
+testbench.cpu.alu.Ihi[8:0]
+testbench.cpu.alu.Iss[12:0]
+@200
+-
+@22
+testbench.cpu.alu.p3_0.I[8:0]
+testbench.cpu.alu.p3_0.Y[3:0]
+testbench.cpu.alu.p3_0.result[4:0]
+testbench.cpu.alu.p3_0.R_ext[4:0]
+testbench.cpu.alu.p3_0.S_ext[4:0]
+testbench.cpu.alu.p3_0.s[3:0]
+testbench.cpu.alu.p3_0.a[3:0]
+testbench.cpu.alu.p3_0.Aadd[3:0]
+[pattern_trace] 1
+[pattern_trace] 0

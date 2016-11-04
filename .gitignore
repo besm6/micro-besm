@@ -15,3 +15,7 @@ xsim.dir
 tests/*/gen-test-vectors
 tests/*/modelsim/work/
 tests/*/vhdl/modelsim/work/
+tests/*/vcs/csrc/
+tests/*/vcs/simv
+tests/*/vcs/simv.daidir/
+tests/*/vcs/ucli.key

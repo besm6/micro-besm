@@ -620,7 +620,7 @@ task print_changed_cpu(
     static logic  [9:0] old_physpg;
     static logic  [3:0] old_arbopc;
     static logic [31:0] old_ureg;
-    static logic  [6:0] old_pshift;
+    static logic [10:0] old_pshift;
     static logic [31:0] old_rr;
     static logic [31:0] old_irmem[1024];
     static logic  [7:0] old_mpmem[16];
