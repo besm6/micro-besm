@@ -635,7 +635,7 @@ task print_changed_cpu(
     automatic logic  [9:0] physpg = cpu.PHYSPG;
     automatic logic  [3:0] arbopc = cpu.arb_req;
     automatic logic [31:0] ureg   = cpu.UREG;
-    automatic logic  [6:0] pshift = cpu.PSHIFT;
+    automatic logic [10:0] pshift = cpu.PSHIFT;
     automatic logic [31:0] rr     = cpu.RR;
     automatic logic        stopm0 = cpu.stopm0;
     automatic logic        stopm1 = cpu.stopm1;
