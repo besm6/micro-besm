@@ -34,13 +34,13 @@ logic [3:0] re, s;
 logic [3:0] a, b, q, f;
 
 // According to datasheet, A and B outputs have a latch
-always @(*)
+always_latch
     if (clk == 1)
-        a = ram[Aadd];
+        a <= ram[Aadd];
 
-always @(*)
+always_latch
     if (clk == 1)
-        b = ram[Badd];
+        b <= ram[Badd];
 
 // Select the source operands for ALU. Selected operands are "re" and "s".
 always_comb case (I[2:0])

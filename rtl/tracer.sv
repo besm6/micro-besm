@@ -321,7 +321,7 @@ task print_uop(
     assign COND  = opcode[6:2];     // Выбор условия, подлежащего проверке
     assign MPS   = opcode[1];       // Выбор источника параметра сдвига
 
-    $fwrite(fd, "(%0d) %h: %4s", ctime, pc, sqi_name[SQI]);
+    $fwrite(fd, "(%0d) %h: %s", ctime, pc, sqi_name[SQI]);
 
     if (A != 0) $fwrite(fd, " %h", A);
     else        $fwrite(fd, "    ");

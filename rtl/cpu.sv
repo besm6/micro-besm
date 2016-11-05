@@ -374,7 +374,7 @@ assign o_tag  = bus_oDX[71:64];
 extbus busio(
     bus_DA, bus_oDA,                    // A data bus
     bus_DB, bus_oDB,                    // B data bus
-    '0,     bus_oDC,                    // C data bus
+    72'b00, bus_oDC,                    // C data bus
     bus_DX, bus_oDX,                    // X data bus
     ARA, BRA,          2'b01, bus_ARX,  // address inputs
     ECA, ECB, bus_ECBTAG, '1, bus_ECX,  // port enable
