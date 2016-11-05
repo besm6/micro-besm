@@ -623,7 +623,7 @@ task print_changed_cpu(
     static logic [31:0] old_ureg;
     static logic [10:0] old_pshift;
     static logic [31:0] old_rr;
-    static logic [31:0] old_irmem[1024];
+    static logic [31:0] old_mrmem[1024];
     static logic  [7:0] old_mpmem[16];
     static logic [19:0] old_psmem[1024];
     static logic        old_stopm0, old_stopm1;
@@ -661,10 +661,10 @@ task print_changed_cpu(
     if (csm & wem) begin
         int i;
         for (i=old_modgn*32; i<old_modgn*32+32; i+=1)
-            if (cpu.irmem[i] !== old_irmem[i]) begin
+            if (cpu.mr_mem[i] !== old_mrmem[i]) begin
                 $fdisplay(fd, "(%0d)               Write %0s[%0d] = %h",
-                    ctime, ir_name[i[4:0]], i[9:5], cpu.irmem[i]);
-                old_irmem[i] = cpu.irmem[i];
+                    ctime, ir_name[i[4:0]], i[9:5], cpu.mr_mem[i]);
+                old_mrmem[i] = cpu.mr_mem[i];
             end
     end
 

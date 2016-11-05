@@ -268,7 +268,8 @@ assign PROM = const_ROM[A[8:0]];
 // Modifier memory.
 //
 logic [3:0] instr_reg;          // поле модификатора команды
-logic [31:0] irmem[1024];       // память регистров-модификаторов
+logic [31:0] mr_mem[1024];      // память регистров-модификаторов
+logic [31:0] mr_read;           // read from mr_mem[]
 logic [4:0] mn;                 // номер модификатора
 
 assign mn =
@@ -277,9 +278,19 @@ assign mn =
     (MNSA == 3) ? ~MODNM :      // MP, поле MODNM микрокоманды
                   '0;           // не используется
 
+assign mr_read =                // read modifier memory
+    (mn[4] & MNSA!=3 & !MOD)
+        ? '0                    // need MOD to access M[16:31]
+        : mr_mem[{modgn, mn}];
+
 always @(posedge clk)
     if (CSM & WEM) begin
-        irmem[{modgn, mn}] <= Y[31:0];
+        if (mn == 0 & MNSA != 3)
+            ;                   // cannot write to M0 from UREG
+        else if (mn[4] & MNSA != 3 & !MOD)
+            ;                   // need MOD to write to M[16:32], no UREG
+        else
+            mr_mem[{modgn, mn}] <= Y[31:0];
     end
 
 //--------------------------------------------------------------
@@ -308,7 +319,7 @@ assign alu_D =
     (DSRC == 11) ? clz_out :            // LOS, результат поиска левой единицы
     (DSRC == 12) ? PROM :               // ПЗУ констант
     (DDEV == 5)  ? {ss_oY, 6'd0} :      // STATUS, Y bus output from Status/Shift
-    (CSM & !WEM) ? irmem[{modgn, mn}] : // регистр-модификатор
+    (CSM & !WEM) ? mr_read :            // регистр-модификатор
                    instr_addr;          // источник не указан: адресная часть команды?
 
 assign Y =
