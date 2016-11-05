@@ -12,7 +12,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/decoder.sv \
                   ../../../rtl/arbiter.sv \
                   ../../../rtl/shifter.sv \
-                  ../../cpu/tracer.sv \
+                  ../../../rtl/tracer.sv \
                   ../initest.sv
 
 VCS             = vcs -l vcs.log -sverilog -debug_all

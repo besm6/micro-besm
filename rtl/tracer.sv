@@ -3,6 +3,10 @@
 //
 // Trace monitor.
 //
+// This is not a synthesizable code, but a part of verification testbench.
+// The main role of tracer is to observe the behavior of the processor
+// and print the trace log to a file.
+//
 module tracer();
 
 timeunit 1ns / 10ps;
@@ -30,25 +34,20 @@ logic [112:1] opcode_x;                 // Opcode at execute stage
 // Current time
 time ctime;
 
-initial begin
-    static bit old_reset = 0;
-    static logic [63:0] const_value;    // Constant value
-    static logic [8:0] const_addr;      // Constant address
+bit old_reset = 0;                      // Previous state of reset
+logic [63:0] const_value;               // Constant value
+logic [8:0] const_addr;                 // Constant address
 
-    // Wait until trace file opened
-    wait(fd);
+// Get time at the rising edge of the clock.
+always @(posedge clk) begin
+    ctime = $time;
+    pc_f = cpu.control_Y;
+end
 
-    forever begin
-        // Wait for instruction, valid on leading edge of clk
-        wait(clk);
-
-        // Get time
-        ctime = $time;
-        pc_f = cpu.control_Y;
-
-        // Wait until everything is stable
-        wait(!clk);
-
+// At negative clock edge, when all the signals are quiet,
+// print the state of the processor.
+always @(negedge clk)
+    if (fd) begin
         if (reset) begin
             if (!old_reset) begin               // Reset
                 $fdisplay(fd, "(%0d) *** Reset", ctime);
@@ -101,7 +100,6 @@ initial begin
         const_value = cpu.PROM;
         const_addr = cpu.A[8:0];
     end
-end
 
 //
 // Print micro-instruction.
