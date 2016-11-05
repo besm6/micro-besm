@@ -142,8 +142,10 @@ localparam LABEL_PSLO23 = 1;
 localparam LABEL_PSLO24 = 9;
 localparam LABEL_CLO24  = 12;
 localparam LABEL_CLO25  = 28;
+localparam LABEL_PSMOD1 = 44;
 localparam LABEL_CMOD2  = 57;
 localparam LABEL_CMOD3  = 68;
+localparam LABEL_PSMOD4 = 76;
 localparam LABEL_CMODA  = 116;
 localparam LABEL_CMODB  = 125;
 localparam LABEL_CMODC  = 134;
@@ -250,8 +252,10 @@ initial begin
         //
         // РНГ + память модификаторов
         //
+        check_jump(LABEL_PSMOD1-1, LABEL_PSMOD1, LABEL_CMOD2-4, "Skip test CMOD1");
         check_pass(LABEL_CMOD2,  "Test CMOD2 pass");
         check_pass(LABEL_CMOD3,  "Test CMOD3 pass");
+        check_jump(LABEL_PSMOD4-1, LABEL_PSMOD4, LABEL_CMODA-4, "Skip tests CMOD4-CMOD8");
         check_pass(LABEL_CMODA,  "Test CMODA pass");
         check_pass(LABEL_CMODB,  "Test CMODB pass");
         check_pass(LABEL_CMODC,  "Test CMODC pass");
@@ -270,6 +274,7 @@ initial begin
         check_pass(LABEL_CMOD1E, "Test CMOD1E pass");
         check_pass(LABEL_CADR2,  "Test CADR2 pass");
         check_pass(LABEL_CADR3,  "Test CADR3 pass");
+//        check_jump(LABEL_PSMOD4-1, LABEL_PSMOD4, LABEL_CMODA-4, "Skip tests CMOD4-CMOD8");
         check_pass(LABEL_CADR5,  "Test CADR5 pass");
         check_pass(LABEL_CADR6,  "Test CADR6 pass");
         check_pass(LABEL_CADR8,  "Test CADR8 pass");
