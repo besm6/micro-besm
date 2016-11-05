@@ -11,7 +11,8 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/k1802bb1.sv \
                   ../../../rtl/decoder.sv \
                   ../../../rtl/arbiter.sv \
-                  ../tracer.sv \
+                  ../../../rtl/shifter.sv \
+                  ../../../rtl/tracer.sv \
 		  ../test_cpu.sv
 
 # Altera Quartus toolchain

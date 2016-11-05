@@ -10,7 +10,9 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/am2910.sv \
                   ../../../rtl/k1802bb1.sv \
                   ../../../rtl/decoder.sv \
-                  ../tracer.sv \
+                  ../../../rtl/arbiter.sv \
+                  ../../../rtl/shifter.sv \
+                  ../../../rtl/tracer.sv \
                   ../test_cpu.sv
 
 # Xilinx Vivado toolchain

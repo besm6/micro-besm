@@ -58,12 +58,6 @@ always @(negedge clk)
                 $fdisplay(fd, "(%0d) *** Clear reset", ctime);
                 old_reset = 0;
             end
-            if ($isunknown(cpu.opcode)) begin
-                $fdisplay(fd, "(%0d) *** Unknown state: cpu.opcode=%h", ctime, cpu.opcode);
-                $display("\n----- Fatal Error! -----");
-                $fdisplay(fd, "\n----- Fatal Error! -----");
-                $finish(1);
-            end
         end
 
         if (testbench.trace > 1 /*&& !$isunknown(pc_x)*/) begin
@@ -92,6 +86,13 @@ always @(negedge clk)
             // Print changed busio state _last_,
             // as it actually comes from the _next_ microinstruction.
             print_changed_bb1();
+        end
+
+        if (!reset && $isunknown(cpu.opcode)) begin
+            $fdisplay(fd, "(%0d) *** Unknown state: cpu.opcode=%h", ctime, cpu.opcode);
+            $display("\n----- Fatal Error! -----");
+            $fdisplay(fd, "\n----- Fatal Error! -----");
+            $finish(1);
         end
 
         // Get data from fetch stage

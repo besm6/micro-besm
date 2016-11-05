@@ -58,7 +58,6 @@ initial begin
     $display("--------------------------------");
 
     // Dump waveforms.
-    // Dump waveforms.
     if ($test$plusargs("dump")) begin
         $dumpfile("output.vcd");
         $dumpvars();

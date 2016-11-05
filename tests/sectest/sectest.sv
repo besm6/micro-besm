@@ -58,7 +58,6 @@ initial begin
     $display("--------------------------------");
 
     // Dump waveforms.
-    // Dump waveforms.
     if ($test$plusargs("dump")) begin
         $dumpfile("output.vcd");
         $dumpvars();
@@ -244,7 +243,7 @@ initial begin
         //
         // Skip CLO23 test
         //
-        check_jump(LABEL_PSLO23-1, LABEL_PSLO23, LABEL_PSLO24, "Skip test CLO23");
+        check_jump(LABEL_PSLO23-1, LABEL_PSLO23, LABEL_PSLO24-1, "Skip test CLO23");
 
         //
         // Big test
