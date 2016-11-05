@@ -1,5 +1,9 @@
 `default_nettype none
 
+//
+// Run initest.
+// See initest.src for sources.
+//
 module testbench();
 
 // Global time parameters.
