@@ -241,15 +241,15 @@ initial begin
         end
 
         //
-        // Skip CLO23 test
+        // Поиск левой единицы
         //
         check_jump(LABEL_PSLO23-1, LABEL_PSLO23, LABEL_PSLO24-1, "Skip test CLO23");
-
-        //
-        // Big test
-        //
         check_pass(LABEL_CLO24,  "Test CLO24 pass");
         check_pass(LABEL_CLO25,  "Test CLO25 pass");
+
+        //
+        // РНГ + память модификаторов
+        //
         check_pass(LABEL_CMOD2,  "Test CMOD2 pass");
         check_pass(LABEL_CMOD3,  "Test CMOD3 pass");
         check_pass(LABEL_CMODA,  "Test CMODA pass");

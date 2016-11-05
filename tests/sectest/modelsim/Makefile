@@ -12,6 +12,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/decoder.sv \
                   ../../../rtl/arbiter.sv \
                   ../../../rtl/shifter.sv \
+                  ../../../rtl/clz.sv \
                   ../../../rtl/tracer.sv \
 		  ../sectest.sv
 
@@ -32,7 +33,7 @@ work:           $(SOURCES) $(INCLUDES)
 		$(MODELSIM)/vlog -sv -nologo $(SOURCES)
 
 run:            work
-		$(MODELSIM)/vsim -c -l run.log -do 'run 1000us;quit' testbench +limit=200000
+		$(MODELSIM)/vsim -c -l run.log -do 'run 1000us;quit' testbench +limit=100000
 
 view:
 		gtkwave output.vcd test.gtkw &

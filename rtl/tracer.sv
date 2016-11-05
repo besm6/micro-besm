@@ -385,7 +385,7 @@ task print_uop(
     //
     // Some features not implemented yet
     //
-    if (DSRC==10 || DSRC==11)
+    if (DSRC==10)
         $fdisplay(fd, "(%0d) *** dsrc=%0s not implemented yet!",
             ctime, dsrc_name[DSRC]);
     if (!IOMP && (FFCNT == 16 || FFCNT == 17 || FFCNT == 21 || FFCNT == 24 ||
