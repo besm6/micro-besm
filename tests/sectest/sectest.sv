@@ -162,32 +162,40 @@ localparam LABEL_MC18   = 407;
 localparam LABEL_CMOD1A = 418;
 localparam LABEL_CMOD1C = 427;
 localparam LABEL_CMOD1E = 450;
+localparam LABEL_PSADR1 = 471;
 localparam LABEL_CADR2  = 480;
 localparam LABEL_CADR3  = 490;
+localparam LABEL_PSADR4 = 497;
 localparam LABEL_CADR5  = 509;
 localparam LABEL_CADR6  = 519;
+localparam LABEL_PSADR7 = 526;
 localparam LABEL_CADR8  = 538;
 localparam LABEL_CADR9  = 547;
+localparam LABEL_PSADRA = 554;
 localparam LABEL_CADRB  = 568;
 localparam LABEL_CADRC  = 582;
 localparam LABEL_CADRD  = 604;
 localparam LABEL_CADRE  = 619;
 localparam LABEL_CADRF  = 634;
+localparam LABEL_PSAD10 = 645;
 localparam LABEL_CADR11 = 659;
 localparam LABEL_CADR12 = 672;
 localparam LABEL_CADR13 = 694;
 localparam LABEL_CADR14 = 709;
 localparam LABEL_CADR15 = 725;
+localparam LABEL_PSAD16 = 737;
 localparam LABEL_CADR17 = 751;
 localparam LABEL_CADR18 = 764;
 localparam LABEL_CADR19 = 786;
 localparam LABEL_CADR1A = 802;
 localparam LABEL_CADR1B = 818;
+localparam LABEL_PSAD1C = 830;
 localparam LABEL_CADR1D = 844;
 localparam LABEL_CADR1E = 858;
 localparam LABEL_CADR1F = 880;
 localparam LABEL_CADR20 = 895;
 localparam LABEL_CADR21 = 910;
+localparam LABEL_PSAD22 = 921;
 localparam LABEL_CADR22 = 923;
 localparam LABEL_CADR23 = 935;
 localparam LABEL_CADR24 = 949;
@@ -196,11 +204,15 @@ localparam LABEL_CADR26 = 986;
 localparam LABEL_CADR27 = 1001;
 localparam LABEL_CAD2C  = 1014;
 localparam LABEL_CAD2D  = 1042;
+localparam LABEL_PSTAG1 = 1075;
 localparam LABEL_CTAG3  = 1102;
 localparam LABEL_CBOI4  = 1123;
 localparam LABEL_CBOI5  = 1147;
+localparam LABEL_CONTA1 = 1165;
 localparam LABEL_CA2    = 1174;
 localparam LABEL_CA3    = 1184;
+localparam LABEL_CONT1  = 1191;
+localparam LABEL_CONTA  = 1287;
 localparam LABEL_CICLA  = 1296;
 localparam LABEL_CKLB   = 1309;
 localparam LABEL_CKLC   = 1358;
@@ -245,17 +257,17 @@ initial begin
         //
         // Поиск левой единицы
         //
-        check_jump(LABEL_PSLO23-1, LABEL_PSLO23, LABEL_PSLO24-1, "Skip test CLO23");
+        check_jump(LABEL_PSLO23-1, LABEL_PSLO23, LABEL_PSLO24-1, "Skip CLO23");
         check_pass(LABEL_CLO24,  "Test CLO24 pass");
         check_pass(LABEL_CLO25,  "Test CLO25 pass");
 
         //
-        // РНГ + память модификаторов
+        // Регистр номера группы (РНГ) и память модификаторов
         //
-        check_jump(LABEL_PSMOD1-1, LABEL_PSMOD1, LABEL_CMOD2-4, "Skip test CMOD1");
+        check_jump(LABEL_PSMOD1-1, LABEL_PSMOD1, LABEL_CMOD2-4, "Skip CMOD1");
         check_pass(LABEL_CMOD2,  "Test CMOD2 pass");
         check_pass(LABEL_CMOD3,  "Test CMOD3 pass");
-        check_jump(LABEL_PSMOD4-1, LABEL_PSMOD4, LABEL_CMODA-4, "Skip tests CMOD4-CMOD8");
+        check_jump(LABEL_PSMOD4-1, LABEL_PSMOD4, LABEL_CMODA-4, "Skip CMOD4-CMOD8");
         check_pass(LABEL_CMODA,  "Test CMODA pass");
         check_pass(LABEL_CMODB,  "Test CMODB pass");
         check_pass(LABEL_CMODC,  "Test CMODC pass");
@@ -272,33 +284,72 @@ initial begin
         check_pass(LABEL_CMOD1A, "Test CMOD1A pass");
         check_pass(LABEL_CMOD1C, "Test CMOD1C pass");
         check_pass(LABEL_CMOD1E, "Test CMOD1E pass");
+
+        //
+        // Регистр номера процесса (РНП)
+        //
+        check_jump(LABEL_PSADR1-1, LABEL_PSADR1, LABEL_CADR2-4, "Skip CADR1");
         check_pass(LABEL_CADR2,  "Test CADR2 pass");
         check_pass(LABEL_CADR3,  "Test CADR3 pass");
-//        check_jump(LABEL_PSMOD4-1, LABEL_PSMOD4, LABEL_CMODA-4, "Skip tests CMOD4-CMOD8");
+
+        //
+        // Регистр исполнительного адреса
+        //
+        check_jump(LABEL_PSADR4-1, LABEL_PSADR4, LABEL_CADR5-4, "Skip CADR4");
         check_pass(LABEL_CADR5,  "Test CADR5 pass");
         check_pass(LABEL_CADR6,  "Test CADR6 pass");
+
+        //
+        // Регистр физической страницы (РФС)
+        //
+        check_jump(LABEL_PSADR7-1, LABEL_PSADR7, LABEL_CADR8-4, "Skip CADR7");
         check_pass(LABEL_CADR8,  "Test CADR8 pass");
         check_pass(LABEL_CADR9,  "Test CADR9 pass");
+
+        //
+        // Регистры приписки
+        //
+        check_jump(LABEL_PSADRA-1, LABEL_PSADRA, LABEL_CADRB-5, "Skip CADRA");
         check_pass(LABEL_CADRB,  "Test CADRB pass");
         check_pass(LABEL_CADRC,  "Test CADRC pass");
         check_pass(LABEL_CADRD,  "Test CADRD pass");
         check_pass(LABEL_CADRE,  "Test CADRE pass");
         check_pass(LABEL_CADRF,  "Test CADRF pass");
+
+        //
+        // БОБР, БИЗМ
+        //
+        check_jump(LABEL_PSAD10-1, LABEL_PSAD10, LABEL_CADR11-6, "Skip CADR10");
         check_pass(LABEL_CADR11, "Test CADR11 pass");
         check_pass(LABEL_CADR12, "Test CADR12 pass");
         check_pass(LABEL_CADR13, "Test CADR13 pass");
         check_pass(LABEL_CADR14, "Test CADR14 pass");
         check_pass(LABEL_CADR15, "Test CADR15 pass");
+
+        //
+        // БМСП
+        //
+        check_jump(LABEL_PSAD16-1, LABEL_PSAD16, LABEL_CADR17-6, "Skip CADR16");
         check_pass(LABEL_CADR17, "Test CADR17 pass");
         check_pass(LABEL_CADR18, "Test CADR18 pass");
         check_pass(LABEL_CADR19, "Test CADR19 pass");
         check_pass(LABEL_CADR1A, "Test CADR1A pass");
         check_pass(LABEL_CADR1B, "Test CADR1B pass");
+
+        //
+        // Память приоритетов страниц 0
+        //
+        check_jump(LABEL_PSAD1C-1, LABEL_PSAD1C, LABEL_CADR1D-5, "Skip CADR1C");
         check_pass(LABEL_CADR1D, "Test CADR1D pass");
         check_pass(LABEL_CADR1E, "Test CADR1E pass");
         check_pass(LABEL_CADR1F, "Test CADR1F pass");
         check_pass(LABEL_CADR20, "Test CADR20 pass");
         check_pass(LABEL_CADR21, "Test CADR21 pass");
+
+        //
+        // Память приоритетов страниц 1
+        //
+        check_jump(LABEL_PSAD22-1, LABEL_PSAD22, LABEL_CADR23-5, "Skip CADR22");
         check_pass(LABEL_CADR23, "Test CADR23 pass");
         check_pass(LABEL_CADR24, "Test CADR24 pass");
         check_pass(LABEL_CADR25, "Test CADR25 pass");
@@ -306,11 +357,26 @@ initial begin
         check_pass(LABEL_CADR27, "Test CADR27 pass");
         check_pass(LABEL_CAD2C,  "Test CAD2C pass");
         check_pass(LABEL_CAD2D,  "Test CAD2D pass");
+
+        //
+        // БОИ тега
+        //
+        check_jump(LABEL_PSTAG1-1, LABEL_PSTAG1, LABEL_CTAG3-6, "Skip CTAG1, CTAG2");
         check_pass(LABEL_CTAG3,  "Test CTAG3 pass");
         check_pass(LABEL_CBOI4,  "Test CBOI4 pass");
         check_pass(LABEL_CBOI5,  "Test CBOI5 pass");
+
+        //
+        // Регистр КОП арбитра
+        //
+        check_jump(LABEL_CONTA1-1, LABEL_CONTA1, LABEL_CA2-4, "Skip CARB1");
         check_pass(LABEL_CA2,    "Test CA2 pass");
         check_pass(LABEL_CA3,    "Test CA3 pass");
+
+        //
+        // Часы и таймер счетного времени
+        //
+        check_jump(LABEL_CONT1-1, LABEL_CONT1, LABEL_CONTA-1, "Skip STP1-CICL9");
         check_pass(LABEL_CICLA,  "Test CICLA pass");
         check_pass(LABEL_CKLB,   "Test CKLB pass");
         check_pass(LABEL_CKLC,   "Test CKLC pass");
