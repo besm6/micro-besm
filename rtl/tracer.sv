@@ -340,11 +340,14 @@ task print_uop(
     if (MOD   != 0)  $fwrite(fd, " MOD");
     if (DSRC  != 0)  $fwrite(fd, " dsrc=%0s", dsrc_name[DSRC]);
     if (DSRC  == 9)  $fwrite(fd, " shf=%0s", shf_name[SHF]);
+    if (CSM   != 0) begin
+                     $fwrite(fd, " CSM");
+    if (MNSA  != 2)  $fwrite(fd, " mnsa=%0s", mnsa_name[MNSA]);
+    if (MODNM != 0)  $fwrite(fd, " modnm=%0s", modnm_name[MODNM]);
+    end else
     if (DSRC  == 9 ||
         PSHF  != 64) $fwrite(fd, " pshf=%0d", int'(PSHF) - 64);
     if (YDST  != 0)  $fwrite(fd, " ydst=%0s", ydst_name[YDST]);
-    if (MNSA  != 2)  $fwrite(fd, " mnsa=%0s", mnsa_name[MNSA]);
-    if (MODNM != 0)  $fwrite(fd, " modnm=%0s", modnm_name[MODNM]);
     if (ARBI  != 0)  $fwrite(fd, " arbi=%0s", arbi_name[ARBI]);
     if (RLD   != 0)  $fwrite(fd, " RLD");
     if (LETC  != 0)  $fwrite(fd, " LETC");
@@ -354,7 +357,6 @@ task print_uop(
     if (ISE   != 0)  $fwrite(fd, " ISE");
     if (CEM   != 0)  $fwrite(fd, " CEM");
     if (CEN   != 0)  $fwrite(fd, " CEN");
-    if (CSM   != 0)  $fwrite(fd, " CSM");
     if (WEM   != 0)  $fwrite(fd, " WEM");
     if (ECB   != 0)  $fwrite(fd, " ECB");
     if (WRB   != 0)  $fwrite(fd, " WRB");
@@ -626,7 +628,7 @@ task print_changed_cpu(
     static logic [19:0] old_psmem[1024];
     static logic        old_stopm0, old_stopm1;
 
-    automatic logic [5:0] modgn  = cpu.MODGN;
+    automatic logic  [5:0] modgn  = cpu.modgn;
     automatic logic  [7:0] procn  = cpu.PROCN;
     automatic logic  [9:0] physpg = cpu.PHYSPG;
     automatic logic  [3:0] arbopc = cpu.arb_req;
@@ -660,7 +662,7 @@ task print_changed_cpu(
         int i;
         for (i=old_modgn*32; i<old_modgn*32+32; i+=1)
             if (cpu.irmem[i] !== old_irmem[i]) begin
-                $fdisplay(fd, "(%0d)               Write %0s[%d] = %h",
+                $fdisplay(fd, "(%0d)               Write %0s[%0d] = %h",
                     ctime, ir_name[i[4:0]], i[9:5], cpu.irmem[i]);
                 old_irmem[i] = cpu.irmem[i];
             end
