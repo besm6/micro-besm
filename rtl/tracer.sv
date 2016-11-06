@@ -395,7 +395,7 @@ task print_uop(
                   FFCNT == 29 || FFCNT == 30 || FFCNT == 31))
         $fdisplay(fd, "(%0d) *** ffcnt=%0s not implemented yet!",
             ctime, ffcnt_name[FFCNT]);
-    if (DDEV == 2 || DDEV == 6 || DDEV == 7)
+    if (DDEV == 6 || DDEV == 7)
         $fdisplay(fd, "(%0d) *** ddev=%0s not implemented yet!",
             ctime, ddev_name[DDEV]);
     if (YDEV == 2)
@@ -625,6 +625,7 @@ task print_changed_cpu(
     static logic [19:0] old_pgmap[1024];
     static logic        old_pginv[1024];
     static logic        old_pgro[1024];
+    static logic        old_pgrepri[1024];
     static logic        old_stopm0, old_stopm1;
 
     automatic logic  [5:0] modgn  = cpu.modgn;
@@ -707,6 +708,15 @@ task print_changed_cpu(
                 $fdisplay(fd, "(%0d)               Write PageRO[%0d] = %h",
                     ctime, i, cpu.pg_ro[i]);
                 old_pgro[i] = cpu.pg_ro[i];
+            end
+    end
+    if (wrd && ddev==3) begin
+        int i;
+        for (i=0; i<1024; i+=1)
+            if (cpu.pg_repri[i] !== old_pgrepri[i]) begin
+                $fdisplay(fd, "(%0d)               Write PageRepri[%0d] = %h",
+                    ctime, i, cpu.pg_repri[i]);
+                old_pgrepri[i] = cpu.pg_repri[i];
             end
     end
 endtask

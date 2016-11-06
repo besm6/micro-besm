@@ -57,7 +57,8 @@ logic [7:0] mpmem[16];
 // Память приписок страниц
 logic [19:0] pg_map[1024];
 logic        pg_inv[1024];      // БОБР, page invalid
-logic        pg_ro[1024];       // БИЗМ, read only
+logic        pg_ro[1024];       // БИЗМ, page is read only
+logic        pg_repri[1024];    // БМСП, reprioritize request
 logic  [2:0] pg_access;         // both for current page
 logic  [9:0] pg_index;          // РФС: регистр физической страницы
 
@@ -301,7 +302,7 @@ assign D =
 
     // DDEV mux
     (DDEV == 1)  ? pg_access :          // ВВ: БОБР, БИЗМ
-    (DDEV == 2)  ? `TODO :              // MODB: БМСП
+    (DDEV == 2)  ? pg_repri[pg_index] : // MODB: БМСП
     (DDEV == 5)  ? {ss_oY, 6'd0} :      // STATUS: Y bus output from Status/Shift
     (DDEV == 6)  ? `TODO :              // РРМЕМ0: ОЗУ приоритетов страниц 0
     (DDEV == 7)  ? `TODO :              // РРМЕМ1: ОЗУ приоритетов страниц 1
@@ -553,5 +554,11 @@ always @(posedge clk)
     end
 
 assign pg_access = { pg_ro[pg_index], pg_inv[pg_index], 1'b0 };
+
+// БМСП, бит модификации списка приоритетов
+always @(posedge clk)
+    if (WRD & DDEV == 2) begin
+        pg_repri[pg_index] <= D[0];
+    end
 
 endmodule
