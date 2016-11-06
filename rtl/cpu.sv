@@ -58,7 +58,7 @@ logic [7:0] mpmem[16];
 logic [19:0] pg_map[1024];
 logic        pg_inv[1024];      // БОБР, page invalid
 logic        pg_ro[1024];       // БИЗМ, read only
-logic        pg_access;         // both bor current page
+logic  [2:0] pg_access;         // both for current page
 logic  [9:0] pg_index;          // РФС: регистр физической страницы
 
 // Мультиплексор условий
@@ -300,7 +300,7 @@ assign D =
     (DSRC == 12) ? PROM :               // ПЗУ констант
 
     // DDEV mux
-    (DDEV == 1)  ? {pg_access, 1'b0} :  // ВВ: БОБР, БИЗМ
+    (DDEV == 1)  ? pg_access :          // ВВ: БОБР, БИЗМ
     (DDEV == 2)  ? `TODO :              // MODB: БМСП
     (DDEV == 5)  ? {ss_oY, 6'd0} :      // STATUS: Y bus output from Status/Shift
     (DDEV == 6)  ? `TODO :              // РРМЕМ0: ОЗУ приоритетов страниц 0
