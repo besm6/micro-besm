@@ -105,13 +105,10 @@ endtask
 // Print message when test passes the label.
 //
 task check_pass(input int label, input string msg);
-    logic  [3:0] sqi;
-    logic [11:0] a;
-    assign sqi = opcode_x[112:109];
-    assign a   = opcode_x[108:97];
-
     // Look for CONT operation with given address
-    if (sqi == 14 && a == label)
+    if (opcode_x[112:109] == 14 &&      // sqi: CONT
+        opcode_x[96:95]   == 0 &&       // map: PE
+        opcode_x[108:97]  == label)     // a: target address
         message(msg);
 endtask
 

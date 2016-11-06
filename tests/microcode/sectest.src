@@ -1329,7 +1329,7 @@ CJP А=PSADRD,МАР=РЕ
 PSADRD:CONT А=HD,%T%
 %S% А=INITST,МАР=РЕ
 ;ЧИТАЕМ CONST ИЗ ПЗУ
-CONT A=ZER,ALUS=DZ,H,ALUD=B,RB=A
+CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
 ;"0" - В РГ.РС, В АИСП.
 PUSH А=1023,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=РС,ALU,YDST=ADRREG
 ;ПИШЕМ "CONST" ИЗ РГ.А - В РП
