@@ -394,7 +394,7 @@ task print_uop(
     if (YDEV == 2)
         $fdisplay(fd, "(%0d) *** ydev=PHYSAD not implemented yet!", ctime);
 
-    if (!IOMP && (FFCNT == 16 || FFCNT == 17 || FFCNT == 21 || FFCNT == 24 ||
+    if (!IOMP && (FFCNT == 16 || FFCNT == 17 || FFCNT == 24 ||
                   FFCNT == 25 || FFCNT == 26 || FFCNT == 27 || FFCNT == 28 ||
                   FFCNT == 29 || FFCNT == 30 || FFCNT == 31))
         $fdisplay(fd, "(%0d) *** ffcnt=%0s not implemented yet!",
@@ -404,7 +404,6 @@ task print_uop(
          16: $fdisplay(fd, "(%0d) *** cond=RUN not implemented yet!", ctime);
          17: $fdisplay(fd, "(%0d) *** cond=NMLRDY not implemented yet!", ctime);
          19: $fdisplay(fd, "(%0d) *** cond=INT not implemented yet!", ctime);
-         20: $fdisplay(fd, "(%0d) *** cond=FULMEM not implemented yet!", ctime);
          23: $fdisplay(fd, "(%0d) *** cond=CPMP not implemented yet!", ctime);
     endcase
 endtask
@@ -645,6 +644,7 @@ task print_changed_cpu(
     automatic logic        wry    = opcode[17];
     automatic logic  [2:0] ddev   = opcode[16:14];
     automatic logic        wrd    = opcode[13];
+    automatic logic  [4:0] cond   = opcode[6:2];
 
     //
     // Internal registers
@@ -686,15 +686,14 @@ task print_changed_cpu(
     //
     // Page map
     //
-    if (wry && ydev==4) begin
+    if (cpu.pg_changed) begin
+        cpu.pg_changed = 0;
         for (int i=0; i<1024; i+=1)
             if (cpu.pg_map[i] !== old_pgmap[i]) begin
                 $fdisplay(fd, "(%0d)               Write Page[%0d] = %h",
                     ctime, i, cpu.pg_map[i]);
                 old_pgmap[i] = cpu.pg_map[i];
             end
-    end
-    if (wrd && ddev==1) begin
         for (int i=0; i<1024; i+=1)
             if (cpu.pg_inv[i] !== old_pginv[i]) begin
                 $fdisplay(fd, "(%0d)               Write PageInv[%0d] = %h",
@@ -707,24 +706,18 @@ task print_changed_cpu(
                     ctime, i, cpu.pg_ro[i]);
                 old_pgro[i] = cpu.pg_ro[i];
             end
-    end
-    if (wrd && ddev==3) begin
         for (int i=0; i<1024; i+=1)
             if (cpu.pg_reprio[i] !== old_pgreprio[i]) begin
                 $fdisplay(fd, "(%0d)               Write PageReprio[%0d] = %h",
                     ctime, i, cpu.pg_reprio[i]);
                 old_pgreprio[i] = cpu.pg_reprio[i];
             end
-    end
-    if (wrd && ddev==6) begin
         for (int i=0; i<1024; i+=1)
             if (cpu.pg_prio0[i] !== old_pgprio0[i]) begin
                 $fdisplay(fd, "(%0d)               Write PagePrio0[%0d] = %h",
                     ctime, i, cpu.pg_prio0[i]);
                 old_pgprio0[i] = cpu.pg_prio0[i];
             end
-    end
-    if (wrd && ddev==7) begin
         for (int i=0; i<1024; i+=1)
             if (cpu.pg_prio1[i] !== old_pgprio1[i]) begin
                 $fdisplay(fd, "(%0d)               Write PagePrio1[%0d] = %h",

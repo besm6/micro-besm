@@ -63,6 +63,9 @@ logic  [2:0] pg_access;         // both for current page
 logic  [9:0] pg_index;          // РФС: регистр физической страницы
 logic [11:0] pg_prio0[1024];    // page priority 0
 logic [11:0] pg_prio1[1024];    // page priority 1
+logic        pg_fill;           // fill pg_prio[] with 1s
+logic  [9:0] pg_fcnt;           // fill count
+logic        pg_changed;        // flag for tracer
 
 // Мультиплексор условий
 logic cond;
@@ -231,7 +234,7 @@ always_comb case (COND)
      15: cond = tkk;        // TKK, признак правой команды стандартизатора (TKK)
      16: cond = `TODO;      // RUN, "пуск" от ПП
      19: cond = `TODO;      // INT, признак наличия прерываний
-     20: cond = `TODO;      // FULMEM, память БМСП заполнена единицами
+     20: cond = ~pg_fill;   // FULMEM, память БМСП заполнена единицами
      21: cond = arb_rdy;    // ARBRDY, готовность арбитра
      22: cond = tr0;        // TR0, След0
      23: cond = `TODO;      // CPMP, память обмена "ЦП -> ПП" свободна
@@ -306,8 +309,8 @@ assign D =
     (DDEV == 1)  ? pg_access :          // ВВ: БОБР, БИЗМ
     (DDEV == 2)  ? pg_reprio[pg_index] : // MODB: БМСП
     (DDEV == 5)  ? {ss_oY, 6'd0} :      // STATUS: Y bus output from Status/Shift
-    (DDEV == 6)  ? pg_prio0[pg_index] : // PPMEM0: ОЗУ приоритетов страниц 0
-    (DDEV == 7)  ? pg_prio1[pg_index] : // PPMEM1: ОЗУ приоритетов страниц 1
+    (DDEV == 6)  ? pg_prio0[pg_index] : // PPMEM0: память приоритетов страниц 0
+    (DDEV == 7)  ? pg_prio1[pg_index] : // PPMEM1: память приоритетов страниц 1
 
     // Others
     (CSM & !WEM) ? mr_read :            // регистр-модификатор
@@ -338,10 +341,13 @@ always @(posedge clk)
 always @(posedge clk)
     if (WRY)
         case (YDEV)
-        4: pg_map[UREG[19:10]] <= Y[19:0];  // PSMEM, память приписок (CS)
-        5: mpmem[MPADR] <= Y[7:0];          // МРМЕМ, память обмена с ПП
-        6: stopm0 <= Y[0];                  // STOPM0, флаг останова 0
-        7: stopm1 <= Y[0];                  // STOPM1, флаг останова 1
+         4: begin                   // PSMEM, память приписок (CS)
+                pg_map[UREG[19:10]] <= Y[19:0];
+                pg_changed <= 1;
+            end
+         5: mpmem[MPADR] <= Y[7:0]; // МРМЕМ, память обмена с ПП
+         6: stopm0 <= Y[0];         // STOPM0, флаг останова 0
+         7: stopm1 <= Y[0];         // STOPM1, флаг останова 1
         endcase
 
 assign CCLR = (YDST == 10);     // запуск сброса кэша
@@ -518,15 +524,18 @@ always @(posedge clk)
     18: tkk <= '0;          // CLRTKK, сброс триггера коммутации команд - ТКК (ППК стандартизатора)
     19: tkk <= '1;          // SЕТТКК, установка ТКК
     20: besm6_mode <= '0;   // SETNR, установка НР
-    21: /*TODO <= '1*/;     // STRTLD, запуск загрузки ОЗУ БМСП единицами
+    21: begin               // STRTLD, запуск загрузки памяти БМСП единицами
+            pg_fill <= '1;
+            pg_fcnt <= pg_index;
+        end
     22: besm6_mode <= '1;   // SETER, установка РЭ
     23: tkk <= ~tkk;        // СНТКК, переброс ТКК (работает в счетном режиме!)
     24: /*TODO <= '1*/;     // SETHLT, установка триггера "Останов" (Halt)
     25: /*TODO <= '0*/;     // CLRINT, сброс прерываний (кроме прерываний от таймеров)
     26: /*TODO <= '0*/;     // CLRRUN, сброс триггера "Пуск"
-    27: /*TODO <= '1*/;     // RDMPCP, установка признака "ОЗУ обмена ПП -> ЦП прочитано"
-    28: /*TODO <= '1*/;     // LDMPCP, установка признака "в ОЗУ обмена ПП -> ЦП есть информация"
-    29: /*TODO <= '1*/;     // LDCPMP, установка признака "в ОЗУ обмена ЦП -> ПП есть информация"
+    27: /*TODO <= '1*/;     // RDMPCP, установка признака "память обмена ПП -> ЦП прочитана"
+    28: /*TODO <= '1*/;     // LDMPCP, установка признака "в памяти обмена ПП -> ЦП есть информация"
+    29: /*TODO <= '1*/;     // LDCPMP, установка признака "в памяти обмена ЦП -> ПП есть информация"
     30: /*TODO <= '1*/;     // PRGINT, установка программного прерывания с номером 31
     31: /*TODO <= '1*/;     // EXTINT, установка внешнего прерывания на магистраль
     endcase
@@ -553,23 +562,36 @@ always @(posedge clk)
     if (WRD & DDEV == 1) begin
         pg_inv[pg_index] <= D[1];
         pg_ro[pg_index] <= D[2];
+        pg_changed <= 1;
     end
 
 assign pg_access = { pg_ro[pg_index], pg_inv[pg_index], 1'b0 };
 
 // БМСП, бит модификации списка приоритетов
 always @(posedge clk)
-    if (WRD & DDEV == 2) begin
+    if (reset)
+        pg_fill <= 0;
+    else if (pg_fill) begin     // Заполнение памяти БМСП единицами
+        pg_reprio[pg_fcnt] <= 1;
+        if (pg_fcnt[9:0] == 1023)
+            pg_fill <= 0;
+        else;
+            pg_fcnt <= pg_fcnt + 1;
+        pg_changed <= 1;
+    end else if (WRD & DDEV == 2) begin
         pg_reprio[pg_index] <= D[0];
+        pg_changed <= 1;
     end
 
 // PPMEM0/1, память приоритетов страниц
 always @(posedge clk) begin
     if (WRD & DDEV == 6) begin
         pg_prio0[pg_index] <= Y;
+        pg_changed <= 1;
     end
     if (WRD & DDEV == 7) begin
         pg_prio1[pg_index] <= Y;
+        pg_changed <= 1;
     end
 end
 

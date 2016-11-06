@@ -2224,8 +2224,9 @@ WE2D:CJP А=WE2D,МАР=РЕ,COND=FULMEM,IСС
 ;02: ПРОВЕРЯЕМ 1-Ю ПОЛОВИНУ ПАМЯТИ НА 0
 ;НАЧИНАЕМ С "1", Т.К. ПОКА СРАБОТАЕТ АППАРАТНЫЙ ОСТАНОВ ЗАГРУЗКИ,
 ;УСПЕВАЕТ ЗАГРУЗИТЬСЯ "1" ПО ЛИШНЕМУ АДРЕСУ, В ЧАСТНОСТИ, ПО 0-ОМУ!!!
+;(vak) Эта ошибка исправлена в аппаратуре, изменяем тест.
 CONT A=C1,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=PC,ALU,YDST=PHYSPG
-PUSH А=62,МАР=РЕ,%ТУРЕ%
+PUSH А=63,МАР=РЕ,%ТУРЕ%
 CJS A=OUT4/7,MAP=PE,ALUS=ZA,RA=PC,H,ALUD=B,RB=WR6
 CONT DDEV=MODВ,ALUS=DZ,ALUD=B,RB=Y
 CONT ALUS=AB,RА=А,RB=Y,FUNC=EXOR,ALUD=Q
