@@ -46,9 +46,9 @@ logic [11:0] pc_x;                      // Current PC address at execution stage
 logic [112:1] opcode_x;                 // Current opcode at execution stage
 
 //
-// Generate clock at 100MHz.
+// Generate clock at 1000MHz.
 //
-always #5 clk = ~clk;
+always #0.5 clk = ~clk;
 
 //
 // Main loop.
@@ -83,7 +83,7 @@ initial begin
     reset = 1;
 
     // Hold reset for a while.
-    #10 reset = 0;
+    #1 reset = 0;
 
     // Run until limit.
     #limit begin
@@ -228,171 +228,166 @@ localparam LABEL_ERRTST = 1665;
 localparam LABEL_ERRINF = 1667;
 localparam LABEL_ERRINH = 1669;
 
-//
-// Test switcher.
-//
-initial begin
-    forever begin
-        // Wait for instruction, valid on leading edge of clk
-        wait(clk);
-        ctime = $time;
-        pc_x = tr.pc_x;
-        opcode_x = tr.opcode_x;
+// Get time at the rising edge of the clock.
+always @(posedge clk) begin
+    ctime = $time;
+    pc_x = tr.pc_x;
+    opcode_x = tr.opcode_x;
+end
 
-        // Wait until everything is stable
-        wait(!clk);
-        #1;
+// At negative clock edge, when all the signals are quiet,
+// analyze the state of the processor.
+always @(negedge clk) begin
+    // In case of failure, the tests stop at label ERR*
+    if (pc_x == LABEL_ERRTST || pc_x == LABEL_ERRINF ||
+        pc_x == LABEL_ERRINH) begin
+        message("Test FAIL");
+        $display("--------------------------------");
+        $finish(1);
+    end
 
-        // In case of failure, the tests stop at label ERR*
-        if (pc_x == LABEL_ERRTST || pc_x == LABEL_ERRINF ||
-            pc_x == LABEL_ERRINH) begin
-            message("Test FAIL");
-            $display("--------------------------------");
-            $finish(1);
-        end
+    //
+    // Поиск левой единицы
+    //
+    //check_jump(LABEL_PSLO23-1, LABEL_PSLO23, LABEL_PSLO24-1, "Skip CLO23");
+    check_jump(LABEL_PSLO23-1, LABEL_PSLO23, LABEL_CTAG3-6, "Skip CLO23-CTAG2");
+    check_pass(LABEL_CLO24,  "Test CLO24 pass");
+    check_pass(LABEL_CLO25,  "Test CLO25 pass");
 
-        //
-        // Поиск левой единицы
-        //
-        check_jump(LABEL_PSLO23-1, LABEL_PSLO23, LABEL_PSLO24-1, "Skip CLO23");
-        check_pass(LABEL_CLO24,  "Test CLO24 pass");
-        check_pass(LABEL_CLO25,  "Test CLO25 pass");
+    //
+    // Регистр номера группы (РНГ) и память модификаторов
+    //
+    check_jump(LABEL_PSMOD1-1, LABEL_PSMOD1, LABEL_CMOD2-4, "Skip CMOD1");
+    check_pass(LABEL_CMOD2,  "Test CMOD2 pass");
+    check_pass(LABEL_CMOD3,  "Test CMOD3 pass");
+    check_jump(LABEL_PSMOD4-1, LABEL_PSMOD4, LABEL_CMODA-4, "Skip CMOD4-CMOD8");
+    check_pass(LABEL_CMODA,  "Test CMODA pass");
+    check_pass(LABEL_CMODB,  "Test CMODB pass");
+    check_pass(LABEL_CMODC,  "Test CMODC pass");
+    check_pass(LABEL_CMODD,  "Test CMODD pass");
+    check_pass(LABEL_CMODE,  "Test CMODE pass");
+    check_pass(LABEL_CMOD10, "Test CMOD10 pass");
+    check_pass(LABEL_CMOD11, "Test CMOD11 pass");
+    check_pass(LABEL_CMOD12, "Test CMOD12 pass");
+    check_pass(LABEL_CMOD13, "Test CMOD13 pass");
+    check_pass(LABEL_CMOD14, "Test CMOD14 pass");
+    check_pass(LABEL_CMOD16, "Test CMOD16 pass");
+    check_pass(LABEL_MC17,   "Test MC17 pass");
+    check_pass(LABEL_MC18,   "Test MC18 pass");
+    check_pass(LABEL_CMOD1A, "Test CMOD1A pass");
+    check_pass(LABEL_CMOD1C, "Test CMOD1C pass");
+    check_pass(LABEL_CMOD1E, "Test CMOD1E pass");
 
-        //
-        // Регистр номера группы (РНГ) и память модификаторов
-        //
-        check_jump(LABEL_PSMOD1-1, LABEL_PSMOD1, LABEL_CMOD2-4, "Skip CMOD1");
-        check_pass(LABEL_CMOD2,  "Test CMOD2 pass");
-        check_pass(LABEL_CMOD3,  "Test CMOD3 pass");
-        check_jump(LABEL_PSMOD4-1, LABEL_PSMOD4, LABEL_CMODA-4, "Skip CMOD4-CMOD8");
-        check_pass(LABEL_CMODA,  "Test CMODA pass");
-        check_pass(LABEL_CMODB,  "Test CMODB pass");
-        check_pass(LABEL_CMODC,  "Test CMODC pass");
-        check_pass(LABEL_CMODD,  "Test CMODD pass");
-        check_pass(LABEL_CMODE,  "Test CMODE pass");
-        check_pass(LABEL_CMOD10, "Test CMOD10 pass");
-        check_pass(LABEL_CMOD11, "Test CMOD11 pass");
-        check_pass(LABEL_CMOD12, "Test CMOD12 pass");
-        check_pass(LABEL_CMOD13, "Test CMOD13 pass");
-        check_pass(LABEL_CMOD14, "Test CMOD14 pass");
-        check_pass(LABEL_CMOD16, "Test CMOD16 pass");
-        check_pass(LABEL_MC17,   "Test MC17 pass");
-        check_pass(LABEL_MC18,   "Test MC18 pass");
-        check_pass(LABEL_CMOD1A, "Test CMOD1A pass");
-        check_pass(LABEL_CMOD1C, "Test CMOD1C pass");
-        check_pass(LABEL_CMOD1E, "Test CMOD1E pass");
+    //
+    // Регистр номера процесса (РНП)
+    //
+    check_jump(LABEL_PSADR1-1, LABEL_PSADR1, LABEL_CADR2-4, "Skip CADR1");
+    check_pass(LABEL_CADR2,  "Test CADR2 pass");
+    check_pass(LABEL_CADR3,  "Test CADR3 pass");
 
-        //
-        // Регистр номера процесса (РНП)
-        //
-        check_jump(LABEL_PSADR1-1, LABEL_PSADR1, LABEL_CADR2-4, "Skip CADR1");
-        check_pass(LABEL_CADR2,  "Test CADR2 pass");
-        check_pass(LABEL_CADR3,  "Test CADR3 pass");
+    //
+    // Регистр исполнительного адреса
+    //
+    check_jump(LABEL_PSADR4-1, LABEL_PSADR4, LABEL_CADR5-4, "Skip CADR4");
+    check_pass(LABEL_CADR5,  "Test CADR5 pass");
+    check_pass(LABEL_CADR6,  "Test CADR6 pass");
 
-        //
-        // Регистр исполнительного адреса
-        //
-        check_jump(LABEL_PSADR4-1, LABEL_PSADR4, LABEL_CADR5-4, "Skip CADR4");
-        check_pass(LABEL_CADR5,  "Test CADR5 pass");
-        check_pass(LABEL_CADR6,  "Test CADR6 pass");
+    //
+    // Регистр физической страницы (РФС)
+    //
+    check_jump(LABEL_PSADR7-1, LABEL_PSADR7, LABEL_CADR8-4, "Skip CADR7");
+    check_pass(LABEL_CADR8,  "Test CADR8 pass");
+    check_pass(LABEL_CADR9,  "Test CADR9 pass");
 
-        //
-        // Регистр физической страницы (РФС)
-        //
-        check_jump(LABEL_PSADR7-1, LABEL_PSADR7, LABEL_CADR8-4, "Skip CADR7");
-        check_pass(LABEL_CADR8,  "Test CADR8 pass");
-        check_pass(LABEL_CADR9,  "Test CADR9 pass");
+    //
+    // Регистры приписки
+    //
+    check_jump(LABEL_PSADRA-1, LABEL_PSADRA, LABEL_CADRB-5, "Skip CADRA");
+    check_pass(LABEL_CADRB,  "Test CADRB pass");
+    check_pass(LABEL_CADRC,  "Test CADRC pass");
+    check_pass(LABEL_CADRD,  "Test CADRD pass");
+    check_pass(LABEL_CADRE,  "Test CADRE pass");
+    check_pass(LABEL_CADRF,  "Test CADRF pass");
 
-        //
-        // Регистры приписки
-        //
-        check_jump(LABEL_PSADRA-1, LABEL_PSADRA, LABEL_CADRB-5, "Skip CADRA");
-        check_pass(LABEL_CADRB,  "Test CADRB pass");
-        check_pass(LABEL_CADRC,  "Test CADRC pass");
-        check_pass(LABEL_CADRD,  "Test CADRD pass");
-        check_pass(LABEL_CADRE,  "Test CADRE pass");
-        check_pass(LABEL_CADRF,  "Test CADRF pass");
+    //
+    // БОБР, БИЗМ
+    //
+    check_jump(LABEL_PSAD10-1, LABEL_PSAD10, LABEL_CADR11-6, "Skip CADR10");
+    check_pass(LABEL_CADR11, "Test CADR11 pass");
+    check_pass(LABEL_CADR12, "Test CADR12 pass");
+    check_pass(LABEL_CADR13, "Test CADR13 pass");
+    check_pass(LABEL_CADR14, "Test CADR14 pass");
+    check_pass(LABEL_CADR15, "Test CADR15 pass");
 
-        //
-        // БОБР, БИЗМ
-        //
-        check_jump(LABEL_PSAD10-1, LABEL_PSAD10, LABEL_CADR11-6, "Skip CADR10");
-        check_pass(LABEL_CADR11, "Test CADR11 pass");
-        check_pass(LABEL_CADR12, "Test CADR12 pass");
-        check_pass(LABEL_CADR13, "Test CADR13 pass");
-        check_pass(LABEL_CADR14, "Test CADR14 pass");
-        check_pass(LABEL_CADR15, "Test CADR15 pass");
+    //
+    // БМСП
+    //
+    check_jump(LABEL_PSAD16-1, LABEL_PSAD16, LABEL_CADR17-6, "Skip CADR16");
+    check_pass(LABEL_CADR17, "Test CADR17 pass");
+    check_pass(LABEL_CADR18, "Test CADR18 pass");
+    check_pass(LABEL_CADR19, "Test CADR19 pass");
+    check_pass(LABEL_CADR1A, "Test CADR1A pass");
+    check_pass(LABEL_CADR1B, "Test CADR1B pass");
 
-        //
-        // БМСП
-        //
-        check_jump(LABEL_PSAD16-1, LABEL_PSAD16, LABEL_CADR17-6, "Skip CADR16");
-        check_pass(LABEL_CADR17, "Test CADR17 pass");
-        check_pass(LABEL_CADR18, "Test CADR18 pass");
-        check_pass(LABEL_CADR19, "Test CADR19 pass");
-        check_pass(LABEL_CADR1A, "Test CADR1A pass");
-        check_pass(LABEL_CADR1B, "Test CADR1B pass");
+    //
+    // Память приоритетов страниц 0
+    //
+    check_jump(LABEL_PSAD1C-1, LABEL_PSAD1C, LABEL_CADR1D-5, "Skip CADR1C");
+    check_pass(LABEL_CADR1D, "Test CADR1D pass");
+    check_pass(LABEL_CADR1E, "Test CADR1E pass");
+    check_pass(LABEL_CADR1F, "Test CADR1F pass");
+    check_pass(LABEL_CADR20, "Test CADR20 pass");
+    check_pass(LABEL_CADR21, "Test CADR21 pass");
 
-        //
-        // Память приоритетов страниц 0
-        //
-        check_jump(LABEL_PSAD1C-1, LABEL_PSAD1C, LABEL_CADR1D-5, "Skip CADR1C");
-        check_pass(LABEL_CADR1D, "Test CADR1D pass");
-        check_pass(LABEL_CADR1E, "Test CADR1E pass");
-        check_pass(LABEL_CADR1F, "Test CADR1F pass");
-        check_pass(LABEL_CADR20, "Test CADR20 pass");
-        check_pass(LABEL_CADR21, "Test CADR21 pass");
+    //
+    // Память приоритетов страниц 1
+    //
+    check_jump(LABEL_PSAD22-1, LABEL_PSAD22, LABEL_CADR23-5, "Skip CADR22");
+    check_pass(LABEL_CADR23, "Test CADR23 pass");
+    check_pass(LABEL_CADR24, "Test CADR24 pass");
+    check_pass(LABEL_CADR25, "Test CADR25 pass");
+    check_pass(LABEL_CADR26, "Test CADR26 pass");
+    check_pass(LABEL_CADR27, "Test CADR27 pass");
+    check_pass(LABEL_CAD2C,  "Test CAD2C pass");
+    check_pass(LABEL_CAD2D,  "Test CAD2D pass");
 
-        //
-        // Память приоритетов страниц 1
-        //
-        check_jump(LABEL_PSAD22-1, LABEL_PSAD22, LABEL_CADR23-5, "Skip CADR22");
-        check_pass(LABEL_CADR23, "Test CADR23 pass");
-        check_pass(LABEL_CADR24, "Test CADR24 pass");
-        check_pass(LABEL_CADR25, "Test CADR25 pass");
-        check_pass(LABEL_CADR26, "Test CADR26 pass");
-        check_pass(LABEL_CADR27, "Test CADR27 pass");
-        check_pass(LABEL_CAD2C,  "Test CAD2C pass");
-        check_pass(LABEL_CAD2D,  "Test CAD2D pass");
+    //
+    // БОИ тега
+    //
+    check_jump(LABEL_PSTAG1-1, LABEL_PSTAG1, LABEL_CTAG3-6, "Skip CTAG1, CTAG2");
+    check_pass(LABEL_CTAG3,  "Test CTAG3 pass");
+    check_pass(LABEL_CBOI4,  "Test CBOI4 pass");
+    check_pass(LABEL_CBOI5,  "Test CBOI5 pass");
 
-        //
-        // БОИ тега
-        //
-        check_jump(LABEL_PSTAG1-1, LABEL_PSTAG1, LABEL_CTAG3-6, "Skip CTAG1, CTAG2");
-        check_pass(LABEL_CTAG3,  "Test CTAG3 pass");
-        check_pass(LABEL_CBOI4,  "Test CBOI4 pass");
-        check_pass(LABEL_CBOI5,  "Test CBOI5 pass");
+    //
+    // Регистр КОП арбитра
+    //
+    check_jump(LABEL_CONTA1-1, LABEL_CONTA1, LABEL_CA2-4, "Skip CARB1");
+    check_pass(LABEL_CA2,    "Test CA2 pass");
+    check_pass(LABEL_CA3,    "Test CA3 pass");
 
-        //
-        // Регистр КОП арбитра
-        //
-        check_jump(LABEL_CONTA1-1, LABEL_CONTA1, LABEL_CA2-4, "Skip CARB1");
-        check_pass(LABEL_CA2,    "Test CA2 pass");
-        check_pass(LABEL_CA3,    "Test CA3 pass");
+    //
+    // Часы и таймер счетного времени
+    //
+    check_jump(LABEL_CONT1-1, LABEL_CONT1, LABEL_CONTA-1, "Skip STP1-CICL9");
+    check_pass(LABEL_CICLA,  "Test CICLA pass");
+    check_pass(LABEL_CKLB,   "Test CKLB pass");
+    check_pass(LABEL_CKLC,   "Test CKLC pass");
+    check_pass(LABEL_CCD,    "Test CCD pass");
+    check_pass(LABEL_CCE,    "Test CCE pass");
+    check_pass(LABEL_CCF,    "Test CCF pass");
+    check_pass(LABEL_CC10,   "Test CC10 pass");
+    check_pass(LABEL_CC11,   "Test CC11 pass");
+    check_pass(LABEL_CC12,   "Test CC12 pass");
+    check_pass(LABEL_CC13,   "Test CC13 pass");
+    check_pass(LABEL_CC14,   "Test CC14 pass");
+    check_pass(LABEL_CKL15,  "Test CKL15 pass");
+    check_pass(LABEL_CKL16,  "Test CKL16 pass");
 
-        //
-        // Часы и таймер счетного времени
-        //
-        check_jump(LABEL_CONT1-1, LABEL_CONT1, LABEL_CONTA-1, "Skip STP1-CICL9");
-        check_pass(LABEL_CICLA,  "Test CICLA pass");
-        check_pass(LABEL_CKLB,   "Test CKLB pass");
-        check_pass(LABEL_CKLC,   "Test CKLC pass");
-        check_pass(LABEL_CCD,    "Test CCD pass");
-        check_pass(LABEL_CCE,    "Test CCE pass");
-        check_pass(LABEL_CCF,    "Test CCF pass");
-        check_pass(LABEL_CC10,   "Test CC10 pass");
-        check_pass(LABEL_CC11,   "Test CC11 pass");
-        check_pass(LABEL_CC12,   "Test CC12 pass");
-        check_pass(LABEL_CC13,   "Test CC13 pass");
-        check_pass(LABEL_CC14,   "Test CC14 pass");
-        check_pass(LABEL_CKL15,  "Test CKL15 pass");
-        check_pass(LABEL_CKL16,  "Test CKL16 pass");
-
-        if (pc_x == LABEL_CTWR-1) begin
-            message("Test PASS");
-            $display("--------------------------------");
-            $finish(0);
-        end
+    if (pc_x == LABEL_CTWR-1) begin
+        message("Test PASS");
+        $display("--------------------------------");
+        $finish(0);
     end
 end
 

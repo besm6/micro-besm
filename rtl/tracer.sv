@@ -388,8 +388,7 @@ task print_uop(
     // Some features not implemented yet
     //
     if (DSRC == 10)
-        $fdisplay(fd, "(%0d) *** dsrc=OPC not implemented yet!",
-            ctime, dsrc_name[DSRC]);
+        $fdisplay(fd, "(%0d) *** dsrc=OPC not implemented yet!", ctime);
 
     if (YDEV == 2)
         $fdisplay(fd, "(%0d) *** ydev=PHYSAD not implemented yet!", ctime);

@@ -32,7 +32,7 @@ $(PROG):        $(SOURCES)
 		$(NCSIM)elab --nolog testbench
 
 run:            $(PROG)
-		$(NCSIM)sim --R --log run.log testbench --testplusarg limit=1000000
+		$(NCSIM)sim --R --log run.log testbench --testplusarg limit=300000
 
 view:
 		gtkwave testbench.vcd databus.gtkw

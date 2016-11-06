@@ -46,9 +46,9 @@ logic [11:0] pc_x;                      // Current PC address at execution stage
 logic [112:1] opcode_x;                 // Current opcode at execution stage
 
 //
-// Generate clock at 100MHz.
+// Generate clock at 1000MHz.
 //
-always #5 clk = ~clk;
+always #0.5 clk = ~clk;
 
 //
 // Main loop.
@@ -83,7 +83,7 @@ initial begin
     reset = 1;
 
     // Hold reset for a while.
-    #10 reset = 0;
+    #1 reset = 0;
 
     // Run until limit.
     #limit begin
@@ -285,200 +285,194 @@ localparam LABEL_ERRINF = 1834;
 localparam LABEL_ERRINH = 1836;
 localparam LABEL_ERR8F  = 1956;
 
-//
-// Test switcher.
-//
-initial begin
-    forever begin
-        // Wait for instruction, valid on leading edge of clk
-        wait(clk);
-        ctime = $time;
-        pc_x = tr.pc_x;
-        opcode_x = tr.opcode_x;
+// Get time at the rising edge of the clock.
+always @(posedge clk) begin
+    ctime = $time;
+    pc_x = tr.pc_x;
+    opcode_x = tr.opcode_x;
+end
 
-        // Wait until everything is stable
-        wait(!clk);
-        #1;
+// At negative clock edge, when all the signals are quiet,
+// analyze the state of the processor.
+always @(negedge clk) begin
+    // In case of failure, the tests stop at label ERR*
+    if (pc_x == LABEL_ERRINI || pc_x == LABEL_ERRTST ||
+        pc_x == LABEL_ERRINF || pc_x == LABEL_ERRINH ||
+        pc_x == LABEL_ERR8F) begin
+        message("Test FAIL");
+        $display("--------------------------------");
+        $finish(1);
+    end
 
-        // In case of failure, the tests stop at label ERR*
-        if (pc_x == LABEL_ERRINI || pc_x == LABEL_ERRTST ||
-            pc_x == LABEL_ERRINF || pc_x == LABEL_ERRINH ||
-            pc_x == LABEL_ERR8F) begin
-            message("Test FAIL");
-            $display("--------------------------------");
-            $finish(1);
-        end
+    //
+    // Проверка последовательности исполнения команд в БМПУ
+    //
+    check_jump(LABEL_MPU1,    LABEL_PSBU1, pc_x+2,     "Test CONT+CJP pass");
+    check_jump(LABEL_LBU2,    LABEL_PSBU2, pc_x+2,     "Test LDCT+RPCT pass");
+    check_jump(LABEL_LBU3,    LABEL_PSBU3, pc_x+2,     "Test JRP pass");
+    check_jump(LABEL_PSBU4+2, LABEL_PSBU4, LABEL_BU5,  "Test CJS+CRTN pass");
+    check_jump(LABEL_PSBU5+4, LABEL_PSBU5, LABEL_BU6,  "Test CJPP pass");
+    check_jump(LABEL_LBU6,    LABEL_PSBU6, pc_x+1,     "Test PUSH pass");
+    check_jump(LABEL_LBU7,    LABEL_PSBU7, pc_x+1,     "Test PUSH+LOOP pass");
+    check_jump(LABEL_PSBU8+4, LABEL_PSBU8, pc_x+1,     "Test RFCT pass");
+    check_jump(LABEL_LABL9,   LABEL_PSBU9, pc_x+1,     "Test JSRP pass");
+    check_jump(LABEL_PSBUA+6, LABEL_PSBUA, LABEL_MICB, "Test TWB pass");
 
-        //
-        // Проверка последовательности исполнения команд в БМПУ
-        //
-        check_jump(LABEL_MPU1,    LABEL_PSBU1, pc_x+2,     "Test CONT+CJP pass");
-        check_jump(LABEL_LBU2,    LABEL_PSBU2, pc_x+2,     "Test LDCT+RPCT pass");
-        check_jump(LABEL_LBU3,    LABEL_PSBU3, pc_x+2,     "Test JRP pass");
-        check_jump(LABEL_PSBU4+2, LABEL_PSBU4, LABEL_BU5,  "Test CJS+CRTN pass");
-        check_jump(LABEL_PSBU5+4, LABEL_PSBU5, LABEL_BU6,  "Test CJPP pass");
-        check_jump(LABEL_LBU6,    LABEL_PSBU6, pc_x+1,     "Test PUSH pass");
-        check_jump(LABEL_LBU7,    LABEL_PSBU7, pc_x+1,     "Test PUSH+LOOP pass");
-        check_jump(LABEL_PSBU8+4, LABEL_PSBU8, pc_x+1,     "Test RFCT pass");
-        check_jump(LABEL_LABL9,   LABEL_PSBU9, pc_x+1,     "Test JSRP pass");
-        check_jump(LABEL_PSBUA+6, LABEL_PSBUA, LABEL_MICB, "Test TWB pass");
+    //
+    // Проверка всех сигналов, вырабатываемых микропрограммой
+    //
+    check_jump(LABEL_PSMICB+4, LABEL_PSMICB, pc_x+1,  "Test MAP pass");
+    check_jump(LABEL_PSMIB1+4, LABEL_PSMIB1, pc_x+1,  "Test A pass");
+    check_jump(LABEL_PSMICC+7, LABEL_PSMICC, pc_x+1,  "Test YDEV=MPMEM pass");
+    check_jump(LABEL_PSMICD+4, LABEL_PSMICD, pc_x+1,  "Test ALUS+FUNC+ALUD+RA+RB pass");
+    check_jump(LABEL_PSMID1+4, LABEL_PSMID1, pc_x+1,  "Test SHMUX+ALUD+STOPC+CI+CEM+CEN pass");
+    check_jump(LABEL_PSMICE+5, LABEL_PSMICE, pc_x+1,  "Test MNSA+MODNM pass");
+    check_jump(LABEL_PSMIE1+8, LABEL_PSMIE1, pc_x+1,  "Test ARA+BRA+ECA+ECB+WRA+WRB pass");
+    check_jump(LABEL_PSMI14+11, LABEL_PSMI14, pc_x+1, "Test ARBI pass");
+    check_jump(LABEL_PSMIE2+5, LABEL_PSMIE2, pc_x+1,  "Test SCI+ISE+LETC pass");
+    check_jump(LABEL_PSMIE3+8, LABEL_PSMIE3, pc_x+1,  "Test CYSTR pass");
+    check_jump(LABEL_PSMI11+12, LABEL_PSMI11, pc_x+1, "Test DSRC+YDST pass");
+    check_jump(LABEL_PSMI12+7, LABEL_PSMI12, pc_x+1,  "Test YDEV+DDEV+WRY+WRD pass");
+    check_jump(LABEL_PSMI13+32, LABEL_PSMI13, pc_x+1, "Test COND pass");
+    check_jump(LABEL_PSM131+32, LABEL_PSM131, pc_x+1, "Test FFCNT pass");
+    check_jump(LABEL_PSMI10+4, LABEL_PSMI10, pc_x+1,  "Test YDEVT pass");
 
-        //
-        // Проверка всех сигналов, вырабатываемых микропрограммой
-        //
-        check_jump(LABEL_PSMICB+4, LABEL_PSMICB, pc_x+1,  "Test MAP pass");
-        check_jump(LABEL_PSMIB1+4, LABEL_PSMIB1, pc_x+1,  "Test A pass");
-        check_jump(LABEL_PSMICC+7, LABEL_PSMICC, pc_x+1,  "Test YDEV=MPMEM pass");
-        check_jump(LABEL_PSMICD+4, LABEL_PSMICD, pc_x+1,  "Test ALUS+FUNC+ALUD+RA+RB pass");
-        check_jump(LABEL_PSMID1+4, LABEL_PSMID1, pc_x+1,  "Test SHMUX+ALUD+STOPC+CI+CEM+CEN pass");
-        check_jump(LABEL_PSMICE+5, LABEL_PSMICE, pc_x+1,  "Test MNSA+MODNM pass");
-        check_jump(LABEL_PSMIE1+8, LABEL_PSMIE1, pc_x+1,  "Test ARA+BRA+ECA+ECB+WRA+WRB pass");
-        check_jump(LABEL_PSMI14+11, LABEL_PSMI14, pc_x+1, "Test ARBI pass");
-        check_jump(LABEL_PSMIE2+5, LABEL_PSMIE2, pc_x+1,  "Test SCI+ISE+LETC pass");
-        check_jump(LABEL_PSMIE3+8, LABEL_PSMIE3, pc_x+1,  "Test CYSTR pass");
-        check_jump(LABEL_PSMI11+12, LABEL_PSMI11, pc_x+1, "Test DSRC+YDST pass");
-        check_jump(LABEL_PSMI12+7, LABEL_PSMI12, pc_x+1,  "Test YDEV+DDEV+WRY+WRD pass");
-        check_jump(LABEL_PSMI13+32, LABEL_PSMI13, pc_x+1, "Test COND pass");
-        check_jump(LABEL_PSM131+32, LABEL_PSM131, pc_x+1, "Test FFCNT pass");
-        check_jump(LABEL_PSMI10+4, LABEL_PSMI10, pc_x+1,  "Test YDEVT pass");
+    //
+    // МПС + БОПП
+    //
+    check_jump(LABEL_RPMI15+4, LABEL_RPMI15, pc_x+1,  "Test ALU+Console pass");
 
-        //
-        // МПС + БОПП
-        //
-        check_jump(LABEL_RPMI15+4, LABEL_RPMI15, pc_x+1,  "Test ALU+Console pass");
+    //
+    // ПЗУ
+    //
+    check_jump(LABEL_PSMI16+4, LABEL_PSMI16, pc_x+1,  "Test DSRC=PROM pass");
+    check_jump(LABEL_PSM161+8, LABEL_PSM161, pc_x+1,  "Test DSRC=PROM #2 pass");
 
-        //
-        // ПЗУ
-        //
-        check_jump(LABEL_PSMI16+4, LABEL_PSMI16, pc_x+1,  "Test DSRC=PROM pass");
-        check_jump(LABEL_PSM161+8, LABEL_PSM161, pc_x+1,  "Test DSRC=PROM #2 pass");
+    //
+    // Сдвигатель
+    //
+    check_jump(LABEL_PSMI17+8, LABEL_PSMI17, pc_x+1,  "Test rotate-1-left pass");
+    check_jump(LABEL_RPMI18+1, LABEL_RPMI18, pc_x+1,  "Test rotate-1-left #2 pass");
+    check_jump(LABEL_RPMI19+1, LABEL_RPMI19, pc_x+1,  "Test rotate-1-right pass");
+    check_jump(LABEL_PSMI1A+8, LABEL_PSMI1A, pc_x+1,  "Test shift-1-left pass");
+    check_jump(LABEL_PSMI1B+8, LABEL_PSMI1B, pc_x+1,  "Test shift-1-right pass");
+    check_jump(LABEL_PSMI1C+5, LABEL_PSMI1C, pc_x+1,  "Test arith.shift-16-right pass");
+    check_jump(LABEL_PSMI1D+5, LABEL_PSMI1D, pc_x+1,  "Test arith.shift-16-right #2 pass");
+    check_jump(LABEL_PSMI1E+3, LABEL_PSMI1E, pc_x+1,  "Test arith.shift-32-left pass");
+    check_jump(LABEL_PSMI1F+3, LABEL_PSMI1F, pc_x+1,  "Test arith.shift-32-left #2 pass");
+    check_jump(LABEL_PSMI20+3, LABEL_PSMI20, pc_x+1,  "Test shift-32-right pass");
+    check_jump(LABEL_CSH1+6,   LABEL_CSH1,   pc_x+1,  "Test shift-left pass");
+    check_jump(LABEL_STSH1M,   LABEL_STSH1M, pc_x+1,  "Test shift-left #2 pass");
+    check_jump(LABEL_STSH1N,   LABEL_STSH1N, pc_x+1,  "Test shift-right pass");
+    check_jump(LABEL_CSH2+6,   LABEL_CSH2,   pc_x+1,  "Test shift-right #2 pass");
+    check_jump(LABEL_STSH3,    LABEL_STSH3,  pc_x+1,  "Test arith.shift-left pass");
+    check_jump(LABEL_STSH4,    LABEL_STSH4,  pc_x+1,  "Test arith.shift-right pass");
 
-        //
-        // Сдвигатель
-        //
-        check_jump(LABEL_PSMI17+8, LABEL_PSMI17, pc_x+1,  "Test rotate-1-left pass");
-        check_jump(LABEL_RPMI18+1, LABEL_RPMI18, pc_x+1,  "Test rotate-1-left #2 pass");
-        check_jump(LABEL_RPMI19+1, LABEL_RPMI19, pc_x+1,  "Test rotate-1-right pass");
-        check_jump(LABEL_PSMI1A+8, LABEL_PSMI1A, pc_x+1,  "Test shift-1-left pass");
-        check_jump(LABEL_PSMI1B+8, LABEL_PSMI1B, pc_x+1,  "Test shift-1-right pass");
-        check_jump(LABEL_PSMI1C+5, LABEL_PSMI1C, pc_x+1,  "Test arith.shift-16-right pass");
-        check_jump(LABEL_PSMI1D+5, LABEL_PSMI1D, pc_x+1,  "Test arith.shift-16-right #2 pass");
-        check_jump(LABEL_PSMI1E+3, LABEL_PSMI1E, pc_x+1,  "Test arith.shift-32-left pass");
-        check_jump(LABEL_PSMI1F+3, LABEL_PSMI1F, pc_x+1,  "Test arith.shift-32-left #2 pass");
-        check_jump(LABEL_PSMI20+3, LABEL_PSMI20, pc_x+1,  "Test shift-32-right pass");
-        check_jump(LABEL_CSH1+6,   LABEL_CSH1,   pc_x+1,  "Test shift-left pass");
-        check_jump(LABEL_STSH1M,   LABEL_STSH1M, pc_x+1,  "Test shift-left #2 pass");
-        check_jump(LABEL_STSH1N,   LABEL_STSH1N, pc_x+1,  "Test shift-right pass");
-        check_jump(LABEL_CSH2+6,   LABEL_CSH2,   pc_x+1,  "Test shift-right #2 pass");
-        check_jump(LABEL_STSH3,    LABEL_STSH3,  pc_x+1,  "Test arith.shift-left pass");
-        check_jump(LABEL_STSH4,    LABEL_STSH4,  pc_x+1,  "Test arith.shift-right pass");
+    if (pc_x == LABEL_PSMI20+3 && tr.pc_f == LABEL_PSMI20) begin
+        // Before shift-left test, we need to provide
+        // a shift count in mpmem[7] byte.
+        cpu.mpmem[7] <= 3;
+    end
 
-        if (pc_x == LABEL_PSMI20+3 && tr.pc_f == LABEL_PSMI20) begin
-            // Before shift-left test, we need to provide
-            // a shift count in mpmem[7] byte.
-            cpu.mpmem[7] <= 3;
-        end
+    //
+    // Чтение, запись блока обмена с ПП
+    //
+    check_jump(LABEL_PSPMP2+1, LABEL_PSPMP2, pc_x+1,  "Test console pass");
+    check_jump(LABEL_PSPMP3+11, LABEL_PSPMP3, pc_x+1, "Test console #2 pass");
+    check_jump(LABEL_PSPMP4+11, LABEL_PSPMP4, pc_x+1, "Test console #3 pass");
+    check_jump(LABEL_CROM1+2,  LABEL_CROM1,  pc_x+1,  "Test console #4 pass");
 
-        //
-        // Чтение, запись блока обмена с ПП
-        //
-        check_jump(LABEL_PSPMP2+1, LABEL_PSPMP2, pc_x+1,  "Test console pass");
-        check_jump(LABEL_PSPMP3+11, LABEL_PSPMP3, pc_x+1, "Test console #2 pass");
-        check_jump(LABEL_PSPMP4+11, LABEL_PSPMP4, pc_x+1, "Test console #3 pass");
-        check_jump(LABEL_CROM1+2,  LABEL_CROM1,  pc_x+1,  "Test console #4 pass");
+    //
+    // Большой тест
+    //
+    check_pass(LABEL_CMPU5,  "Test CMPU5 pass");
+    check_pass(LABEL_CMPU6,  "Test CMPU6 pass");
+    check_pass(LABEL_CMPU7,  "Test CMPU7 pass");
+    check_pass(LABEL_CMPU8,  "Test CMPU8 pass");
+    check_pass(LABEL_CMPU9,  "Test CMPU9 pass");
+    check_pass(LABEL_CMPUA,  "Test CMPUA pass");
+    check_pass(LABEL_CMPUB,  "Test CMPUB pass");
+    check_pass(LABEL_CMPUC,  "Test CMPUC pass");
+    check_pass(LABEL_CMPUD,  "Test CMPUD pass");
+    check_pass(LABEL_CMPUE,  "Test CMPUE pass");
+    check_pass(LABEL_CCTF,   "Test CCTF pass");
+    check_pass(LABEL_CCT10,  "Test CCT10 pass");
+    check_pass(LABEL_CCT11,  "Test CCT11 pass");
+    check_pass(LABEL_CCT12,  "Test CCT12 pass");
+    check_pass(LABEL_CCT13,  "Test CCT13 pass");
+    check_pass(LABEL_CCT14,  "Test CCT14 pass");
+    check_pass(LABEL_CCT15,  "Test CCT15 pass");
+    check_pass(LABEL_CCT16,  "Test CCT16 pass");
+    check_pass(LABEL_CCT17,  "Test CCT17 pass");
+    check_pass(LABEL_CCT18,  "Test CCT18 pass");
+    check_pass(LABEL_CMPS19, "Test CMPS19 pass");
+    check_pass(LABEL_CMPS1A, "Test CMPS1A pass");
+    check_pass(LABEL_CMPS1B, "Test CMPS1B pass");
+    check_pass(LABEL_CMPS1C, "Test CMPS1C pass");
+    check_pass(LABEL_CMPS1D, "Test CMPS1D pass");
+    check_pass(LABEL_CMPS1E, "Test CMPS1E pass");
+    check_pass(LABEL_CMPS1F, "Test CMPS1F pass");
+    check_pass(LABEL_CMPS20, "Test CMPS20 pass");
+    check_pass(LABEL_CMPS21, "Test CMPS21 pass");
+    check_pass(LABEL_CMPS22, "Test CMPS22 pass");
+    check_pass(LABEL_CMPS23, "Test CMPS23 pass");
+    check_pass(LABEL_CMPS24, "Test CMPS24 pass");
+    check_pass(LABEL_CH25,   "Test CH25 pass");
+    check_pass(LABEL_CH26,   "Test CH26 pass");
+    check_pass(LABEL_CH27,   "Test CH27 pass");
+    check_pass(LABEL_CH28,   "Test CH28 pass");
+    check_pass(LABEL_CH29,   "Test CH29 pass");
+    check_pass(LABEL_CMPS2A, "Test CMPS2A pass");
+    check_pass(LABEL_CMPS2B, "Test CMPS2B pass");
+    check_pass(LABEL_CMPS2C, "Test CMPS2C pass");
+    check_pass(LABEL_CC31,   "Test CC31 pass");
+    check_pass(LABEL_CC32,   "Test CC32 pass");
+    check_pass(LABEL_CTG2D,  "Test CTG2D pass");
+    check_pass(LABEL_CTG2E,  "Test CTG2E pass");
+    check_pass(LABEL_CTG2F,  "Test CTG2F pass");
+    check_pass(LABEL_CTG30,  "Test CTG30 pass");
+    check_pass(LABEL_CTG31,  "Test CTG31 pass");
+    check_pass(LABEL_CTG32,  "Test CTG32 pass");
+    check_pass(LABEL_CTG33,  "Test CTG33 pass");
+    check_pass(LABEL_CTG34,  "Test CTG34 pass");
+    check_pass(LABEL_LABL35, "Test LABL35 pass");
+    check_pass(LABEL_CROM2,  "Test CROM2 pass");
+    check_pass(LABEL_CROM3,  "Test CROM3 pass");
+    check_pass(LABEL_CSH5,   "Test CSH5 pass");
+    check_pass(LABEL_CSH6,   "Test CSH6 pass");
+    check_pass(LABEL_CSH7,   "Test CSH7 pass");
+    check_pass(LABEL_CSH8,   "Test CSH8 pass");
+    check_pass(LABEL_CSH9,   "Test CSH9 pass");
+    check_pass(LABEL_CSHA,   "Test CSHA pass");
+    check_pass(LABEL_CSHB,   "Test CSHB pass");
+    check_pass(LABEL_CSHC,   "Test CSHC pass");
+    check_pass(LABEL_CSHD,   "Test CSHD pass");
+    check_pass(LABEL_CSHE,   "Test CSHE pass");
+    check_pass(LABEL_CSHF,   "Test CSHF pass");
+    check_pass(LABEL_CSH10,  "Test CSH10 pass");
+    check_pass(LABEL_CSH11,  "Test CSH11 pass");
+    check_pass(LABEL_CSH12,  "Test CSH12 pass");
+    check_pass(LABEL_CSH13,  "Test CSH13 pass");
+    check_pass(LABEL_CSH14,  "Test CSH14 pass");
+    check_pass(LABEL_CSH15,  "Test CSH15 pass");
+    check_pass(LABEL_CSH16,  "Test CSH16 pass");
+    check_pass(LABEL_CSH17,  "Test CSH17 pass");
+    check_pass(LABEL_CSH18,  "Test CSH18 pass");
+    check_pass(LABEL_CSH19,  "Test CSH19 pass");
+    check_pass(LABEL_CSH1A,  "Test CSH1A pass");
+    check_pass(LABEL_CSH1B,  "Test CSH1B pass");
+    check_pass(LABEL_CSH1C,  "Test CSH1C pass");
+    check_pass(LABEL_CSH1D,  "Test CSH1D pass");
+    check_pass(LABEL_CSH1E,  "Test CSH1E pass");
+    check_pass(LABEL_CSH1F,  "Test CSH1F pass");
+    check_pass(LABEL_CSH20,  "Test CSH20 pass");
+    check_pass(LABEL_CSH21,  "Test CSH21 pass");
+    check_pass(LABEL_CSH22,  "Test CSH22 pass");
 
-        //
-        // Большой тест
-        //
-        check_pass(LABEL_CMPU5,  "Test CMPU5 pass");
-        check_pass(LABEL_CMPU6,  "Test CMPU6 pass");
-        check_pass(LABEL_CMPU7,  "Test CMPU7 pass");
-        check_pass(LABEL_CMPU8,  "Test CMPU8 pass");
-        check_pass(LABEL_CMPU9,  "Test CMPU9 pass");
-        check_pass(LABEL_CMPUA,  "Test CMPUA pass");
-        check_pass(LABEL_CMPUB,  "Test CMPUB pass");
-        check_pass(LABEL_CMPUC,  "Test CMPUC pass");
-        check_pass(LABEL_CMPUD,  "Test CMPUD pass");
-        check_pass(LABEL_CMPUE,  "Test CMPUE pass");
-        check_pass(LABEL_CCTF,   "Test CCTF pass");
-        check_pass(LABEL_CCT10,  "Test CCT10 pass");
-        check_pass(LABEL_CCT11,  "Test CCT11 pass");
-        check_pass(LABEL_CCT12,  "Test CCT12 pass");
-        check_pass(LABEL_CCT13,  "Test CCT13 pass");
-        check_pass(LABEL_CCT14,  "Test CCT14 pass");
-        check_pass(LABEL_CCT15,  "Test CCT15 pass");
-        check_pass(LABEL_CCT16,  "Test CCT16 pass");
-        check_pass(LABEL_CCT17,  "Test CCT17 pass");
-        check_pass(LABEL_CCT18,  "Test CCT18 pass");
-        check_pass(LABEL_CMPS19, "Test CMPS19 pass");
-        check_pass(LABEL_CMPS1A, "Test CMPS1A pass");
-        check_pass(LABEL_CMPS1B, "Test CMPS1B pass");
-        check_pass(LABEL_CMPS1C, "Test CMPS1C pass");
-        check_pass(LABEL_CMPS1D, "Test CMPS1D pass");
-        check_pass(LABEL_CMPS1E, "Test CMPS1E pass");
-        check_pass(LABEL_CMPS1F, "Test CMPS1F pass");
-        check_pass(LABEL_CMPS20, "Test CMPS20 pass");
-        check_pass(LABEL_CMPS21, "Test CMPS21 pass");
-        check_pass(LABEL_CMPS22, "Test CMPS22 pass");
-        check_pass(LABEL_CMPS23, "Test CMPS23 pass");
-        check_pass(LABEL_CMPS24, "Test CMPS24 pass");
-        check_pass(LABEL_CH25,   "Test CH25 pass");
-        check_pass(LABEL_CH26,   "Test CH26 pass");
-        check_pass(LABEL_CH27,   "Test CH27 pass");
-        check_pass(LABEL_CH28,   "Test CH28 pass");
-        check_pass(LABEL_CH29,   "Test CH29 pass");
-        check_pass(LABEL_CMPS2A, "Test CMPS2A pass");
-        check_pass(LABEL_CMPS2B, "Test CMPS2B pass");
-        check_pass(LABEL_CMPS2C, "Test CMPS2C pass");
-        check_pass(LABEL_CC31,   "Test CC31 pass");
-        check_pass(LABEL_CC32,   "Test CC32 pass");
-        check_pass(LABEL_CTG2D,  "Test CTG2D pass");
-        check_pass(LABEL_CTG2E,  "Test CTG2E pass");
-        check_pass(LABEL_CTG2F,  "Test CTG2F pass");
-        check_pass(LABEL_CTG30,  "Test CTG30 pass");
-        check_pass(LABEL_CTG31,  "Test CTG31 pass");
-        check_pass(LABEL_CTG32,  "Test CTG32 pass");
-        check_pass(LABEL_CTG33,  "Test CTG33 pass");
-        check_pass(LABEL_CTG34,  "Test CTG34 pass");
-        check_pass(LABEL_LABL35, "Test LABL35 pass");
-        check_pass(LABEL_CROM2,  "Test CROM2 pass");
-        check_pass(LABEL_CROM3,  "Test CROM3 pass");
-        check_pass(LABEL_CSH5,   "Test CSH5 pass");
-        check_pass(LABEL_CSH6,   "Test CSH6 pass");
-        check_pass(LABEL_CSH7,   "Test CSH7 pass");
-        check_pass(LABEL_CSH8,   "Test CSH8 pass");
-        check_pass(LABEL_CSH9,   "Test CSH9 pass");
-        check_pass(LABEL_CSHA,   "Test CSHA pass");
-        check_pass(LABEL_CSHB,   "Test CSHB pass");
-        check_pass(LABEL_CSHC,   "Test CSHC pass");
-        check_pass(LABEL_CSHD,   "Test CSHD pass");
-        check_pass(LABEL_CSHE,   "Test CSHE pass");
-        check_pass(LABEL_CSHF,   "Test CSHF pass");
-        check_pass(LABEL_CSH10,  "Test CSH10 pass");
-        check_pass(LABEL_CSH11,  "Test CSH11 pass");
-        check_pass(LABEL_CSH12,  "Test CSH12 pass");
-        check_pass(LABEL_CSH13,  "Test CSH13 pass");
-        check_pass(LABEL_CSH14,  "Test CSH14 pass");
-        check_pass(LABEL_CSH15,  "Test CSH15 pass");
-        check_pass(LABEL_CSH16,  "Test CSH16 pass");
-        check_pass(LABEL_CSH17,  "Test CSH17 pass");
-        check_pass(LABEL_CSH18,  "Test CSH18 pass");
-        check_pass(LABEL_CSH19,  "Test CSH19 pass");
-        check_pass(LABEL_CSH1A,  "Test CSH1A pass");
-        check_pass(LABEL_CSH1B,  "Test CSH1B pass");
-        check_pass(LABEL_CSH1C,  "Test CSH1C pass");
-        check_pass(LABEL_CSH1D,  "Test CSH1D pass");
-        check_pass(LABEL_CSH1E,  "Test CSH1E pass");
-        check_pass(LABEL_CSH1F,  "Test CSH1F pass");
-        check_pass(LABEL_CSH20,  "Test CSH20 pass");
-        check_pass(LABEL_CSH21,  "Test CSH21 pass");
-        check_pass(LABEL_CSH22,  "Test CSH22 pass");
-
-        if (pc_x == LABEL_S22+4) begin
-            message("Test PASS");
-            $display("--------------------------------");
-            $finish(0);
-        end
+    if (pc_x == LABEL_S22+4) begin
+        message("Test PASS");
+        $display("--------------------------------");
+        $finish(0);
     end
 end
 
