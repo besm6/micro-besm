@@ -22,7 +22,6 @@ timeunit 1ns / 10ps;
 logic  [4:0] modgn;             // РНГ: регистр номера группы памяти модификаторов
 logic  [7:0] PROCN;             // РНП: регистр номера процесса
 logic [31:0] RR;                // регистр режимов и триггеры признаков
-logic  [9:0] PHYSPG;            // РФС: регистр физической страницы
 logic [31:0] UREG;              // регистр исполнительного адреса (запись)
 logic [63:0] sh_out;            // результат сдвига
 logic [10:0] PSHIFT;            // регистр параметра сдвига (только запись)
@@ -37,24 +36,17 @@ logic [11:0] grp_addr;          // ПНА групп
 
 // Signals for ALU
 logic  [8:0] alu_I;             // ALU instruction, from ALUD, FUNC and ALUS
-logic  [3:0] alu_A;             // A register address, from RA
-logic  [3:0] alu_B;             // B register address, from RB
-logic [63:0] alu_D;             // D bus input
 logic        alu_C0;            // Carry input
-logic        alu_mode64;        // 64-bit mode flag, from H
-
 logic [63:0] alu_Y;             // Y bus output from ALU
 
 // Signals for status/shift unit
 logic [12:0] ss_I;              // Status/Shift instruction, from SHMUX and STOPC
-logic        ss_nCEM;           // Machine status register enable, from CEM
-logic        ss_nCEN;           // Micro status register enable, from CEN
-
 logic  [3:0] ss_Y;              // Y bus input
 logic  [3:0] ss_oY;             // Y bus output from Status/Shift
 logic        ss_CT;             // Conditional test output
 
-// Global data bus Y
+// Global data bus D and Y
+logic [63:0] D;
 logic [63:0] Y;
 
 logic stopm0, stopm1;           // Флаги останова
@@ -63,10 +55,14 @@ logic stopm0, stopm1;           // Флаги останова
 logic [7:0] mpmem[16];
 
 // Память приписок страниц
-logic [19:0] psmem[1024];
+logic [19:0] pg_map[1024];
+logic        pg_access_disable[1024];   // БОБР
+logic        pg_write_disable[1024];    // БИЗМ
+logic        pg_access;                 // both bor current page
+logic  [9:0] pg_index;                  // РФС: регистр физической страницы
 
 // Мультиплексор условий
-logic condition, condmux;
+logic cond;
 
 // Биты регистра режимов (РР)
 logic [2:0] grp;
@@ -100,17 +96,12 @@ logic [71:0] bus_oDX;           // X data output
 
 // Control unit
 // Input signals
-logic  [3:0] control_I;         // Four-bit instruction
 logic        control_nCC;       // Conditional Code Bit
-logic        control_nRLD;      // Unconditional load bit for register/counter
 logic        control_CI;        // Carry-in bit for microprogram counter
 logic [11:0] control_D;         // 12-bit data input to chip
 
 // Output signals
 logic [11:0] control_Y;         // 12-bit address output
-logic        control_nVE;       // Vector output enable
-logic        control_nME;       // Mapping PROM output enable
-logic        control_nFULL;     // Stack full flag
 
 //--------------------------------------------------------------
 // Microinstruction ROM.
@@ -202,14 +193,11 @@ wire        MPS   = opcode[1];       // Выбор источника парам
 // всегда равен “0”.
 
 am2910 control(clk,
-    control_I, '0, control_nCC, control_nRLD, control_CI, '0,
-    control_D, control_Y, , control_nVE, control_nME, control_nFULL);
-
-assign control_I    = SQI;      // Four-bit instruction
-assign control_nRLD = ~RLD;     // Unconditional load bit for register/counter
+    SQI, '0, control_nCC, ~RLD, control_CI, '0,
+    control_D, control_Y, , , , );
 
 // Carry-in bit for microprogram counter
-assign control_CI = (SCI ? condition : '1) ^ ICI;
+assign control_CI = (SCI ? control_nCC : '1) ^ ICI;
 
 // 12-bit data input
 assign control_D =
@@ -218,39 +206,33 @@ assign control_D =
     (MAP == 2) ? grp_addr :     // GRP, ПНА групп и микропрограммные признаки "След0" И "След1"
                  alu_Y[11:0];   // Выход АЛУ
 
-//TODO:
-//assign control_D = !control_nME & MOD ? pna_mod :
-//                   !control_nVE       ? pna_irq : x;
-
-assign control_nCC = condition;
-
-assign condition = ICC ? condmux : ~condmux;
+assign control_nCC = ICC ? cond : ~cond;
 
 // Выбор условия, подлежащего проверке.
 always_comb case (COND)
-      0: condmux = 1;           // YES, "да"
-      1: condmux = normb;       // NORMB, блокировка нормализации (БНОР)
-      2: condmux = rndb;        // RNDB, блокировка округления (БОКР)
-      3: condmux = ovrib;       // OVRIB, блокировка прерывания по переполнению (БПП)
-      4: condmux = bnb;         // BNB, блокировка выхода числа за диапазон БЭСМ-6 (ББЧ)
-      5: condmux = ovrftb;      // OVRFTB, блокировка проверки переполнения поля упрятывания (БППУ)
-      6: condmux = drg;         // DRG, режим диспетчера (РД)
-      7: condmux = besm6_mode;  // EMLRG, режим эмуляции
-      8: condmux = rcb;         // RCB, признак правой команды (ППК)
-      9: condmux = cb;          // CB, признак изменения адреса 16 регистром (ПИА)
-     10: condmux = cemlrg;      // CEMLRG, РЭС, 20-й разряд PP (резерв)
-     11: condmux = ss_CT;       // CT, сигнал CT CYCC
-     12: condmux = tr1;         // TR1, След1
-     13: condmux = intstp;      // INTSTP, признак останова по прерыванию (ПОП)
-     14: condmux = instr_ir15;  // IR15, стековый режим команды (ИР15)
-     15: condmux = tkk;         // TKK, признак правой команды стандартизатора (TKK)
-     16: condmux = `TODO;       // RUN, "пуск" от ПП
-     19: condmux = `TODO;       // INT, признак наличия прерываний
-     20: condmux = `TODO;       // FULMEM, память БМСП заполнена единицами
-     21: condmux = arb_rdy;     // ARBRDY, готовность арбитра
-     22: condmux = tr0;         // TR0, След0
-     23: condmux = `TODO;       // CPMP, память обмена "ЦП -> ПП" свободна
-default: condmux = 1;
+      0: cond = 1;          // YES, "да"
+      1: cond = normb;      // NORMB, блокировка нормализации (БНОР)
+      2: cond = rndb;       // RNDB, блокировка округления (БОКР)
+      3: cond = ovrib;      // OVRIB, блокировка прерывания по переполнению (БПП)
+      4: cond = bnb;        // BNB, блокировка выхода числа за диапазон БЭСМ-6 (ББЧ)
+      5: cond = ovrftb;     // OVRFTB, блокировка проверки переполнения поля упрятывания (БППУ)
+      6: cond = drg;        // DRG, режим диспетчера (РД)
+      7: cond = besm6_mode; // EMLRG, режим эмуляции
+      8: cond = rcb;        // RCB, признак правой команды (ППК)
+      9: cond = cb;         // CB, признак изменения адреса 16 регистром (ПИА)
+     10: cond = cemlrg;     // CEMLRG, РЭС, 20-й разряд PP (резерв)
+     11: cond = ss_CT;      // CT, сигнал CT CYCC
+     12: cond = tr1;        // TR1, След1
+     13: cond = intstp;     // INTSTP, признак останова по прерыванию (ПОП)
+     14: cond = instr_ir15; // IR15, стековый режим команды (ИР15)
+     15: cond = tkk;        // TKK, признак правой команды стандартизатора (TKK)
+     16: cond = `TODO;      // RUN, "пуск" от ПП
+     19: cond = `TODO;      // INT, признак наличия прерываний
+     20: cond = `TODO;      // FULMEM, память БМСП заполнена единицами
+     21: cond = arb_rdy;    // ARBRDY, готовность арбитра
+     22: cond = tr0;        // TR0, След0
+     23: cond = `TODO;      // CPMP, память обмена "ЦП -> ПП" свободна
+default: cond = 1;
 endcase
 
 //--------------------------------------------------------------
@@ -297,28 +279,34 @@ always @(posedge clk)
 // Datapath: register file, ALU and status/shifts
 //
 datapath alu(clk,
-    alu_I, alu_A, alu_B, alu_D, alu_C0, alu_mode64, alu_Y,
-    ss_I, ss_nCEM, ss_nCEN, ss_Y, ss_oY, ss_CT);
+    alu_I, RA, RB, D, alu_C0, H, alu_Y,
+    ss_I, ~CEM, ~CEN, ss_Y, ss_oY, ss_CT);
 
 assign alu_I = {ALUD, FUNC, ALUS};
-assign alu_A = RA;
-assign alu_B = RB;
-assign alu_mode64 = H;
-assign alu_C0 = condition;
+assign alu_C0 = control_nCC;
 
 // Управление источниками информации на шину D.
-assign alu_D =
+assign D =
+    // DSRC mux
     (DSRC == 1)  ? {1'b1, modgn, 5'd0} : // регистр номера группы памяти модификаторов
     (DSRC == 2)  ? PROCN :              // регистр номера процесса
     (DSRC == 3)  ? RR :                 // регистр режимов и триггеры признаков
-    (DSRC == 4)  ? {PHYSPG, 10'd0} :    // регистр физической страницы
+    (DSRC == 4)  ? {pg_index, 10'd0} :  // регистр физической страницы
     (DSRC == 5)  ? arb_req :            // регистр КОП арбитра
-    (DSRC == 8)  ? instr_addr :         // COMA, адресная часть команды
+    (DSRC == 8)  ? instr_addr :         // COMA: адресная часть команды
     (DSRC == 9)  ? sh_out :             // результат сдвига
-    (DSRC == 10) ? instr_code :         // OPC, код операции команды
-    (DSRC == 11) ? clz_out :            // LOS, результат поиска левой единицы
+    (DSRC == 10) ? instr_code :         // OPC: код операции команды
+    (DSRC == 11) ? clz_out :            // LOS: результат поиска левой единицы
     (DSRC == 12) ? PROM :               // ПЗУ констант
-    (DDEV == 5)  ? {ss_oY, 6'd0} :      // STATUS, Y bus output from Status/Shift
+
+    // DDEV mux
+    (DDEV == 1)  ? {pg_access, 1'b0} :  // ВВ: БОБР, БИЗМ
+    (DDEV == 2)  ? `TODO :              // MODB: БМСП
+    (DDEV == 5)  ? {ss_oY, 6'd0} :      // STATUS: Y bus output from Status/Shift
+    (DDEV == 6)  ? `TODO :              // РРМЕМ0: ОЗУ приоритетов страниц 0
+    (DDEV == 7)  ? `TODO :              // РРМЕМ1: ОЗУ приоритетов страниц 1
+
+    // Others
     (CSM & !WEM) ? mr_read :            // регистр-модификатор
                    instr_addr;          // источник не указан: адресная часть команды?
 
@@ -326,7 +314,7 @@ assign Y =
     (YDEV == 1 & !WRB) ? bus_oDB[71:64] :       // ECBTAG, канал В БОИ тега
     (YDEV == 2 & !WRY) ? `TODO :                // PHYSAD, физический адрес (только на чтение);
     (YDEV == 3 & !WRY) ? UREG :                 // RADRR, регистр исполнительного адреса (чтение);
-    (YDEV == 4 & !WRY) ? psmem[UREG[19:10]] :   // PSMEM, память приписок (CS);
+    (YDEV == 4 & !WRY) ? pg_map[UREG[19:10]] :  // PSMEM, память приписок (CS);
     (YDEV == 5 & !WRY) ? mpmem[MPADR] :         // МРМЕМ, память обмена с ПП;
                    ALU ? alu_Y :                // Y bus output from ALU
                          '0;
@@ -334,20 +322,20 @@ assign Y =
 // Управление приемниками информации с шины Y ЦП.
 always @(posedge clk)
     case (YDST)
-     1: modgn  <= Y[9:5];       // регистр номера группы памяти модификаторов
-     2: PROCN  <= Y[7:0];       // регистр номера процесса
-   /*3: RR     <= Y[31:0];*/    // регистр режимов и триггеры признаков
-     4: PHYSPG <= Y[19:10];     // регистр физической страницы
-   /*5: ARBOPC <= Y[3:0];*/     // код операции арбитра
-     8: UREG   <= Y[31:0];      // ADRREG, регистр исполнительного адреса (запись)
-   /*9: PSHIFT <= Y[10:0];*/    // регистр параметра сдвига (только запись)
+     1: modgn    <= Y[9:5];     // регистр номера группы памяти модификаторов
+     2: PROCN    <= Y[7:0];     // регистр номера процесса
+   /*3: RR       <= Y[31:0];*/  // регистр режимов и триггеры признаков
+     4: pg_index <= Y[19:10];   // регистр физической страницы
+   /*5: ARBOPC   <= Y[3:0];*/   // код операции арбитра
+     8: UREG     <= Y[31:0];    // ADRREG, регистр исполнительного адреса (запись)
+   /*9: PSHIFT   <= Y[10:0];*/  // регистр параметра сдвига (только запись)
     endcase
 
 // Запись в источники или приемники шины Y.
 always @(posedge clk)
     if (WRY)
         case (YDEV)
-        4: psmem[UREG[19:10]] <= Y[19:0];   // PSMEM, память приписок (CS)
+        4: pg_map[UREG[19:10]] <= Y[19:0];  // PSMEM, память приписок (CS)
         5: mpmem[MPADR] <= Y[7:0];          // МРМЕМ, память обмена с ПП
         6: stopm0 <= Y[0];                  // STOPM0, флаг останова 0
         7: stopm1 <= Y[0];                  // STOPM1, флаг останова 1
@@ -356,8 +344,6 @@ always @(posedge clk)
 assign CCLR = (YDST == 10);     // запуск сброса кэша
 
 assign ss_I = {CI, alu_I[7], SHMUX, STOPC};
-assign ss_nCEM = !CEM;
-assign ss_nCEN = !CEN;
 assign ss_Y = Y[9:6];           // status bits: Z N C V
 
 //--------------------------------------------------------------
@@ -381,7 +367,7 @@ clz clz(Y, clz_out);
 //
 assign bus_ECBTAG = (YDEV == 1);    // ydev=ECBTAG, выбор регистров БОИ тега
 
-assign bus_DA = alu_D;
+assign bus_DA = D;
 assign bus_DB = {Y[7:0], Y};
 assign bus_DX = {i_tag, i_data};
 assign o_ad   = bus_oDX[63:0];
@@ -544,11 +530,12 @@ always @(posedge clk)
 
 // Признак изменения адресом (ПИА) устанавливается и сбрасывается разными путями
 always @(posedge clk)
-    if (DDEV == 3)
-        cb <= '0;           // CLRCD, сброс ПИА, дополнительный сигнал
-    else if (!IOMP & FFCNT == 5)
-        cb <= '1;           // SЕТС, установка триггера ПИА
+    if (DDEV == 3)          // ddev=CLRCD
+        cb <= '0;           // сброс ПИА, дополнительный сигнал
+    else if (!IOMP & FFCNT == 5)    // ffcnt=SЕТС
+        cb <= '1;           // установка триггера ПИА
 
+// ППК, признак правой команды
 always @(posedge clk)
     if (ISE)
         rcb <= tkk;         // Копирование ТКК в ППК
@@ -557,5 +544,16 @@ always @(posedge clk)
           6: rcb <= '0;     // CLRRCB, сброс триггера ППК
           7: rcb <= '1;     // SETRCB, установка триггера ППК
         endcase
+
+// БОБР, БИЗМ: блокировка обращения, блокировка изменения
+always @(posedge clk)
+    if (WRD & DDEV == 1) begin
+        pg_access_disable[pg_index] <= D[1];
+        pg_write_disable[pg_index] <= D[2];
+    end
+
+assign pg_access = { pg_write_disable[pg_index],
+                     pg_access_disable[pg_index],
+                     1'b0 };
 
 endmodule

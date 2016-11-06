@@ -387,7 +387,7 @@ task print_uop(
     //
     // Some features not implemented yet
     //
-    if (DSRC==10)
+    if (DSRC == 10)
         $fdisplay(fd, "(%0d) *** dsrc=%0s not implemented yet!",
             ctime, dsrc_name[DSRC]);
     if (!IOMP && (FFCNT == 16 || FFCNT == 17 || FFCNT == 21 || FFCNT == 24 ||
@@ -395,20 +395,17 @@ task print_uop(
                   FFCNT == 29 || FFCNT == 30 || FFCNT == 31))
         $fdisplay(fd, "(%0d) *** ffcnt=%0s not implemented yet!",
             ctime, ffcnt_name[FFCNT]);
-    if (WRD != 0)
-        $fdisplay(fd, "(%0d) *** WRD not implemented yet!", ctime);
-    if (DDEV != 0 && DDEV != 3 && DDEV != 5)
+    if (DDEV == 2 || DDEV == 6 || DDEV == 7)
         $fdisplay(fd, "(%0d) *** ddev=%0s not implemented yet!",
             ctime, ddev_name[DDEV]);
+    if (YDEV == 2)
+        $fdisplay(fd, "(%0d) *** ydev=PHYSAD not implemented yet!", ctime);
     case (COND)
          16: $fdisplay(fd, "(%0d) *** cond=RUN not implemented yet!", ctime);
          17: $fdisplay(fd, "(%0d) *** cond=NMLRDY not implemented yet!", ctime);
          19: $fdisplay(fd, "(%0d) *** cond=INT not implemented yet!", ctime);
          20: $fdisplay(fd, "(%0d) *** cond=FULMEM not implemented yet!", ctime);
          23: $fdisplay(fd, "(%0d) *** cond=CPMP not implemented yet!", ctime);
-    endcase
-    case (YDEV)
-        2: $fdisplay(fd, "(%0d) *** ydev=PHYSAD not implemented yet!", ctime);
     endcase
 endtask
 
@@ -625,12 +622,12 @@ task print_changed_cpu(
     static logic [31:0] old_rr;
     static logic [31:0] old_mrmem[1024];
     static logic  [7:0] old_mpmem[16];
-    static logic [19:0] old_psmem[1024];
+    static logic [19:0] old_pgmap[1024];
     static logic        old_stopm0, old_stopm1;
 
     automatic logic  [5:0] modgn  = cpu.modgn;
     automatic logic  [7:0] procn  = cpu.PROCN;
-    automatic logic  [9:0] physpg = cpu.PHYSPG;
+    automatic logic  [9:0] physpg = cpu.pg_index;
     automatic logic  [3:0] arbopc = cpu.arb_req;
     automatic logic [31:0] ureg   = cpu.UREG;
     automatic logic [10:0] pshift = cpu.PSHIFT;
@@ -687,10 +684,10 @@ task print_changed_cpu(
     if (wry && ydev==4) begin
         int i;
         for (i=0; i<1024; i+=1)
-            if (cpu.psmem[i] !== old_psmem[i]) begin
+            if (cpu.pg_map[i] !== old_pgmap[i]) begin
                 $fdisplay(fd, "(%0d)               Write Page[%0d] = %h",
-                    ctime, i, cpu.psmem[i]);
-                old_psmem[i] = cpu.psmem[i];
+                    ctime, i, cpu.pg_map[i]);
+                old_pgmap[i] = cpu.pg_map[i];
             end
     end
 endtask

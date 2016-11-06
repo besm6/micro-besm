@@ -12,6 +12,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/decoder.sv \
                   ../../../rtl/arbiter.sv \
                   ../../../rtl/shifter.sv \
+                  ../../../rtl/clz.sv \
                   ../../../rtl/tracer.sv \
                   ../sectest.sv
 
@@ -31,7 +32,7 @@ $(PROG):        $(SOURCES)
 		$(NCSIM)elab --nolog testbench
 
 run:            $(PROG)
-		$(NCSIM)sim --R --log run.log testbench --testplusarg limit=200000
+		$(NCSIM)sim --R --log run.log testbench --testplusarg limit=1000000
 
 view:
 		gtkwave testbench.vcd databus.gtkw
