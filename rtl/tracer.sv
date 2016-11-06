@@ -623,8 +623,8 @@ task print_changed_cpu(
     static logic [31:0] old_mrmem[1024];
     static logic  [7:0] old_mpmem[16];
     static logic [19:0] old_pgmap[1024];
-    static logic  [9:0] old_pgprio0[1024];
-    static logic  [9:0] old_pgprio1[1024];
+    static logic [11:0] old_pgprio0[1024];
+    static logic [11:0] old_pgprio1[1024];
     static logic        old_pginv[1024];
     static logic        old_pgro[1024];
     static logic        old_pgreprio[1024];
