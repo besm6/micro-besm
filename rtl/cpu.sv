@@ -58,9 +58,11 @@ logic [7:0] mpmem[16];
 logic [19:0] pg_map[1024];
 logic        pg_inv[1024];      // БОБР, page invalid
 logic        pg_ro[1024];       // БИЗМ, page is read only
-logic        pg_repri[1024];    // БМСП, reprioritize request
+logic        pg_reprio[1024];   // БМСП, reprioritize request
 logic  [2:0] pg_access;         // both for current page
 logic  [9:0] pg_index;          // РФС: регистр физической страницы
+logic  [9:0] pg_prio0[1024];    // page priority 0
+logic  [9:0] pg_prio1[1024];    // page priority 1
 
 // Мультиплексор условий
 logic cond;
@@ -301,11 +303,11 @@ assign D =
     (DSRC == 12) ? PROM :               // ПЗУ констант
 
     // DDEV mux
-    (DDEV == 1)  ? pg_access :          // ВВ: БОБР, БИЗМ
-    (DDEV == 2)  ? pg_repri[pg_index] : // MODB: БМСП
-    (DDEV == 5)  ? {ss_oY, 6'd0} :      // STATUS: Y bus output from Status/Shift
-    (DDEV == 6)  ? `TODO :              // РРМЕМ0: ОЗУ приоритетов страниц 0
-    (DDEV == 7)  ? `TODO :              // РРМЕМ1: ОЗУ приоритетов страниц 1
+    (DDEV == 1)  ? pg_access :                   // ВВ: БОБР, БИЗМ
+    (DDEV == 2)  ? pg_reprio[pg_index] :         // MODB: БМСП
+    (DDEV == 5)  ? {ss_oY, 6'd0} :               // STATUS: Y bus output from Status/Shift
+    (DDEV == 6)  ? {pg_prio0[pg_index], 10'd0} : // PPMEM0: ОЗУ приоритетов страниц 0
+    (DDEV == 7)  ? {pg_prio1[pg_index], 10'd0} : // PPMEM1: ОЗУ приоритетов страниц 1
 
     // Others
     (CSM & !WEM) ? mr_read :            // регистр-модификатор
@@ -558,7 +560,17 @@ assign pg_access = { pg_ro[pg_index], pg_inv[pg_index], 1'b0 };
 // БМСП, бит модификации списка приоритетов
 always @(posedge clk)
     if (WRD & DDEV == 2) begin
-        pg_repri[pg_index] <= D[0];
+        pg_reprio[pg_index] <= D[0];
     end
+
+// PPMEM0/1, память приоритетов страниц
+always @(posedge clk) begin
+    if (WRD & DDEV == 6) begin
+        pg_prio0[pg_index] <= Y[19:10];
+    end
+    if (WRD & DDEV == 7) begin
+        pg_prio1[pg_index] <= Y[19:10];
+    end
+end
 
 endmodule

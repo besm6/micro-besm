@@ -388,18 +388,18 @@ task print_uop(
     // Some features not implemented yet
     //
     if (DSRC == 10)
-        $fdisplay(fd, "(%0d) *** dsrc=%0s not implemented yet!",
+        $fdisplay(fd, "(%0d) *** dsrc=OPC not implemented yet!",
             ctime, dsrc_name[DSRC]);
+
+    if (YDEV == 2)
+        $fdisplay(fd, "(%0d) *** ydev=PHYSAD not implemented yet!", ctime);
+
     if (!IOMP && (FFCNT == 16 || FFCNT == 17 || FFCNT == 21 || FFCNT == 24 ||
                   FFCNT == 25 || FFCNT == 26 || FFCNT == 27 || FFCNT == 28 ||
                   FFCNT == 29 || FFCNT == 30 || FFCNT == 31))
         $fdisplay(fd, "(%0d) *** ffcnt=%0s not implemented yet!",
             ctime, ffcnt_name[FFCNT]);
-    if (DDEV == 6 || DDEV == 7)
-        $fdisplay(fd, "(%0d) *** ddev=%0s not implemented yet!",
-            ctime, ddev_name[DDEV]);
-    if (YDEV == 2)
-        $fdisplay(fd, "(%0d) *** ydev=PHYSAD not implemented yet!", ctime);
+
     case (COND)
          16: $fdisplay(fd, "(%0d) *** cond=RUN not implemented yet!", ctime);
          17: $fdisplay(fd, "(%0d) *** cond=NMLRDY not implemented yet!", ctime);
@@ -623,9 +623,11 @@ task print_changed_cpu(
     static logic [31:0] old_mrmem[1024];
     static logic  [7:0] old_mpmem[16];
     static logic [19:0] old_pgmap[1024];
+    static logic  [9:0] old_pgprio0[1024];
+    static logic  [9:0] old_pgprio1[1024];
     static logic        old_pginv[1024];
     static logic        old_pgro[1024];
-    static logic        old_pgrepri[1024];
+    static logic        old_pgreprio[1024];
     static logic        old_stopm0, old_stopm1;
 
     automatic logic  [5:0] modgn  = cpu.modgn;
@@ -641,7 +643,7 @@ task print_changed_cpu(
     automatic logic        wem    = opcode[29];
     automatic logic  [2:0] ydev   = opcode[20:18];
     automatic logic        wry    = opcode[17];
-    automatic logic        ddev   = opcode[16:14];
+    automatic logic  [2:0] ddev   = opcode[16:14];
     automatic logic        wrd    = opcode[13];
 
     //
@@ -661,8 +663,7 @@ task print_changed_cpu(
     // Index-registers
     //
     if (csm & wem) begin
-        int i;
-        for (i=old_modgn*32; i<old_modgn*32+32; i+=1)
+        for (int i=old_modgn*32; i<old_modgn*32+32; i+=1)
             if (cpu.mr_mem[i] !== old_mrmem[i]) begin
                 $fdisplay(fd, "(%0d)               Write %0s[%0d] = %h",
                     ctime, ir_name[i[4:0]], i[9:5], cpu.mr_mem[i]);
@@ -674,8 +675,7 @@ task print_changed_cpu(
     // I/O memory for console processor
     //
     if (wry && ydev==5) begin
-        int i;
-        for (i=0; i<16; i+=1)
+        for (int i=0; i<16; i+=1)
             if (cpu.mpmem[i] !== old_mpmem[i]) begin
                 $fdisplay(fd, "(%0d)               Write %0s = %h",
                     ctime, mpadr_name[i], cpu.mpmem[i]);
@@ -687,8 +687,7 @@ task print_changed_cpu(
     // Page map
     //
     if (wry && ydev==4) begin
-        int i;
-        for (i=0; i<1024; i+=1)
+        for (int i=0; i<1024; i+=1)
             if (cpu.pg_map[i] !== old_pgmap[i]) begin
                 $fdisplay(fd, "(%0d)               Write Page[%0d] = %h",
                     ctime, i, cpu.pg_map[i]);
@@ -696,14 +695,13 @@ task print_changed_cpu(
             end
     end
     if (wrd && ddev==1) begin
-        int i;
-        for (i=0; i<1024; i+=1)
+        for (int i=0; i<1024; i+=1)
             if (cpu.pg_inv[i] !== old_pginv[i]) begin
                 $fdisplay(fd, "(%0d)               Write PageInv[%0d] = %h",
                     ctime, i, cpu.pg_inv[i]);
                 old_pginv[i] = cpu.pg_inv[i];
             end
-        for (i=0; i<1024; i+=1)
+        for (int i=0; i<1024; i+=1)
             if (cpu.pg_ro[i] !== old_pgro[i]) begin
                 $fdisplay(fd, "(%0d)               Write PageRO[%0d] = %h",
                     ctime, i, cpu.pg_ro[i]);
@@ -711,12 +709,27 @@ task print_changed_cpu(
             end
     end
     if (wrd && ddev==3) begin
-        int i;
-        for (i=0; i<1024; i+=1)
-            if (cpu.pg_repri[i] !== old_pgrepri[i]) begin
-                $fdisplay(fd, "(%0d)               Write PageRepri[%0d] = %h",
-                    ctime, i, cpu.pg_repri[i]);
-                old_pgrepri[i] = cpu.pg_repri[i];
+        for (int i=0; i<1024; i+=1)
+            if (cpu.pg_reprio[i] !== old_pgreprio[i]) begin
+                $fdisplay(fd, "(%0d)               Write PageReprio[%0d] = %h",
+                    ctime, i, cpu.pg_reprio[i]);
+                old_pgreprio[i] = cpu.pg_reprio[i];
+            end
+    end
+    if (wrd && ddev==6) begin
+        for (int i=0; i<1024; i+=1)
+            if (cpu.pg_prio0[i] !== old_pgprio0[i]) begin
+                $fdisplay(fd, "(%0d)               Write PagePrio0[%0d] = %h",
+                    ctime, i, cpu.pg_prio0[i]);
+                old_pgprio0[i] = cpu.pg_prio0[i];
+            end
+    end
+    if (wrd && ddev==7) begin
+        for (int i=0; i<1024; i+=1)
+            if (cpu.pg_prio1[i] !== old_pgprio1[i]) begin
+                $fdisplay(fd, "(%0d)               Write PagePrio1[%0d] = %h",
+                    ctime, i, cpu.pg_prio1[i]);
+                old_pgprio1[i] = cpu.pg_prio1[i];
             end
     end
 endtask
