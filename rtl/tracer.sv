@@ -623,6 +623,8 @@ task print_changed_cpu(
     static logic [31:0] old_mrmem[1024];
     static logic  [7:0] old_mpmem[16];
     static logic [19:0] old_pgmap[1024];
+    static logic        old_pginv[1024];
+    static logic        old_pgro[1024];
     static logic        old_stopm0, old_stopm1;
 
     automatic logic  [5:0] modgn  = cpu.modgn;
@@ -634,10 +636,12 @@ task print_changed_cpu(
     automatic logic [31:0] rr     = cpu.RR;
     automatic logic        stopm0 = cpu.stopm0;
     automatic logic        stopm1 = cpu.stopm1;
-    automatic logic        csm    = opcode[30];    // Управление обращением к ОЗУ модификаторов
-    automatic logic        wem    = opcode[29];    // Разрешение записи в ОЗУ модификаторов
-    automatic logic  [2:0] ydev   = opcode[20:18]; // Выбор источника или приемника информации с шины Y
-    automatic logic        wry    = opcode[17];    // Запись в источники или приемники шины Y
+    automatic logic        csm    = opcode[30];
+    automatic logic        wem    = opcode[29];
+    automatic logic  [2:0] ydev   = opcode[20:18];
+    automatic logic        wry    = opcode[17];
+    automatic logic        ddev   = opcode[16:14];
+    automatic logic        wrd    = opcode[13];
 
     //
     // Internal registers
@@ -688,6 +692,21 @@ task print_changed_cpu(
                 $fdisplay(fd, "(%0d)               Write Page[%0d] = %h",
                     ctime, i, cpu.pg_map[i]);
                 old_pgmap[i] = cpu.pg_map[i];
+            end
+    end
+    if (wrd && ddev==1) begin
+        int i;
+        for (i=0; i<1024; i+=1)
+            if (cpu.pg_inv[i] !== old_pginv[i]) begin
+                $fdisplay(fd, "(%0d)               Write PageInv[%0d] = %h",
+                    ctime, i, cpu.pg_inv[i]);
+                old_pginv[i] = cpu.pg_inv[i];
+            end
+        for (i=0; i<1024; i+=1)
+            if (cpu.pg_ro[i] !== old_pgro[i]) begin
+                $fdisplay(fd, "(%0d)               Write PageRO[%0d] = %h",
+                    ctime, i, cpu.pg_ro[i]);
+                old_pgro[i] = cpu.pg_ro[i];
             end
     end
 endtask

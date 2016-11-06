@@ -56,10 +56,10 @@ logic [7:0] mpmem[16];
 
 // Память приписок страниц
 logic [19:0] pg_map[1024];
-logic        pg_access_disable[1024];   // БОБР
-logic        pg_write_disable[1024];    // БИЗМ
-logic        pg_access;                 // both bor current page
-logic  [9:0] pg_index;                  // РФС: регистр физической страницы
+logic        pg_inv[1024];      // БОБР, page invalid
+logic        pg_ro[1024];       // БИЗМ, read only
+logic        pg_access;         // both bor current page
+logic  [9:0] pg_index;          // РФС: регистр физической страницы
 
 // Мультиплексор условий
 logic cond;
@@ -548,12 +548,10 @@ always @(posedge clk)
 // БОБР, БИЗМ: блокировка обращения, блокировка изменения
 always @(posedge clk)
     if (WRD & DDEV == 1) begin
-        pg_access_disable[pg_index] <= D[1];
-        pg_write_disable[pg_index] <= D[2];
+        pg_inv[pg_index] <= D[1];
+        pg_ro[pg_index] <= D[2];
     end
 
-assign pg_access = { pg_write_disable[pg_index],
-                     pg_access_disable[pg_index],
-                     1'b0 };
+assign pg_access = { pg_ro[pg_index], pg_inv[pg_index], 1'b0 };
 
 endmodule
