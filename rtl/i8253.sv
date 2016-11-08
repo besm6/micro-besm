@@ -58,7 +58,6 @@ module i8253(
             2'b10: cwsel = 3'b100;
             2'b11: cwsel = 3'b000;
         endcase
-    end
 
     //assign dout = rden[0] ? q0 : rden[1] ? q1 : rden[2] ? q2 : 0;
     always_comb
@@ -115,20 +114,20 @@ module i8253_counter(
     // let the counter auto-reload inself in modes M2,M2X,M3,M3X
     wire autoreload = (cw_mode[1:0] == M3) || (cw_mode[1:0] == M2);
 
-    i8253_downcount dctr(clk, counter_clock_enable, cw_mode[1:0] == M3, autoreload, out, counter_load, counter_wren, counter_q);
-
-    // software stop by loading
+    logic counter_loading;
+    logic counter_loaded;
     logic loading_stopper;
-    always @(counter_loading, cw_mode)
-        loading_stopper <= (cw_mode == M0 || cw_mode == M4) & counter_loading;
+    logic loading_msb;    // for rl=3: 0: next 8-bit value will be lsb, 1: msb
+    logic counter_starting;
 
     // master, total, final grand enable
     wire counter_clock_enable = counter_loaded & !loading_stopper;
 
-    logic loading_msb;    // for rl=3: 0: next 8-bit value will be lsb, 1: msb
-    logic counter_starting;
-    logic counter_loaded;
-    logic counter_loading;
+    i8253_downcount dctr(clk, counter_clock_enable, cw_mode[1:0] == M3, autoreload, out, counter_load, counter_wren, counter_q);
+
+    // software stop by loading
+    always @(counter_loading, cw_mode)
+        loading_stopper <= (cw_mode == M0 || cw_mode == M4) & counter_loading;
 
     // latching command written: counter value latch enable
     wire read_latch_e = (cword[5:4] == 2'b00);
