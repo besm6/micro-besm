@@ -250,7 +250,7 @@ always @(negedge clk) begin
     // Поиск левой единицы
     //
     //check_jump(LABEL_PSLO23-1, LABEL_PSLO23, LABEL_PSLO24-1, "Skip CLO23");
-    check_jump(LABEL_PSLO23-1, LABEL_PSLO23, LABEL_CTAG3-6, "Skip CLO23-CTAG2");
+    check_jump(LABEL_PSLO23-1, LABEL_PSLO23, LABEL_CONTA-1, "Skip STP1-CICL9");
     check_pass(LABEL_CLO24,  "Test CLO24 pass");
     check_pass(LABEL_CLO25,  "Test CLO25 pass");
 
