@@ -30,52 +30,44 @@ module i8253(
     input  wire         rd,         // data read
     input  wire         wr,         // data write
     input  wire   [1:0] a,          // address bus
-    input  wire   [7:0] din,        // data input bus
-    output logic  [7:0] dout,       // data output bus
-    output logic  [2:0] out         // timer outputs
+    input  wire   [7:0] idata,      // data input bus
+    output wire   [7:0] odata,      // data output bus
+    output wire         out0,       // timer 0 output
+    output wire         out1,       // timer 1 output
+    output wire         out2        // timer 2 output
 );
-    logic [7:0] q0, q1, q2;
-    logic [5:0] cword0, cword1, cword2;
-    logic [2:0] cwsel;
-    logic [3:0] sel, wren, rden;
+    wire [7:0] q0, q1, q2;
 
-    always_comb
-        case(a)
-            2'b00: sel = 4'b0001;
-            2'b01: sel = 4'b0010;
-            2'b10: sel = 4'b0100;
-            2'b11: sel = 4'b1000;
-        endcase
+    wire [3:0] sel = (a == 2'b00) ? 4'b0001 :
+                     (a == 2'b01) ? 4'b0010 :
+                     (a == 2'b10) ? 4'b0100 :
+                                    4'b1000;
 
-    assign wren = {4{wr & cs}} & sel;
-    assign rden = {4{rd & cs}} & sel;
+    wire [3:0] wren = {4{wr & cs}} & sel;
+    wire [3:0] rden = {4{rd & cs}} & sel;
 
-    always_comb
-        case (din[7:6])
-            2'b00: cwsel = 3'b001;
-            2'b01: cwsel = 3'b010;
-            2'b10: cwsel = 3'b100;
-            2'b11: cwsel = 3'b000;
-        endcase
+    wire [2:0] cwsel = (idata[7:6] == 2'b00) ? 3'b001 :
+                       (idata[7:6] == 2'b01) ? 3'b010 :
+                       (idata[7:6] == 2'b10) ? 3'b100 :
+                                               3'b000;
 
-    i8253_counter c0(clk, din[5:0], wren[3] & cwsel[0], din, wren[0], rden[0], q0, out[0]);
-    i8253_counter c1(clk, din[5:0], wren[3] & cwsel[1], din, wren[1], rden[1], q1, out[1]);
-    i8253_counter c2(clk, din[5:0], wren[3] & cwsel[2], din, wren[2], rden[2], q2, out[2]);
+    i8253_counter c0(clk, wren[3] & cwsel[0], wren[0], rden[0], idata, q0, out0);
+    i8253_counter c1(clk, wren[3] & cwsel[1], wren[1], rden[1], idata, q1, out1);
+    i8253_counter c2(clk, wren[3] & cwsel[2], wren[2], rden[2], idata, q2, out2);
 
-    assign dout = rden[0] ? q0 :
-                  rden[1] ? q1 :
-                  rden[2] ? q2 : 0;
+    assign odata = rden[0] ? q0 :
+                   rden[1] ? q1 :
+                   rden[2] ? q2 : 0;
 
 endmodule
 
 module i8253_counter(
     input  wire        clk,     // clock for time counter
-    input  wire  [5:0] cword,   // control word from top sans counter select: 6 bits
     input  wire        cwset,   // control word set
-    input  wire  [7:0] d,       // data in for load
     input  wire        wren,    // data load enable
     input  wire        rden,    // data read enable
-    output logic [7:0] dout,    // read value
+    input  wire  [7:0] idata,   // data in for load
+    output logic [7:0] odata,   // read value
     output logic       out      // out pin according to mode
 );
     parameter M0 = 3'd0,
@@ -99,10 +91,10 @@ module i8253_counter(
     // current counter value
     logic [15:0] counter;
 
+    logic loading_msb;    // for rl=3: 0: next 8-bit value will be lsb, 1: msb
     logic overwrite_req;
     logic loading;
     logic loaded;
-    logic loading_msb;    // for rl=3: 0: next 8-bit value will be lsb, 1: msb
     logic starting;
 
     //---------------------------------------------------------
@@ -118,56 +110,23 @@ module i8253_counter(
     // counter overwrite enable (from host)
     wire overwrite = (overwrite_req && cw_mode != M1 && cw_mode != M5);
 
-    wire [15:0] decr = !halfmode ? 1 :
-                   counter[0]==0 ? 2 :
-                             out ? 1 :
-                                   3;
+    wire [15:0] decr = !halfmode ? 1 :  // all modes except M3
+                   counter[0]==0 ? 2 :  // M3 even: step 2
+                             out ? 1 :  // M3 odd, output 1: first step 1
+                                   3;   // M3 odd, output 0: first step 3
 
     wire [15:0] next = counter - decr;
 
     always @(posedge clk) begin
         // Update counter.
-        if (overwrite | (autoreload & |next==0))
+        if (overwrite | (autoreload & next==0))
             counter <= reload_value;
         else
             counter <= next;
-    end
 
-    //---------------------------------------------------------
-    // Read dispatcher.
-    //
-    i8253_read rbus(
-        .rden       (rden),
-        .cwset      (cwset),
-        .latch_en   (cword[5:4] == 2'b00),
-        .rl_mode    (rl_mode),
-        .counter    (counter),
-        .q          (dout)
-    );
-
-    always @(posedge wren, posedge cwset) begin
-        if (cwset && cword[5:4] != 0)
-            loading_msb <= 0;
-        else if (wren && rl_mode == 3)
-            loading_msb <= ~loading_msb;
-
-        if (wren) begin
-            case (rl_mode)
-            2'b01: reload_value[7:0] <= d;
-            2'b10: reload_value[15:8] <= d;
-            2'b11: if (loading_msb) reload_value[15:8] <= d;
-                   else             reload_value[7:0] <= d;
-            endcase
-        end
-    end
-
-    always_latch begin
-        if (cwset && cword[5:4] != 0) begin
-            loaded      <= 0;
-            loading     <= 0;
-            cwreg       <= cword;
-
-            case (cword[3:1])
+        // Set output pin.
+        if (overwrite)
+            case (cw_mode)
             M0:      out <= 0; // interrupt, 1-time, start count on load or gate
             M1:      out <= 1; // programmable one-shot on gate rising edge; NOT IMPLEMENTED
             M2, M2X: out <= 1; // rate generator, start couting on load (or gate rising edge, not supported)
@@ -176,6 +135,70 @@ module i8253_counter(
             M5:      out <= 1; // hardware trigger strobe (NOT IMPLEMENTED)
             default: out <= 1;
             endcase
+        else
+            case (cw_mode)
+            M0: if (counter == 0)
+                    out <= 1;
+
+            M1: ; // NOT IMPLEMENTED: no gate, no reloads
+
+            M2X,
+            M2: // technically we should trigger/reload on 1
+                // but we need to do this up front to be ready
+                // by the next clk
+                if (counter == 1)
+                    out <= 0;
+                else
+                    out <= 1;
+
+            M3X,
+            M3: if (counter == 2)
+                    out <= ~out;
+
+            M4: if (counter == 0)
+                    out <= 0;
+                else
+                    out <= 1; // reset out on next cycle
+
+            M5: ; // NOT IMPLEMENTED: no gate, just roll
+
+            default: ;
+            endcase
+    end
+
+    //---------------------------------------------------------
+    // Read dispatcher.
+    //
+    i8253_read rbus(
+        .rden       (rden),
+        .cwset      (cwset),
+        .latch_en   (idata[5:4] == 2'b00),
+        .rl_mode    (rl_mode),
+        .counter    (counter),
+        .q          (odata)
+    );
+
+    always @(posedge wren, posedge cwset) begin
+        if (cwset && idata[5:4] != 0)
+            loading_msb <= 0;
+        else if (wren && rl_mode == 3)
+            loading_msb <= ~loading_msb;
+
+        if (wren) begin
+            case (rl_mode)
+            2'b01: reload_value[7:0] <= idata;
+            2'b10: reload_value[15:8] <= idata;
+            2'b11: if (loading_msb) reload_value[15:8] <= idata;
+                   else             reload_value[7:0] <= idata;
+            endcase
+        end
+    end
+
+    always_latch begin
+        if (cwset && idata[5:4] != 0) begin
+            loaded  <= 0;
+            loading <= 0;
+            cwreg   <= idata;
         end
 
         // load
@@ -213,37 +236,6 @@ module i8253_counter(
             loaded <= 1;
             starting <= 0;
         end
-
-        // Set output pin.
-        case (cw_mode)
-        M0: if (counter == 16'd1) begin // 1 locks the counter so the terminal count is 0
-                out <= 1;
-            end
-
-        M1: ; // NOT IMPLEMENTED: no gate, no reloads
-
-        M2X,
-        M2: // technically we should trigger/reload on 1
-            // but we need to do this up front to be ready
-            // by the next clk
-            if (counter == 16'd2)
-                out <= 0;
-            else
-                out <= 1;
-
-        M3X,
-        M3: if (counter == 16'd2)
-                out <= ~out;
-
-        M4: if (counter == 16'd0)
-                out <= 0;
-            else
-                out <= 1; // reset out on next cycle
-
-        M5: ; // NOT IMPLEMENTED: no gate, just roll
-
-        default: ;
-        endcase
     end
 endmodule
 

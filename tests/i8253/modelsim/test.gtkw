@@ -1,13 +1,13 @@
 [*]
 [*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
-[*] Wed Nov  9 03:24:50 2016
+[*] Wed Nov  9 06:01:54 2016
 [*]
 [dumpfile] "/local/Besm-6/micro-besm/tests/i8253/modelsim/output.vcd"
-[dumpfile_mtime] "Wed Nov  9 03:13:44 2016"
-[dumpfile_size] 15077
+[dumpfile_mtime] "Wed Nov  9 06:01:46 2016"
+[dumpfile_size] 21542501
 [savefile] "/local/Besm-6/micro-besm/tests/i8253/modelsim/test.gtkw"
 [timestart] 0
-[size] 991 600
+[size] 1536 600
 [pos] 66 40
 *-5.578761 38 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testbench.
@@ -26,17 +26,22 @@ testbench.a[1:0]
 @22
 testbench.din[7:0]
 testbench.dout[7:0]
-@28
-#{testbench.out[2:0]} testbench.out[2] testbench.out[1] testbench.out[0]
-@23
-testbench.dut.c0.counter[15:0]
+@200
+-
 @22
+testbench.dut.c0.counter[15:0]
 #{testbench.dut.c0.next[15:0]} testbench.dut.c0.next[15] testbench.dut.c0.next[14] testbench.dut.c0.next[13] testbench.dut.c0.next[12] testbench.dut.c0.next[11] testbench.dut.c0.next[10] testbench.dut.c0.next[9] testbench.dut.c0.next[8] testbench.dut.c0.next[7] testbench.dut.c0.next[6] testbench.dut.c0.next[5] testbench.dut.c0.next[4] testbench.dut.c0.next[3] testbench.dut.c0.next[2] testbench.dut.c0.next[1] testbench.dut.c0.next[0]
 testbench.dut.c0.reload_value[15:0]
+@200
+-
 @28
-testbench.dut.c0.overwrite
+testbench.dut.out0
+testbench.dut.out1
+testbench.dut.out2
+@200
+-
+@28
 testbench.dut.c0.overwrite_req
 testbench.dut.c0.loading_msb
-testbench.dut.c0.loaded
 [pattern_trace] 1
 [pattern_trace] 0

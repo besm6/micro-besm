@@ -10,13 +10,13 @@ reg   [1:0] a;
 reg   [7:0] din;
 reg  [15:0] data0, data1, data2;
 reg   [7:0] dout;
-wire  [2:0] out;
+wire        out0, out1, out2;
 integer     errors;
 
 //
 // Intel 8253 under test
 //
-i8253 dut(clk, cs, rd, wr, a, din, dout, out);
+i8253 dut(clk, cs, rd, wr, a, din, dout, out0, out1, out2);
 
 //
 // Generate clock, slow, enabled by clk_en
@@ -52,6 +52,17 @@ task write_ctl(
     input [5:0] data
 );
     write(3, {address, data});
+endtask
+
+//
+// Write to counter register
+//
+task write_cnt(
+    input  [1:0] address,
+    input [15:0] data
+);
+    write(address, data[7:0]);
+    write(address, data[15:8]);
 endtask
 
 // Read from a register
@@ -114,18 +125,15 @@ initial begin
 
     // Set counter #0 as mode 0, value 1234
     write_ctl(0, 6'h30);
-    write(0, 8'h34);
-    write(0, 8'h12);
+    write_cnt(0, 16'h1234);
 
     // Set counter #1 as mode 0, value 5678
     write_ctl(1, 6'h30);
-    write(1, 8'h78);
-    write(1, 8'h56);
+    write_cnt(1, 16'h5678);
 
     // Set counter #2 as mode 0, value 9abc
     write_ctl(2, 6'h30);
-    write(2, 8'hbc);
-    write(2, 8'h9a);
+    write_cnt(2, 16'h9abc);
 
     // Generate one clock pulse.
     clk_en = 1;
@@ -150,56 +158,55 @@ initial begin
         errors += 1;
     end
 
-`ifdef notdef
-    @(posedge clk);
-
     // Start Test of Timer 0
     // This involves setting timer 0 to LSB MSB Mode 3 by inputting 36h.
-    // The initial timer count is set to 0, which means that a square
-    // wave will be generated every 65536 counts
-    @(posedge clk);
+    // The initial timer count is set to 20
     $display("************");
     $display("Test Timer 0");
     $display("************");
 
     // Setup counter #0 as mode 3
     write_ctl(0, 6'h36);
-    write(0, 8'h00);
-    write(0, 8'h00);
+    write_cnt(0, 20);
+
+    // Enable clock.
+    clk_en = 1;
+    @(posedge clk);
 
     // Loop and be sure that our output is high
-    for (int i=0; i<32768; i=i+1) begin
+    for (int i=0; i<32768; i+=1) begin
         @(posedge clk);
-        if (out[0] !== 1'b1) begin
-            $display("ERR OUT NOT 1, %b",out[0]);
+        if (out0 !== 1) begin
+            $display("(%0d) Wrong out=%b", $time, out0);
             errors += 1;
         end
     end
     // Loop and be sure that our output is low
-    for (int i=0; i<32768; i=i+1) begin
+    for (int i=0; i<32768; i+=1) begin
         @(posedge clk);
-        if (out[0] !== 1'b0) begin
-            $display("ERR OUT NOT 0, %b",out[0]);
+        if (out0 !== 0) begin
+            $display("(%0d) Wrong out=%b", $time, out0);
             errors += 1;
         end
     end
     // Loop and be sure that our output is high
-    for (int i=0; i<32768; i=i+1) begin
+    for (int i=0; i<32768; i+=1) begin
         @(posedge clk);
-        if (out[0] !== 1'b1) begin
-            $display("ERR OUT NOT 1, %b",out[0]);
+        if (out0 !== 1) begin
+            $display("(%0d) Wrong out=%b", $time, out0);
             errors += 1;
         end
     end
     // Loop and be sure that our output is low
-    for (int i=0; i<32768; i=i+1) begin
+    for (int i=0; i<32768; i+=1) begin
         @(posedge clk);
-        if (out[0] !== 1'b0) begin
-            $display("ERR OUT NOT 0, %b",out[0]);
+        if (out0 !== 0) begin
+            $display("(%0d) Wrong out=%b", $time, out0);
             errors += 1;
         end
     end
 
+`ifdef notdef
     // Start Test of Timer 1
     // This involves setting timer 1 to LSB Mode 2 by inputting 54h.
     // The initial timer count is set to 12h, which means that a rate
@@ -209,46 +216,46 @@ initial begin
     $display("Test Timer 1");
     $display("************");
 
-    write(2'b11, 8'h54);
-    write(2'b01, 8'h12);
+    write_ctl(1, 6'h14);
+    write_cnt(1, 18);
 
     //@(posedge clk);
-    for (int i=0; i<17; i=i+1) begin
+    for (int i=0; i<17; i+=1) begin
         @(posedge clk);
-        if (out[1] !== 1'b1) begin
-            $display("ERR OUT NOT 1, %b",out[1]);
+        if (out1 !== 1) begin
+            $display("ERR OUT NOT 1, %b", out1);
             errors += 1;
         end
     end
     @(posedge clk);
-    if (out[1] !== 1'b0) begin
-        $display("ERR OUT NOT 0, %b",out[1]);
+    if (out1 !== 0) begin
+        $display("ERR OUT NOT 0, %b", out1);
         errors += 1;
     end
     // Loop and be sure that our output is low
-    for (int i=0; i<17; i=i+1) begin
+    for (int i=0; i<17; i+=1) begin
         @(posedge clk);
-        if (out[1] !== 1'b1) begin
-            $display("ERR OUT NOT 1, %b",out[1]);
+        if (out1 !== 1) begin
+            $display("ERR OUT NOT 1, %b", out1);
             errors += 1;
         end
     end
     @(posedge clk);
-    if (out[1] !== 1'b0) begin
-        $display("ERR OUT NOT 0, %b",out[1]);
+    if (out1 !== 0) begin
+        $display("ERR OUT NOT 0, %b", out1);
         errors += 1;
     end
     // Loop and be sure that our output is low
-    for (int i=0; i<17; i=i+1) begin
+    for (int i=0; i<17; i+=1) begin
         @(posedge clk);
-        if (out[1] !== 1'b1) begin
-            $display("ERR OUT NOT 1, %b",out[1]);
+        if (out1 !== 1) begin
+            $display("ERR OUT NOT 1, %b", out1);
             errors += 1;
         end
     end
     @(posedge clk);
-    if (out[1] !== 1'b0) begin
-        $display("ERR OUT NOT 0, %b",out[1]);
+    if (out1 !== 0) begin
+        $display("ERR OUT NOT 0, %b", out1);
         errors += 1;
     end
 
@@ -261,39 +268,38 @@ initial begin
     $display("Test Timer 2");
     $display("************");
 
-    write(2'b11, 8'hb6);
-    write(2'b10, 8'h33);
-    write(2'b10, 8'h05);
+    write_ctl(2, 6'h36);
+    write_cnt(2, 1331);
 
     // Loop and be sure that our output is high
-    for (int i=0; i<666; i=i+1) begin
+    for (int i=0; i<666; i+=1) begin
         @(posedge clk);
-        if (out[2] !== 1'b1) begin
-            $display("ERR OUT NOT 1, %b",out[2]);
+        if (out2 !== 1) begin
+            $display("ERR OUT NOT 1, %b", out2);
             errors += 1;
         end
     end
     // Loop and be sure that our output is high
-    for (int i=0; i<665; i=i+1) begin
+    for (int i=0; i<665; i+=1) begin
         @(posedge clk);
-        if (out[2] !== 1'b1) begin
-            $display("ERR OUT NOT 1, %b",out[2]);
+        if (out2 !== 1) begin
+            $display("ERR OUT NOT 1, %b", out2);
             errors += 1;
         end
     end
     // Loop and be sure that our output is high
-    for (int i=0; i<666; i=i+1) begin
+    for (int i=0; i<666; i+=1) begin
         @(posedge clk);
-        if (out[2] !== 1'b1) begin
-            $display("ERR OUT NOT 1, %b",out[2]);
+        if (out2 !== 1) begin
+            $display("ERR OUT NOT 1, %b", out2);
             errors += 1;
         end
     end
     // Loop and be sure that our output is high
-    for (int i=0; i<665; i=i+1) begin
+    for (int i=0; i<665; i+=1) begin
         @(posedge clk);
-        if (out[2] !== 1'b1) begin
-            $display("ERR OUT NOT 1, %b",out[2]);
+        if (out2 !== 1) begin
+            $display("ERR OUT NOT 1, %b", out2);
             errors += 1;
         end
     end
@@ -305,23 +311,23 @@ initial begin
     $display("Test Timer Test");
     $display("***************");
 
-    write(2'b11, 8'h10);
-    write(2'b00, 8'h16);
+    write_ctl(0, 8'h10);
+    write_cnt(0, 22);
 
     // Loop and be sure that our output is low
-    for (int i=0; i<22; i=i+1) begin
+    for (int i=0; i<22; i+=1) begin
         @(posedge clk);
-        if (out[0] !== 1'b0) begin
-            $display("ERR OUT NOT 0, %b",out[0]);
+        if (out0 !== 0) begin
+            $display("ERR OUT NOT 0, %b", out0);
             errors += 1;
         end
     end
 
     // Loop and be sure that our output is high
-    for (int i=0; i<51; i=i+1) begin
+    for (int i=0; i<51; i+=1) begin
         @(posedge clk);
-        if (out[0] !== 1'b1) begin
-            $display("ERR OUT NOT 1, %b",out[0]);
+        if (out0 !== 1) begin
+            $display("ERR OUT NOT 1, %b", out0);
             errors += 1;
         end
     end
