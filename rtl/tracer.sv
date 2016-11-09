@@ -90,6 +90,7 @@ always @(negedge clk)
             print_changed_2904();
             print_changed_2910();
             print_changed_cpu(opcode_x);
+            print_changed_timer();
         end
 
         // Print memory transactions
@@ -746,6 +747,43 @@ task print_changed_cpu(
                 old_pgprio1[i] = cpu.pg_prio1[i];
             end
     end
+endtask
+
+//
+// Print changed state of i8253 timer
+//
+task print_changed_timer();
+
+    static logic [15:0] old_counter0;
+    static logic [15:0] old_counter1;
+    static logic [15:0] old_counter2;
+    static logic [15:0] old_reload0;
+    static logic [15:0] old_reload1;
+    static logic [15:0] old_reload2;
+    static logic  [5:0] old_control0;
+    static logic  [5:0] old_control1;
+    static logic  [5:0] old_control2;
+
+    automatic logic [15:0] counter0 = cpu.timer.c0.counter;
+    automatic logic [15:0] counter1 = cpu.timer.c1.counter;
+    automatic logic [15:0] counter2 = cpu.timer.c2.counter;
+    automatic logic [15:0] reload0 = cpu.timer.c0.reload_value;
+    automatic logic [15:0] reload1 = cpu.timer.c1.reload_value;
+    automatic logic [15:0] reload2 = cpu.timer.c2.reload_value;
+    automatic logic  [5:0] control0 = cpu.timer.c0.cwreg;
+    automatic logic  [5:0] control1 = cpu.timer.c1.cwreg;
+    automatic logic  [5:0] control2 = cpu.timer.c2.cwreg;
+
+    if (counter0 !== old_counter0) begin $fdisplay(fd, "(%0d)               Write timer.Counter0 = %h", ctime, counter0); old_counter0 = counter0; end
+    if (counter1 !== old_counter1) begin $fdisplay(fd, "(%0d)               Write timer.Counter1 = %h", ctime, counter1); old_counter1 = counter1; end
+    if (counter2 !== old_counter2) begin $fdisplay(fd, "(%0d)               Write timer.Counter2 = %h", ctime, counter2); old_counter2 = counter2; end
+    if (reload0  !== old_reload0)  begin $fdisplay(fd, "(%0d)               Write timer.Reload0 = %h",  ctime, reload0);  old_reload0  = reload0;  end
+    if (reload1  !== old_reload1)  begin $fdisplay(fd, "(%0d)               Write timer.Reload1 = %h",  ctime, reload1);  old_reload1  = reload1;  end
+    if (reload2  !== old_reload2)  begin $fdisplay(fd, "(%0d)               Write timer.Reload2 = %h",  ctime, reload2);  old_reload2  = reload2;  end
+    if (control0 !== old_control0) begin $fdisplay(fd, "(%0d)               Write timer.Ctl0 = %h",     ctime, control0); old_control0 = control0; end
+    if (control1 !== old_control1) begin $fdisplay(fd, "(%0d)               Write timer.Ctl1 = %h",     ctime, control1); old_control1 = control1; end
+    if (control2 !== old_control2) begin $fdisplay(fd, "(%0d)               Write timer.Ctl2 = %h",     ctime, control2); old_control2 = control2; end
+
 endtask
 
 endmodule
