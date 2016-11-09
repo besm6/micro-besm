@@ -94,39 +94,63 @@ module i8253_counter(
     wire        bcd_mode = cwreg[0];
 
     // counter load value
-    logic [15:0] counter_input;
+    logic [15:0] reload_value;
 
-    // counter count
-    logic [15:0] counter_q;
+    // current counter value
+    logic [15:0] counter;
 
-    // counter load value overwrite enable (from host)
-    logic counter_wren_wr;
+    logic overwrite_req;
+    logic loading;
+    logic loaded;
+    logic loading_msb;    // for rl=3: 0: next 8-bit value will be lsb, 1: msb
+    logic starting;
 
-    /* study GATE for GATE-d systems, a gatelesss hack */
-    wire counter_wren = ((cw_mode != M1 && cw_mode != M5) & counter_wren_wr);
+    //---------------------------------------------------------
+    // Down counter with auto-reload.
+    //
+
+    // for square wave gen
+    wire halfmode = (cw_mode[1:0] == M3);
 
     // let the counter auto-reload inself in modes M2,M2X,M3,M3X
-    wire autoreload = (cw_mode[1:0] == M3) || (cw_mode[1:0] == M2);
+    wire autoreload = (cw_mode[1:0] == M3 || cw_mode[1:0] == M2);
 
-    logic counter_loading;
-    logic counter_loaded;
-    logic loading_msb;    // for rl=3: 0: next 8-bit value will be lsb, 1: msb
-    logic counter_starting;
+    // counter overwrite enable (from host)
+    wire overwrite = (overwrite_req && cw_mode != M1 && cw_mode != M5);
 
-    i8253_downcount dc(clk, cw_mode[1:0] == M3, autoreload, out, counter_input, counter_wren, counter_q);
+    wire [15:0] decr = !halfmode ? 1 :
+                   counter[0]==0 ? 2 :
+                             out ? 1 :
+                                   3;
 
-    // latching command written: counter value latch enable
-    wire read_latch_e = (cword[5:4] == 2'b00);
-
-    // readhelper decides what to do with latching read, lsb/msb modes etc
-    i8253_read rbus(clk, rden, cwset, read_latch_e, rl_mode, counter_q, dout);
+    wire [15:0] next = counter - decr;
 
     always @(posedge clk) begin
+        // Update counter.
+        if (overwrite | (autoreload & |next==0))
+            counter <= reload_value;
+        else
+            counter <= next;
+    end
+
+    //---------------------------------------------------------
+    // Read dispatcher.
+    //
+    i8253_read rbus(
+        .rden       (rden),
+        .cwset      (cwset),
+        .latch_en   (cword[5:4] == 2'b00),
+        .rl_mode    (rl_mode),
+        .counter    (counter),
+        .q          (dout)
+    );
+
+    always_latch begin
         if (cwset && cword[5:4] != 0) begin
-            loading_msb     <= 0;   // reset the doorstopper
-            counter_loaded  <= 0;
-            counter_loading <= 0;
-            cwreg           <= cword;
+            loading_msb <= 0;   // reset the doorstopper
+            loaded      <= 0;
+            loading     <= 0;
+            cwreg       <= cword;
 
             case (cword[3:1])
             M0:      out <= 0; // interrupt, 1-time, start count on load or gate
@@ -143,27 +167,26 @@ module i8253_counter(
         if (wren) begin
             case (rl_mode)
             2'b01: begin
-                    counter_input[7:0] <= d;
-                    counter_starting <= 1;
-                    counter_wren_wr <= 1;
+                    reload_value[7:0] <= d;
+                    starting <= 1;
+                    overwrite_req <= 1;
                 end
             2'b10: begin
-                    counter_input[15:8] <= d;
-                    counter_starting <= 1;
-                    counter_wren_wr <= 1;
+                    reload_value[15:8] <= d;
+                    starting <= 1;
+                    overwrite_req <= 1;
                 end
             2'b11: begin
                     if (loading_msb) begin
-                        counter_input[15:8] <= d;
-                        counter_starting <= 1;
-                        counter_loading <= 0;
-                        counter_wren_wr <= ~counter_loaded;
+                        reload_value[15:8] <= d;
+                        starting <= 1;
+                        loading <= 0;
+                        overwrite_req <= ~loaded;
                     end else begin
-                        counter_input[7:0] <= d;
-                        counter_loaded <= (cw_mode == M1 || // don't stop during reload in M2, M3
-                                           cw_mode == M5 ||
-                                           cw_mode[1] == 1) ? counter_loaded : 0;
-                        counter_loading <= 1;
+                        reload_value[7:0] <= d;
+                        loading <= 1;
+                        if (cw_mode == M0 || cw_mode == M4)
+                            loaded <= 0;
                     end
 
                     loading_msb <= ~loading_msb;
@@ -172,49 +195,43 @@ module i8253_counter(
             endcase
         end
 
-        // reset counter_wren
-        if (counter_wren)
-            counter_wren_wr <= 0;
+        // reset overwrite flag
+        if (overwrite & clk)
+            overwrite_req <= 0;
 
         // enable counting
-        if (counter_starting) begin
-            counter_loaded <= 1;
-            counter_starting <= 0;
+        if (starting & clk) begin
+            loaded <= 1;
+            starting <= 0;
         end
 
+        // Set output pin.
         case (cw_mode)
-        M0: begin
-                if (counter_q == 16'd1) begin // 1 locks the counter so the terminal count is 0
-                    // counter_loaded <= 0; -- not! the counter continues counting
-                    out <= 1;
-                end
+        M0: if (counter == 16'd1) begin // 1 locks the counter so the terminal count is 0
+                out <= 1;
             end
 
-        M1: ;   // M1 NOT IMPLEMENTED: no gate, no reloads
+        M1: ; // NOT IMPLEMENTED: no gate, no reloads
 
-        M2, M2X: begin
-                // technically we should trigger/reload on 1
-                // but we need to do this up front to be ready
-                // by the next clk
-                if (counter_q == 16'd2)
-                    out <= 0;
-                else
-                    out <= 1;
-            end
+        M2X,
+        M2: // technically we should trigger/reload on 1
+            // but we need to do this up front to be ready
+            // by the next clk
+            if (counter == 16'd2)
+                out <= 0;
+            else
+                out <= 1;
 
-        M3, M3X: begin
-                if (counter_q == 16'd2)
-                    out <= ~out;
-            end
+        M3X,
+        M3: if (counter == 16'd2)
+                out <= ~out;
 
-        M4: begin
-                if (counter_q == 16'd0)
-                    out <= 0;
-                else
-                    out <= 1; // reset out on next cycle
-            end
+        M4: if (counter == 16'd0)
+                out <= 0;
+            else
+                out <= 1; // reset out on next cycle
 
-        M5: ; // M5 NOT IMPLEMENTED: no gate, just roll
+        M5: ; // NOT IMPLEMENTED: no gate, just roll
 
         default: ;
         endcase
@@ -227,76 +244,42 @@ endmodule
 // LSB/MSB read is decided upon here.
 //
 module i8253_read(
-    input  wire         clk,
-    input  wire         rden,
-    input  wire         cwset,
-    input  wire         latch_e,
-    input  wire   [1:0] rl_mode,
-    input  wire  [15:0] counter_q,
-    output logic  [7:0] q
+    input  wire        rden,
+    input  wire        cwset,
+    input  wire        latch_en,    // latching command written: counter value latch enable
+    input  wire  [1:0] rl_mode,
+    input  wire [15:0] counter,
+    output wire  [7:0] q
 );
     logic  [2:0] read_state;
     logic [15:0] latched_q;
     logic        read_msb;
 
-    wire [7:0] r_lsb = rl_mode == 2'b10 ? counter_q[15:8] : counter_q[7:0];
-    wire [7:0] r_msb = rl_mode == 2'b01 ? counter_q[7:0]  : counter_q[15:8];
+    wire [7:0] r_lsb = (rl_mode == 2'b10) ? counter[15:8] : counter[7:0];
+    wire [7:0] r_msb = (rl_mode == 2'b01) ? counter[7:0]  : counter[15:8];
 
-    always_comb
-        case (read_msb)
-            0: q <= read_state == 0 ? r_lsb : latched_q[7:0];
-            1: q <= read_state == 0 ? r_msb : latched_q[15:8];
-        endcase
+    assign q = read_msb ?
+        (read_state == 0) ? r_msb : latched_q[15:8] :
+        (read_state == 0) ? r_lsb : latched_q[7:0];
 
-    always @(posedge clk)
-        if (cwset && latch_e)
-            latched_q <= counter_q;
+    always_latch
+        if (cwset && latch_en)
+            latched_q <= counter;
 
-    always @(posedge clk)
+    always_latch
         if (cwset) begin
             read_msb <= 0;
-
-            if (latch_e)
+            if (latch_en)
                 read_state <= 2;
             else
                 read_state <= 0;
-        end else begin
-            if (rden) begin
-                case (read_state)
-                    0: read_state <= 0;
-                    1: read_state <= 0;
-                    2: read_state <= 1;
-                endcase
 
-                read_msb <= ~read_msb;
-            end
+        end else if (rden) begin
+            read_msb <= ~read_msb;
+            case (read_state)
+                0: read_state <= 0;
+                1: read_state <= 0;
+                2: read_state <= 1;
+            endcase
         end
-endmodule
-
-//
-// Down counter with auto-reload.
-//
-module i8253_downcount(
-    input  wire         clk,
-    input  wire         halfmode,       // for square wave gen
-    input  wire         autoreload,
-    input  wire         o,              // current state of out for M3
-    input  wire  [15:0] d,
-    input  wire         wren,
-    output logic [15:0] q
-);
-    wire decr = !halfmode ? 16'd1 :
-                  q[0]==0 ? 16'd2 :
-                        o ? 1 :
-                            3;
-
-    wire [15:0] next = q - decr;
-
-    always @(posedge clk) begin
-        if (wren | (autoreload & |next==0))
-            q <= d;
-        else
-            q <= next;
-    end
-
 endmodule

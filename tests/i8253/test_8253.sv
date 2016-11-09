@@ -79,6 +79,7 @@ task read(
 endtask
 
 initial begin
+    $display("------------------------");
     $dumpfile("output.vcd");
     $dumpvars();
 
@@ -95,10 +96,16 @@ initial begin
 
     $display("Read/write registers without clock");
 
-    // Set counter #0 as mode=3, value a55a
-    write(2'b11, 8'h36);
+    // Set counter #0 as mode 0, value a55a
+    write(2'b11, 8'h30);
     write(2'b00, 8'ha5);
     write(2'b00, 8'h5a);
+
+    // Generate one clock pulse.
+    clk_en = 1;
+    @(posedge clk);
+    @(negedge clk);
+    clk_en = 0;
 
     // Read it back
     read(0, datao);
@@ -296,12 +303,13 @@ initial begin
 `endif
 
     if (errors > 0) begin
-        $display("8253 TEST FAILURE WITH %d ERRORS",errors);
+        $display("Test FAIL");
+        $display("------------------------");
+        $finish(1);
     end
-    else begin
-        $display("8253 TEST SUCCESS");
-    end
-    $finish();
+    $display("Test PASS");
+    $display("------------------------");
+    $finish;
 end
 
 endmodule
