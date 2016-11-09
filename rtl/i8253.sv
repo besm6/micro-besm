@@ -25,10 +25,11 @@
 `default_nettype none
 
 module i8253(
-    input  wire         clk,        // i/o clock
-    input  wire   [1:0] a,          // address bus
-    input  wire         wr,         // data write
+    input  wire         clk,        // clock for time counter
+    input  wire         cs,         // chip select
     input  wire         rd,         // data read
+    input  wire         wr,         // data write
+    input  wire   [1:0] a,          // address bus
     input  wire   [7:0] din,        // data input bus
     output logic  [7:0] dout,       // data output bus
     output logic  [2:0] out         // timer outputs
@@ -36,9 +37,7 @@ module i8253(
     logic [7:0] q0, q1, q2;
     logic [5:0] cword0, cword1, cword2;
     logic [2:0] cwsel;
-    logic [3:0] sel;
-    logic [3:0] wren;
-    logic [3:0] rden;
+    logic [3:0] sel, wren, rden;
 
     always_comb
         case(a)
@@ -48,8 +47,8 @@ module i8253(
             2'b11: sel = 4'b1000;
         endcase
 
-    assign wren = {4{wr}} & sel;
-    assign rden = {4{rd}} & sel;
+    assign wren = {4{wr & cs}} & sel;
+    assign rden = {4{rd & cs}} & sel;
 
     always_comb
         case (din[7:6])
@@ -59,23 +58,18 @@ module i8253(
             2'b11: cwsel = 3'b000;
         endcase
 
-    //assign dout = rden[0] ? q0 : rden[1] ? q1 : rden[2] ? q2 : 0;
-    always_comb
-        case (rden)
-            3'b001:  dout = q0;
-            3'b010:  dout = q1;
-            3'b100:  dout = q2;
-            default: dout = 0;
-        endcase
+    i8253_counter c0(clk, din[5:0], wren[3] & cwsel[0], din, wren[0], rden[0], q0, out[0]);
+    i8253_counter c1(clk, din[5:0], wren[3] & cwsel[1], din, wren[1], rden[1], q1, out[1]);
+    i8253_counter c2(clk, din[5:0], wren[3] & cwsel[2], din, wren[2], rden[2], q2, out[2]);
 
-    i8253_counter c0(clk, din, wren[3] & cwsel[0], din, wren[0], rden[0], q0, out[0]);
-    i8253_counter c1(clk, din, wren[3] & cwsel[1], din, wren[1], rden[1], q1, out[1]);
-    i8253_counter c2(clk, din, wren[3] & cwsel[2], din, wren[2], rden[2], q2, out[2]);
+    assign dout = rden[0] ? q0 :
+                  rden[1] ? q1 :
+                  rden[2] ? q2 : 0;
 
 endmodule
 
 module i8253_counter(
-    input  wire        clk,     // whatever main clk
+    input  wire        clk,     // clock for time counter
     input  wire  [5:0] cword,   // control word from top sans counter select: 6 bits
     input  wire        cwset,   // control word set
     input  wire  [7:0] d,       // data in for load
@@ -100,7 +94,7 @@ module i8253_counter(
     wire        bcd_mode = cwreg[0];
 
     // counter load value
-    logic [15:0] counter_load;
+    logic [15:0] counter_input;
 
     // counter count
     logic [15:0] counter_q;
@@ -116,24 +110,16 @@ module i8253_counter(
 
     logic counter_loading;
     logic counter_loaded;
-    logic loading_stopper;
     logic loading_msb;    // for rl=3: 0: next 8-bit value will be lsb, 1: msb
     logic counter_starting;
 
-    // master, total, final grand enable
-    wire counter_clock_enable = counter_loaded & !loading_stopper;
-
-    i8253_downcount dctr(clk, counter_clock_enable, cw_mode[1:0] == M3, autoreload, out, counter_load, counter_wren, counter_q);
-
-    // software stop by loading
-    always @(counter_loading, cw_mode)
-        loading_stopper <= (cw_mode == M0 || cw_mode == M4) & counter_loading;
+    i8253_downcount dc(clk, cw_mode[1:0] == M3, autoreload, out, counter_input, counter_wren, counter_q);
 
     // latching command written: counter value latch enable
     wire read_latch_e = (cword[5:4] == 2'b00);
 
     // readhelper decides what to do with latching read, lsb/msb modes etc
-    i8253_read rbus(clk, rden, rl_mode, cwset, read_latch_e, counter_q, dout);
+    i8253_read rbus(clk, rden, cwset, read_latch_e, rl_mode, counter_q, dout);
 
     always @(posedge clk) begin
         if (cwset && cword[5:4] != 0) begin
@@ -157,23 +143,23 @@ module i8253_counter(
         if (wren) begin
             case (rl_mode)
             2'b01: begin
-                    counter_load[7:0] <= d;
+                    counter_input[7:0] <= d;
                     counter_starting <= 1;
                     counter_wren_wr <= 1;
                 end
             2'b10: begin
-                    counter_load[15:8] <= d;
+                    counter_input[15:8] <= d;
                     counter_starting <= 1;
                     counter_wren_wr <= 1;
                 end
             2'b11: begin
                     if (loading_msb) begin
-                        counter_load[15:8] <= d;
+                        counter_input[15:8] <= d;
                         counter_starting <= 1;
                         counter_loading <= 0;
                         counter_wren_wr <= ~counter_loaded;
                     end else begin
-                        counter_load[7:0] <= d;
+                        counter_input[7:0] <= d;
                         counter_loaded <= (cw_mode == M1 || // don't stop during reload in M2, M3
                                            cw_mode == M5 ||
                                            cw_mode[1] == 1) ? counter_loaded : 0;

@@ -389,7 +389,9 @@ task print_uop(
     if (DDEV  != 0)  $fwrite(fd, " ddev=%0s", ddev_name[DDEV]);
     if (WRD   != 0)  $fwrite(fd, " WRD");
 
-    if (IOMP  != 0)  $fwrite(fd, " IOMP mpadr=%0s", mpadr_name[MPADR]);
+    if (IOMP  != 0)
+        if (DDEV == 4) $fwrite(fd, " IOMP ffcnt=%0d", FFCNT);
+        else           $fwrite(fd, " IOMP mpadr=%0s", mpadr_name[MPADR]);
     else
     if (FFCNT != 0)  $fwrite(fd, " ffcnt=%0s", ffcnt_name[FFCNT]);
 

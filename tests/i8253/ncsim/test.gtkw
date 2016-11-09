@@ -1,0 +1,29 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Wed Nov  9 01:37:44 2016
+[*]
+[dumpfile] "/local/Besm-6/micro-besm/tests/i8253/ncsim/output.vcd"
+[dumpfile_mtime] "Wed Nov  9 01:36:41 2016"
+[dumpfile_size] 7435
+[savefile] "/local/Besm-6/micro-besm/tests/i8253/ncsim/test.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] -1 -1
+*-15.643866 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 235
+[signals_width] 102
+[sst_expanded] 1
+[sst_vpaned_height] 159
+@28
+testbench.clk
+testbench.cs
+testbench.rd
+testbench.wr
+testbench.a[1:0]
+@22
+testbench.din[7:0]
+testbench.dout[7:0]
+@28
+testbench.out[2:0]
+[pattern_trace] 1
+[pattern_trace] 0

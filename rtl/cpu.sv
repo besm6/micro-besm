@@ -302,6 +302,33 @@ always @(posedge clk)
     end
 
 //--------------------------------------------------------------
+// Timer
+//
+logic       tm_clk;                 // clock for timer, 20 times slower
+logic [4:0] tm_counter;             // clock divider
+logic [7:0] tm_dout;                // data output bus
+logic [2:0] tm_event;               // timer outputs
+
+wire tm_cs = (DDEV == 4);           // CTIME: chip select
+wire tm_wr = (DSRC == 15) & WRD;    // WT: write strobe from Y bus
+wire tm_rd = (DSRC == 14);          // RT: read strobe to Y bus
+
+i8253 timer(tm_clk, tm_cs, tm_rd, tm_wr, FFCNT[1:0], Y[7:0], tm_dout, tm_event);
+
+// Clock divider by 20.
+always @(posedge clk) begin
+    if (reset) begin
+        tm_counter <= 0;
+        tm_clk <= 0;
+    end else if (tm_counter == 9) begin
+        tm_counter <= 0;
+        tm_clk <= ~tm_clk;
+    end else begin
+        tm_counter <= tm_counter + 1;
+    end
+end
+
+//--------------------------------------------------------------
 // Datapath: register file, ALU and status/shifts
 //
 datapath alu(clk,
@@ -314,16 +341,16 @@ assign alu_C0 = control_nCC;
 // Управление источниками информации на шину D.
 assign D =
     // DSRC mux
-    (DSRC == 1)  ? {1'b1, modgn, 5'd0} : // регистр номера группы памяти модификаторов
-    (DSRC == 2)  ? PROCN :              // регистр номера процесса
-    (DSRC == 3)  ? RR :                 // регистр режимов и триггеры признаков
-    (DSRC == 4)  ? {pg_index, 10'd0} :  // регистр физической страницы
-    (DSRC == 5)  ? arb_req :            // регистр КОП арбитра
+    (DSRC == 1)  ? {1'b1, modgn, 5'd0} : // MODGN: регистр номера группы памяти модификаторов
+    (DSRC == 2)  ? PROCN :              // PROCN: регистр номера процесса
+    (DSRC == 3)  ? RR :                 // CNT: регистр режимов и триггеры признаков
+    (DSRC == 4)  ? {pg_index, 10'd0} :  // PHYSPG: регистр физической страницы
+    (DSRC == 5)  ? arb_req :            // ARBOPC: регистр КОП арбитра
     (DSRC == 8)  ? instr_addr :         // COMA: адресная часть команды
-    (DSRC == 9)  ? sh_out :             // результат сдвига
+    (DSRC == 9)  ? sh_out :             // SHIFT: результат сдвига
     (DSRC == 10) ? instr_code :         // OPC: код операции команды
     (DSRC == 11) ? clz_out :            // LOS: результат поиска левой единицы
-    (DSRC == 12) ? PROM :               // ПЗУ констант
+    (DSRC == 12) ? PROM :               // PROM: ПЗУ констант
 
     // DDEV mux
     (DDEV == 1)  ? pg_access :          // ВВ: БОБР, БИЗМ
@@ -342,6 +369,7 @@ assign Y =
     (YDEV == 3 & !WRY) ? UREG :                 // RADRR, регистр исполнительного адреса (чтение);
     (YDEV == 4 & !WRY) ? pg_map[UREG[19:10]] :  // PSMEM, память приписок (CS);
     (YDEV == 5 & !WRY) ? mpmem[MPADR] :         // МРМЕМ, память обмена с ПП;
+   (DSRC == 14 & !WRD) ? tm_dout :              // RTIME, сигнал чтения часов/таймеров на шину Y
                    ALU ? alu_Y :                // Y bus output from ALU
                          '0;
 
