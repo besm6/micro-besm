@@ -145,9 +145,24 @@ module i8253_counter(
         .q          (dout)
     );
 
+    always @(posedge wren, posedge cwset) begin
+        if (cwset && cword[5:4] != 0)
+            loading_msb <= 0;
+        else if (wren && rl_mode == 3)
+            loading_msb <= ~loading_msb;
+
+        if (wren) begin
+            case (rl_mode)
+            2'b01: reload_value[7:0] <= d;
+            2'b10: reload_value[15:8] <= d;
+            2'b11: if (loading_msb) reload_value[15:8] <= d;
+                   else             reload_value[7:0] <= d;
+            endcase
+        end
+    end
+
     always_latch begin
         if (cwset && cword[5:4] != 0) begin
-            loading_msb <= 0;   // reset the doorstopper
             loaded      <= 0;
             loading     <= 0;
             cwreg       <= cword;
@@ -167,29 +182,23 @@ module i8253_counter(
         if (wren) begin
             case (rl_mode)
             2'b01: begin
-                    reload_value[7:0] <= d;
                     starting <= 1;
                     overwrite_req <= 1;
                 end
             2'b10: begin
-                    reload_value[15:8] <= d;
                     starting <= 1;
                     overwrite_req <= 1;
                 end
             2'b11: begin
                     if (loading_msb) begin
-                        reload_value[15:8] <= d;
                         starting <= 1;
                         loading <= 0;
                         overwrite_req <= ~loaded;
                     end else begin
-                        reload_value[7:0] <= d;
                         loading <= 1;
                         if (cw_mode == M0 || cw_mode == M4)
                             loaded <= 0;
                     end
-
-                    loading_msb <= ~loading_msb;
                 end
             2'b00: ; // illegal state
             endcase
@@ -266,9 +275,9 @@ module i8253_read(
         if (cwset && latch_en)
             latched_q <= counter;
 
-    always_latch
+    always @(posedge rden, posedge cwset)
         if (cwset) begin
-            read_msb <= 0;
+            read_msb <= 1;
             if (latch_en)
                 read_state <= 2;
             else
