@@ -25,16 +25,17 @@
 `default_nettype none
 
 module i8253(
-    input  wire         clk,        // clock for time counter
-    input  wire         cs,         // chip select
-    input  wire         rd,         // data read
-    input  wire         wr,         // data write
-    input  wire   [1:0] a,          // address bus
-    input  wire   [7:0] idata,      // data input bus
-    output wire   [7:0] odata,      // data output bus
-    output wire         out0,       // timer 0 output
-    output wire         out1,       // timer 1 output
-    output wire         out2        // timer 2 output
+    input  wire       clk,      // system clock
+    input  wire       tclock,   // clock for time counter, slow
+    input  wire       cs,       // chip select
+    input  wire       rd,       // data read
+    input  wire       wr,       // data write
+    input  wire [1:0] a,        // address bus
+    input  wire [7:0] idata,    // data input bus
+    output wire [7:0] odata,    // data output bus
+    output wire       out0,     // timer 0 output
+    output wire       out1,     // timer 1 output
+    output wire       out2      // timer 2 output
 );
     wire [7:0] q0, q1, q2;
 
@@ -51,9 +52,9 @@ module i8253(
                        (idata[7:6] == 2'b10) ? 3'b100 :
                                                3'b000;
 
-    i8253_counter c0(clk, wren[3] & cwsel[0], wren[0], rden[0], idata, q0, out0);
-    i8253_counter c1(clk, wren[3] & cwsel[1], wren[1], rden[1], idata, q1, out1);
-    i8253_counter c2(clk, wren[3] & cwsel[2], wren[2], rden[2], idata, q2, out2);
+    i8253_counter c0(clk, tclock, wren[3] & cwsel[0], wren[0], rden[0], idata, q0, out0);
+    i8253_counter c1(clk, tclock, wren[3] & cwsel[1], wren[1], rden[1], idata, q1, out1);
+    i8253_counter c2(clk, tclock, wren[3] & cwsel[2], wren[2], rden[2], idata, q2, out2);
 
     assign odata = rden[0] ? q0 :
                    rden[1] ? q1 :
@@ -62,7 +63,8 @@ module i8253(
 endmodule
 
 module i8253_counter(
-    input  wire        clk,     // clock for time counter
+    input  wire        clk,     // system clock
+    input  wire        tclock,  // clock for time counter, slow
     input  wire        cwset,   // control word set
     input  wire        wren,    // data load enable
     input  wire        rden,    // data read enable
@@ -170,6 +172,7 @@ module i8253_counter(
     // Read dispatcher.
     //
     i8253_read rbus(
+        .clk        (clk),
         .rden       (rden),
         .cwset      (cwset),
         .latch_en   (idata[5:4] == 2'b00),
@@ -245,6 +248,7 @@ endmodule
 // LSB/MSB read is decided upon here.
 //
 module i8253_read(
+    input  wire        clk,         // system clock
     input  wire        rden,
     input  wire        cwset,
     input  wire        latch_en,    // latching command written: counter value latch enable
