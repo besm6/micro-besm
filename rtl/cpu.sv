@@ -304,26 +304,37 @@ always @(posedge clk)
 //--------------------------------------------------------------
 // Timer
 //
-logic       tm_clk;                 // clock for timer, 20 times slower
-logic [4:0] tm_counter;             // clock divider
+logic       tm_clk0;                // clock for timer0, 2 times slower
+logic       tm_clk1;                // clock for timer1, 128k times slower
+logic       tm_clk2;                // clock for timer2, 20 times slower
+logic [4:0] tm_counter;             // divider for clk2
 logic [7:0] tm_dout;                // data output bus
 
 wire tm_cs = (DDEV == 4);           // CTIME: chip select
 wire tm_wr = (DSRC == 15) & WRD;    // WT: write strobe from Y bus
 wire tm_rd = (DSRC == 14);          // RT: read strobe to Y bus
 
-i8253 timer(clk, tm_clk, tm_cs, tm_rd, tm_wr,
+i8253 timer(clk, tm_cs, tm_rd, tm_wr,
             FFCNT[1:0], Y[7:0], tm_dout,
-            /*out0*/, /*out1*/, /*out2*/);
+            tm_clk0, tm_clk1, tm_clk2,
+            tm_clk1, /*out1*/, /*out2*/);
+
+// Clock divider by 2.
+always @(posedge clk) begin
+    if (reset)
+        tm_clk0 <= 0;
+    else
+        tm_clk0 <= ~tm_clk0;
+end
 
 // Clock divider by 20.
 always @(posedge clk) begin
     if (reset) begin
         tm_counter <= 0;
-        tm_clk <= 0;
+        tm_clk2 <= 0;
     end else if (tm_counter == 9) begin
         tm_counter <= 0;
-        tm_clk <= ~tm_clk;
+        tm_clk2 <= ~tm_clk2;
     end else begin
         tm_counter <= tm_counter + 1;
     end
@@ -352,6 +363,7 @@ assign D =
     (DSRC == 10) ? instr_code :         // OPC: код операции команды
     (DSRC == 11) ? clz_out :            // LOS: результат поиска левой единицы
     (DSRC == 12) ? PROM :               // PROM: ПЗУ констант
+    (DSRC == 14) ? tm_dout :            // RTIME, сигнал чтения часов/таймеров
 
     // DDEV mux
     (DDEV == 1)  ? pg_access :          // ВВ: БОБР, БИЗМ
@@ -370,7 +382,6 @@ assign Y =
     (YDEV == 3 & !WRY) ? UREG :                 // RADRR, регистр исполнительного адреса (чтение);
     (YDEV == 4 & !WRY) ? pg_map[UREG[19:10]] :  // PSMEM, память приписок (CS);
     (YDEV == 5 & !WRY) ? mpmem[MPADR] :         // МРМЕМ, память обмена с ПП;
-   (DSRC == 14 & !WRD) ? tm_dout :              // RTIME, сигнал чтения часов/таймеров на шину Y
                    ALU ? alu_Y :                // Y bus output from ALU
                          '0;
 

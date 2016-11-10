@@ -26,13 +26,15 @@
 
 module i8253(
     input  wire       clk,      // system clock
-    input  wire       tclock,   // clock for time counter, slow
     input  wire       cs,       // chip select
     input  wire       rd,       // data read
     input  wire       wr,       // data write
     input  wire [1:0] a,        // address bus
     input  wire [7:0] idata,    // data input bus
     output wire [7:0] odata,    // data output bus
+    input  wire       tclock0,  // clock for timer 0
+    input  wire       tclock1,  // clock for timer 1
+    input  wire       tclock2,  // clock for timer 2
     output wire       out0,     // timer 0 output
     output wire       out1,     // timer 1 output
     output wire       out2      // timer 2 output
@@ -52,9 +54,9 @@ module i8253(
                        (idata[7:6] == 2'b10) ? 3'b100 :
                                                3'b000;
 
-    i8253_counter c0(clk, tclock, wren[3] & cwsel[0], wren[0], rden[0], idata, q0, out0);
-    i8253_counter c1(clk, tclock, wren[3] & cwsel[1], wren[1], rden[1], idata, q1, out1);
-    i8253_counter c2(clk, tclock, wren[3] & cwsel[2], wren[2], rden[2], idata, q2, out2);
+    i8253_counter c0(clk, tclock0, wren[3] & cwsel[0], wren[0], rden[0], idata, q0, out0);
+    i8253_counter c1(clk, tclock1, wren[3] & cwsel[1], wren[1], rden[1], idata, q1, out1);
+    i8253_counter c2(clk, tclock2, wren[3] & cwsel[2], wren[2], rden[2], idata, q2, out2);
 
     assign odata = rden[0] ? q0 :
                    rden[1] ? q1 :
@@ -237,6 +239,7 @@ module i8253_read(
     logic  [2:0] read_state;
     logic [15:0] latched_q;
     logic        read_msb;
+    logic        read_done;
 
     wire [7:0] r_lsb = (rl_mode == 2'b10) ? counter[15:8] : counter[7:0];
     wire [7:0] r_msb = (rl_mode == 2'b01) ? counter[7:0]  : counter[15:8];
@@ -257,13 +260,19 @@ module i8253_read(
                 read_state <= 0;
 
         end else if (rden) begin
-            read_msb <= ~read_msb;
+            if (!read_done) begin
+                read_done <= 1;
+                read_msb <= ~read_msb;
 
-            case (read_state)
-                0: read_state <= 0;
-                1: read_state <= 0;
-                2: read_state <= 1;
-            endcase
-        end
+                case (read_state)
+                    0: read_state <= 0;
+                    1: read_state <= 0;
+                    2: read_state <= 1;
+                endcase
+            end
+        end else
+
+        if (!rden)
+            read_done <= 0;
     end
 endmodule
