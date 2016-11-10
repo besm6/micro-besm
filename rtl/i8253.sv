@@ -95,9 +95,7 @@ module i8253_counter(
 
     logic loading_msb;    // for rl=3: 0: next 8-bit value will be lsb, 1: msb
     logic overwrite_req;
-    logic loading;
-    logic loaded;
-    logic starting;
+    logic counting;
 
     //---------------------------------------------------------
     // Down counter with auto-reload.
@@ -119,11 +117,12 @@ module i8253_counter(
 
     wire [15:0] next = counter - decr;
 
-    always @(posedge clk) begin
+    always @(posedge tclock) begin
         // Update counter.
-        if (overwrite | (autoreload & next==0))
+        if (overwrite | (autoreload & next==0)) begin
             counter <= reload_value;
-        else
+            counting <= 1;
+        end else if (counting)
             counter <= next;
 
         // Set output pin.
@@ -147,7 +146,7 @@ module i8253_counter(
             M2X,
             M2: // technically we should trigger/reload on 1
                 // but we need to do this up front to be ready
-                // by the next clk
+                // by the next tclock
                 if (counter == 1)
                     out <= 0;
                 else
@@ -166,12 +165,16 @@ module i8253_counter(
 
             default: ;
             endcase
+
+        // reset overwrite flag
+        if (overwrite_req)
+            overwrite_req <= 0;
     end
 
     //---------------------------------------------------------
     // Read dispatcher.
     //
-    i8253_read rbus(
+    i8253_read rd(
         .clk        (clk),
         .rden       (rden),
         .cwset      (cwset),
@@ -181,63 +184,38 @@ module i8253_counter(
         .q          (odata)
     );
 
-    always @(posedge wren, posedge cwset) begin
-        if (cwset && idata[5:4] != 0)
-            loading_msb <= 0;
-        else if (wren && rl_mode == 3)
-            loading_msb <= ~loading_msb;
-
-        if (wren) begin
-            case (rl_mode)
-            2'b01: reload_value[7:0] <= idata;
-            2'b10: reload_value[15:8] <= idata;
-            2'b11: if (loading_msb) reload_value[15:8] <= idata;
-                   else             reload_value[7:0] <= idata;
-            endcase
-        end
-    end
-
-    always_latch begin
+    always @(posedge clk) begin
         if (cwset && idata[5:4] != 0) begin
-            loaded  <= 0;
-            loading <= 0;
-            cwreg   <= idata;
+            cwreg <= idata;
+            loading_msb <= 0;
+            counting <= 0;
         end
 
         // load
         if (wren) begin
             case (rl_mode)
             2'b01: begin
-                    starting <= 1;
+                    reload_value[7:0] <= idata;
                     overwrite_req <= 1;
                 end
             2'b10: begin
-                    starting <= 1;
+                    reload_value[15:8] <= idata;
                     overwrite_req <= 1;
                 end
             2'b11: begin
                     if (loading_msb) begin
-                        starting <= 1;
-                        loading <= 0;
-                        overwrite_req <= ~loaded;
+                        loading_msb <= 0;
+                        reload_value[15:8] <= idata;
+                        overwrite_req <= ~counting;
                     end else begin
-                        loading <= 1;
+                        loading_msb <= 1;
+                        reload_value[7:0] <= idata;
                         if (cw_mode == M0 || cw_mode == M4)
-                            loaded <= 0;
+                            counting <= 0;
                     end
                 end
             2'b00: ; // illegal state
             endcase
-        end
-
-        // reset overwrite flag
-        if (overwrite & clk)
-            overwrite_req <= 0;
-
-        // enable counting
-        if (starting & clk) begin
-            loaded <= 1;
-            starting <= 0;
         end
     end
 endmodule
@@ -267,12 +245,11 @@ module i8253_read(
         (read_state == 0) ? r_msb : latched_q[15:8] :
         (read_state == 0) ? r_lsb : latched_q[7:0];
 
-    always_latch
-        if (cwset && latch_en)
-            latched_q <= counter;
-
-    always @(posedge rden, posedge cwset)
+    always @(posedge clk) begin
         if (cwset) begin
+            if (latch_en)
+                latched_q <= counter;
+
             read_msb <= 1;
             if (latch_en)
                 read_state <= 2;
@@ -281,10 +258,12 @@ module i8253_read(
 
         end else if (rden) begin
             read_msb <= ~read_msb;
+
             case (read_state)
                 0: read_state <= 0;
                 1: read_state <= 0;
                 2: read_state <= 1;
             endcase
         end
+    end
 endmodule

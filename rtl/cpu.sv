@@ -312,7 +312,9 @@ wire tm_cs = (DDEV == 4);           // CTIME: chip select
 wire tm_wr = (DSRC == 15) & WRD;    // WT: write strobe from Y bus
 wire tm_rd = (DSRC == 14);          // RT: read strobe to Y bus
 
-i8253 timer(tm_clk, tm_cs, tm_rd, tm_wr, FFCNT[1:0], Y[7:0], tm_dout, /*out0*/, /*out1*/, /*out2*/);
+i8253 timer(clk, tm_clk, tm_cs, tm_rd, tm_wr,
+            FFCNT[1:0], Y[7:0], tm_dout,
+            /*out0*/, /*out1*/, /*out2*/);
 
 // Clock divider by 20.
 always @(posedge clk) begin
