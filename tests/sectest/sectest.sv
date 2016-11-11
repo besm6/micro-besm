@@ -218,15 +218,15 @@ localparam LABEL_CCE    = 1406;
 localparam LABEL_CCF    = 1421;
 localparam LABEL_CC10   = 1433;
 localparam LABEL_CC11   = 1445;
-localparam LABEL_CC12   = 1464;
-localparam LABEL_CC13   = 1491;
-localparam LABEL_CC14   = 1507;
-localparam LABEL_CKL15  = 1514;
-localparam LABEL_CKL16  = 1538;
-localparam LABEL_CTWR   = 1564;
-localparam LABEL_ERRTST = 1665;
-localparam LABEL_ERRINF = 1667;
-localparam LABEL_ERRINH = 1669;
+localparam LABEL_CC12   = 1465;
+localparam LABEL_CC13   = 1492;
+localparam LABEL_CC14   = 1508;
+localparam LABEL_CKL15  = 1515;
+localparam LABEL_CKL16  = 1539;
+localparam LABEL_CTWR   = 1565;
+localparam LABEL_ERRTST = 1666;
+localparam LABEL_ERRINF = 1668;
+localparam LABEL_ERRINH = 1670;
 
 // Get time at the rising edge of the clock.
 always @(posedge clk) begin
@@ -374,7 +374,7 @@ always @(negedge clk) begin
     check_pass(LABEL_CICLA,  "Test CICLA pass");
 
     // Test CKLB seems incorrect: it tries to write/read value of Count1,
-    // but does not wait long enough for clk1 pulse to update thre counter,
+    // but does not wait long enough for clk1 pulse to update the counter,
     // and fails on undefined read value.
     //check_pass(LABEL_CKLB,   "Test CKLB pass");
     check_jump(LABEL_CKLB-3, LABEL_CKLB-2, LABEL_CKLC-3, "Skip CKLB");
@@ -384,9 +384,9 @@ always @(negedge clk) begin
     check_pass(LABEL_CCE,    "Test CCE pass");
     check_pass(LABEL_CCF,    "Test CCF pass");
     check_pass(LABEL_CC10,   "Test CC10 pass");
-
     check_pass(LABEL_CC11,   "Test CC11 pass");
     check_pass(LABEL_CC12,   "Test CC12 pass");
+
     check_pass(LABEL_CC13,   "Test CC13 pass");
     check_pass(LABEL_CC14,   "Test CC14 pass");
     check_pass(LABEL_CKL15,  "Test CKL15 pass");
