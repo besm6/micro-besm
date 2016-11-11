@@ -113,6 +113,16 @@ task check_pass(input int label, input string msg);
 endtask
 
 //
+// Jump to a specified address.
+//
+task jump(input int target);
+    tr.pc_x = target;
+    cpu.control.uPC = target;
+    cpu.opcode = cpu.memory[target];
+    tr.opcode_x = cpu.opcode;
+endtask
+
+//
 // Check for a jump from label `from' to label `to'.
 // When jump detected, consider the test passed and
 // go instead to the target address.
@@ -125,10 +135,7 @@ task check_jump(
 );
     if (pc_x == label_from && tr.pc_f == label_to) begin
         message(msg);
-        tr.pc_x = target;
-        cpu.control.uPC = target;
-        cpu.opcode = cpu.memory[target];
-        tr.opcode_x = cpu.opcode;
+        jump(target);
     end
 endtask
 
@@ -373,11 +380,22 @@ always @(negedge clk) begin
     check_jump(LABEL_CONT1-1, LABEL_CONT1, LABEL_CONTA-1, "Skip STP1-CICL9");
     check_pass(LABEL_CICLA,  "Test CICLA pass");
 
-    // Test CKLB seems incorrect: it tries to write/read value of Count1,
-    // but does not wait long enough for clk1 pulse to update the counter,
-    // and fails on undefined read value.
-    //check_pass(LABEL_CKLB,   "Test CKLB pass");
-    check_jump(LABEL_CKLB-3, LABEL_CKLB-2, LABEL_CKLC-3, "Skip CKLB");
+    // CICLA test has initialized the Timer1.
+    // Need to wait 10msec for Count1 to be updated by slow clock tm_clk1 (100Hz).
+    if (pc_x == LABEL_CKLB-3 && tr.pc_f == LABEL_CKLB-2) begin
+        if ($isunknown(cpu.timer.c1.counter)) begin
+            message("Waiting for Timer1 clock");
+            if (cpu.timer.c0.counter > 2)
+                cpu.timer.c0.counter = 2; // speed it up
+            jump(LABEL_CKLB-3);
+        end else begin
+            // Test CKLB looks incorrect: it tries to write/read value of Count1,
+            // but does not wait long enough for clk1 pulse to update the counter,
+            // and fails on undefined read value.
+            message("Skip CKLB");
+            jump(LABEL_CKLC-3);
+        end
+    end
 
     check_pass(LABEL_CKLC,   "Test CKLC pass");
     check_pass(LABEL_CCD,    "Test CCD pass");
@@ -386,9 +404,9 @@ always @(negedge clk) begin
     check_pass(LABEL_CC10,   "Test CC10 pass");
     check_pass(LABEL_CC11,   "Test CC11 pass");
     check_pass(LABEL_CC12,   "Test CC12 pass");
-
     check_pass(LABEL_CC13,   "Test CC13 pass");
     check_pass(LABEL_CC14,   "Test CC14 pass");
+
     check_pass(LABEL_CKL15,  "Test CKL15 pass");
     check_pass(LABEL_CKL16,  "Test CKL16 pass");
 

@@ -101,6 +101,7 @@ logic [1:0] rr_unused;
 logic besm6_mode;               // режим эмуляции (РЭ)
 logic instr_ir15;               // stack mode flag
 logic tkk;                      // признак правой команды стандартизатора (TKK)
+logic halt;                     // триггер "Останов", сбрасывается только из пультового процессора
 
 // Signals for arbiter
 logic  [3:0] arb_req;           // код операции арбитра
@@ -143,6 +144,7 @@ always @(posedge clk)
     if (reset) begin
         opcode <= '0;           // Reset state
         besm6_mode <= 0;        // Изначально РЭ=0
+        halt <= 0;
     end else
         opcode <= memory[control_Y];
 
@@ -326,7 +328,7 @@ i8253 timer(clk, tm_cs, tm_rd, tm_wr,
 always @(posedge clk) begin
    if (reset)
         tm_clk0 <= 0;
-    else
+    else if (!halt)
         tm_clk0 <= ~tm_clk0;
 end
 
@@ -337,7 +339,8 @@ always @(posedge clk) begin
         tm_clk2 <= 0;
     end else if (tm_counter2 == 9) begin
         tm_counter2 <= 0;
-        tm_clk2 <= ~tm_clk2;
+        if (!halt)
+            tm_clk2 <= ~tm_clk2;
     end else begin
         tm_counter2 <= tm_counter2 + 1;
     end
@@ -593,7 +596,7 @@ always @(posedge clk)
         end
     22: besm6_mode <= '1;   // SETER, установка РЭ
     23: tkk <= ~tkk;        // СНТКК, переброс ТКК (работает в счетном режиме!)
-    24: /*TODO <= '1*/;     // SETHLT, установка триггера "Останов" (Halt)
+    24: halt <= '1;         // SETHLT, установка триггера "Останов" (Halt)
     25: /*TODO <= '0*/;     // CLRINT, сброс прерываний (кроме прерываний от таймеров)
     26: /*TODO <= '0*/;     // CLRRUN, сброс триггера "Пуск"
     27: /*TODO <= '1*/;     // RDMPCP, установка признака "память обмена ПП -> ЦП прочитана"

@@ -416,7 +416,7 @@ task print_uop(
     if (YDEV == 2)
         $fdisplay(fd, "(%0d) *** ydev=PHYSAD not implemented yet!", ctime);
 
-    if (!IOMP && (FFCNT == 16 || FFCNT == 17 || FFCNT == 24 ||
+    if (!IOMP && (FFCNT == 16 || FFCNT == 17 ||
                   FFCNT == 25 || FFCNT == 26 || FFCNT == 27 || FFCNT == 28 ||
                   FFCNT == 29 || FFCNT == 30 || FFCNT == 31))
         $fdisplay(fd, "(%0d) *** ffcnt=%0s not implemented yet!",
@@ -649,7 +649,7 @@ task print_changed_cpu(
     static logic        old_pginv[1024];
     static logic        old_pgro[1024];
     static logic        old_pgreprio[1024];
-    static logic        old_stopm0, old_stopm1;
+    static logic        old_stopm0, old_stopm1, old_halt;
 
     automatic logic  [5:0] modgn  = cpu.modgn;
     automatic logic  [7:0] procn  = cpu.PROCN;
@@ -660,6 +660,7 @@ task print_changed_cpu(
     automatic logic [31:0] rr     = cpu.RR;
     automatic logic        stopm0 = cpu.stopm0;
     automatic logic        stopm1 = cpu.stopm1;
+    automatic logic        halt   = cpu.halt;
     automatic logic        csm    = opcode[30];
     automatic logic        wem    = opcode[29];
     automatic logic  [2:0] ydev   = opcode[20:18];
@@ -674,12 +675,14 @@ task print_changed_cpu(
     if (modgn  !== old_modgn)  begin $fdisplay(fd, "(%0d)               Write MODGN = %h",  ctime, modgn);  old_modgn  = modgn;  end
     if (procn  !== old_procn)  begin $fdisplay(fd, "(%0d)               Write PROCN = %h",  ctime, procn);  old_procn  = procn;  end
     if (physpg !== old_physpg) begin $fdisplay(fd, "(%0d)               Write PHYSPG = %h", ctime, physpg); old_physpg = physpg; end
-    if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d)               Write ARBOPC = %h (%0s)", ctime, arbopc, arbopc_name[arbopc]); old_arbopc = arbopc; end
+    if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d)               Write ARBOPC = %h (%0s)", ctime, arbopc, arbopc_name[arbopc]);
+                                                                                                            old_arbopc = arbopc; end
     if (ureg   !== old_ureg)   begin $fdisplay(fd, "(%0d)               Write UREG = %h",   ctime, ureg);   old_ureg   = ureg;   end
     if (rr     !== old_rr)     begin $fdisplay(fd, "(%0d)               Write RR = %h",     ctime, rr);     old_rr     = rr;     end
     if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d)               Write PSHIFT = %h", ctime, pshift); old_pshift = pshift; end
     if (stopm0 !== old_stopm0) begin $fdisplay(fd, "(%0d)               Write STOPM0 = %h", ctime, stopm0); old_stopm0 = stopm0; end
     if (stopm1 !== old_stopm1) begin $fdisplay(fd, "(%1d)               Write STOPM1 = %h", ctime, stopm1); old_stopm1 = stopm1; end
+    if (halt   !== old_halt)   begin $fdisplay(fd, "(%1d)               Write HALT = %h",   ctime, halt);   old_halt   = halt;   end
 
     //
     // Index-registers
