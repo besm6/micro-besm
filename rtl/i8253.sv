@@ -83,11 +83,40 @@ module i8253_counter(
     parameter M2X = 3'd6,       // according to OKI datasheet these modes are x10 and x11
               M3X = 3'd7;
 
+    // BCD decrement
+    function [15:0] bcd_decr(input [15:0] v, input [1:0] decr);
+
+        logic [15:0] r;
+        logic        borrow;
+
+        // First digit, least significant
+        {borrow, r[3:0]} = {1'b0, v[3:0]} - decr;
+        if (borrow)
+            r[3:0] -= 6;
+
+        // Second digit
+        {borrow, r[7:4]} = {1'b0, v[7:4]} - borrow;
+        if (borrow)
+            r[7:4] = 9;
+
+        // Third digit
+        {borrow, r[11:8]} = {1'b0, v[11:8]} - borrow;
+        if (borrow)
+            r[11:8] = 9;
+
+        // Fourth digit
+        {borrow, r[15:12]} = {1'b0, v[15:12]} - borrow;
+        if (borrow)
+            r[15:12] = 9;
+
+        return r;
+    endfunction
+
     // control word breakdown
-    logic [5:0] cwreg;
-    wire  [1:0] rl_mode  = cwreg[5:4];
-    wire  [2:0] cw_mode  = cwreg[3:1];
-    wire        bcd_mode = cwreg[0];
+    logic [5:0] control_word;
+    wire  [1:0] rl_mode  = control_word[5:4];
+    wire  [2:0] cw_mode  = control_word[3:1];
+    wire        bcd_mode = control_word[0];
 
     // counter load value
     logic [15:0] reload_value;
@@ -117,7 +146,9 @@ module i8253_counter(
                              out ? 1 :  // M3 odd, output 1: first step 1
                                    3;   // M3 odd, output 0: first step 3
 
-    wire [15:0] next = counter - decr;
+    wire [15:0] next = bcd_mode ?
+                       bcd_decr(counter, decr) :
+                       counter - decr;
 
     always @(posedge tclock) begin
         // Update counter.
@@ -188,7 +219,7 @@ module i8253_counter(
 
     always @(posedge clk) begin
         if (cwset && idata[5:4] != 0) begin
-            cwreg <= idata;
+            control_word <= idata;
             loading_msb <= 0;
             counting <= 0;
         end
@@ -237,7 +268,7 @@ module i8253_read(
     output wire  [7:0] q
 );
     logic  [2:0] read_state;
-    logic [15:0] latched_q;
+    logic [15:0] latch;
     logic        read_msb;
     logic        read_done;
 
@@ -245,13 +276,13 @@ module i8253_read(
     wire [7:0] r_msb = (rl_mode == 2'b01) ? counter[7:0]  : counter[15:8];
 
     assign q = read_msb ?
-        (read_state == 0) ? r_msb : latched_q[15:8] :
-        (read_state == 0) ? r_lsb : latched_q[7:0];
+        (read_state == 0) ? r_msb : latch[15:8] :
+        (read_state == 0) ? r_lsb : latch[7:0];
 
     always @(posedge clk) begin
         if (cwset) begin
             if (latch_en)
-                latched_q <= counter;
+                latch <= counter;
 
             read_msb <= 1;
             if (latch_en)

@@ -304,11 +304,14 @@ always @(posedge clk)
 //--------------------------------------------------------------
 // Timer
 //
-logic       tm_clk0;                // clock for timer0, 2 times slower
-logic       tm_clk1;                // clock for timer1, 128k times slower
-logic       tm_clk2;                // clock for timer2, 20 times slower
-logic [4:0] tm_counter;             // divider for clk2
-logic [7:0] tm_dout;                // data output bus
+wire        tm_out0;                // output of timer0: use it as clock for timer1
+wire        tm_out1;                // output of timer1: interrupt TODO
+wire        tm_out2;                // output of timer2: interrupt TODO
+logic       tm_clk0;                // clock for timer0, 1MHz
+wire        tm_clk1 = tm_out0;      // clock for timer1, 100Hz
+logic       tm_clk2;                // clock for timer2, 100kHz
+logic [3:0] tm_counter2;            // divider for clk2
+wire  [7:0] tm_dout;                // data output bus
 
 wire tm_cs = (DDEV == 4);           // CTIME: chip select
 wire tm_wr = (DSRC == 15) & WRD;    // WT: write strobe from Y bus
@@ -317,11 +320,11 @@ wire tm_rd = (DSRC == 14);          // RT: read strobe to Y bus
 i8253 timer(clk, tm_cs, tm_rd, tm_wr,
             FFCNT[1:0], Y[7:0], tm_dout,
             tm_clk0, tm_clk1, tm_clk2,
-            tm_clk1, /*out1*/, /*out2*/);
+            tm_out0, tm_out1, tm_out2);
 
 // Clock divider by 2.
 always @(posedge clk) begin
-    if (reset)
+   if (reset)
         tm_clk0 <= 0;
     else
         tm_clk0 <= ~tm_clk0;
@@ -330,13 +333,13 @@ end
 // Clock divider by 20.
 always @(posedge clk) begin
     if (reset) begin
-        tm_counter <= 0;
+        tm_counter2 <= 0;
         tm_clk2 <= 0;
-    end else if (tm_counter == 9) begin
-        tm_counter <= 0;
+    end else if (tm_counter2 == 9) begin
+        tm_counter2 <= 0;
         tm_clk2 <= ~tm_clk2;
     end else begin
-        tm_counter <= tm_counter + 1;
+        tm_counter2 <= tm_counter2 + 1;
     end
 end
 
