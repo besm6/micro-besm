@@ -52,9 +52,9 @@ int trace;                              // Trace level
 int tracefd;                            // Trace file descriptor
 
 //
-// Generate clock at 1000MHz.
+// Generate clock 500MHz.
 //
-always #0.5 clk = ~clk;
+always #1 clk = ~clk;
 
 //
 // Main loop.
@@ -108,7 +108,7 @@ initial begin
     reset = 1;
 
     // Hold reset for a while.
-    #1 reset = 0;
+    #2 reset = 0;
 
     // Run until limit.
     #limit begin

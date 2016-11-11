@@ -13,6 +13,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/arbiter.sv \
                   ../../../rtl/shifter.sv \
                   ../../../rtl/clz.sv \
+                  ../../../rtl/i8253.sv \
                   ../../../rtl/tracer.sv \
 		  ../initest.sv
 

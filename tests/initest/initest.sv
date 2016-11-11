@@ -46,9 +46,9 @@ logic [11:0] pc_x;                      // Current PC address at execution stage
 logic [112:1] opcode_x;                 // Current opcode at execution stage
 
 //
-// Generate clock at 1000MHz.
+// Generate clock 500MHz.
 //
-always #0.5 clk = ~clk;
+always #1 clk = ~clk;
 
 //
 // Main loop.
@@ -83,7 +83,7 @@ initial begin
     reset = 1;
 
     // Hold reset for a while.
-    #1 reset = 0;
+    #2 reset = 0;
 
     // Run until limit.
     #limit begin
