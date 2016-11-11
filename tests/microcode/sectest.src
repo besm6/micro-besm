@@ -2976,7 +2976,7 @@ CONT ALUS=ZQ,Н,ALUD=LSB,RВ=EXPN,SHMUX=LSLSL
 ;ВЫЧИСЛЯЕМ 2-УЮ РАЗНИЦУ, ПИШЕМ В Q
 CONT ALUS=АВ,RА=A,RВ=Y,FUNC=SUBS,Н,CI,ALUD=Q
 ;СРАВНИВАЕМ РАЗНИЦУ С ПРЕДЫДУЩЕЙ, МАСКА НА 16 РАЗРЯДОВ
-CONT ALUS=АQ,RА=EXPN,FUNC=SUBS,Н,ALUD=B,RB=HALF
+CONT ALUS=АQ,RА=EXPN,FUNC=SUBR,Н,ALUD=B,RB=HALF
 CONT А=MQ,DSRC=PROM,ALUS=DA,RA=HALF,FUNC=AND,Н,ALUD=B,RB=HALF
 ;СДВИГАЕМ НА N РАЗРЯДОВ ВПРАВО (СРАВНИВАЕМ С ТОЧНОСТЬЮ ДО N РАЗРЯДОВ)
 CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+1,SHF=LOG,CEN

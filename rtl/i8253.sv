@@ -39,6 +39,8 @@ module i8253(
     output wire       out1,     // timer 1 output
     output wire       out2      // timer 2 output
 );
+    timeunit 1ns / 10ps;
+
     wire [7:0] q0, q1, q2;
 
     wire [3:0] sel = (a == 2'b00) ? 4'b0001 :
@@ -74,6 +76,8 @@ module i8253_counter(
     output logic [7:0] odata,   // read value
     output logic       out      // out pin according to mode
 );
+    timeunit 1ns / 10ps;
+
     parameter M0 = 3'd0,
               M1 = 3'd1,
               M2 = 3'd2,
@@ -226,16 +230,19 @@ module i8253_counter(
             2'b01: begin
                     reload_value[7:0] <= idata;
                     overwrite <= 1;
+                    counter <= {reload_value[15:8], idata};
                 end
             2'b10: begin
                     reload_value[15:8] <= idata;
                     overwrite <= 1;
+                    counter <= {idata, reload_value[7:0]};
                 end
             2'b11: begin
                     if (loading_msb) begin
                         loading_msb <= 0;
                         reload_value[15:8] <= idata;
                         overwrite <= 1;
+                        counter <= {idata, reload_value[7:0]};
                     end else begin
                         loading_msb <= 1;
                         reload_value[7:0] <= idata;
@@ -261,6 +268,8 @@ module i8253_read(
     input  wire [15:0] counter,
     output wire  [7:0] q
 );
+    timeunit 1ns / 10ps;
+
     logic  [2:0] read_state;
     logic [15:0] latch;
     logic        read_msb;
