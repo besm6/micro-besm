@@ -124,9 +124,8 @@ module i8253_counter(
     // current counter value
     logic [15:0] counter;
 
-    logic loading_msb;    // for rl=3: 0: next 8-bit value will be lsb, 1: msb
-    logic overwrite_req;
-    logic counting;
+    logic loading_msb;      // for rl=3: 0: next 8-bit value will be lsb, 1: msb
+    logic overwrite;        // counter overwrite enable (from host)
 
     //---------------------------------------------------------
     // Down counter with auto-reload.
@@ -134,9 +133,6 @@ module i8253_counter(
 
     // for square wave gen
     wire halfmode = (count_mode[1:0] == M3);
-
-    // counter overwrite enable (from host)
-    wire overwrite = (overwrite_req && count_mode != M1 && count_mode != M5);
 
     // decrement the counter by this value
     wire [15:0] decr = !halfmode ? 1 :  // all modes except M3
@@ -154,10 +150,9 @@ module i8253_counter(
 
     always @(posedge tclock) begin
         // Update counter.
-        if (overwrite | autoreload) begin
+        if (overwrite | autoreload)
             counter <= reload_value;
-            counting <= 1;
-        end else if (counting)
+        else
             counter <= next;
 
         // Set output pin.
@@ -202,8 +197,8 @@ module i8253_counter(
             endcase
 
         // reset overwrite flag
-        if (overwrite_req)
-            overwrite_req <= 0;
+        if (overwrite)
+            overwrite <= 0;
     end
 
     //---------------------------------------------------------
@@ -230,22 +225,20 @@ module i8253_counter(
             case (load_mode)
             2'b01: begin
                     reload_value[7:0] <= idata;
-                    overwrite_req <= 1;
+                    overwrite <= 1;
                 end
             2'b10: begin
                     reload_value[15:8] <= idata;
-                    overwrite_req <= 1;
+                    overwrite <= 1;
                 end
             2'b11: begin
                     if (loading_msb) begin
                         loading_msb <= 0;
                         reload_value[15:8] <= idata;
-                        overwrite_req <= ~counting;
+                        overwrite <= 1;
                     end else begin
                         loading_msb <= 1;
                         reload_value[7:0] <= idata;
-                        if (count_mode == M0 || count_mode == M4)
-                            counting <= 0;
                     end
                 end
             2'b00: ; // illegal state
