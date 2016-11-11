@@ -51,8 +51,15 @@ logic [11:0] pc_f;                      // PC at fetch stage
 logic [11:0] pc_x;                      // PC at execute stage
 logic [112:1] opcode_x;                 // Opcode at execute stage
 
+//
 // Current time
+//
 time ctime;
+
+//
+// Signal for the test for every graduated instruction.
+//
+event instruction_retired;
 
 bit old_reset = 0;                      // Previous state of reset
 logic [63:0] const_value;               // Constant value
@@ -121,6 +128,8 @@ always @(negedge clk)
         opcode_x = cpu.opcode;
         const_value = cpu.PROM;
         const_addr = cpu.A[8:0];
+
+        ->instruction_retired;
     end
 
 //

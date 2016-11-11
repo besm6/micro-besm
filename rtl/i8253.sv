@@ -130,6 +130,7 @@ module i8253_counter(
 
     logic loading_msb;      // for rl=3: 0: next 8-bit value will be lsb, 1: msb
     logic overwrite;        // counter overwrite enable (from host)
+    logic last_tclock;      // previous tclock value
 
     //---------------------------------------------------------
     // Down counter with auto-reload.
@@ -151,59 +152,6 @@ module i8253_counter(
 
     // let the counter auto-reload inself in modes M2,M2X,M3,M3X
     wire autoreload = (next == 0) && (count_mode[1:0] == M3 || count_mode[1:0] == M2);
-
-    always @(posedge tclock) begin
-        // Update counter.
-        if (overwrite | autoreload)
-            counter <= reload_value;
-        else
-            counter <= next;
-
-        // Set output pin.
-        if (overwrite)
-            case (count_mode)
-            M0:      out <= 0; // interrupt, 1-time, start count on load or gate
-            M1:      out <= 1; // programmable one-shot on gate rising edge; NOT IMPLEMENTED
-            M2, M2X: out <= 1; // rate generator, start couting on load (or gate rising edge, not supported)
-            M3, M3X: out <= 1; // square waveform generator
-            M4:      out <= 1; // software trigger strobe
-            M5:      out <= 1; // hardware trigger strobe (NOT IMPLEMENTED)
-            default: out <= 1;
-            endcase
-        else
-            case (count_mode)
-            M0: if (next == 0)
-                    out <= 1;
-
-            M1: ; // NOT IMPLEMENTED: no gate, no reloads
-
-            M2X,
-            M2: // technically we should trigger/reload on 1
-                // but we need to do this up front to be ready
-                // by the next tclock
-                if (next == 1)
-                    out <= 0;
-                else
-                    out <= 1;
-
-            M3X,
-            M3: if (counter == 2)
-                    out <= ~out;
-
-            M4: if (next == 0)
-                    out <= 0;
-                else
-                    out <= 1; // reset out on next cycle
-
-            M5: ; // NOT IMPLEMENTED: no gate, just roll
-
-            default: ;
-            endcase
-
-        // reset overwrite flag
-        if (overwrite)
-            overwrite <= 0;
-    end
 
     //---------------------------------------------------------
     // Read dispatcher.
@@ -250,6 +198,62 @@ module i8253_counter(
                 end
             2'b00: ; // illegal state
             endcase
+        end
+
+        // Detect tclock rising edge.
+        last_tclock <= tclock;
+        if (tclock & !last_tclock) begin
+
+            // Update counter.
+            if (overwrite | autoreload)
+                counter <= reload_value;
+            else
+                counter <= next;
+
+            // Set output pin.
+            if (overwrite)
+                case (count_mode)
+                M0:      out <= 0; // interrupt, 1-time, start count on load or gate
+                M1:      out <= 1; // programmable one-shot on gate rising edge; NOT IMPLEMENTED
+                M2, M2X: out <= 1; // rate generator, start couting on load (or gate rising edge, not supported)
+                M3, M3X: out <= 1; // square waveform generator
+                M4:      out <= 1; // software trigger strobe
+                M5:      out <= 1; // hardware trigger strobe (NOT IMPLEMENTED)
+                default: out <= 1;
+                endcase
+            else
+                case (count_mode)
+                M0: if (next == 0)
+                        out <= 1;
+
+                M1: ; // NOT IMPLEMENTED: no gate, no reloads
+
+                M2X,
+                M2: // technically we should trigger/reload on 1
+                    // but we need to do this up front to be ready
+                    // by the next tclock
+                    if (next == 1)
+                        out <= 0;
+                    else
+                        out <= 1;
+
+                M3X,
+                M3: if (counter == 2)
+                        out <= ~out;
+
+                M4: if (next == 0)
+                        out <= 0;
+                    else
+                        out <= 1; // reset out on next cycle
+
+                M5: ; // NOT IMPLEMENTED: no gate, just roll
+
+                default: ;
+                endcase
+
+            // reset overwrite flag
+            if (overwrite)
+                overwrite <= 0;
         end
     end
 endmodule

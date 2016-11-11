@@ -244,7 +244,7 @@ end
 
 // At negative clock edge, when all the signals are quiet,
 // analyze the state of the processor.
-always @(negedge clk) begin
+always @(tr.instruction_retired) begin
     // In case of failure, the tests stop at label ERR*
     if (pc_x == LABEL_ERRTST || pc_x == LABEL_ERRINF ||
         pc_x == LABEL_ERRINH) begin
