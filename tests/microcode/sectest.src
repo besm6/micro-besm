@@ -2815,7 +2815,7 @@ CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=/NZ
 CJP А=CONTD,МАР=РЕ
 CONTD:CONT А=HD,%Т%
 %S% А=INITST,МАР=РЕ
-CONT А=ZER,МАР=РЕ,ALUS=DZ,Н,ALUD=В,RВ=А
+CONT А=ZER,DSRC=PROM,МАР=РЕ,ALUS=DZ,Н,ALUD=В,RВ=А
 CJS А=CTWR,МАР=РЕ
 ;ЖДЕМ 2 МК = 1 MKS, ПОСЛЕ ЧЕГО ЧАСЫ МОЖНО ЧИТАТЬ (ПОКЗАНИЯ ДОЛЖНЫ ИЗМЕНИТЬСЯ!)
 PUSH А=0,МАР=РЕ
@@ -2838,7 +2838,7 @@ CJS А=ERRTST,МАР=РЕ,COND=СТ,SТОРС=NZ,%TIK%
 CJP А=CONTE,МАР=РЕ
 CONTE:CONT А=НЕ,%Т%
 %S% А=INITST,МАР=РЕ
-CONT А=ZER,МАР=РЕ,ALUS=DZ,Н,ALUD=В,RВ=А
+CONT А=ZER,DSRC=PROM,МАР=РЕ,ALUS=DZ,Н,ALUD=В,RВ=А
 ;ЧИТАЕМ КОМ.СЛОВО С РЕЖИМОМ 2
 CONT А=R2СН2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6
 CJS А=CTTWRM,МАР=РЕ
@@ -2935,9 +2935,11 @@ CONT ALUS=ZQ,Н,ALUD=LSB,RВ=EXPN,SHMUX=LSLSL
 ;ВЫЧИСЛЯЕМ 2-УЮ РАЗНИЦУ, ПИШЕМ В Q
 CONT ALUS=АВ,RА=A,RВ=Y,FUNC=SUBS,Н,CI,ALUD=Q
 ;СРАВНИВАЕМ РАЗНИЦУ С ПРЕДЫДУЩЕЙ
-CONT ALUS=АQ,RА=EXPN,FUNC=EXOR,Н,ALUD=B,RB=HALF
+CONT ALUS=АQ,RА=EXPN,FUNC=SUBR,Н,ALUD=B,RB=HALF
 ;СДВИГАЕМ НА N РАЗРЯДОВ ВПРАВО (СРАВНИВАЕМ С ТОЧНОСТЬЮ ДО N РАЗРЯДОВ)
-CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+2,SHF=LOG,CEN
+CONT ALUS=DZ,Н,ALUD=ВА,RА=HALF,RВ=WR6,ALU,DSRC=SHIFT,MPS,PSHF=SН0+4,SHF=LOG,CEN
+;МАСКА НА 16-4=12 РАЗРЯДОВ
+CONT А=МРР,DSRC=PROM,ALUS=DA,RA=WR6,FUNC=AND,Н,ALUD=Q,CEN
 CJS А=ERRINF,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;ЧИТАЕМ СНОВА ДЛЯ СЛЕДУЮЩЕЙ ИТЕРАЦИИ
 CJS А=CTRD,МАР=РЕ,%TIK%

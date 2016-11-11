@@ -223,11 +223,6 @@ module i8253_counter(
         if (cwset && idata[5:4] != 0) begin
             control_word <= idata;
             loading_msb <= 0;
-            if (counting); else begin
-                // clear undefined state
-                counter <= 0;
-                counting <= 0;
-            end
         end
 
         // load
