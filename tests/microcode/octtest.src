@@ -898,7 +898,8 @@ CONT CSM,MNSA=IRA,ALUS=DZ,ALUD=B,RB=Y
 CONT ALUS=AB,RА=A,RB=Y,FUNC=EXOR,ALUD=Q,CEN
 CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
 RFCT FFCNT=CHTKK
-;
+;берём константу 0 в А
+CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=А
 ;ИНВЕРТИРУЕМ КОМАНДНОЕ СЛОВО (FF...FF)
 PUSH A=1,MAP=PE,ALUS=ZА,RА=А,FUNC=EXNOR,Н,ALUD=В,RВ=А,ALU,ЕСВ,WRB,BRA=RG1
 ;09,0D: ЧИТАЕМ КОМАНДУ (F...F): АДРЕС КОМАНДЫ (32 РАЗРЯДА)
