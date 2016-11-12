@@ -154,6 +154,7 @@ localparam LABEL_CBOIB  = 120;
 localparam LABEL_CBOIC  = 135;
 localparam LABEL_CBOID  = 167;
 localparam LABEL_CBOIE  = 206;
+localparam LABEL_PSSTF  = 239;
 localparam LABEL_CST10  = 280;
 localparam LABEL_CST11  = 308;
 localparam LABEL_CST12  = 347;
@@ -225,6 +226,7 @@ always @(tr.instruction_retired) begin
     //
     // Стандартизатор команд
     //
+    check_jump(LABEL_PSSTF-1, LABEL_PSSTF, LABEL_CST10-6, "Skip CICTF");
     check_pass(LABEL_CST10,  "Test CST10 pass");
     check_pass(LABEL_CST11,  "Test CST11 pass");
     check_pass(LABEL_CST12,  "Test CST12 pass");

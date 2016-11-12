@@ -48,7 +48,7 @@ logic [10:0] PSHIFT;            // регистр параметра сдвиг�
 logic  [6:0] clz_out;           // результат поиска левой единицы
 logic        CCLR;              // запуск сброса кэша
 logic  [7:0] instr_code;        // код операции команды
-logic [19:0] instr_addr;        // адресная часть команды
+logic [31:0] instr_addr;        // адресная часть команды
 logic [11:0] jump_addr;         // ПНА КОП основного или дополнительного формата
 
 //TODO:
@@ -485,6 +485,7 @@ always @(posedge clk)                   // arbiter request
 //
 logic instr_ext;                // extended opcode flag
 logic uflag;                    // признак изменения адресом (ПИА)
+logic [19:0] addr;
 assign uflag = LETC & cb;
 
 decoder dec(
@@ -495,8 +496,9 @@ decoder dec(
     instr_code,                 // instruction code (КОП)
     instr_ext,                  // extended opcode flag
     instr_ir15,                 // stack mode flag
-    instr_addr                  // address
+    addr                        // address
 );
+assign instr_addr = {{12{addr[19]}}, addr};
 
 logic [11:0] optab[4096] = '{
     `include "../microcode/optab.v"

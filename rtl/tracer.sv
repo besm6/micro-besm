@@ -660,7 +660,7 @@ task print_changed_cpu(
     static logic        old_pginv[1024];
     static logic        old_pgro[1024];
     static logic        old_pgreprio[1024];
-    static logic        old_stopm0, old_stopm1, old_halt;
+    static logic        old_stopm0, old_stopm1, old_halt, old_tkk;
 
     automatic logic  [5:0] modgn  = cpu.modgn;
     automatic logic  [7:0] procn  = cpu.PROCN;
@@ -672,6 +672,7 @@ task print_changed_cpu(
     automatic logic        stopm0 = cpu.stopm0;
     automatic logic        stopm1 = cpu.stopm1;
     automatic logic        halt   = cpu.halt;
+    automatic logic        tkk    = cpu.tkk;
     automatic logic        csm    = opcode[30];
     automatic logic        wem    = opcode[29];
     automatic logic  [2:0] ydev   = opcode[20:18];
@@ -694,6 +695,7 @@ task print_changed_cpu(
     if (stopm0 !== old_stopm0) begin $fdisplay(fd, "(%0d)               Write STOPM0 = %h", ctime, stopm0); old_stopm0 = stopm0; end
     if (stopm1 !== old_stopm1) begin $fdisplay(fd, "(%1d)               Write STOPM1 = %h", ctime, stopm1); old_stopm1 = stopm1; end
     if (halt   !== old_halt)   begin $fdisplay(fd, "(%1d)               Write HALT = %h",   ctime, halt);   old_halt   = halt;   end
+    if (tkk    !== old_tkk)    begin $fdisplay(fd, "(%1d)               Write TKK = %h",    ctime, tkk);    old_tkk    = tkk;    end
 
     //
     // Index-registers
