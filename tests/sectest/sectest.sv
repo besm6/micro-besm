@@ -2,7 +2,7 @@
 
 //
 // Run sectest.
-// See initest.src for sources.
+// See sectest.src for sources.
 //
 module testbench();
 

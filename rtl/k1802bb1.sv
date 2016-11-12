@@ -24,6 +24,7 @@
 `default_nettype none
 
 module k1802bb1(
+    input  wire        clk,
     input  wire  [3:0] nDA,     // A data bus input...
     output logic [3:0] onDA,    // ...and output
     input  wire  [3:0] nDB,     // B data bus input...
@@ -97,12 +98,12 @@ assign selX2 = !nECX & (AX == 2);   // port X selects RG2
 assign selX3 = !nECX & (AX == 3);   // port X selects RG3
 
 // Clock and enable signals for RGi.
-logic clk0, en1, en2, en3;
+logic en0, en1, en2, en3;
 
-assign clk0 = ((selA0 & !nWA) |     // clock for flip-flop RG0
-               (selB0 & !nWB) |
-               (selC0 & !nWC) |
-               (selX0 & !nWX)) & !nCI;
+assign en0 = ((selA0 & !nWA) |     // clock for flip-flop RG0
+              (selB0 & !nWB) |
+              (selC0 & !nWC) |
+              (selX0 & !nWX)) & !nCI;
 assign en1 = (selA1 & !nWA) |       // data enable for latch RG1
              (selB1 & !nWB) |
              (selC1 & !nWC) |
@@ -118,34 +119,36 @@ assign en3 = (selA3 & !nWA) |       // data enable for latch RG3
 
 // Flip-flop RG0 and latches RG1-RG3.
 logic CO;
-always @(posedge clk0)
-    if (nCI)
-        {CO, RG[0]} <= RG[0] + 1;
-    else begin
-        RG[0] <= ((!outA & !nWA & selA0) ? ~nDA : 0) |
-                 ((!outB & !nWB & selB0) ? ~nDB : 0) |
-                 ((!outC & !nWC & selC0) ? ~nDC : 0) |
-                 ((!outX & !nWX & selX0) ? ~nDX : 0);
-        CO <= 0;
+always @(posedge clk)
+    if (en0) begin
+        if (nCI)
+            {CO, RG[0]} <= RG[0] + 1;
+        else begin
+            RG[0] <= {4{!outA & !nWA & selA0}} & ~nDA |
+                     {4{!outB & !nWB & selB0}} & ~nDB |
+                     {4{!outC & !nWC & selC0}} & ~nDC |
+                     {4{!outX & !nWX & selX0}} & ~nDX;
+            CO <= 0;
+        end
     end
-always @(*)
+always @(posedge clk)
     if (en1)
-        RG[1] <= ((!outA & !nWA & selA1) ? ~nDA : 0) |
-                 ((!outB & !nWB & selB1) ? ~nDB : 0) |
-                 ((!outC & !nWC & selC1) ? ~nDC : 0) |
-                 ((!outX & !nWX & selX1) ? ~nDX : 0);
-always @(*)
+        RG[1] <= {4{!outA & !nWA & selA1}} & ~nDA |
+                 {4{!outB & !nWB & selB1}} & ~nDB |
+                 {4{!outC & !nWC & selC1}} & ~nDC |
+                 {4{!outX & !nWX & selX1}} & ~nDX;
+always @(posedge clk)
     if (en2)
-        RG[2] <= ((!outA & !nWA & selA2) ? ~nDA : 0) |
-                 ((!outB & !nWB & selB2) ? ~nDB : 0) |
-                 ((!outC & !nWC & selC2) ? ~nDC : 0) |
-                 ((!outX & !nWX & selX2) ? ~nDX : 0);
-always @(*)
+        RG[2] <= {4{!outA & !nWA & selA2}} & ~nDA |
+                 {4{!outB & !nWB & selB2}} & ~nDB |
+                 {4{!outC & !nWC & selC2}} & ~nDC |
+                 {4{!outX & !nWX & selX2}} & ~nDX;
+always @(posedge clk)
     if (en3)
-        RG[3] <= ((!outA & !nWA & selA3) ? ~nDA : 0) |
-                 ((!outB & !nWB & selB3) ? ~nDB : 0) |
-                 ((!outC & !nWC & selC3) ? ~nDC : 0) |
-                 ((!outX & !nWX & selX3) ? ~nDX : 0);
+        RG[3] <= {4{!outA & !nWA & selA3}} & ~nDA |
+                 {4{!outB & !nWB & selB3}} & ~nDB |
+                 {4{!outC & !nWC & selC3}} & ~nDC |
+                 {4{!outX & !nWX & selX3}} & ~nDX;
 
 // Read RGi.
 assign onDA = !outA ? 4'hz :

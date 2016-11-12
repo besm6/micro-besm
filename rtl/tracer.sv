@@ -236,7 +236,7 @@ task print_uop(
         12:"BTRWR", 13:"BTRRD", 14:"BICLR", 15:"BIRD"
     };
     static string bra_name[4] = '{
-        0: "RG0",   1: "RG1",   2: "RG2",   3: "-"
+        0: "RG0",   1: "RG1",   2: "RG2",   3: "RG3"
     };
     static string ydev_name[8] = '{
         0: "-",     1: "ECBTAG",2: "PHYSAD",3: "RADRR",
@@ -390,10 +390,12 @@ task print_uop(
     if (WEM   != 0)  $fwrite(fd, " WEM");
     if (ECB   != 0)  $fwrite(fd, " ECB");
     if (WRB   != 0)  $fwrite(fd, " WRB");
-    if (BRA   != 3)  $fwrite(fd, " bra=%0s", bra_name[BRA]);
+    if (BRA   != 3 ||
+        ECB)         $fwrite(fd, " bra=%0s", bra_name[BRA]);
     if (ECA   != 0)  $fwrite(fd, " ECA");
     if (WRA   != 0)  $fwrite(fd, " WRA");
-    if (ARA   != 3)  $fwrite(fd, " ara=%0s", bra_name[ARA]);
+    if (ARA   != 3 ||
+        ECA)         $fwrite(fd, " ara=%0s", bra_name[ARA]);
     if (YDEV  != 0)  $fwrite(fd, " ydev=%0s", ydev_name[YDEV]);
     if (WRY   != 0)  $fwrite(fd, " WRY");
     if (DDEV  != 0)  $fwrite(fd, " ddev=%0s", ddev_name[DDEV]);

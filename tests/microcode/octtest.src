@@ -100,11 +100,11 @@ FLIST COND=YES,NORMB,RNDB,OVRIB,BNB,OVRFTB,DRG,EMLRG,RСВ,СВ,CEMLRG,
 ;     ============================================
 ;
 ;ВАРИАНТ ДЛЯ ОДНОГО БОЛЬШОГО
-;MACRO J CONT
-;MACRO S CONT
+MACRO J CONT
+MACRO S CONT
 ;ВАРИАНТ ДЛЯ ОТДЕЛЬНЫХ ТЕСТОВ
-MACRO J CJP
-MACRO S CJS
+;MACRO J CJP
+;MACRO S CJS
 ;
 ;     ==================
 ;     МАКРОСЫ ДЛЯ КОМАНД

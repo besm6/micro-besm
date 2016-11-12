@@ -449,6 +449,7 @@ assign o_ad   = bus_oDX[63:0];
 assign o_tag  = bus_oDX[71:64];
 
 extbus busio(
+    clk,
     bus_DA, bus_oDA,                    // A data bus
     bus_DB, bus_oDB,                    // B data bus
     72'b00, bus_oDC,                    // C data bus
