@@ -109,7 +109,8 @@ logic        arb_rdy;           // ответ арбитра
 
 // External bus interface
 // Inputs
-logic [71:0] bus_DA, bus_DB;    // A, B data inputs
+logic [63:0] bus_DA;            // A data input
+logic [71:0] bus_DB;            // B data input
 logic [71:0] bus_DX;            // X data bus
 logic  [1:0] bus_ARX;           // X address input
 logic        bus_ECBTAG;        // B tag port enable
@@ -117,7 +118,8 @@ logic        bus_ECX;           // X port enable
 logic        bus_WRX;           // X write enable
 
 // Outputs
-logic [71:0] bus_oDA, bus_oDB;  // A, B data outputs TODO
+logic [63:0] bus_oDA;           // A data output
+logic [71:0] bus_oDB;           // B data output TODO
 logic [71:0] bus_oDC;           // C data output
 logic [71:0] bus_oDX;           // X data output
 
@@ -380,6 +382,7 @@ assign D =
 
     // Others
     (CSM & !WEM) ? mr_read :            // регистр-модификатор
+    (ECA & !WRA) ? bus_oDA :            // канал A БОИ данных
                    instr_addr;          // источник не указан: адресная часть команды?
 
 assign Y =
@@ -399,7 +402,7 @@ always @(posedge clk)
    /*3: RR       <= Y[31:0];*/  // регистр режимов и триггеры признаков
      4: pg_index <= Y[19:10];   // регистр физической страницы
    /*5: ARBOPC   <= Y[3:0];*/   // код операции арбитра
-     8: UREG     <= Y[31:0];    // ADRREG, регистр исполнительного адреса (запись)
+     8: UREG     <= D[31:0];    // ADRREG, регистр исполнительного адреса (запись)
    /*9: PSHIFT   <= Y[10:0];*/  // регистр параметра сдвига (только запись)
     endcase
 

@@ -1,0 +1,50 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Sat Nov 12 02:27:59 2016
+[*]
+[dumpfile] "/local/Besm-6/micro-besm/tests/octtest/modelsim/output.vcd"
+[dumpfile_mtime] "Sat Nov 12 02:27:44 2016"
+[dumpfile_size] 738905
+[savefile] "/local/Besm-6/micro-besm/tests/octtest/modelsim/test.gtkw"
+[timestart] 82418
+[size] 1680 600
+[pos] -830 -328
+*-10.667917 92994 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testbench.
+[treeopen] testbench.cpu.
+[treeopen] testbench.cpu.busio.
+[sst_width] 235
+[signals_width] 110
+[sst_expanded] 1
+[sst_vpaned_height] 159
+@28
+testbench.clk
+@22
+testbench.cpu.D[63:0]
+@23
+testbench.cpu.Y[63:0]
+@200
+-
+@28
+#{testbench.cpu.busio.AA[1:0]} testbench.cpu.busio.AA[1] testbench.cpu.busio.AA[0]
+@22
+#{testbench.cpu.busio.DA[71:0]} testbench.cpu.busio.DA[71] testbench.cpu.busio.DA[70] testbench.cpu.busio.DA[69] testbench.cpu.busio.DA[68] testbench.cpu.busio.DA[67] testbench.cpu.busio.DA[66] testbench.cpu.busio.DA[65] testbench.cpu.busio.DA[64] testbench.cpu.busio.DA[63] testbench.cpu.busio.DA[62] testbench.cpu.busio.DA[61] testbench.cpu.busio.DA[60] testbench.cpu.busio.DA[59] testbench.cpu.busio.DA[58] testbench.cpu.busio.DA[57] testbench.cpu.busio.DA[56] testbench.cpu.busio.DA[55] testbench.cpu.busio.DA[54] testbench.cpu.busio.DA[53] testbench.cpu.busio.DA[52] testbench.cpu.busio.DA[51] testbench.cpu.busio.DA[50] testbench.cpu.busio.DA[49] testbench.cpu.busio.DA[48] testbench.cpu.busio.DA[47] testbench.cpu.busio.DA[46] testbench.cpu.busio.DA[45] testbench.cpu.busio.DA[44] testbench.cpu.busio.DA[43] testbench.cpu.busio.DA[42] testbench.cpu.busio.DA[41] testbench.cpu.busio.DA[40] testbench.cpu.busio.DA[39] testbench.cpu.busio.DA[38] testbench.cpu.busio.DA[37] testbench.cpu.busio.DA[36] testbench.cpu.busio.DA[35] testbench.cpu.busio.DA[34] testbench.cpu.busio.DA[33] testbench.cpu.busio.DA[32] testbench.cpu.busio.DA[31] testbench.cpu.busio.DA[30] testbench.cpu.busio.DA[29] testbench.cpu.busio.DA[28] testbench.cpu.busio.DA[27] testbench.cpu.busio.DA[26] testbench.cpu.busio.DA[25] testbench.cpu.busio.DA[24] testbench.cpu.busio.DA[23] testbench.cpu.busio.DA[22] testbench.cpu.busio.DA[21] testbench.cpu.busio.DA[20] testbench.cpu.busio.DA[19] testbench.cpu.busio.DA[18] testbench.cpu.busio.DA[17] testbench.cpu.busio.DA[16] testbench.cpu.busio.DA[15] testbench.cpu.busio.DA[14] testbench.cpu.busio.DA[13] testbench.cpu.busio.DA[12] testbench.cpu.busio.DA[11] testbench.cpu.busio.DA[10] testbench.cpu.busio.DA[9] testbench.cpu.busio.DA[8] testbench.cpu.busio.DA[7] testbench.cpu.busio.DA[6] testbench.cpu.busio.DA[5] testbench.cpu.busio.DA[4] testbench.cpu.busio.DA[3] testbench.cpu.busio.DA[2] testbench.cpu.busio.DA[1] testbench.cpu.busio.DA[0]
+@28
+testbench.cpu.busio.ECA
+testbench.cpu.busio.WA
+@22
+testbench.cpu.busio.oDA[71:0]
+@200
+-
+@28
+#{testbench.cpu.busio.AB[1:0]} testbench.cpu.busio.AB[1] testbench.cpu.busio.AB[0]
+@22
+#{testbench.cpu.busio.DB[71:0]} testbench.cpu.busio.DB[71] testbench.cpu.busio.DB[70] testbench.cpu.busio.DB[69] testbench.cpu.busio.DB[68] testbench.cpu.busio.DB[67] testbench.cpu.busio.DB[66] testbench.cpu.busio.DB[65] testbench.cpu.busio.DB[64] testbench.cpu.busio.DB[63] testbench.cpu.busio.DB[62] testbench.cpu.busio.DB[61] testbench.cpu.busio.DB[60] testbench.cpu.busio.DB[59] testbench.cpu.busio.DB[58] testbench.cpu.busio.DB[57] testbench.cpu.busio.DB[56] testbench.cpu.busio.DB[55] testbench.cpu.busio.DB[54] testbench.cpu.busio.DB[53] testbench.cpu.busio.DB[52] testbench.cpu.busio.DB[51] testbench.cpu.busio.DB[50] testbench.cpu.busio.DB[49] testbench.cpu.busio.DB[48] testbench.cpu.busio.DB[47] testbench.cpu.busio.DB[46] testbench.cpu.busio.DB[45] testbench.cpu.busio.DB[44] testbench.cpu.busio.DB[43] testbench.cpu.busio.DB[42] testbench.cpu.busio.DB[41] testbench.cpu.busio.DB[40] testbench.cpu.busio.DB[39] testbench.cpu.busio.DB[38] testbench.cpu.busio.DB[37] testbench.cpu.busio.DB[36] testbench.cpu.busio.DB[35] testbench.cpu.busio.DB[34] testbench.cpu.busio.DB[33] testbench.cpu.busio.DB[32] testbench.cpu.busio.DB[31] testbench.cpu.busio.DB[30] testbench.cpu.busio.DB[29] testbench.cpu.busio.DB[28] testbench.cpu.busio.DB[27] testbench.cpu.busio.DB[26] testbench.cpu.busio.DB[25] testbench.cpu.busio.DB[24] testbench.cpu.busio.DB[23] testbench.cpu.busio.DB[22] testbench.cpu.busio.DB[21] testbench.cpu.busio.DB[20] testbench.cpu.busio.DB[19] testbench.cpu.busio.DB[18] testbench.cpu.busio.DB[17] testbench.cpu.busio.DB[16] testbench.cpu.busio.DB[15] testbench.cpu.busio.DB[14] testbench.cpu.busio.DB[13] testbench.cpu.busio.DB[12] testbench.cpu.busio.DB[11] testbench.cpu.busio.DB[10] testbench.cpu.busio.DB[9] testbench.cpu.busio.DB[8] testbench.cpu.busio.DB[7] testbench.cpu.busio.DB[6] testbench.cpu.busio.DB[5] testbench.cpu.busio.DB[4] testbench.cpu.busio.DB[3] testbench.cpu.busio.DB[2] testbench.cpu.busio.DB[1] testbench.cpu.busio.DB[0]
+@28
+testbench.cpu.busio.ECB
+testbench.cpu.busio.ECBTAG
+testbench.cpu.busio.WB
+@22
+testbench.cpu.busio.oDB[71:0]
+[pattern_trace] 1
+[pattern_trace] 0

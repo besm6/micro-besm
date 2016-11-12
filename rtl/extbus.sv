@@ -25,8 +25,8 @@
 
 module extbus(
     input  wire         clk,
-    input  wire  [71:0] DA,     // A data bus input...
-    output logic [71:0] oDA,    // ...and output
+    input  wire  [63:0] DA,     // A data bus input...
+    output logic [63:0] oDA,    // ...and output
     input  wire  [71:0] DB,     // B data bus input...
     output logic [71:0] oDB,    // ...and output
     input  wire  [71:0] DC,     // C data bus input...
@@ -53,7 +53,7 @@ module extbus(
 timeunit 1ns / 10ps;
 
 // Inverted output data
-logic [71:0] onDA;
+logic [63:0] onDA;
 logic [71:0] onDB;
 logic [71:0] onDC;
 logic [71:0] onDX;
@@ -231,24 +231,24 @@ k1802bb1 b60_63(clk,
 // Tag 71:64
 //
 k1802bb1 b64_67(clk,
-                ~DA[67:64], onDA[67:64],
+                4'b1111, ,
                 ~DB[67:64], onDB[67:64],
                 ~DC[67:64], onDC[67:64],
                 ~DX[67:64], onDX[67:64],
                 AA,   AB,      AC,   AX,
-                ~ECA, ~ECBTAG, ~ECC, ~ECX,
-                ~WA,  ~WB,     ~WC,  ~WX,
-                WA,   WB,      WC,   WX,
+                '1,   ~ECBTAG, ~ECC, ~ECX,
+                '1,   ~WB,     ~WC,  ~WX,
+                '1,   WB,      WC,   WX,
                 '0, , );
 k1802bb1 b68_71(clk,
-                ~DA[71:68], onDA[71:68],
+                4'b1111, ,
                 ~DB[71:68], onDB[71:68],
                 ~DC[71:68], onDC[71:68],
                 ~DX[71:68], onDX[71:68],
                 AA,   AB,      AC,   AX,
-                ~ECA, ~ECBTAG, ~ECC, ~ECX,
-                ~WA,  ~WB,     ~WC,  ~WX,
-                WA,   WB,      WC,   WX,
+                '1,   ~ECBTAG, ~ECC, ~ECX,
+                '1,   ~WB,     ~WC,  ~WX,
+                '1,   WB,      WC,   WX,
                 '0, , );
 
 endmodule

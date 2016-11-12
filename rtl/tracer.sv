@@ -612,9 +612,9 @@ task print_changed_bb1();
                    cpu.busio.b12_15.RG[3], cpu.busio.b8_11.RG[3],  cpu.busio.b4_7.RG[3],   cpu.busio.b0_3.RG[3] };
 
     if (rg0 !== old_rg0) begin $fdisplay(fd, "(%0d)               Write bus.RG0 = %h", ctime, rg0); old_rg0 = rg0; end
-    if (rg1 !== old_rg1) begin $fdisplay(fd, "(%0d)               Write bus.RG1 = %h", ctime, rg1); old_rg1 = rg1; end
-    if (rg2 !== old_rg2) begin $fdisplay(fd, "(%0d)               Write bus.RG2 = %h", ctime, rg2); old_rg2 = rg2; end
-    if (rg3 !== old_rg3) begin $fdisplay(fd, "(%0d)               Write bus.RG3 = %h", ctime, rg3); old_rg3 = rg3; end
+    if (rg1 !== old_rg1) begin $fdisplay(fd, "(%0d)               Write bus.RG1 = %h:%h", ctime, rg1[71:64], rg1[63:0]); old_rg1 = rg1; end
+    if (rg2 !== old_rg2) begin $fdisplay(fd, "(%0d)               Write bus.RG2 = %h:%h", ctime, rg2[71:64], rg2[63:0]); old_rg2 = rg2; end
+    if (rg3 !== old_rg3) begin $fdisplay(fd, "(%0d)               Write bus.RG3 = %h:%h", ctime, rg3[71:64], rg3[63:0]); old_rg3 = rg3; end
 endtask
 
 //

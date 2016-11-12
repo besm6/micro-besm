@@ -131,19 +131,19 @@ always @(posedge clk)
             CO <= 0;
         end
     end
-always @(posedge clk)
+always @(*)
     if (en1)
         RG[1] <= {4{!outA & !nWA & selA1}} & ~nDA |
                  {4{!outB & !nWB & selB1}} & ~nDB |
                  {4{!outC & !nWC & selC1}} & ~nDC |
                  {4{!outX & !nWX & selX1}} & ~nDX;
-always @(posedge clk)
+always @(*)
     if (en2)
         RG[2] <= {4{!outA & !nWA & selA2}} & ~nDA |
                  {4{!outB & !nWB & selB2}} & ~nDB |
                  {4{!outC & !nWC & selC2}} & ~nDC |
                  {4{!outX & !nWX & selX2}} & ~nDX;
-always @(posedge clk)
+always @(*)
     if (en3)
         RG[3] <= {4{!outA & !nWA & selA3}} & ~nDA |
                  {4{!outB & !nWB & selB3}} & ~nDB |

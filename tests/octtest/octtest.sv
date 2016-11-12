@@ -146,7 +146,41 @@ localparam LABEL_PSBOI6 = 1;
 localparam LABEL_CBOI6  = 3;
 localparam LABEL_PSBOI7 = 7;
 localparam LABEL_CBOI7  = 13;
-
+localparam LABEL_CBOI8  = 30;
+localparam LABEL_CBOI9  = 59;
+localparam LABEL_CBOI91 = 79;
+localparam LABEL_CBOIA  = 108;
+localparam LABEL_CBOIB  = 120;
+localparam LABEL_CBOIC  = 135;
+localparam LABEL_CBOID  = 167;
+localparam LABEL_CBOIE  = 206;
+localparam LABEL_CST10  = 280;
+localparam LABEL_CST11  = 308;
+localparam LABEL_CST12  = 347;
+localparam LABEL_CST13  = 381;
+localparam LABEL_CST14  = 423;
+localparam LABEL_CST15  = 476;
+localparam LABEL_CST25  = 534;
+localparam LABEL_CST16  = 581;
+localparam LABEL_CST17  = 665;
+localparam LABEL_CST18  = 695;
+localparam LABEL_CST19  = 732;
+localparam LABEL_CST1A  = 768;
+localparam LABEL_CST1B  = 827;
+localparam LABEL_CMODF  = 889;
+localparam LABEL_CMOD15 = 899;
+localparam LABEL_MC19   = 914;
+localparam LABEL_MC29   = 936;
+localparam LABEL_MC39   = 963;
+localparam LABEL_CMOD1B = 984;
+localparam LABEL_CMOD1D = 994;
+localparam LABEL_CCA4   = 1012;
+localparam LABEL_CADR28 = 1087;
+localparam LABEL_CADR29 = 1129;
+localparam LABEL_CADR2A = 1160;
+localparam LABEL_CADR2B = 1190;
+localparam LABEL_CADR2C = 1218;
+localparam LABEL_CADR2D = 1250;
 localparam LABEL_INCR2D = 1270;
 localparam LABEL_ERRTST = 1277;
 localparam LABEL_ERRINF = 1279;
@@ -171,12 +205,65 @@ always @(tr.instruction_retired) begin
     end
 
     //
-    // Поиск левой единицы
+    // БОИ данных
     //
     check_jump(LABEL_CBOI6+2, LABEL_CBOI6, LABEL_PSBOI7-1, "Test CBOI6 pass");
     check_pass(LABEL_CBOI7,  "Test CBOI7 pass");
+    check_pass(LABEL_CBOI8,  "Test CBOI8 pass");
+    check_pass(LABEL_CBOI9,  "Test CBOI9 pass");
+    check_pass(LABEL_CBOI91, "Test CBOI91 pass");
 
-    //TODO
+    //
+    // БОИ данных и тега
+    //
+    check_pass(LABEL_CBOIA,  "Test CBOIA pass");
+    check_pass(LABEL_CBOIB,  "Test CBOIB pass");
+    check_pass(LABEL_CBOIC,  "Test CBOIC pass");
+    check_pass(LABEL_CBOID,  "Test CBOID pass");
+    check_pass(LABEL_CBOIE,  "Test CBOIE pass");
+
+    //
+    // Стандартизатор команд
+    //
+    check_pass(LABEL_CST10,  "Test CST10 pass");
+    check_pass(LABEL_CST11,  "Test CST11 pass");
+    check_pass(LABEL_CST12,  "Test CST12 pass");
+    check_pass(LABEL_CST13,  "Test CST13 pass");
+    check_pass(LABEL_CST14,  "Test CST14 pass");
+    check_pass(LABEL_CST15,  "Test CST15 pass");
+    check_pass(LABEL_CST25,  "Test CST25 pass");
+    check_pass(LABEL_CST16,  "Test CST16 pass");
+    check_pass(LABEL_CST17,  "Test CST17 pass");
+    check_pass(LABEL_CST18,  "Test CST18 pass");
+    check_pass(LABEL_CST19,  "Test CST19 pass");
+    check_pass(LABEL_CST1A,  "Test CST1A pass");
+    check_pass(LABEL_CST1B,  "Test CST1B pass");
+
+    //
+    // Память модификаторов с БОИ
+    //
+    check_pass(LABEL_CMODF,  "Test CMODF pass");
+    check_pass(LABEL_CMOD15, "Test CMOD15 pass");
+    check_pass(LABEL_MC19,   "Test MC19 pass");
+    check_pass(LABEL_MC29,   "Test MC29 pass");
+    check_pass(LABEL_MC39,   "Test MC39 pass");
+    check_pass(LABEL_CMOD1B, "Test CMOD1B pass");
+    check_pass(LABEL_CMOD1D, "Test CMOD1D pass");
+
+    //
+    // Изменение регистра КОП арбитра после физ.адреса
+    //
+    check_pass(LABEL_CCA4,   "Test CCA4 pass");
+
+    //
+    // Физ.адрес + запись N страницы в РФС + изменение БОБР, БИЗМ
+    //
+    check_pass(LABEL_CADR28, "Test CADR28 pass");
+    check_pass(LABEL_CADR29, "Test CADR29 pass");
+    check_pass(LABEL_CADR2A, "Test CADR2A pass");
+    check_pass(LABEL_CADR2B, "Test CADR2B pass");
+    check_pass(LABEL_CADR2C, "Test CADR2C pass");
+    check_pass(LABEL_CADR2D, "Test CADR2D pass");
 
     if (pc_x == LABEL_INCR2D+2) begin
         message("Test PASS");
