@@ -421,24 +421,28 @@ task print_uop(
     //
     // Some features not implemented yet
     //
-    if (DSRC == 10)
-        $fdisplay(fd, "(%0d) *** dsrc=OPC not implemented yet!", ctime);
-
     if (YDEV == 2)
         $fdisplay(fd, "(%0d) *** ydev=PHYSAD not implemented yet!", ctime);
 
-    if (!IOMP && (FFCNT == 16 || FFCNT == 17 ||
-                  FFCNT == 25 || FFCNT == 26 || FFCNT == 27 || FFCNT == 28 ||
-                  FFCNT == 29 || FFCNT == 30 || FFCNT == 31))
-        $fdisplay(fd, "(%0d) *** ffcnt=%0s not implemented yet!",
-            ctime, ffcnt_name[FFCNT]);
-
     case (COND)
-         16: $fdisplay(fd, "(%0d) *** cond=RUN not implemented yet!", ctime);
-         17: $fdisplay(fd, "(%0d) *** cond=NMLRDY not implemented yet!", ctime);
-         19: $fdisplay(fd, "(%0d) *** cond=INT not implemented yet!", ctime);
-         23: $fdisplay(fd, "(%0d) *** cond=CPMP not implemented yet!", ctime);
+    16: $fdisplay(fd, "(%0d) *** cond=RUN not implemented yet!", ctime);
+    17: $fdisplay(fd, "(%0d) *** cond=NMLRDY not implemented yet!", ctime);
+    19: $fdisplay(fd, "(%0d) *** cond=INT not implemented yet!", ctime);
+    23: $fdisplay(fd, "(%0d) *** cond=CPMP not implemented yet!", ctime);
     endcase
+
+    if (!IOMP)
+        case (FFCNT)
+        16: $fdisplay(fd, "(%0d) *** ffcnt=CLRCT not implemented yet!", ctime);
+        17: $fdisplay(fd, "(%0d) *** ffcnt=CLRCTT not implemented yet!", ctime);
+        25: $fdisplay(fd, "(%0d) *** ffcnt=CLRINT not implemented yet!", ctime);
+        26: $fdisplay(fd, "(%0d) *** ffcnt=CLRRUN not implemented yet!", ctime);
+        27: $fdisplay(fd, "(%0d) *** ffcnt=RDMPCP not implemented yet!", ctime);
+        28: $fdisplay(fd, "(%0d) *** ffcnt=LDMPCP not implemented yet!", ctime);
+        29: $fdisplay(fd, "(%0d) *** ffcnt=LDCPMP not implemented yet!", ctime);
+        30: $fdisplay(fd, "(%0d) *** ffcnt=PRGINT not implemented yet!", ctime);
+        31: $fdisplay(fd, "(%0d) *** ffcnt=EXTIN not implemented yet!", ctime);
+        endcase
 endtask
 
 //
@@ -645,7 +649,7 @@ task print_changed_cpu(
         8: "FETCH", 9: "DRD",   10:"DWR",   11:"RDMWR",
         12:"BTRWR", 13:"BTRRD", 14:"BICLR", 15:"BIRD"
     };
-    static logic  [5:0] old_modgn;
+    static logic  [4:0] old_modgn;
     static logic  [7:0] old_procn;
     static logic  [9:0] old_physpg;
     static logic  [3:0] old_arbopc;
@@ -662,7 +666,7 @@ task print_changed_cpu(
     static logic        old_pgreprio[1024];
     static logic        old_stopm0, old_stopm1, old_halt, old_tkk;
 
-    automatic logic  [5:0] modgn  = cpu.modgn;
+    automatic logic  [4:0] modgn  = cpu.modgn;
     automatic logic  [7:0] procn  = cpu.PROCN;
     automatic logic  [9:0] physpg = cpu.pg_index;
     automatic logic  [3:0] arbopc = cpu.arb_req;
