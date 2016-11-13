@@ -140,6 +140,30 @@ task check_jump(
 endtask
 
 //
+// Loop a test for a while
+//
+task loop(
+    input int maxcount,
+    input int label,
+    input string msg
+);
+    static int count = 0;
+
+    if (opcode_x[112:109] == 14 &&      // sqi: CONT
+        opcode_x[96:95]   == 0 &&       // map: PE
+        opcode_x[108:97]  == label)     // a: target address
+    begin
+        count += 1;
+        if (count < maxcount)
+            jump(label);                // continue the test
+        else begin
+            message(msg);               // the test finished
+            count = 0;
+        end
+    end
+endtask
+
+//
 // Addresses of octtest.
 //
 localparam LABEL_PSBOI6 = 1;
@@ -194,6 +218,16 @@ always @(posedge clk) begin
     opcode_x = tr.opcode_x;
 end
 
+wire [71:0] rg1 = { cpu.busio.b68_71.RG[1], cpu.busio.b64_67.RG[1],
+                    cpu.busio.b60_63.RG[1], cpu.busio.b56_59.RG[1],
+                    cpu.busio.b52_55.RG[1], cpu.busio.b48_51.RG[1],
+                    cpu.busio.b44_47.RG[1], cpu.busio.b40_43.RG[1],
+                    cpu.busio.b36_39.RG[1], cpu.busio.b32_35.RG[1],
+                    cpu.busio.b28_31.RG[1], cpu.busio.b24_27.RG[1],
+                    cpu.busio.b20_23.RG[1], cpu.busio.b16_19.RG[1],
+                    cpu.busio.b12_15.RG[1], cpu.busio.b8_11.RG[1],
+                    cpu.busio.b4_7.RG[1],   cpu.busio.b0_3.RG[1] };
+
 // At negative clock edge, when all the signals are quiet,
 // analyze the state of the processor.
 always @(tr.instruction_retired) begin
@@ -232,13 +266,13 @@ always @(tr.instruction_retired) begin
     check_pass(LABEL_CST12,  "Test CST12 pass");
     check_pass(LABEL_CST13,  "Test CST13 pass");
     check_pass(LABEL_CST14,  "Test CST14 pass");
-    check_pass(LABEL_CST15,  "Test CST15 pass");
+    loop(256,  LABEL_CST15,  "Test CST15 pass");
     check_pass(LABEL_CST25,  "Test CST25 pass");
     check_pass(LABEL_CST16,  "Test CST16 pass");
     check_pass(LABEL_CST17,  "Test CST17 pass");
     check_pass(LABEL_CST18,  "Test CST18 pass");
-    check_pass(LABEL_CST19,  "Test CST19 pass");
-    check_pass(LABEL_CST1A,  "Test CST1A pass");
+    loop(2,    LABEL_CST19,  "Test CST19 pass");
+    loop(256,  LABEL_CST1A,  "Test CST1A pass");
     check_pass(LABEL_CST1B,  "Test CST1B pass");
 
     //
