@@ -624,14 +624,14 @@ task print_changed_cpu(
     input logic [112:1] opcode
 );
     static string ir_name[32] = '{
-        0:"М0",     1:"М1",     2:"М2",     3:"М3",
-        4:"М4",     5:"М5",     6:"М6",     7:"М7",
-        8:"М8",     9:"М9",     10:"М10",   11:"М11",
-        12:"М12",   13:"М13",   14:"М14",   15:"SР",
-        16:"С",     17:"RR",    18:"RRR",   19:"SPRADR",
-        20:"СТТ",   21:"CTL",   22:"CTR",   23:"ACL",
-        24:"ACR",   25:"YCL",   26:"YCR",   27:"РСС",
-        28:"РССС",  29:"SVFA",  30:"PROCNC",31:"MREZ"
+        0:"M0",     1:"M1",     2:"M2",     3:"M3",
+        4:"M4",     5:"M5",     6:"M6",     7:"M7",
+        8:"M8",     9:"M9",     10:"M10",   11:"M11",
+        12:"M12",   13:"M13",   14:"M14",   15:"SP",
+        16:"C",     17:"RR",    18:"RRR",   19:"SPRADR",
+        20:"CTT",   21:"CTL",   22:"CTR",   23:"ACL",
+        24:"ACR",   25:"YCL",   26:"YCR",   27:"PCC",
+        28:"PCCC",  29:"SVFA",  30:"PROCNC",31:"MREZ"
     };
     static string mpadr_name[16] = '{
         0: "INFB1", 1: "INFB2", 2: "FCP",   3: "FMP",
@@ -642,7 +642,7 @@ task print_changed_cpu(
     static string arbopc_name[16] = '{
         0: "RST",   1: "CCRD",  2: "CCWR",  3: "DCRD",
         4: "DCWR",  5: "?",     6: "?",     7: "?",
-        8: "FЕТСН", 9: "DRD",   10:"DWR",   11:"RDMWR",
+        8: "FETCH", 9: "DRD",   10:"DWR",   11:"RDMWR",
         12:"BTRWR", 13:"BTRRD", 14:"BICLR", 15:"BIRD"
     };
     static logic  [5:0] old_modgn;
