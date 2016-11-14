@@ -421,9 +421,6 @@ task print_uop(
     //
     // Some features not implemented yet
     //
-    if (YDEV == 2)
-        $fdisplay(fd, "(%0d) *** ydev=PHYSAD not implemented yet!", ctime);
-
     case (COND)
     16: $fdisplay(fd, "(%0d) *** cond=RUN not implemented yet!", ctime);
     17: $fdisplay(fd, "(%0d) *** cond=NMLRDY not implemented yet!", ctime);
@@ -661,18 +658,18 @@ task print_changed_cpu(
     static logic [19:0] old_pgmap[1024];
     static logic [11:0] old_pgprio0[1024];
     static logic [11:0] old_pgprio1[1024];
-    static logic        old_pginv[1024];
-    static logic        old_pgro[1024];
+    static logic        old_pgused[1024];
+    static logic        old_pgdirty[1024];
     static logic        old_pgreprio[1024];
     static logic        old_stopm0, old_stopm1, old_halt, old_tkk;
 
     automatic logic  [4:0] modgn  = cpu.modgn;
-    automatic logic  [7:0] procn  = cpu.PROCN;
+    automatic logic  [7:0] procn  = cpu.procn;
     automatic logic  [9:0] physpg = cpu.pg_index;
     automatic logic  [3:0] arbopc = cpu.arb_opc;
-    automatic logic [31:0] ureg   = cpu.UREG;
-    automatic logic [10:0] pshift = cpu.PSHIFT;
-    automatic logic [31:0] rr     = cpu.RR;
+    automatic logic [31:0] ureg   = cpu.ureg;
+    automatic logic [10:0] pshift = cpu.pshift;
+    automatic logic [31:0] rr     = cpu.rr;
     automatic logic        stopm0 = cpu.stopm0;
     automatic logic        stopm1 = cpu.stopm1;
     automatic logic        halt   = cpu.halt;
@@ -737,16 +734,16 @@ task print_changed_cpu(
                 old_pgmap[i] = cpu.pg_map[i];
             end
         for (int i=0; i<1024; i+=1)
-            if (cpu.pg_inv[i] !== old_pginv[i]) begin
-                $fdisplay(fd, "(%0d)               Write PageInv[%0d] = %h",
-                    ctime, i, cpu.pg_inv[i]);
-                old_pginv[i] = cpu.pg_inv[i];
+            if (cpu.pg_used[i] !== old_pgused[i]) begin
+                $fdisplay(fd, "(%0d)               Write PageUsed[%0d] = %h",
+                    ctime, i, cpu.pg_used[i]);
+                old_pgused[i] = cpu.pg_used[i];
             end
         for (int i=0; i<1024; i+=1)
-            if (cpu.pg_ro[i] !== old_pgro[i]) begin
-                $fdisplay(fd, "(%0d)               Write PageRO[%0d] = %h",
-                    ctime, i, cpu.pg_ro[i]);
-                old_pgro[i] = cpu.pg_ro[i];
+            if (cpu.pg_dirty[i] !== old_pgdirty[i]) begin
+                $fdisplay(fd, "(%0d)               Write PageDirty[%0d] = %h",
+                    ctime, i, cpu.pg_dirty[i]);
+                old_pgdirty[i] = cpu.pg_dirty[i];
             end
         for (int i=0; i<1024; i+=1)
             if (cpu.pg_reprio[i] !== old_pgreprio[i]) begin

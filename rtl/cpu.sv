@@ -40,11 +40,12 @@ timeunit 1ns / 10ps;
 
 // Internal registers
 logic  [4:0] modgn;             // РНГ: регистр номера группы памяти модификаторов
-logic  [7:0] PROCN;             // РНП: регистр номера процесса
-logic [31:0] RR;                // регистр режимов и триггеры признаков
-logic [31:0] UREG;              // регистр исполнительного адреса (запись)
+logic  [7:0] procn;             // РНП: регистр номера процесса
+logic [31:0] rr;                // регистр режимов и триггеры признаков
+logic [31:0] ureg;              // регистр исполнительного адреса
+logic [19:0] physad;            // физический адрес, результат трансляции ureg
 logic [63:0] sh_out;            // результат сдвига
-logic [10:0] PSHIFT;            // регистр параметра сдвига (только запись)
+logic [10:0] pshift;            // регистр параметра сдвига
 logic  [6:0] clz_out;           // результат поиска левой единицы
 logic        CCLR;              // запуск сброса кэша
 logic  [7:0] instr_code;        // код операции команды
@@ -76,8 +77,8 @@ logic [7:0] mpmem[16];
 
 // Память приписок страниц
 logic [19:0] pg_map[1024];
-logic        pg_inv[1024];      // БОБР, page invalid
-logic        pg_ro[1024];       // БИЗМ, page is read only
+logic        pg_used[1024];     // БОБР, page has been referenced
+logic        pg_dirty[1024];    // БИЗМ, page had been modified
 logic        pg_reprio[1024];   // БМСП, reprioritize request
 logic  [2:0] pg_access;         // both for current page
 logic  [9:0] pg_index;          // РФС: регистр физической страницы
@@ -286,7 +287,7 @@ logic [31:0] mr_read;           // read from mr_mem[]
 logic [4:0] mn;                 // номер модификатора
 
 assign mn =
-    (MNSA == 0) ? UREG[4:0] :   // U, регистр исполнительного адреса
+    (MNSA == 0) ? ureg[4:0] :   // U, регистр исполнительного адреса
     (MNSA == 1) ? instr_reg :   // IRA, поле модификатора команды
     (MNSA == 3) ? ~MODNM :      // MP, поле MODNM микрокоманды
                   '0;           // не используется
@@ -299,9 +300,9 @@ assign mr_read =                // read modifier memory
 always @(posedge clk)
     if (CSM & WEM) begin
         if (mn == 0 & MNSA != 3)
-            ;                   // cannot write to M0 from UREG
+            ;                   // cannot write to M0 from ureg
         else if (mn[4] & MNSA != 3 & !MOD)
-            ;                   // need MOD to write to M[16:32], no UREG
+            ;                   // need MOD to write to M[16:32], no ureg
         else
             mr_mem[{modgn, mn}] <= Y[31:0];
     end
@@ -363,8 +364,8 @@ assign alu_C0 = control_nCC;
 assign D =
     // DSRC mux
     (DSRC == 1)  ? {1'b1, modgn, 5'd0} : // MODGN: регистр номера группы памяти модификаторов
-    (DSRC == 2)  ? PROCN :              // PROCN: регистр номера процесса
-    (DSRC == 3)  ? RR :                 // CNT: регистр режимов и триггеры признаков
+    (DSRC == 2)  ? procn :              // PROCN: регистр номера процесса
+    (DSRC == 3)  ? rr :                 // CNT: регистр режимов и триггеры признаков
     (DSRC == 4)  ? {pg_index, 10'd0} :  // PHYSPG: регистр физической страницы
     (DSRC == 5)  ? arb_opc :            // ARBOPC: регистр КОП арбитра
     (DSRC == 8)  ? instr_addr :         // COMA: адресная часть команды
@@ -389,9 +390,9 @@ assign D =
 assign Y =
                    ALU ? alu_Y :                // Y bus output from ALU
     (YDEV == 1 & !WRB) ? bus_oDB[71:64] :       // ECBTAG, канал В БОИ тега
-//  (YDEV == 2 & !WRY) ? `TODO :                // PHYSAD, физический адрес (только на чтение);
-    (YDEV == 3 & !WRY) ? UREG :                 // RADRR, регистр исполнительного адреса (чтение);
-    (YDEV == 4 & !WRY) ? pg_map[UREG[19:10]] :  // PSMEM, память приписок (CS);
+    (YDEV == 2 & !WRY) ? physad :               // PHYSAD, физический адрес (только на чтение)
+    (YDEV == 3 & !WRY) ? ureg :                 // RADRR, регистр исполнительного адреса (чтение)
+    (YDEV == 4 & !WRY) ? pg_map[ureg[19:10]] :  // PSMEM, память приписок (CS);
     (YDEV == 5 & !WRY) ? mpmem[MPADR] :         // МРМЕМ, память обмена с ПП;
           (ECB & !WRB) ? bus_oDB[63:0] :        // канал B БОИ данных
                          '0;
@@ -400,12 +401,12 @@ assign Y =
 always @(posedge clk)
     case (YDST)
      1: modgn    <= Y[9:5];     // MODGN, регистр номера группы памяти модификаторов
-     2: PROCN    <= Y[7:0];     // регистр номера процесса
-   /*3: RR       <= Y[31:0];*/  // регистр режимов и триггеры признаков
-     4: pg_index <= Y[19:10];   // регистр физической страницы
-   /*5: ARBOPC   <= Y[3:0];*/   // код операции арбитра
-     8: UREG     <= Y[31:0];    // ADRREG, регистр исполнительного адреса (запись)
-   /*9: PSHIFT   <= Y[10:0];*/  // регистр параметра сдвига (только запись)
+     2: procn    <= Y[7:0];     // PROCN, регистр номера процесса
+   /*3: rr       <= Y[31:0];*/  // CNT, регистр режимов и триггеры признаков
+   /*4: pg_index <= Y[19:10];*/ // PHYSPG, регистр физической страницы
+   /*5: arb_opc  <= Y[3:0];*/   // ARBOPC, код операции арбитра
+     8: ureg     <= Y[31:0];    // ADRREG, регистр исполнительного адреса (запись)
+   /*9: pshift   <= Y[10:0];*/  // PSHIFT, регистр параметра сдвига (только запись)
     endcase
 
 // Запись в источники или приемники шины Y.
@@ -413,7 +414,7 @@ always @(posedge clk)
     if (WRY)
         case (YDEV)
          4: begin                   // PSMEM, память приписок (CS)
-                pg_map[UREG[19:10]] <= Y[19:0];
+                pg_map[ureg[19:10]] <= Y[19:0];
                 pg_changed <= 1;
             end
          5: mpmem[MPADR] <= Y[7:0]; // МРМЕМ, память обмена с ПП
@@ -429,13 +430,13 @@ assign ss_Y = Y[9:6];           // status bits: Z N C V
 //--------------------------------------------------------------
 // Shifter.
 //
-shifter sh(Y, PSHF, PSHIFT, sh_op, sh_out);
+shifter sh(Y, PSHF, pshift, sh_op, sh_out);
 
 always @(posedge clk)
     if (YDST == 9)
-        PSHIFT <= Y[10:0];
+        pshift <= Y[10:0];
     else if (PSHF != 64)
-        PSHIFT <= '0;
+        pshift <= '0;
 
 //--------------------------------------------------------------
 // Count leading zeroes.
@@ -468,7 +469,7 @@ extbus busio(
 // Arbiter
 //
 arbiter arb(clk,
-    arb_req, arb_opc,                   // input request and opcode
+    arb_req, ARBI,                      // input request and opcode
     bus_ARX, bus_ECX, bus_WRX,          // X bus control
     o_astb, o_rd, o_wr,                 // external memory interface
     arb_rdy                             // resulting status
@@ -510,7 +511,7 @@ assign jump_addr = optab[{instr_ext, besm6_mode, instr_ir15, uflag, instr_code}]
 //--------------------------------------------------------------
 // Mode register (РР)
 //
-assign RR = {       // регистр режимов (РР)
+assign rr = {       // регистр режимов (РР)
     rr_unused,      // РР.31-30 - not specified
     flag_jump,      // РР.29 - признак команды передачи управления (ППУ)
     rcb,            // РР.28 - RCB, признак правой команды (ППК)
@@ -632,13 +633,13 @@ always @(posedge clk)
 
 // БОБР, БИЗМ: блокировка обращения, блокировка изменения
 always @(posedge clk)
-    if (WRD & DDEV == 1) begin
-        pg_inv[pg_index] <= D[1];
-        pg_ro[pg_index] <= D[2];
+    if (WRD & DDEV == 1) begin  // ddev=ВВ: БОБР, БИЗМ
+        pg_used[pg_index] <= D[1];
+        pg_dirty[pg_index] <= D[2];
         pg_changed <= 1;
     end
 
-assign pg_access = { pg_ro[pg_index], pg_inv[pg_index], 1'b0 };
+assign pg_access = { pg_dirty[pg_index], pg_used[pg_index], 1'b0 };
 
 // БМСП, бит модификации списка приоритетов
 always @(posedge clk)
@@ -651,21 +652,35 @@ always @(posedge clk)
         else;
             pg_fcnt <= pg_fcnt + 1;
         pg_changed <= 1;
-    end else if (WRD & DDEV == 2) begin
+    end else if (WRD & DDEV == 2) begin // MODB, БМСП
         pg_reprio[pg_index] <= D[0];
         pg_changed <= 1;
     end
 
 // PPMEM0/1, память приоритетов страниц
 always @(posedge clk) begin
-    if (WRD & DDEV == 6) begin
+    if (WRD & DDEV == 6) begin  // РРМЕМ0, ОЗУ приоритетов страниц 0
         pg_prio0[pg_index] <= Y;
         pg_changed <= 1;
     end
-    if (WRD & DDEV == 7) begin
+    if (WRD & DDEV == 7) begin  // РРМЕМ1, ОЗУ приоритетов страниц 1
         pg_prio1[pg_index] <= Y;
         pg_changed <= 1;
     end
 end
+
+// Translate virtual address into physical address.
+wire [9:0] pg_translated =
+    no_paging ? ureg[19:10]
+              : pg_map[ureg[19:10]];
+
+assign physad = {pg_translated, ureg[9:0]};
+
+always @(posedge clk)
+    if (arb_req) begin
+        pg_index <= pg_translated;  // PHYSAD, set from microinstruction
+        pg_used[pg_translated] <= 1;
+    end else if (YDST == 4)
+        pg_index <= Y[19:10];       // PHYSPG, регистр физической страницы
 
 endmodule
