@@ -192,6 +192,7 @@ localparam LABEL_CST18  = 696;
 localparam LABEL_CST19  = 733;
 localparam LABEL_CST1A  = 769;
 localparam LABEL_CST1B  = 828;
+localparam LABEL_CMOD9  = 880;
 localparam LABEL_CMODF  = 890;
 localparam LABEL_CMOD15 = 900;
 localparam LABEL_MC19   = 915;
@@ -278,6 +279,7 @@ always @(tr.instruction_retired) begin
     //
     // Память модификаторов с БОИ
     //
+    check_jump(LABEL_CMOD9-3, LABEL_CMOD9-2, LABEL_CMODF-5, "Skip CMOD9");
     check_pass(LABEL_CMODF,  "Test CMODF pass");
     check_pass(LABEL_CMOD15, "Test CMOD15 pass");
     check_pass(LABEL_MC19,   "Test MC19 pass");
