@@ -244,7 +244,7 @@ always @(tr.instruction_retired) begin
     // БОИ данных
     //
     //check_jump(LABEL_CBOI6+2, LABEL_CBOI6, LABEL_PSBOI7-1, "Skip CBOI6");
-check_jump(LABEL_CBOI6+2, LABEL_CBOI6, LABEL_CCA4-6, "Skip CBOI6-CMOD1D");
+check_jump(LABEL_CBOI6+2, LABEL_CBOI6, LABEL_CADR2B-10, "Skip CBOI6-CADR2A");
     check_pass(LABEL_CBOI7,  "Test CBOI7 pass");
     check_pass(LABEL_CBOI8,  "Test CBOI8 pass");
     check_pass(LABEL_CBOI9,  "Test CBOI9 pass");

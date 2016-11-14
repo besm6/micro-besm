@@ -679,8 +679,22 @@ assign physad = {pg_translated, ureg[9:0]};
 always @(posedge clk)
     if (arb_req) begin
         pg_index <= pg_translated;  // PHYSAD, set from microinstruction
+
+        // Update `used' bit (БОБР)
         pg_used[pg_translated] <= 1;
+
+        // Update `dirty' bit (БИЗМ)
+        case (ARBI)
+        2,  // CCWR, запись в кэш команд
+        4,  // DCWR, запись в кэш операндов
+        10, // DWR, запись результата
+        11, // RDMWR, чтение - модификация - запись
+        12: // BTRWR, запись в режиме блочной передачи
+            pg_dirty[pg_translated] <= 1;
+        endcase
+
     end else if (YDST == 4)
         pg_index <= Y[19:10];       // PHYSPG, регистр физической страницы
+      //pg_index <= ureg[19:10];    // PHYSPG, регистр физической страницы
 
 endmodule
