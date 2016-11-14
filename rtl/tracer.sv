@@ -441,7 +441,7 @@ task print_uop(
         28: $fdisplay(fd, "(%0d) *** ffcnt=LDMPCP not implemented yet!", ctime);
         29: $fdisplay(fd, "(%0d) *** ffcnt=LDCPMP not implemented yet!", ctime);
         30: $fdisplay(fd, "(%0d) *** ffcnt=PRGINT not implemented yet!", ctime);
-        31: $fdisplay(fd, "(%0d) *** ffcnt=EXTIN not implemented yet!", ctime);
+        31: $fdisplay(fd, "(%0d) *** ffcnt=EXTINT not implemented yet!", ctime);
         endcase
 endtask
 
@@ -669,7 +669,7 @@ task print_changed_cpu(
     automatic logic  [4:0] modgn  = cpu.modgn;
     automatic logic  [7:0] procn  = cpu.PROCN;
     automatic logic  [9:0] physpg = cpu.pg_index;
-    automatic logic  [3:0] arbopc = cpu.arb_req;
+    automatic logic  [3:0] arbopc = cpu.arb_opc;
     automatic logic [31:0] ureg   = cpu.UREG;
     automatic logic [10:0] pshift = cpu.PSHIFT;
     automatic logic [31:0] rr     = cpu.RR;

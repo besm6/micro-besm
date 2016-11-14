@@ -104,7 +104,8 @@ logic tkk;                      // признак правой команды с
 logic halt;                     // триггер "Останов", сбрасывается только из пультового процессора
 
 // Signals for arbiter
-logic  [3:0] arb_req;           // код операции арбитра
+logic  [3:0] arb_opc;           // код операции арбитра
+logic        arb_req;           // запрос к арбитру
 logic        arb_rdy;           // ответ арбитра
 
 // External bus interface
@@ -365,7 +366,7 @@ assign D =
     (DSRC == 2)  ? PROCN :              // PROCN: регистр номера процесса
     (DSRC == 3)  ? RR :                 // CNT: регистр режимов и триггеры признаков
     (DSRC == 4)  ? {pg_index, 10'd0} :  // PHYSPG: регистр физической страницы
-    (DSRC == 5)  ? arb_req :            // ARBOPC: регистр КОП арбитра
+    (DSRC == 5)  ? arb_opc :            // ARBOPC: регистр КОП арбитра
     (DSRC == 8)  ? instr_addr :         // COMA: адресная часть команды
     (DSRC == 9)  ? sh_out :             // SHIFT: результат сдвига
     (DSRC == 10) ? instr_code :         // OPC: код операции команды
@@ -388,7 +389,7 @@ assign D =
 assign Y =
                    ALU ? alu_Y :                // Y bus output from ALU
     (YDEV == 1 & !WRB) ? bus_oDB[71:64] :       // ECBTAG, канал В БОИ тега
-    (YDEV == 2 & !WRY) ? `TODO :                // PHYSAD, физический адрес (только на чтение);
+//  (YDEV == 2 & !WRY) ? `TODO :                // PHYSAD, физический адрес (только на чтение);
     (YDEV == 3 & !WRY) ? UREG :                 // RADRR, регистр исполнительного адреса (чтение);
     (YDEV == 4 & !WRY) ? pg_map[UREG[19:10]] :  // PSMEM, память приписок (CS);
     (YDEV == 5 & !WRY) ? mpmem[MPADR] :         // МРМЕМ, память обмена с ПП;
@@ -467,19 +468,18 @@ extbus busio(
 // Arbiter
 //
 arbiter arb(clk,
-    arb_req,                            // input request
+    arb_req, arb_opc,                   // input request and opcode
     bus_ARX, bus_ECX, bus_WRX,          // X bus control
     o_astb, o_rd, o_wr,                 // external memory interface
     arb_rdy                             // resulting status
 );
+assign arb_req = (YDEV == 2);           // PHYSAD, request to external bus
 
-always @(posedge clk)                   // arbiter request
-    if (arb_rdy)
-        arb_req <= '0;                  // clear request when ready
+always @(posedge clk)
+    if (arb_req)
+        arb_opc <= ARBI;                // PHYSAD, set from microinstruction
     else if (YDST == 5)
-        arb_req <= Y[3:0];              // set from Y data bus
-    else if (ARBI != 0)
-        arb_req <= ARBI;                // set from microinstruction
+        arb_opc <= Y[3:0];              // ARBOPC, set from Y data bus
 
 //--------------------------------------------------------------
 // Instruction decoder

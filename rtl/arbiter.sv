@@ -25,7 +25,8 @@
 
 module arbiter(
     input  wire        clk,
-    input  wire  [3:0] request, // input request
+    input  wire        request, // input request
+    input  wire  [3:0] opcode,  // input opcode
 
     output logic [1:0] arx,     // busio register index
     output logic       ecx,     // busio port enable
@@ -52,7 +53,7 @@ typedef enum bit [1:0] {
 // Sequential state transition
 //
 always_ff @(posedge clk)
-    if (request == 0)
+    if (request)
         step <= 0;
     else if (!done & step != MAXSTATE)  // TODO need some action on timeout
         step <= step + 1;
@@ -61,20 +62,20 @@ always_ff @(posedge clk)
 // Output assignments
 //
 always_comb begin
-    // Done by default
-    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
-
-    case (request)
+    case (opcode)
     0:  // Reset everything
-        {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '0};
+        {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
 
     1:  // CCRD, чтение кэша команд
         case (step)
               //0: //TODO
               //1: //TODO
               //2: //TODO
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=CCRD not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     2:  // CCWR, запись в кэш команд
@@ -82,8 +83,11 @@ always_comb begin
               //0: //TODO
               //1: //TODO
               //2: //TODO
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=CCWR not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     3:  // DCRD, чтение кэш операндов
@@ -91,8 +95,11 @@ always_comb begin
               //0: //TODO
               //1: //TODO
               //2: //TODO
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DCRD not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     4:  // DCWR, запись в кэш операндов
@@ -100,8 +107,11 @@ always_comb begin
               //0: //TODO
               //1: //TODO
               //2: //TODO
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DCWR not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     8:  // FЕТСН, чтение команды
@@ -109,8 +119,11 @@ always_comb begin
               //0: //TODO
               //1: //TODO
               //2: //TODO
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=FETCH not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     9:  // DRD, чтение операнда
@@ -121,8 +134,11 @@ always_comb begin
                     {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '1, '0, '0};
                 2:  // Done
                     {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DRD not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     10: // DWR, запись результата
@@ -130,8 +146,11 @@ always_comb begin
               //0: //TODO
               //1: //TODO
               //2: //TODO
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DWR not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     11: // RDMWR, чтение - модификация - запись (семафорная)
@@ -139,8 +158,11 @@ always_comb begin
               //0: //TODO
               //1: //TODO
               //2: //TODO
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=RDMWR not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     12: // BTRWR, запись в режиме блочной передачи
@@ -148,8 +170,11 @@ always_comb begin
               //0: //TODO
               //1: //TODO
               //2: //TODO
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=BTRWR not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     13: // BTRRD, чтение в режиме блочной передачи
@@ -157,8 +182,11 @@ always_comb begin
               //0: //TODO
               //1: //TODO
               //2: //TODO
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=BTRRD not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     14: // BICLR, сброс прерываний на шине
@@ -166,8 +194,11 @@ always_comb begin
               //0: //TODO
               //1: //TODO
               //2: //TODO
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=BICLR not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     15: // BIRD, чтение прерываний с шины
@@ -175,14 +206,18 @@ always_comb begin
               //0: //TODO
               //1: //TODO
               //2: //TODO
-        default: if (testbench.tracefd)
+        default: begin
+                if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=BIRD not implemented yet!", $time);
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            end
         endcase
 
     default: begin
-            //TODO: Unknown request
+            // Unknown request
             if (request & testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Wrong arbiter op=%0d!", $time, request);
+                $fdisplay(testbench.tracefd, "(%0d) *** Wrong arbiter op=%0d!", $time, opcode);
+            {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
         end
     endcase
 end
