@@ -672,7 +672,7 @@ end
 // Translate virtual address into physical address.
 wire [9:0] pg_translated =
     no_paging ? ureg[19:10]
-              : pg_map[ureg[19:10]];
+              : pg_map[ureg[19:10]][19:10];
 
 assign physad = {pg_translated, ureg[9:0]};
 
@@ -682,6 +682,7 @@ always @(posedge clk)
 
         // Update `used' bit (БОБР)
         pg_used[pg_translated] <= 1;
+        pg_changed <= 1;
 
         // Update `dirty' bit (БИЗМ)
         case (ARBI)
