@@ -15,7 +15,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/clz.sv \
                   ../../../rtl/i8253.sv \
                   ../../../rtl/tracer.sv \
-                  ../octtest.sv
+                  ../memtest.sv
 
 # Xilinx Vivado toolchain
 NC              = x

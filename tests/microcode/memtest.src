@@ -99,11 +99,11 @@ FLIST COND=YES,NORMB,RNDB,OVRIB,BNB,OVRFTB,DRG,EMLRG,RСВ,СВ,CEMLRG,
 ;     ============================================
 ;
 ;ВАРИАНТ ДЛЯ ОДНОГО БОЛЬШОГО
-;MACRO J CONT
-;MACRO S CONT
+MACRO J CONT
+MACRO S CONT
 ;ВАРИАНТ ДЛЯ ОТДЕЛЬНЫХ ТЕСТОВ
-MACRO J CJP
-MACRO S CJS
+;MACRO J CJP
+;MACRO S CJS
 ;
 ;     ==================
 ;     МАКРОСЫ ДЛЯ КОМАНД
@@ -190,7 +190,7 @@ EXTERN OUT3/6,ERRTST,OUT8/F,OUTC/F,ERRINH,ERR8/F,ERRDAT,ERRINF,OUTPCH
 ;
 CJP А=ССТМ5,МАР=РЕ
 ССТМ5:CONT А=Н5,%Т%
-%S% А=INITST,МАР=РЕ
+CJS А=INITST,МАР=РЕ
 ;ПИШЕМ БЛОКИРОВКИ В РР (БП=1 И Т.Д.)
 CONT А=CTEST,DSRC=PROM,ALUS=DZ,ALU,YDST=CNT,FFCNT=SETNR
 CONT А=С1,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=ВУТЕ
@@ -1838,7 +1838,7 @@ CJS А=СМРСС,МАР=РЕ,YDEV=PHYSAD,ARBI=CCRD,ALUS=ZА,RА=WR4,Н,ALUD=В,
 ;
 CJP А=CONK11,МАР=РЕ
 CONK11:CONT А=Н11,%Т%
-CJS А=INITST,МАР=РЕ,FFCNT=SETNR
+%S% А=INITST,МАР=РЕ,FFCNT=SETNR
 CONT А=CTEST,DSRC=PROM,ALUS=DZ,ALU,YDST=CNT
 ;ПИШЕМ НАЧАЛЬНЫЙ АДРЕС FFF80000 - 1 (ЧТОБ БЫЛ < 0 И НЕ АДРЕС КОНТРОЛЛЕРА)
 CONT А=В20,DSRC=PROM,ALUS=DZ,FUNC=SUBR,Н,ALUD=В,RВ=MANT
@@ -2200,7 +2200,7 @@ RFCT
 ;
 CJP А=CONK19,МАР=РЕ
 CONK19:CONT А=Н19,%Т%
-%J% А=INITST,МАР=РЕ,FFCNT=SETNR
+%S% А=INITST,МАР=РЕ,FFCNT=SETNR
 CONT А=CTEST,DSRC=PROM,ALUS=DZ,ALU,YDST=CNT
 CONT А=В11,DSRC=PROM,ALUS=DZ,Н,CI,ALUD=В,RВ=MANT,YDST=CCLR
 ;ПИШЕМ ДАННЫЕ = АДРЕСУ В ОЗУ
