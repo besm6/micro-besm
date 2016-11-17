@@ -2534,7 +2534,7 @@ CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
 ;02: ПРОВЕРЯЕМ БОБР(2 РАЗРЯД = 1), БИЗМ (3 РАЗРЯД = 1)
 CONT A=C6,DSRC=PROM,ALUS=DZ,ALUD=B,RB=A
 CONT DDEV=ВВ,ALUS=DZ,ALUD=В,RВ=РССОРУ
-CONT ALUS=AB,RА=A,RB=Y,FUNC=EXOR,ALUD=Q
+CONT ALUS=AB,RА=A,RB=PCCOPY,FUNC=EXOR,ALUD=Q
 CONT А=С6,DSRC=PROM,ALUS=DQ,FUNC=AND,ALUD=Q,CEN
 CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
 ;СНОВА УСТАНАВЛИВАЕМ БОБР,БИЗМ В 0 (ДЛЯ ОЧЕРЕДНОГО ЦИКЛА)
