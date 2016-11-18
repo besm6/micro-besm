@@ -468,8 +468,9 @@ extbus busio(
 //--------------------------------------------------------------
 // Arbiter
 //
-arbiter arb(clk,
-    arb_req, ARBI,                      // input request and opcode
+arbiter arb(clk, reset,
+    arb_req,                            // input request strobe
+    arb_req ? ARBI : arb_opc,           // input opcode
     bus_ARX, bus_ECX, bus_WRX,          // X bus control
     o_astb, o_rd, o_wr,                 // external memory interface
     arb_rdy                             // resulting status

@@ -25,6 +25,7 @@
 
 module arbiter(
     input  wire        clk,
+    input  wire        reset,
     input  wire        request, // input request
     input  wire  [3:0] opcode,  // input opcode
 
@@ -53,7 +54,9 @@ typedef enum bit [1:0] {
 // Sequential state transition
 //
 always_ff @(posedge clk)
-    if (request)
+    if (reset)
+        step <= 0;
+    else if (request)
         step <= 0;
     else if (!done & step != MAXSTATE)  // TODO need some action on timeout
         step <= step + 1;
@@ -128,12 +131,12 @@ always_comb begin
 
     9:  // DRD, чтение операнда
         case (step)
-                0:  // Send address
-                    {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
-                1:  // Read word
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '1, '0, '0};
-                2:  // Done
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+            0:  // Send address
+                {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
+            1:  // Read word
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '1, '0, '0};
+            2:  // Done
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
         default: begin
                 if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DRD not implemented yet!", $time);
@@ -143,9 +146,12 @@ always_comb begin
 
     10: // DWR, запись результата
         case (step)
-              //0: //TODO
-              //1: //TODO
-              //2: //TODO
+            0:  // Send address                        arx -- ecx wrx astb rd wr  done
+                {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
+            1:  // Read word
+                {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '1, '0};
+            2:  // Done
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
         default: begin
                 if (testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DWR not implemented yet!", $time);
