@@ -409,7 +409,7 @@ CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=HALF,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
 CMO41:CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 WАМ41:CJP А=WАМ41,%WA%
 ;ЧИТАЕМ, СРАВНИВАЕМ В П/П
-CJS A=DCMPDH+1,MAP=PE
+CJS A=DCMPDH1,MAP=PE
 %J% А=CМO41,МАР=РЕ
 ;
 ;
@@ -429,7 +429,7 @@ CONT A=H1,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=DADR,ALU,ЕСВ,WRB,BRA=RG3,YDEVT=ECBTAG
 CM42:CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 WАМ42:CJP А=WАМ42,%WA%
 ;ЧИТАЕМ КОМ.СЛОВО, СРАВНИВАЕМ В П/П
-CJS A=CCMPD+1,MAP=PE
+CJS A=CCMPD1,MAP=PE
 %J% А=CМ42,МАР=РЕ
 ;
 ;
@@ -755,7 +755,7 @@ CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=EXPN
 CONT А=С1,DSRC=PROM,ALUS=DZ,FUNC=EXNOR,Н,ALUD=В,RВ=WR4
 CCWM8:CONT %CLRTYP%
 ;РС-1 - В РС; П/У НА П/П ЧТЕНИЯ "ФОНА", СРАВНЕНИЕ
-CJS А=DCMPD+1,МАР=РЕ,ALUS=ZВ,RВ=РС,FUNC=SUBR,Н,ALUD=В,ALU,YDST=ADRREG
+CJS А=DCMPD1,МАР=РЕ,ALUS=ZВ,RВ=РС,FUNC=SUBR,Н,ALUD=В,ALU,YDST=ADRREG
 ;ПИШЕМ "БЕГУЩИЙ 0" - В RG3 БОИ ДАННЫХ И ТЕГА, СДВИГАЕМ ЦИЛИЧЕСКИ ВЛЕВО
 CONT ALUS=ZА,RА=WR4,Н,ALUD=LSB,RВ=WR4,SHMUX=RSLRSL,ALU,YDEVT=ECBTAG,ЕСВ
 >,WRB,BRA=RG3
@@ -780,7 +780,7 @@ CONT А=С1,DSRC=PROM,ALUS=DZ,FUNC=EXNOR,Н,ALUD=В,RВ=WR4
 CCRM8:CONT А=С2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR
 ;П/У НА П/П ЧТЕНИЯ И СРАВНЕНИЯ, ПИШЕМ В DADR ЧИСЛО, С КОТ.БУДЕМ СРАВНИВАТЬ
 CJS А=OUTADR,МАР=РЕ,ALUS=ZВ,RВ=РС,FUNC=SUBR,Н,ALUD=В,ALU,YDST=ADRREG
-CJS А=DCMPD+1,МАР=РЕ,ALUS=ZА,RА=WR4,Н,ALUD=В,RВ=DADR
+CJS А=DCMPD1,МАР=РЕ,ALUS=ZА,RА=WR4,Н,ALUD=В,RВ=DADR
 CONT А=С1,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,СЕМ
 CJP А=CCRM8,МАР=РЕ,COND=СТ,SТОРС=/MZ,ALUS=ZВ,RВ=WR4,Н,ALUD=LSB,SHMUX=RSLRSL
 %J% А=CCLME8,МАР=РЕ
@@ -1062,7 +1062,7 @@ CJP А=ADDIA,МАР=РЕ,COND=СТ,SТОРС=NZ
 CJS А=СМРРСС,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=INTR,YDST=CCLR
 ;ПРОВЕРЯЕМ А(К), СРАВНИВАЕМ С /CONST; INTR = 3,4
 CJS А=OUTADR,МАР=РЕ,ALUS=ZА,RА=DADR,FUNC=EXNOR,Н,ALUD=В,RВ=DADR
-CJS А=DCMPD+1,МАР=РЕ,ALUS=ZА,RА=РС,ALU,YDST=ADRREG
+CJS А=DCMPD1,МАР=РЕ,ALUS=ZА,RА=РС,ALU,YDST=ADRREG
 ;СНОВА - А(I), ВОССТАНАВЛИВАЕМ CONST В DADR, INTR = 5,6
 CJS А=СМРРСС,МАР=РЕ,ALUS=ZА,RА=DADR,FUNC=EXNOR,Н,ALUD=В,RВ=DADR,YDST=CCLR
 ;
@@ -1172,7 +1172,7 @@ CONT ALUS=ZА,RА=DADR,FUNC=EXNOR,Н,ALUD=В,RВ=DADR
 CJS А=СМРРСС,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=INTR,YDST=CCLR
 ;ВОССТАНАВЛИВАЕМ CONST В DADR, ПРОВЕРЯЕМ РС=А(К), СРАВНИВАЕМ С CONST; INTR=3,4
 CONT ALUS=ZА,RА=DADR,FUNC=EXNOR,Н,ALUD=В,RВ=DADR
-CJS А=DCMPD+1,МАР=РЕ,ALUS=ZА,RА=РС,ALU,YDST=ADRREG
+CJS А=DCMPD1,МАР=РЕ,ALUS=ZА,RА=РС,ALU,YDST=ADRREG
 ;
 ;ПИШЕМ ВТОРОЙ РАЗ: ПО А(I) - CONST
 CONT ALUS=ZА,RА=РССОРУ,ALU,YDST=ADRREG
@@ -1188,7 +1188,7 @@ WANCRB:CJP А=WANCRB,%WA%
 ;ПРОВЕРЯЕМ АДРЕС А(I), СРАВНИВАЕМ С CONST; INTR=5,6
 CJS А=СМРРСС,МАР=РЕ,YDST=CCLR
 ;А(К); INTR=7,8
-CJS А=DCMPD+1,МАР=РЕ,ALUS=ZА,RА=РС,ALU,YDST=ADRREG
+CJS А=DCMPD1,МАР=РЕ,ALUS=ZА,RА=РС,ALU,YDST=ADRREG
 ;
 ;I = I + 1, ДОШЛИ ЛИ ДО КОНЦА ПОЛОВИНЫ ПАМЯТИ? (16 МЛ.РАЗРЯДОВ = 0?)
 ADDIB:CONT А=MQ,DSRC=PROM,ALUS=DА,RА=РССОРУ,FUNC=AND,Н,ALUD=В,RВ=WR5
@@ -1471,7 +1471,7 @@ CONT ALUS=ZА,RА=РС,ALU,YDST=ADRREG
 CONT ALUS=ZА,RА=DADR,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=RG3
 CONT А=С8,DSRC=PROM,Н,ALUD=В,RВ=INTR,YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 WAWUD:CJP А=WAWUD,%WA%
-CJS А=DCMPD+1,МАР=РЕ,YDST=CCLR
+CJS А=DCMPD1,МАР=РЕ,YDST=CCLR
 ;
 ;S = 255? S = S + 1
 CONT А=МВ,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=EXOR,Н,CEN
@@ -3217,6 +3217,7 @@ CRTN ALUS=ZA,RA=WR6,ALU,YDEV=MPMEM,WRY,IOMP,MPADR=7
 DCMPDH:ENTRY
 ;===== П/П ЧТЕНИЯ ДАННЫХ, СРАВНЕНИЯ С DADR, HALF, ВЫДАЧА ИХ В БОПП ПРИ ОШИБКЕ
 CONT ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDST=ADRREG
+DCMPDH1:ENTRY
 ;Ф.А. + КОП НА ЧТЕНИЕ ДАННЫХ
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DRD
 ;ЖДЕМ ГОТ.АРБИТРА
@@ -3235,9 +3236,10 @@ ERRCMP:CJP А=ERRDAF,МАР=РЕ,ALUS=ZВ,RВ=EXPN,Н,CI,ALUD=В
 ;
 DCMPD0:ENTRY
 ;===== ЧТЕНИЕ ДАННЫХ, СРАВНЕНИЕ С DADR (ТЕГ = МЛ.РАЗР.DADR), ВЫДАЧА ИХ В БОПП
-CJP А=DCMPD+1,МАР=РЕ,ALUS=ZА,RА=РС,ALU,YDST=ADRREG
+CJP А=DCMPD1,МАР=РЕ,ALUS=ZА,RА=РС,ALU,YDST=ADRREG
 DCMPD:ENTRY
 CONT ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDST=ADRREG
+DCMPD1:ENTRY
 ;Ф.А. + КОП НА ЧТЕНИЕ ДАННЫХ
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DRD
 ;ЖДЕМ ГОТ.АРБИТРА
@@ -3257,6 +3259,7 @@ CJP А=ERRDAF,МАР=РЕ,ALUS=ZВ,RВ=EXPN,Н,CI,ALUD=В
 CCMPD:ENTRY
 ;===== П/П ЧТЕНИЯ КОМАНДНОГО СЛОВА, СРАВНЕНИЯ С DADR (ТЕГ = МЛ.РАЗРЯДАМ DADR)
 CONT ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDST=ADRREG
+CCMPD1:ENTRY
 ;Ф.А. + КОП НА ЧТЕНИЕ КОМАНДНОГО СЛОВА
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=FЕТСН
 ;ЖДЕМ ГОТ.АРБИТРА

@@ -231,22 +231,17 @@ always @(tr.instruction_retired) begin
 
     //
     // Статусный регистр ОЗУ
-    //
-    check_pass(LABEL_RS5, "Test RS5 pass");
-
-    //
     // Регистр адреса ОЗУ
     //
-    //TODO: Skip CАМ6
-    check_pass(LABEL_CAM71, "Test CAM71 pass");
-    check_pass(LABEL_CAM7, "Test CAM7 pass");
+    //  - все эти тесты пропускаем.
+    //    Нам не нужна коррекция по Хэммингу,
+    //    поэтому этот блок не реализован.
+    //
+    check_jump(LABEL_RS5-7, LABEL_RS5-6, LABEL_CMO41-8, "Skip RS5-CM3");
 
     //
     // Проверка ОЗУ
     //
-    check_pass(LABEL_CAM8, "Test CAM8 pass");
-    //TODO: Skip CМ1, CM2, CM3
-    //check_jump(LABEL_CBOI6+2, LABEL_CBOI6, LABEL_PSBOI7-1, "Skip CBOI6");
     check_pass(LABEL_CMO41, "Test CMO41 pass");
     check_pass(LABEL_CM42, "Test CM42 pass");
     check_pass(LABEL_RMEM4, "Test RMEM4 pass");
