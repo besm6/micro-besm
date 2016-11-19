@@ -43,11 +43,13 @@ always @(posedge clk) begin
     end else if (o_wr) begin
         mem[waddr] = o_ad;              // Memory store
         tag[waddr] = o_tag;
+        waddr = waddr + 1;              // Increment address for batch mode
         //$fdisplay(tracefd, "(%0d) Store [%h] = %h:%h", $time, waddr, o_tag, o_ad);
 
     end else if (o_rd) begin
         i_data = mem[waddr];            // Memory load
         i_tag = tag[waddr];
+        waddr = waddr + 1;              // Increment address for batch mode
         //$fdisplay(tracefd, "(%0d) Load [%h] = %h:%h", $time, waddr, i_tag, i_data);
     end
 end
@@ -199,9 +201,12 @@ localparam LABEL_RMEM4  = 154;
 localparam LABEL_CICLM5 = 189;
 localparam LABEL_CICL6  = 210;
 localparam LABEL_CICLM7 = 272;
+localparam LABEL_CMEM8  = 287;
 localparam LABEL_CCLME8 = 311;
 localparam LABEL_WRMEM  = 333;
+localparam LABEL_CMEMA  = 421;
 localparam LABEL_WRMEMA = 434;
+localparam LABEL_CONTWB = 479;
 localparam LABEL_WRMEMB = 492;
 localparam LABEL_WRMEMC = 554;
 localparam LABEL_WRMEMD = 621;
@@ -222,6 +227,7 @@ localparam LABEL_CCK1A  = 1136;
 localparam LABEL_CCK1B  = 1177;
 localparam LABEL_CCK1C  = 1217;
 localparam LABEL_C1D    = 1259;
+localparam LABEL_CONTB4 = 1287;
 localparam LABEL_CCB4   = 1292;
 localparam LABEL_CONTB5 = 1317;
 localparam LABEL_CONTM6 = 1356;
@@ -261,7 +267,8 @@ always @(tr.instruction_retired) begin
     //    Нам не нужна коррекция по Хэммингу,
     //    поэтому этот блок не реализован.
     //
-    check_jump(LABEL_RS5-7, LABEL_RS5-6, LABEL_CMO41-8, "Skip RS5-CM3");
+    //check_jump(LABEL_RS5-7, LABEL_RS5-6, LABEL_CMO41-8, "Skip RS5-CM3");
+    check_jump(LABEL_RS5-7, LABEL_RS5-6, LABEL_CONTB4-1, "Skip RS5-C1D");
 
     //
     // Проверка ОЗУ
@@ -273,33 +280,27 @@ always @(tr.instruction_retired) begin
     check_pass(LABEL_CICL6, "Test CICL6 pass");
     check_pass(LABEL_CICLM7, "Test CICLM7 pass");
     check_pass(LABEL_CCLME8, "Test CCLME8 pass");
-    check_pass(LABEL_WRMEM, "Test WRMEM pass");
-    check_pass(LABEL_WRMEMA, "Test WRMEMA pass");
-    check_pass(LABEL_WRMEMB, "Test WRMEMB pass");
-    check_pass(LABEL_WRMEMC, "Test WRMEMC pass");
-    check_pass(LABEL_WRMEMD, "Test WRMEMD pass");
-    check_pass(LABEL_WRMEME, "Test WRMEME pass");
+    check_jump(LABEL_WRMEM-9, LABEL_WRMEM-8, LABEL_CONTB4-1, "Skip WRMEM-C1D");
 
     //
-    // Кэш команд, операндов
+    // Кэш команд, операндов - пропускаем
     //
-    //TODO: Skip RКЕС, RKED, RКEЕ, RKEF
-    check_pass(LABEL_RKEF1, "Test RKEF1 pass");
-    check_pass(LABEL_RKEF2, "Test RKEF2 pass");
-    check_pass(LABEL_CCK10, "Test CCK10 pass");
-    check_pass(LABEL_CCK11, "Test CCK11 pass");
-    check_pass(LABEL_CCK12, "Test CCK12 pass");
-    check_pass(LABEL_CCK13, "Test CCK13 pass");
-    check_pass(LABEL_CCK14, "Test CCK14 pass");
-    check_pass(LABEL_CCK15, "Test CCK15 pass");
-    check_pass(LABEL_CK16, "Test CK16 pass");
-    check_pass(LABEL_CK17, "Test CK17 pass");
-    check_pass(LABEL_CCK18, "Test CCK18 pass");
-    check_pass(LABEL_CCK19, "Test CCK19 pass");
-    check_pass(LABEL_CCK1A, "Test CCK1A pass");
-    check_pass(LABEL_CCK1B, "Test CCK1B pass");
-    check_pass(LABEL_CCK1C, "Test CCK1C pass");
-    check_pass(LABEL_C1D, "Test C1D pass");
+    //check_pass(LABEL_RKEF1, "Test RKEF1 pass");
+    //check_pass(LABEL_RKEF2, "Test RKEF2 pass");
+    //check_pass(LABEL_CCK10, "Test CCK10 pass");
+    //check_pass(LABEL_CCK11, "Test CCK11 pass");
+    //check_pass(LABEL_CCK12, "Test CCK12 pass");
+    //check_pass(LABEL_CCK13, "Test CCK13 pass");
+    //check_pass(LABEL_CCK14, "Test CCK14 pass");
+    //check_pass(LABEL_CCK15, "Test CCK15 pass");
+    //check_pass(LABEL_CK16, "Test CK16 pass");
+    //check_pass(LABEL_CK17, "Test CK17 pass");
+    //check_pass(LABEL_CCK18, "Test CCK18 pass");
+    //check_pass(LABEL_CCK19, "Test CCK19 pass");
+    //check_pass(LABEL_CCK1A, "Test CCK1A pass");
+    //check_pass(LABEL_CCK1B, "Test CCK1B pass");
+    //check_pass(LABEL_CCK1C, "Test CCK1C pass");
+    //check_pass(LABEL_C1D, "Test C1D pass");
 
     //
     // Режим блочной передачи (сигнал BTR)

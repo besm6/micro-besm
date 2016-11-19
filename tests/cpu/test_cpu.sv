@@ -38,10 +38,12 @@ always @(posedge clk) begin
     end else if (o_wr) begin
         mem[waddr] = o_ad;              // Memory store
         tag[waddr] = o_tag;
+        waddr = waddr + 1;              // Increment address for batch mode
 
     end else if (o_rd) begin
         i_data = mem[waddr];            // Memory load
         i_tag = tag[waddr];
+        waddr = waddr + 1;              // Increment address for batch mode
     end
 end
 
