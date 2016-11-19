@@ -420,7 +420,7 @@ CJS A=DCMPDH1,MAP=PE
 CJP А=СМЕМ42,МАР=РЕ
 СМЕМ42:CONT А=Н42,%Т%
 %S% А=INITSM,МАР=РЕ
-CJS A=CLR7/F,MAP=ME,FFCNT=SETNR
+CJS A=CLR7/F,MAP=PE,FFCNT=SETNR
 ;БЛОКИРОВКИ В РР ДЛЯ ТЕСТОВ:БП=БПНП=РОА=БЗО=БЗЗ=БПТЗ=БПИНТ=БЧС=БПТЧ=БЧОП=1
 CONT А=CTEST,DSRC=PROM,ALUS=DZ,ALU,YDST=CNT
 ;ЧИТАЕМ АДРЕС ИЗ ПЗУ В РГ.РС, ДАННЫЕ,ТЕГ - В DADR, ПИШЕМ В ОЗУ
@@ -460,8 +460,8 @@ CONT ALUS=ZА,RА=HALF,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, РС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWM4:CJP А=WWM4,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWM4,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;
 ;ЦИКЛ НА ЧТЕНИЕ
@@ -473,7 +473,8 @@ CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=EXPN
 CCRM4:CJS А=DCMPDH,МАР=РЕ,%CLRTYP%
 ;СРАВНИВАЕМ АДРЕС (РС+1)
 CJS А=OUTADR,МАР=РЕ,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
+; было В18
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
 CJP А=CCRM4,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;П/У НА ВЫДАЧУ В БОПП НОМЕРА ЦИКЛА И ЧИСЛА ОШИБОК
 CJS А=OUTEMH,МАР=РЕ
@@ -507,8 +508,8 @@ CONT ALUS=ZА,RА=DADR,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, РС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWFM5:CJP А=WWFM5,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС C MAX+1
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС C MAX+1 (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWFM5,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;
 ;ПРОВЕРЯЕМ "ФОН": ЧИТАЕМ FF...FF, ПИШЕМ ДАННЫЕ=АДРЕСУ; INTR=1,2
@@ -524,13 +525,13 @@ CJS А=OUTADR,МАР=РЕ,ALUS=ZА,RА=РС,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=R
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, РС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWAM5:CJP А=WWAM5,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWM5,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК
 CJS А=OUTEMH,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
-;ЗАДЕРЖКА, ПОКА РГ.WR5 НЕ БУДЕТ РАВЕН CONST ИЗ ПЗУ
-WТМ5:CONT А=В20,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
+;ЗАДЕРЖКА, ПОКА РГ.WR5 НЕ БУДЕТ РАВЕН CONST ИЗ ПЗУ (было В20)
+WТМ5:CONT А=B2,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
 CJP А=WТМ5,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR5,Н,CI,ALUD=В
 ;
 ;ЧТЕНИЕ ДАННЫХ = АДРЕСУ
@@ -543,7 +544,8 @@ CCR5:CONT А=С2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR
 CJS А=DCMPD,МАР=РЕ,ALUS=ZА,RА=РС,Н,CI,ALUD=В,RВ=DADR
 ;СРАВНИВАЕМ АДРЕС (РС+1)
 CJS А=OUTADR,МАР=РЕ,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
 CJP А=CCR5,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК, ЗАДЕРЖКА
 CJS А=OUTEMH,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
@@ -581,8 +583,8 @@ CONT ALUS=ZА,RА=DADR,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, РС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWFM6:CJP А=WWFM6,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=WFM6,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;
 ;ПРОВЕРЯЕМ "ФОН": ЧИТАЕМ FF...FF, ПИШЕМ ДАННЫЕ="СДВИНУТОМУ" АДРЕСУ
@@ -601,13 +603,13 @@ CJS А=OUTADR,МАР=РЕ,ALUS=ZА,RА=WR4,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=RG
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, РС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWAM6:CJP А=WWAM6,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWM6,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК
 CJS А=OUTEMH,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
-;ЗАДЕРЖКА, ПОКА РГ.WR5 НЕ БУДЕТ РАВЕН CONST ИЗ ПЗУ
-WТМ6:CONT А=В20,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
+;ЗАДЕРЖКА, ПОКА РГ.WR5 НЕ БУДЕТ РАВЕН CONST ИЗ ПЗУ (было В20)
+WТМ6:CONT А=В2,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
 CJP А=WТМ6,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR5,Н,CI,ALUD=В
 ;
 ;ЧТЕНИЕ ДАННЫХ = АДРЕСУ
@@ -621,7 +623,8 @@ CONT А=С2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR
 CJS А=DCMPD,МАР=РЕ,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=DADR,ALU,DSRC=SHIFT,SHF=LOG
 ;СРАВНИВАЕМ АДРЕС (РС+1)
 CJS А=OUTADR,МАР=РЕ,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
 CJP А=CCR6,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК, ЗАДЕРЖКА
 CJS А=OUTEMH,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
@@ -669,8 +672,8 @@ CONT ALUS=ZА,RА=DADR,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, РС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWFM7:CJP А=WWFM7,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWFM7,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;
 ;ПРОВЕРЯЕМ "ФОН": ЧИТАЕМ FF...FD, ПИШЕМ ДАННЫЕ=АДРЕСУ
@@ -686,13 +689,13 @@ CONT A=C2,DSRC=PROM,ALUS=DА,RА=РС,FUNC=NOTRS,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,
 CJS А=OUTADR,МАР=РЕ,YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, РС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWM7:CJP А=WWM7,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWM7,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК
 CJS А=OUTEMH,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
-;ЗАДЕРЖКА, ПОКА РГ.WR5 НЕ БУДЕТ РАВЕН CONST ИЗ ПЗУ
-WАТЕМ7:CONT А=В20,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
+;ЗАДЕРЖКА, ПОКА РГ.WR5 НЕ БУДЕТ РАВЕН CONST ИЗ ПЗУ (было В20)
+WАТЕМ7:CONT А=В2,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
 CJP А=WАТЕМ7,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR5,Н,CI,ALUD=В
 ;
 ;ЧТЕНИЕ КОМАНДНОГО СЛОВА = АДРЕСУ
@@ -707,7 +710,8 @@ CONT A=C2,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=NOTRS,Н,ALUD=B,RB=DADR
 CJS А=CCMPD,МАР=РЕ
 ;СРАВНИВАЕМ АДРЕС (РС+1)
 CJS А=OUTADR,МАР=РЕ,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
 CJP А=CCRM7,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК, ЗАДЕРЖКА
 CJS А=OUTEMH,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
@@ -717,7 +721,7 @@ CJP А=WTRDM7,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR5,Н,CI,ALUD=В
 ;
 ;
 ОЗУ8:ENTRY
-;===== ЗАПИСЬ "БУГУЩЕГО 0" В ПАМЯТЬ В ОБРАТНОМ НАПР.; ЛИНЕЙНЫЙ АЛГОРИТМ ТИПА N
+;===== ЗАПИСЬ "БЕГУЩЕГО 0" В ПАМЯТЬ В ОБРАТНОМ НАПР.; ЛИНЕЙНЫЙ АЛГОРИТМ ТИПА N
 ;   ЗАПИСЬ В ПАМЯТЬ (ТЕГ=ДАННЫМ); ЧТЕНИЕ С ЗАДЕРЖКОЙ; СРАВНЕНИЕ
 ;   РС   - АДРЕС, ОТ МАХ ДО 1, Т.Е. В ОБРАТНОМ НАПРАВЛЕНИИ!
 ;   DADR - СНАЧАЛА ФОНОВАЯ CONST, ЗАТЕМ ЧИСЛО С "БЕГУЩИМ 0" (=WR4 ПРИ ЗАПИСИ)
@@ -734,7 +738,8 @@ CONT А=МВ,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=ВУТЕ
 ;"ЗАПИСЬ ФОНА": РАСПИСЫВАЕМ ВСЮ ПАМЯТЬ FF...FF
 ;ЧИТАЕМ ФОНОВУЮ CONST В РГ.DADR, ПИШЕМ МАХ АДРЕС В РС
 CONT А=CFFF,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
-CONT А=В18,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС
 ;АДРЕС РС-1 - В РС, АИСП.
 CCWFM8:CJS А=OUTADR,МАР=РЕ,ALUS=ZВ,RВ=РС,FUNC=SUBR,Н,ALUD=В,ALU,YDST=ADRREG
 ;CONST - В RG3 БОИ ДАННЫХ И ТЕГА
@@ -747,8 +752,8 @@ CONT А=С1,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,СЕМ
 CJP А=CCWFM8,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;
 ;ПРОВЕРЯЕМ "ФОН",  ПИШЕМ "БЕГУЩИЙ 0"
-;РС = МАХ АДРЕСУ, N ЦИКЛА (MANT), ЧИСЛО ОШИБОК (EXPN), INTR=1,2
-CONT А=В18,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС
+;РС = МАХ АДРЕСУ, N ЦИКЛА (MANT), ЧИСЛО ОШИБОК (EXPN), INTR=1,2 (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС
 CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=MANT
 CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=EXPN
 ;ПИШЕМ В WR4 FFF...FFE, КОТОРУЮ БУДЕМ СДВИГАТЬ
@@ -767,13 +772,13 @@ CONT А=С1,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,СЕМ
 CJP А=CCWM8,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК
 CCLME8:CJS А=OUTEMH,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
-;ЗАДЕРЖКА, ПОКА РГ.WR5 НЕ БУДЕТ РАВЕН CONST ИЗ ПЗУ
-WАТЕМ8:CONT А=В20,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
+;ЗАДЕРЖКА, ПОКА РГ.WR5 НЕ БУДЕТ РАВЕН CONST ИЗ ПЗУ (было В20)
+WАТЕМ8:CONT А=В2,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
 CJP А=WАТЕМ8,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR5,Н,CI,ALUD=В
 ;
 ;ЦИКЛ НА ЧТЕНИЕ
-;РС = МАХ АДРЕСУ; 0 - В EXPN (ЧИСЛО ОШИБОК), MANT+1 (N ЦИКЛА); INTR=3,4
-CONT А=В18,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС
+;РС = МАХ АДРЕСУ; 0 - В EXPN (ЧИСЛО ОШИБОК), MANT+1 (N ЦИКЛА); INTR=3,4 (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС
 CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=EXPN
 CONT ALUS=ZВ,RВ=MANT,Н,CI,ALUD=В
 CONT А=С1,DSRC=PROM,ALUS=DZ,FUNC=EXNOR,Н,ALUD=В,RВ=WR4
@@ -845,12 +850,13 @@ CONT ALUS=ZА,RА=DADR,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, РС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWF:CJP А=WWF,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWF,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;ЗАДЕРЖКА ПОСЛЕ ЗАПИСИ
 CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
-CWAITW:CONT А=В20,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
+; (было В20)
+CWAITW:CONT А=В2,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
 CJP А=CWAITW,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR5,Н,CI,ALUD=В
 ;
 ;УСТАНАВЛИВАЕМ НАЧАЛЬНЫЕ ЗНАЧЕНИЯ: ОБНУЛЯЕМ К-ВО ОШИБОК В ЦИКЛЕ
@@ -1033,12 +1039,13 @@ CJS А=OUT3/6,МАР=РЕ,ALUS=ZА,RА=EXPN,ALUD=В,RВ=WR6,YDEV=PHYSAD
 >,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, АДРЕС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWFA:CJP А=WWFA,%WA%,ALUS=ZА,RА=EXPN,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWFA,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;ЗАДЕРЖКА ПОСЛЕ ЗАПИСИ
 CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
-CWTWA:CONT А=В20,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
+; (было В20)
+CWTWA:CONT А=В2,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
 CJP А=CWTWA,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR5,Н,CI,ALUD=В
 ;
 ;УСТАНАВЛИВАЕМ НАЧАЛЬНЫЕ ЗНАЧЕНИЯ: ОБНУЛЯЕМ ЧИСЛО ОШИБОК
@@ -1140,8 +1147,8 @@ CJS А=OUTADR,МАР=РЕ,ALUS=ZА,RА=DADR,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=R
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, АДРЕС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ АДР.+ 1)
 WWFB:CJP А=WWFB,%WA%,ALUS=ZА,RА=EXPN,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWFB,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;ЧИТАЕМ CONST В DADR
 CONT А=ZER,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
@@ -1255,12 +1262,13 @@ CONT ALUS=ZА,RА=DADR,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, РС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWFC:CJP А=WWFC,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWFC,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;ЗАДЕРЖКА ПОСЛЕ ЗАПИСИ
 CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
-WAITWC:CONT А=В20,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
+; (было В20)
+WAITWC:CONT А=В2,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
 CJP А=WAITWC,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR5,Н,CI,ALUD=В
 ;
 ;УСТАНАВЛИВАЕМ НАЧАЛЬНЫЕ ЗНАЧЕНИЯ: ОБНУЛЯЕМ ЧИСЛО ОШИБОК
@@ -1389,12 +1397,13 @@ CONT ALUS=ZА,RА=DADR,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, РС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWFD:CJP А=WWFD,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWFD,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;ЗАДЕРЖКА ПОСЛЕ ЗАПИСИ
 CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
-CWTWD:CONT А=В20,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
+; (было В20)
+CWTWD:CONT А=В2,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
 CJP А=CWTWD,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR5,Н,CI,ALUD=В
 ;
 ;ОБНУЛЯЕМ К-ВО ОШИБОК В ЦИКЛЕ
@@ -1537,12 +1546,13 @@ CJS А=OUTADR,МАР=РЕ,ALUS=ZА,RА=DADR,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=R
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 ;ЖДЕМ ГОТ.АРБИТРА, РС+1 - В РГ.Q (ДЛЯ СРАВНЕНИЯ С МАХ ADR.+ 1)
 WWFE:CJP А=WWFE,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-;СРАВНИВАЕМ АДРЕС
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+;СРАВНИВАЕМ АДРЕС (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CCWFE,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;ЗАДЕРЖКА ПОСЛЕ ЗАПИСИ
 CONT ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR5
-WAITWE:CONT А=В20,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
+; (было В20)
+WAITWE:CONT А=В2,DSRC=PROM,ALUS=DА,RА=WR5,FUNC=EXOR,Н,CEN
 CJP А=WAITWE,МАР=РЕ,COND=СТ,SТОРС=/NZ,ALUS=ZВ,RВ=WR5,Н,CI,ALUD=В
 ;
 ;УСТАНАВЛИВАЕМ НАЧАЛЬНЫЕ ЗНАЧЕНИЯ: ОБНУЛЯЕМ КОЛИЧЕСТВО ОШИБОК В ЦИКЛЕ
@@ -2728,7 +2738,8 @@ CONT ALUS=DZ,FUNC=AND,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 WAWM6:CJP А=WAWM6,%WA%
 CONT ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
-CONT А=В18,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,CEN
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,CEN
 CJP А=WRMM6,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;
 ;ЧИТАЕМ В РЕЖИМЕ ЧТЕНИЕ-МОДИФИКАЦИЯ-ЗАПИСЬ
@@ -2738,7 +2749,8 @@ RDMM6:CONT ALUS=ZВ,RВ=РС,ALU,YDST=ADRREG
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=RDMWR,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=INTR
 CJS А=CMPDC,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=DADR
 CONT ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
-CONT А=В18,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,CEN
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,CEN
 CJP А=RDMM6,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;
 ;ЧИТАЕМ МОДИФИЦИРОВАННОЕ, INTR=3,4
@@ -2749,7 +2761,8 @@ CONT А=С2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR
 CONT А=В56,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
 CJS А=CMPDC,МАР=РЕ,YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=RDMWR
 CONT ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
-CONT А=В18,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,CEN
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,CEN
 CJP А=RDMM26,МАР=РЕ,COND=СТ,SТОРС=/NZ
 %J% А=CONTM6,МАР=РЕ
 ;
@@ -2973,7 +2986,8 @@ CONT ALUS=ZА,RА=DADR,Н,ALU,ЕСВ,WRB,BRA=RG3
 CONT ALUS=ZА,RА=HALF,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 CWWAXA:CJP А=CWWAXA,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CWRMXA,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;
 ;ПРОВЕРЯЕМ CONST
@@ -2985,7 +2999,8 @@ CRDXA:CONT %CLRTYP%
 ;П/У НА П/П ЧТЕНИЯ И СРАВНЕНИЯ, В DADR И HALF - ЧИСЛА, С КОТ.БУДЕМ СРАВНИВАТЬ
 CJS А=SUBPRX,МАР=РЕ,ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
 CONT ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
 CJP А=CRDXA,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК, ЗАДЕРЖКА
@@ -3010,7 +3025,8 @@ CONT ALUS=ZА,RА=DADR,Н,ALU,ЕСВ,WRB,BRA=RG3
 CONT ALUS=ZА,RА=HALF,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 EWWAXA:CJP А=EWWAXA,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=EWRMXA,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;
 ;ПРОВЕРЯЕМ CONST С ОШИБКОЙ БЕЗ ХЕММИНГА
@@ -3022,7 +3038,8 @@ CRCEXA:CONT А=С2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR
 ;П/У НА П/П ЧТЕНИЯ И СРАВНЕНИЯ, В DADR И HALF - ЧИСЛА, С КОТ.БУДЕМ СРАВНИВАТЬ
 CJS А=SUBPRX,МАР=РЕ,ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
 CONT ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
 CJP А=CRCEXA,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК, ЗАДЕРЖКА
@@ -3045,7 +3062,8 @@ CONT ALUS=ZВ,RВ=MANT,Н,CI,ALUD=В
 CCRXA:CONT А=С4,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR
 CJS А=SUBPRX,МАР=РЕ,ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
 CONT ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
 CJP А=CCRXA,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК, ЗАДЕРЖКА
@@ -3105,7 +3123,8 @@ CWRM:CONT ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDST=ADRREG,YDEV=МРМЕМ,WRY,I�
 CONT ALUS=АВ,RА=РС,RВ=WR2,FUNC=OR,Н,ALU,YDEVT=ECBTAG,ЕСВ,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 CWWA:CJP А=CWWA,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=CWRM,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;
 ;ПРОВЕРЯЕМ CONST
@@ -3120,7 +3139,8 @@ CONT ALUS=АВ,RА=РС,RВ=WR2,FUNC=OR,Н,ALUD=Q
 CONT ALUS=ZQ,Н,ALUD=В,RВ=DADR
 CJS А=SUBPRX,МАР=РЕ,ALUS=ZQ,Н,ALUD=В,RВ=HALF
 CONT ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
 CJP А=CRD,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК, ЗАДЕРЖКА
@@ -3143,7 +3163,8 @@ CONT ALUS=AQ,RА=WR3,FUNC=EXOR,Н,ALU,ЕСВ,WRB,BRA=RG3
 CONT ALUS=AQ,RА=WR4,FUNC=EXOR,ALU,YDEVT=ECBTAG,WRB,BRA=RG3
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 EWWA:CJP А=EWWA,%WA%,ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,CEN
 CJP А=EWRM,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;
 ;ПРОВЕРЯЕМ ЧИСЛО С ОШИБКОЙ БЕЗ ХЕММИНГА
@@ -3158,7 +3179,8 @@ CONT ALUS=АВ,RА=РС,RВ=WR2,FUNC=OR,Н,ALUD=Q
 CONT ALUS=AQ,RА=WR3,FUNC=EXOR,Н,ALUD=В,RВ=DADR
 CJS А=SUBPRX,МАР=РЕ,ALUS=AQ,RА=WR4,FUNC=EXOR,Н,ALUD=В,RВ=HALF
 CONT ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
 CJP А=CRDCE,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК, ЗАДЕРЖКА
@@ -3183,7 +3205,8 @@ CONT ALUS=АВ,RА=РС,RВ=WR2,FUNC=OR,Н,ALUD=Q
 CONT ALUS=ZQ,Н,ALUD=В,RВ=DADR
 CJS А=SUBPRX,МАР=РЕ,ALUS=ZQ,Н,ALUD=В,RВ=HALF
 CONT ALUS=ZА,RА=РС,Н,CI,ALUD=Q
-CONT А=В18,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
+; (было В18)
+CONT А=B10,DSRC=PROM,ALUS=DQ,FUNC=EXOR,СЕМ
 CJP А=CCR,МАР=РЕ,COND=СТ,SТОРС=/MZ
 ;
 ;ВЫДАЧА В БОПП N ЦИКЛА И ЧИСЛА ОШИБОК, ЗАДЕРЖКА

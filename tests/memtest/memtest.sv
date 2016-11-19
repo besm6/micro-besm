@@ -197,6 +197,7 @@ localparam LABEL_CMO41  = 123;
 localparam LABEL_CM42   = 134;
 localparam LABEL_RMEM4  = 154;
 localparam LABEL_CICLM5 = 189;
+localparam LABEL_CICL6  = 210;
 localparam LABEL_CICLM7 = 272;
 localparam LABEL_CCLME8 = 311;
 localparam LABEL_WRMEM  = 333;
@@ -269,6 +270,7 @@ always @(tr.instruction_retired) begin
     check_pass(LABEL_CM42, "Test CM42 pass");
     check_pass(LABEL_RMEM4, "Test RMEM4 pass");
     check_pass(LABEL_CICLM5, "Test CICLM5 pass");
+    check_pass(LABEL_CICL6, "Test CICL6 pass");
     check_pass(LABEL_CICLM7, "Test CICLM7 pass");
     check_pass(LABEL_CCLME8, "Test CCLME8 pass");
     check_pass(LABEL_WRMEM, "Test WRMEM pass");

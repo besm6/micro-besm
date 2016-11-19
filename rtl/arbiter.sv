@@ -70,14 +70,13 @@ always_comb begin
         {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
     else
         case (opcode)
-        0:  // Reset everything
+
+        0:  // Initial state, idle
             {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
 
         1:  // CCRD, чтение кэша команд
             case (step)
-                  //0: //TODO
-                  //1: //TODO
-                  //2: //TODO
+                //TODO
             default: begin
                     if (testbench.tracefd)
                         $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=CCRD not implemented yet!", $time);
@@ -87,9 +86,7 @@ always_comb begin
 
         2:  // CCWR, запись в кэш команд
             case (step)
-                  //0: //TODO
-                  //1: //TODO
-                  //2: //TODO
+                //TODO
             default: begin
                     if (testbench.tracefd)
                         $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=CCWR not implemented yet!", $time);
@@ -99,9 +96,7 @@ always_comb begin
 
         3:  // DCRD, чтение кэш операндов
             case (step)
-                  //0: //TODO
-                  //1: //TODO
-                  //2: //TODO
+                //TODO
             default: begin
                     if (testbench.tracefd)
                         $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DCRD not implemented yet!", $time);
@@ -111,9 +106,7 @@ always_comb begin
 
         4:  // DCWR, запись в кэш операндов
             case (step)
-                  //0: //TODO
-                  //1: //TODO
-                  //2: //TODO
+                //TODO
             default: begin
                     if (testbench.tracefd)
                         $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DCWR not implemented yet!", $time);
@@ -123,55 +116,43 @@ always_comb begin
 
         8:  // FЕТСН, чтение команды
             case (step)
-                  //0: //TODO
-                  //1: //TODO
-                  //2: //TODO
-            default: begin
-                    if (testbench.tracefd)
-                        $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=FETCH not implemented yet!", $time);
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
-                end
+             0: // Send address                        arx -- ecx wrx astb rd wr  done
+                {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
+             1: // Get data
+                {arx, ecx, wrx, astb, rd, wr, done} = {CMD,   '1, '0, '0, '1, '0, '0};
+             2: // Read word
+                {arx, ecx, wrx, astb, rd, wr, done} = {CMD,   '1, '1, '0, '0, '0, '0};
+             3: // Done
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
             endcase
 
         9:  // DRD, чтение операнда
             case (step)
-                0:  // Send address                        arx -- ecx wrx astb rd wr  done
-                    {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
-                1:  // Get data
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '1, '0, '0};
-                2:  // Read word
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '0, '0, '0};
-                3:  // Done
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
-            default: begin
-                    if (testbench.tracefd)
-                        $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DRD not implemented yet!", $time);
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
-                end
+             0: // Send address                        arx -- ecx wrx astb rd wr  done
+                {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
+             1: // Get data
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '1, '0, '0};
+             2: // Read word
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '0, '0, '0};
+             3: // Done
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
             endcase
 
         10: // DWR, запись результата
             case (step)
-                0:  // Send address                        arx -- ecx wrx astb rd wr  done
-                    {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
-                1:  // Get data
-                    {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '0, '0};
-                2:  // Write word
-                    {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '1, '0};
-                3:  // Done
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
-            default: begin
-                    if (testbench.tracefd)
-                        $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DWR not implemented yet!", $time);
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
-                end
+             0: // Send address                        arx -- ecx wrx astb rd wr  done
+                {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
+             1: // Get data
+                {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '0, '0};
+             2: // Write word
+                {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '1, '0};
+             3: // Done
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
             endcase
 
         11: // RDMWR, чтение - модификация - запись (семафорная)
             case (step)
-                  //0: //TODO
-                  //1: //TODO
-                  //2: //TODO
+                //TODO
             default: begin
                     if (testbench.tracefd)
                         $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=RDMWR not implemented yet!", $time);
@@ -181,9 +162,7 @@ always_comb begin
 
         12: // BTRWR, запись в режиме блочной передачи
             case (step)
-                  //0: //TODO
-                  //1: //TODO
-                  //2: //TODO
+                //TODO
             default: begin
                     if (testbench.tracefd)
                         $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=BTRWR not implemented yet!", $time);
@@ -193,9 +172,7 @@ always_comb begin
 
         13: // BTRRD, чтение в режиме блочной передачи
             case (step)
-                  //0: //TODO
-                  //1: //TODO
-                  //2: //TODO
+                //TODO
             default: begin
                     if (testbench.tracefd)
                         $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=BTRRD not implemented yet!", $time);
@@ -205,9 +182,7 @@ always_comb begin
 
         14: // BICLR, сброс прерываний на шине
             case (step)
-                  //0: //TODO
-                  //1: //TODO
-                  //2: //TODO
+                //TODO
             default: begin
                     if (testbench.tracefd)
                         $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=BICLR not implemented yet!", $time);
@@ -217,9 +192,7 @@ always_comb begin
 
         15: // BIRD, чтение прерываний с шины
             case (step)
-                  //0: //TODO
-                  //1: //TODO
-                  //2: //TODO
+                //TODO
             default: begin
                     if (testbench.tracefd)
                         $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=BIRD not implemented yet!", $time);
@@ -227,8 +200,8 @@ always_comb begin
                 end
             endcase
 
-        default: begin
-                // Unknown request
+        default: // Unknown request
+            begin
                 if (request & testbench.tracefd)
                     $fdisplay(testbench.tracefd, "(%0d) *** Wrong arbiter op=%0d!", $time, opcode);
                 {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
