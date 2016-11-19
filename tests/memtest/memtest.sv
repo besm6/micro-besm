@@ -27,7 +27,30 @@ cpu cpu(clk, reset, i_data, i_tag,
 
 // Setup trace moninor.
 tracer tr();
-logic [19:0] waddr;                     // needed for tracer
+
+//
+// 1Mword of tagged RAM
+//
+logic [63:0] mem[1024*1024];            // main RAM
+logic  [7:0] tag[1024*1024];            // tags
+logic [19:0] waddr;                     // latched word address
+
+always @(posedge clk) begin
+    if (o_astb) begin
+        waddr = o_ad[19:0];             // Address latch
+        //$fdisplay(tracefd, "(%0d) ad = %h", $time, waddr);
+
+    end else if (o_wr) begin
+        mem[waddr] = o_ad;              // Memory store
+        tag[waddr] = o_tag;
+        //$fdisplay(tracefd, "(%0d) Store [%h] = %h:%h", $time, waddr, o_tag, o_ad);
+
+    end else if (o_rd) begin
+        i_data = mem[waddr];            // Memory load
+        i_tag = tag[waddr];
+        //$fdisplay(tracefd, "(%0d) Load [%h] = %h:%h", $time, waddr, i_tag, i_data);
+    end
+end
 
 //--------------------------------------------------------------
 // Microinstruction ROM.

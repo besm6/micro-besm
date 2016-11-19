@@ -104,7 +104,7 @@ always @(negedge clk)
         if (!testbench.o_astb && testbench.o_wr)
             $fdisplay(fd, "(%0d)               Memory Store [%h] = %h:%h",
                 ctime, testbench.waddr, testbench.o_tag, testbench.o_ad);
-        else if (!testbench.o_astb && testbench.o_rd)
+        else if (!testbench.o_astb && cpu.arb.wrx)
             $fdisplay(fd, "(%0d)               Memory Load [%h] = %h:%h",
                 ctime, testbench.waddr, testbench.i_tag, testbench.i_data);
 
