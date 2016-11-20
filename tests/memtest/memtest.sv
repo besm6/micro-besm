@@ -34,22 +34,40 @@ tracer tr();
 logic [63:0] mem[1024*1024];            // main RAM
 logic  [7:0] tag[1024*1024];            // tags
 logic [19:0] waddr;                     // latched word address
+logic [19:0] laddr;                     // last r/w address
 
 always @(posedge clk) begin
     if (o_astb) begin
-        waddr = o_ad[19:0];             // Address latch
+        laddr = waddr;                  // remember address of last r/w
+        waddr = o_ad[19:0];             // address latch
         //$fdisplay(tracefd, "(%0d) ad = %h", $time, waddr);
 
     end else if (o_wr) begin
-        mem[waddr] = o_ad;              // Memory store
+        mem[waddr] = o_ad;              // memory store
         tag[waddr] = o_tag;
-        waddr = waddr + 1;              // Increment address for batch mode
+        waddr = waddr + 1;              // increment address for batch mode
         //$fdisplay(tracefd, "(%0d) Store [%h] = %h:%h", $time, waddr, o_tag, o_ad);
 
     end else if (o_rd) begin
-        i_data = mem[waddr];            // Memory load
-        i_tag = tag[waddr];
-        waddr = waddr + 1;              // Increment address for batch mode
+        case (waddr)
+        'hfffff: begin                  // read Hamming syndrome
+                i_data = 0;
+                i_tag = 0;
+            end
+        'hffffe: begin                  // read address latch
+                i_data = laddr;
+                i_tag = 0;
+            end
+        'hffffd: begin                  // error correction mode
+                i_data = 0;
+                i_tag = 0;
+            end
+        default: begin                  // memory load
+                i_data = mem[waddr];
+                i_tag = tag[waddr];
+                waddr = waddr + 1;      // increment address for batch mode
+            end
+        endcase
         //$fdisplay(tracefd, "(%0d) Load [%h] = %h:%h", $time, waddr, i_tag, i_data);
     end
 end

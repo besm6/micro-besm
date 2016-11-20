@@ -50,6 +50,7 @@ assign fd = testbench.tracefd;
 logic [11:0] pc_f;                      // PC at fetch stage
 logic [11:0] pc_x;                      // PC at execute stage
 logic [112:1] opcode_x;                 // Opcode at execute stage
+logic [19:0] waddr_x;                   // Memory address
 
 //
 // Current time
@@ -87,7 +88,7 @@ always @(negedge clk)
             end
         end
 
-        if (testbench.trace > 1 /*&& !$isunknown(pc_x)*/) begin
+        if (testbench.trace > 1) begin
             // Print last executed micro-instruction
             if (!reset)
                 print_uop(pc_x, opcode_x, const_addr, const_value);
@@ -103,10 +104,10 @@ always @(negedge clk)
         // Print memory transactions
         if (!testbench.o_astb && testbench.o_wr)
             $fdisplay(fd, "(%0d)               Memory Store [%h] = %h:%h",
-                ctime, testbench.waddr, testbench.o_tag, testbench.o_ad);
+                ctime, waddr_x, testbench.o_tag, testbench.o_ad);
         else if (!testbench.o_astb && cpu.arb.wrx)
             $fdisplay(fd, "(%0d)               Memory Load [%h] = %h:%h",
-                ctime, testbench.waddr, testbench.i_tag, testbench.i_data);
+                ctime, waddr_x, testbench.i_tag, testbench.i_data);
 
         //TODO: print_insn();               // Print instruction
 
@@ -128,6 +129,7 @@ always @(negedge clk)
         opcode_x = cpu.opcode;
         const_value = cpu.PROM;
         const_addr = cpu.A[8:0];
+        waddr_x = testbench.waddr;
 
         ->instruction_retired;
     end
