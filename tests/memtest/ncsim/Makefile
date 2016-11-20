@@ -14,6 +14,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/shifter.sv \
                   ../../../rtl/clz.sv \
                   ../../../rtl/i8253.sv \
+                  ../../../rtl/tmemory.sv \
                   ../../../rtl/tracer.sv \
                   ../memtest.sv
 

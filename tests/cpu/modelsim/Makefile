@@ -14,6 +14,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/shifter.sv \
                   ../../../rtl/clz.sv \
                   ../../../rtl/i8253.sv \
+                  ../../../rtl/tmemory.sv \
                   ../../../rtl/tracer.sv \
 		  ../test_cpu.sv
 
@@ -30,7 +31,7 @@ work:           $(SOURCES)
 		$(MODELSIM)/vlog -sv -nologo $(SOURCES)
 
 run:            work
-		$(MODELSIM)/vsim -c -l run.log -do 'run 1ms;quit' testbench +trace=2 +dump +limit=200
+		$(MODELSIM)/vsim -c -l run.log -do 'run 1ms;quit' testbench +trace=2 +limit=40000 #+dump
 
 view:
 		gtkwave output.vcd test.gtkw &

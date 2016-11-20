@@ -129,7 +129,7 @@ always @(negedge clk)
         opcode_x = cpu.opcode;
         const_value = cpu.PROM;
         const_addr = cpu.A[8:0];
-        waddr_x = testbench.waddr;
+        waddr_x = testbench.ram.waddr;
 
         ->instruction_retired;
     end

@@ -29,56 +29,10 @@ cpu cpu(clk, reset, i_data, i_tag,
 // Setup trace moninor.
 tracer tr();
 
-//
-// 1Mword of tagged RAM
-//
-logic [63:0] mem[1024*1024];            // main RAM
-logic  [7:0] tag[1024*1024];            // tags
-logic [19:0] waddr;                     // latched word address
-logic [19:0] laddr;                     // last r/w address
-
-always @(posedge clk) begin
-    if (o_astb) begin
-        laddr = waddr;                  // remember address of last r/w
-        waddr = o_ad[19:0];             // address latch
-        //$fdisplay(tracefd, "(%0d) ad = %h", $time, waddr);
-
-    end else if (o_wr) begin
-        if (o_atomic)                   // read-modify-write, set bit 55
-            mem[waddr] = {o_ad[63:56], 1'b1, o_ad[54:0]};
-        else
-            mem[waddr] = o_ad;          // memory store
-
-        tag[waddr] = o_tag;
-
-        if (! o_atomic)
-            waddr = waddr + 1;          // increment address for batch mode
-        //$fdisplay(tracefd, "(%0d) Store [%h] = %h:%h", $time, waddr, o_tag, o_ad);
-
-    end else if (o_rd) begin
-        case (waddr)
-        'hfffff: begin                  // read Hamming syndrome
-                i_data = 0;
-                i_tag = 0;
-            end
-        'hffffe: begin                  // read address latch
-                i_data = laddr;
-                i_tag = 0;
-            end
-        'hffffd: begin                  // error correction mode
-                i_data = 0;
-                i_tag = 0;
-            end
-        default: begin                  // memory load
-                i_data = mem[waddr];
-                i_tag = tag[waddr];
-                if (! o_atomic)
-                    waddr = waddr + 1;  // increment address for batch mode
-            end
-        endcase
-        //$fdisplay(tracefd, "(%0d) Load [%h] = %h:%h", $time, waddr, i_tag, i_data);
-    end
-end
+// 1Mword x 64bit of tagged RAM.
+tmemory ram(clk, o_ad, o_tag,
+    o_astb, o_atomic, o_rd, o_wr,
+    i_data, i_tag);
 
 //--------------------------------------------------------------
 // Microinstruction ROM.

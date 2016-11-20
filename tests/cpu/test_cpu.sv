@@ -14,38 +14,21 @@ logic  [7:0] i_tag;
 logic [63:0] o_ad;                      // address/data output
 logic  [7:0] o_tag;                     // tag output
 logic        o_astb;                    // address strobe
+logic        o_atomic;                  // read-modify-write flag
 logic        o_rd;                      // read op
 logic        o_wr;                      // write op
 
 // Instantiate CPU.
 cpu cpu(clk, reset, i_data, i_tag,
-    o_ad, o_tag, o_astb, o_rd, o_wr);
+    o_ad, o_tag, o_astb, o_atomic, o_rd, o_wr);
 
 // Setup trace moninor.
 tracer tr();
 
-//
-// 1Mword of tagged RAM
-//
-logic [63:0] mem[1024*1024];            // main RAM
-logic  [7:0] tag[1024*1024];            // tags
-logic [19:0] waddr;                     // latched word address
-
-always @(posedge clk) begin
-    if (o_astb) begin
-        waddr = o_ad[19:0];             // Address latch
-
-    end else if (o_wr) begin
-        mem[waddr] = o_ad;              // Memory store
-        tag[waddr] = o_tag;
-        waddr = waddr + 1;              // Increment address for batch mode
-
-    end else if (o_rd) begin
-        i_data = mem[waddr];            // Memory load
-        i_tag = tag[waddr];
-        waddr = waddr + 1;              // Increment address for batch mode
-    end
-end
+// 1Mword x 64bit of tagged RAM.
+tmemory ram(clk, o_ad, o_tag,
+    o_astb, o_atomic, o_rd, o_wr,
+    i_data, i_tag);
 
 string tracefile = "output.trace";
 string uprog = "micro-BESM";            // Input file name with microprogram
