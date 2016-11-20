@@ -44,8 +44,13 @@ always @(posedge clk) begin
         //$fdisplay(tracefd, "(%0d) ad = %h", $time, waddr);
 
     end else if (o_wr) begin
-        mem[waddr] = o_ad;              // memory store
+        if (o_atomic)                   // read-modify-write, set bit 55
+            mem[waddr] = {o_ad[63:56], 1'b1, o_ad[54:0]};
+        else
+            mem[waddr] = o_ad;          // memory store
+
         tag[waddr] = o_tag;
+
         if (! o_atomic)
             waddr = waddr + 1;          // increment address for batch mode
         //$fdisplay(tracefd, "(%0d) Store [%h] = %h:%h", $time, waddr, o_tag, o_ad);
@@ -253,6 +258,7 @@ localparam LABEL_CCB4   = 1292;
 localparam LABEL_CONTB5 = 1317;
 localparam LABEL_CONTM6 = 1356;
 localparam LABEL_CONTM7 = 1385;
+localparam LABEL_CONTX8 = 1413;
 localparam LABEL_CX9    = 1438;
 localparam LABEL_CNTXA  = 1479;
 localparam LABEL_CICLW  = 1550;
@@ -288,8 +294,8 @@ always @(tr.instruction_retired) begin
     //    Нам не нужна коррекция по Хэммингу,
     //    поэтому этот блок не реализован.
     //
-    //check_jump(LABEL_RS5-7, LABEL_RS5-6, LABEL_CMO41-8, "Skip RS5-CM3");
-    check_jump(LABEL_RS5-7, LABEL_RS5-6, LABEL_CONTB4-1, "Skip RS5-C1D");
+    check_jump(LABEL_RS5-7, LABEL_RS5-6, LABEL_CMO41-8, "Skip RS5-CM3");
+    //check_jump(LABEL_RS5-7, LABEL_RS5-6, LABEL_CONTB4-1, "Skip RS5-C1D");
 
     //
     // Проверка ОЗУ
@@ -336,14 +342,14 @@ always @(tr.instruction_retired) begin
     check_pass(LABEL_CONTM7, "Test CONTM7 pass");
 
     //
-    // Проверка генератора Хемминга
+    // Проверка генератора Хемминга - пропускаем
     //
     //TODO: Skip CX8
-    check_pass(LABEL_CX9, "Test CX9 pass");
-    check_pass(LABEL_CNTXA, "Test CNTXA pass");
-    check_pass(LABEL_CICLW, "Test CICLW pass");
+    //check_pass(LABEL_CX9, "Test CX9 pass");
+    //check_pass(LABEL_CNTXA, "Test CNTXA pass");
+    //check_pass(LABEL_CICLW, "Test CICLW pass");
 
-    if (pc_x == LABEL_WATER3+6) begin
+    if (pc_x == LABEL_CONTX8) begin
         message("Test PASS");
         $display("--------------------------------");
         $finish(0);

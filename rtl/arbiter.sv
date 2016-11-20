@@ -139,6 +139,7 @@ always_comb begin
             endcase
 
         11: // RDMWR, чтение - модификация - запись (семафорная)
+            // Read a word; set bit 55, write it back.
             case (step)
              0: // Send address                        arx -- ecx wrx astb rd wr  done
                 {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
@@ -146,10 +147,10 @@ always_comb begin
                 {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '1, '0, '0};
              2: // Read word
                 {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '0, '0, '0};
-             3: // Send data
-                {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '0, '0};
+             3: // Send data from RG2
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '0, '0, '0};
              4: // Write word
-                {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '1, '0};
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '0, '1, '0};
             endcase
 
         12: // BTRWR, запись в режиме блочной передачи
