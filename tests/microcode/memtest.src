@@ -2676,7 +2676,8 @@ CONT YDEV=PHYSAD,ARBI=BTRWR
 WА1В5:CJP А=WА1В5,%WA%
 ;КОНЕЦ ПАМЯТИ?
 CONT ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
-CONT А=МАХА1,DSRC=PROM,ALUS=DА,RА=РС,FUNC=SUBR,Н,CI,CEN
+; было МАХА1
+CONT А=МB,DSRC=PROM,ALUS=DА,RА=РС,FUNC=SUBR,Н,CI,CEN
 ;ВЫХОД, ЕСЛИ РС >,= МАХ АДРЕСУ ПАМЯТИ
 CJPP А=ENDWRM,МАР=РЕ,COND=СТ,SТОРС=26
 ;КОНЕЦ БЛОКА?
@@ -2702,7 +2703,8 @@ CONT А=С3,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR
 CJS А=CMPBTR,МАР=РЕ,YDEV=PHYSAD,ARBI=BTRRD
 ;КОНЕЦ ПАМЯТИ?
 CONT ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
-CONT А=МАХА1,DSRC=PROM,ALUS=DА,RА=РС,FUNC=SUBR,Н,CI,CEN
+; было МАХА1
+CONT А=MB,DSRC=PROM,ALUS=DА,RА=РС,FUNC=SUBR,Н,CI,CEN
 ;ВЫХОД, ЕСЛИ РС БОЛЬШЕ ИЛИ РАВЕН МАХ АДРЕСУ ПАМЯТИ
 CJPP А=ENDRDM,МАР=РЕ,COND=СТ,SТОРС=26
 ;КОНЕЦ БЛОКА?
