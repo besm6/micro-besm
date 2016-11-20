@@ -33,6 +33,7 @@ module cpu(
     output logic [63:0] o_ad,       // address/data output
     output logic  [7:0] o_tag,      // tag output
     output logic        o_astb,     // address strobe
+    output logic        o_atomic,   // r-m-w transaction
     output logic        o_rd,       // read op
     output logic        o_wr        // write op
 );
@@ -472,7 +473,7 @@ arbiter arb(clk, reset,
     arb_req,                            // input request strobe
     arb_req ? ARBI : arb_opc,           // input opcode
     bus_ARX, bus_ECX, bus_WRX,          // X bus control
-    o_astb, o_rd, o_wr,                 // external memory interface
+    o_astb, o_atomic, o_rd, o_wr,       // external memory interface
     arb_rdy                             // resulting status
 );
 assign arb_req = (YDEV == 2);           // PHYSAD, request to external bus

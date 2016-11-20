@@ -33,6 +33,7 @@ module arbiter(
     output logic       ecx,     // busio port enable
     output logic       wrx,     // busio write enable
     output logic       astb,    // memory address strobe
+    output logic       atomic,  // atomic r-m-w operation
     output logic       rd,      // memory read
     output logic       wr,      // memory write
     output logic       done     // resulting acknowledge
@@ -72,6 +73,11 @@ always_ff @(posedge clk)
     else if (!request & done)
         // Raise batch mode flag when BTRWR or BTRRD operation finished
         batch_mode <= (opcode == 12 || opcode == 13);
+
+//
+// Flag of atomic read-modify-write operation (RDMWR)
+//
+assign atomic = (opcode == 11);
 
 //
 // Output assignments
@@ -126,20 +132,30 @@ always_comb begin
             case (step)
              0: // Send address                        arx -- ecx wrx astb rd wr  done
                 {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
-             1: // Get data
+             1: // Send data
                 {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '0, '0};
              2: // Write word
                 {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '1, '0};
             endcase
 
         11: // RDMWR, чтение - модификация - запись (семафорная)
-            if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=RDMWR not implemented yet!", $time);
+            case (step)
+             0: // Send address                        arx -- ecx wrx astb rd wr  done
+                {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
+             1: // Get data
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '1, '0, '0};
+             2: // Read word
+                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '0, '0, '0};
+             3: // Send data
+                {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '0, '0};
+             4: // Write word
+                {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '1, '0};
+            endcase
 
         12: // BTRWR, запись в режиме блочной передачи
             if (batch_mode)
                 case (step)
-                 0: // Get data                            arx -- ecx wrx astb rd wr  done
+                 0: // Send data                            arx -- ecx wrx astb rd wr  done
                     {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '0, '0};
                  1: // Write word
                     {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '1, '0};

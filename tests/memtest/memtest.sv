@@ -18,12 +18,13 @@ logic  [7:0] i_tag;
 logic [63:0] o_ad;                      // address/data output
 logic  [7:0] o_tag;                     // tag output
 logic        o_astb;                    // address strobe
+logic        o_atomic;                  // read-modify-write flag
 logic        o_rd;                      // read op
 logic        o_wr;                      // write op
 
 // Instantiate CPU.
 cpu cpu(clk, reset, i_data, i_tag,
-    o_ad, o_tag, o_astb, o_rd, o_wr);
+    o_ad, o_tag, o_astb, o_atomic, o_rd, o_wr);
 
 // Setup trace moninor.
 tracer tr();
@@ -45,7 +46,8 @@ always @(posedge clk) begin
     end else if (o_wr) begin
         mem[waddr] = o_ad;              // memory store
         tag[waddr] = o_tag;
-        waddr = waddr + 1;              // increment address for batch mode
+        if (! o_atomic)
+            waddr = waddr + 1;          // increment address for batch mode
         //$fdisplay(tracefd, "(%0d) Store [%h] = %h:%h", $time, waddr, o_tag, o_ad);
 
     end else if (o_rd) begin
@@ -65,7 +67,8 @@ always @(posedge clk) begin
         default: begin                  // memory load
                 i_data = mem[waddr];
                 i_tag = tag[waddr];
-                waddr = waddr + 1;      // increment address for batch mode
+                if (! o_atomic)
+                    waddr = waddr + 1;  // increment address for batch mode
             end
         endcase
         //$fdisplay(tracefd, "(%0d) Load [%h] = %h:%h", $time, waddr, i_tag, i_data);
