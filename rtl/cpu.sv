@@ -488,9 +488,8 @@ always @(posedge clk)
 // Instruction decoder
 //
 logic instr_ext;                // extended opcode flag
-logic uflag;                    // признак изменения адресом (ПИА)
 logic [19:0] addr;
-assign uflag = LETC & cb;
+wire uflag = LETC & cb;         // признак изменения адресом (ПИА)
 
 decoder dec(
     bus_oDC[63:0],              // instruction word
@@ -688,8 +687,8 @@ always @(posedge clk)
 
         // Update `dirty' bit (БИЗМ)
         case (ARBI)
-        2,  // CCWR, запись в кэш команд
-        4,  // DCWR, запись в кэш операндов
+         2, // CCWR, запись в кэш команд
+         4, // DCWR, запись в кэш операндов
         10, // DWR, запись результата
         11, // RDMWR, чтение - модификация - запись
         12: // BTRWR, запись в режиме блочной передачи

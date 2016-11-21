@@ -3,7 +3,6 @@
 *.log
 *.jou
 *.pb
-*.json
 *.pyc
 microcode.out
 optab.out
@@ -19,3 +18,7 @@ tests/*/vcs/csrc/
 tests/*/vcs/simv
 tests/*/vcs/simv.daidir/
 tests/*/vcs/ucli.key
+microcode/*.json
+microcode/*.lst
+tests/microcode/*.json
+tests/microcode/*.lst

@@ -58,7 +58,7 @@ def main(filenames):
     resolve()
     relocate()
     annotate()
-    write_microcode("microcode.out")
+    write_microcode("microcode.v")
     write_optab()
 
 #
@@ -229,7 +229,7 @@ def write_optab():
     intrtab.sort()
 
     if optab:
-        file = open("optab.out", 'w')
+        file = open("optab.v", 'w')
         file.write("// ПНА: память начальных адресов машинных инструкций\n")
         for s in optab:
             op = s[0]
@@ -240,7 +240,7 @@ def write_optab():
         print "Instruction table: %d opcodes" % (len(optab))
 
     if rwiotab:
-        file = open("rwiotab.out", 'w')
+        file = open("rwiotab.v", 'w')
         file.write("// ПНА: память начальных адресов операций обмена с пультовым процессором\n")
         for s in rwiotab:
             op = s[0]
@@ -251,7 +251,7 @@ def write_optab():
         print "RW/IO table: %d entries" % (len(rwiotab))
 
     if grouptab:
-        file = open("grouptab.out", 'w')
+        file = open("grouptab.v", 'w')
         file.write("// ПНА групп: память начальных адресов для условных операций\n")
         for s in grouptab:
             op = s[0]
@@ -262,7 +262,7 @@ def write_optab():
         print "Group table: %d entries" % (len(grouptab))
 
     if intrtab:
-        file = open("intrtab.out", 'w')
+        file = open("intrtab.v", 'w')
         file.write("// ПНА прерываний: память начальных адресов для переходов при внешних прерываниях\n")
         for s in intrtab:
             op = s[0]

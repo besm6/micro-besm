@@ -14,6 +14,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/shifter.sv \
                   ../../../rtl/clz.sv \
                   ../../../rtl/i8253.sv \
+                  ../../../rtl/tmemory.sv \
                   ../../../rtl/tracer.sv \
                   ../test_cpu.sv
 
@@ -33,7 +34,7 @@ $(PROG):        $(SOURCES)
 		$(NCSIM)elab --nolog testbench
 
 run:            $(PROG)
-		$(NCSIM)sim --R --log run.log testbench --testplusarg trace=2 --testplusarg dump --testplusarg limit=200
+		$(NCSIM)sim --R --log run.log testbench --testplusarg trace=2 --testplusarg limit=40000 #--testplusarg dump
 
 view:
 		gtkwave testbench.vcd databus.gtkw

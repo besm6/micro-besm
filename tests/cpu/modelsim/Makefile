@@ -21,6 +21,12 @@ SOURCES         = ../../../rtl/cpu.sv \
 # Altera Quartus toolchain
 MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
 
+RUNFLAGS        = +hex=test.hex
+RUNFLAGS	+= +limit=40000		# Limit by a number of cycles
+RUNFLAGS	+= +trace=1		# Print instructions
+#RUNFLAGS	+= +trace=2		# Print micro-instructions
+#RUNFLAGS	+= +dump		# Dump waveforms to output.vcd
+
 all:            work
 
 clean:
@@ -31,7 +37,7 @@ work:           $(SOURCES)
 		$(MODELSIM)/vlog -sv -nologo $(SOURCES)
 
 run:            work
-		$(MODELSIM)/vsim -c -l run.log -do 'run 1ms;quit' testbench +trace=2 +limit=40000 #+dump
+		$(MODELSIM)/vsim -c -l run.log -do 'run 1ms;quit' testbench $(RUNFLAGS)
 
 view:
 		gtkwave output.vcd test.gtkw &

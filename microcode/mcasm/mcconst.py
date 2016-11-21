@@ -22,7 +22,7 @@ def main():
     load_defines("define.json")
     for name in const.keys():
         map[const[name]['index']] = name
-    write_results("constants.out")
+    write_results("constants.v")
 
 #
 # Load field[], const[] and equ[] from file define.json.

@@ -31,6 +31,7 @@ tmemory ram(clk, o_ad, o_tag,
     i_data, i_tag);
 
 string tracefile = "output.trace";
+string hexfile;                         // Input hex file with code
 string uprog = "micro-BESM";            // Input file name with microprogram
 int limit;
 int trace;                              // Trace level
@@ -53,6 +54,7 @@ initial begin
         $display("    +trace=0          No tracing");
         $display("    +trace=1          Trace instructions and registers to file %s", tracefile);
         $display("    +trace=2          Trace micro-instructions");
+        $display("    +hex=NAME         Load code into main memory");
         $display("    +uprog=NAME       Load microprogram code");
         $display("    +limit=NUM        Limit execution to a number of cycles (default %0d)", limit);
         $display("    +dump             Dump waveforms as output.vcd");
@@ -60,6 +62,11 @@ initial begin
         $finish(1);
     end
     $display("--------------------------------");
+
+    if ($value$plusargs("hex=%s", hexfile)) begin
+        // Load program code into main memory.
+        load_hex();
+    end
 
     if ($value$plusargs("uprog=%s", uprog)) begin
         // Load microprogram code.
@@ -105,6 +112,37 @@ initial begin
 end
 
 //
+// Load program code, optional.
+//
+task load_hex();
+    int fd, i, count;
+    string line;
+    logic [63:0] word;
+
+    // Open file with code.
+    fd = $fopen(hexfile, "r");
+    if (fd == 0) begin
+        $error("%s: Cannot open", hexfile);
+        $finish(1);
+    end
+
+    // Read hex code.
+    count = 0;
+    while ($fgets(line, fd)) begin
+        if (line[0] == "#")
+            continue;
+
+        if ($sscanf(line, "%x %x", i, word) == 2) begin
+            $display("%05x: %016x", i, word);
+            ram.mem[i] = word;
+            count += 1;
+        end
+    end
+    $fclose(fd);
+    $display("Load %0d words from %s.", count, hexfile);
+endtask
+
+//
 // Load microprogram code, optional.
 //
 task load_uprog();
@@ -137,7 +175,7 @@ task load_uprog();
         end
     end
     $fclose(fd);
-    $display("Load %0d instructions from %s.", count, uprog);
+    $display("Load %0d instructions from %s", count, uprog);
 endtask
 
 endmodule
