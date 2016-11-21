@@ -74,7 +74,7 @@ end
 
 // At negative clock edge, when all the signals are quiet,
 // print the state of the processor.
-always @(negedge clk)
+always @(negedge clk) begin
     if (fd) begin
         if (reset) begin
             if (!old_reset) begin               // Reset
@@ -121,13 +121,6 @@ always @(negedge clk)
             print_changed_bb1();
         end
 
-        if (!reset && $isunknown(cpu.opcode)) begin
-            $fdisplay(fd, "(%0d) *** Unknown state: cpu.opcode=%h", ctime, cpu.opcode);
-            $display("\n----- Fatal Error! -----");
-            $fdisplay(fd, "\n----- Fatal Error! -----");
-            $finish(1);
-        end
-
         // Get data from fetch stage
         pc_x = pc_f;
         opcode_x = cpu.opcode;
@@ -137,6 +130,17 @@ always @(negedge clk)
 
         ->instruction_retired;
     end
+
+    if (!reset && $isunknown(cpu.opcode)) begin
+        if (fd) begin
+            $fdisplay(fd, "(%0d) *** Unknown state: cpu.opcode=%h", ctime, cpu.opcode);
+            $fdisplay(fd, "\n----- Fatal Error! -----");
+        end
+        $display("(%0d) Unknown state: cpu.opcode=%h", ctime, cpu.opcode);
+        $display("\n----- Fatal Error! -----");
+        $finish(1);
+    end
+end
 
 //
 // Print BESM instruction.

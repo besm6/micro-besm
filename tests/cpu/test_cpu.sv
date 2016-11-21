@@ -136,7 +136,7 @@ task load_hex();
             continue;
 
         if ($sscanf(line, "%x %x", i, word) == 2) begin
-            $display("%05x: %016x", i, word);
+            //$display("%05x: %016x", i, word);
             ram.mem[i] = word;
             count += 1;
         end
