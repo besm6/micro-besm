@@ -30,6 +30,9 @@ tmemory ram(clk, o_ad, o_tag,
     o_astb, o_atomic, o_rd, o_wr,
     i_data, i_tag);
 
+logic [19:0] waddr;                     // needed for tracer
+assign waddr = ram.waddr;
+
 string tracefile = "output.trace";
 string hexfile;                         // Input hex file with code
 string uprog = "micro-BESM";            // Input file name with microprogram

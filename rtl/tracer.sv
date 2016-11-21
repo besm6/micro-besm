@@ -212,6 +212,7 @@ task print_insn();
     };
     logic [19:0] pc, rg0;
     logic [31:0] opcode;
+    string name;
 
     assign pc = {
         cpu.alu.p19_16.ram[3], cpu.alu.p15_12.ram[3],
@@ -230,8 +231,8 @@ task print_insn();
         return;
     end
 
-    $fwrite(fd, " %s ", cpu.instr_ext ?
-        ext_name[cpu.instr_code] : op_name[cpu.instr_code]);
+    name = cpu.instr_ext ? ext_name[cpu.instr_code] : op_name[cpu.instr_code];
+    $fwrite(fd, " %s ", name);
     if (cpu.addr != 0)
         $fwrite(fd, "%h", cpu.addr);
     if (cpu.instr_reg != 0)
