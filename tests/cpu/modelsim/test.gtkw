@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
-[*] Thu Oct 27 18:50:31 2016
+[*] Mon Nov 21 03:41:08 2016
 [*]
-[dumpfile] "/local/Besm-6/micro-besm/tests/cpu/modelsim/output.vcd"
-[dumpfile_mtime] "Thu Oct 27 18:50:28 2016"
-[dumpfile_size] 415962
-[savefile] "/local/Besm-6/micro-besm/tests/cpu/modelsim/test.gtkw"
-[timestart] 0
-[size] 1000 704
-[pos] -837 -288
-*-14.927478 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[dumpfile] "/home/vak/Project/Besm-6/micro-besm/tests/cpu/modelsim/output.vcd"
+[dumpfile_mtime] "Mon Nov 21 03:34:19 2016"
+[dumpfile_size] 49991167
+[savefile] "/home/vak/Project/Besm-6/micro-besm/tests/cpu/modelsim/test.gtkw"
+[timestart] 32956060
+[size] 1285 704
+[pos] -1 -1
+*-14.040014 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testbench.
 [treeopen] testbench.cpu.
 [sst_width] 235
@@ -19,16 +19,22 @@
 @28
 testbench.clk
 testbench.reset
-@23
-testbench.cpu.control_D[11:0]
+testbench.cpu.arb.request
 @22
-testbench.cpu.A[11:0]
-testbench.cpu.alu_D[63:0]
-testbench.tr.pc_f[11:0]
-testbench.tr.pc_x[11:0]
-testbench.cpu.opcode[112:1]
-testbench.tr.opcode_x[112:1]
-#{testbench.cpu.control.I[3:0]} testbench.cpu.control.I[3] testbench.cpu.control.I[2] testbench.cpu.control.I[1] testbench.cpu.control.I[0]
-testbench.cpu.control.Y[11:0]
+testbench.cpu.arb.opcode[3:0]
+@28
+testbench.cpu.o_wr
+testbench.cpu.arb.step[2:0]
+testbench.cpu.arb.arx[1:0]
+testbench.cpu.arb.astb
+testbench.cpu.arb.rd
+testbench.cpu.arb.wrx
+@29
+testbench.cpu.arb.wr
+@28
+testbench.cpu.arb.atomic
+testbench.cpu.arb.batch_mode
+testbench.cpu.arb.done
+testbench.cpu.arb.ecx
 [pattern_trace] 1
 [pattern_trace] 0

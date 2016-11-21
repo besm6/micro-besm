@@ -106,8 +106,9 @@ always @(negedge clk)
             $fdisplay(fd, "(%0d)               Memory Store [%h] = %h:%h",
                 ctime, waddr_x, testbench.o_tag, testbench.o_ad);
         else if (!testbench.o_astb && cpu.arb.wrx)
-            $fdisplay(fd, "(%0d)               Memory Load [%h] = %h:%h",
-                ctime, waddr_x, testbench.i_tag, testbench.i_data);
+            $fdisplay(fd, "(%0d)               Memory %0s [%h] = %h:%h",
+                ctime, (cpu.arb_opc == 8) ? "Fetch" : "Load",
+                waddr_x, testbench.i_tag, testbench.i_data);
 
         if (testbench.trace && cpu.MAP == 1 && cpu.DSRC == 8) begin
             // When MAP=ME and DSRC=COMA: print BESM instruction.
@@ -132,7 +133,7 @@ always @(negedge clk)
         opcode_x = cpu.opcode;
         const_value = cpu.PROM;
         const_addr = cpu.A[8:0];
-        waddr_x = testbench.ram.waddr;
+        waddr_x = testbench.waddr;
 
         ->instruction_retired;
     end
@@ -209,13 +210,8 @@ task print_insn();
         240:"3ff0",241:"3ff1",242:"3ff2",243:"3ff3",244:"3ff4",245:"3ff5",246:"3ff6",247:"3ff7",
         248:"3ff8",249:"3ff9",250:"3ffa",251:"3ffb",252:"3ffc",253:"3ffd",254:"ret", 255:"hlt"
     };
-    static string mod_name[16] = '{
-         0: "   ",  1: " m1",  2: " m2",  3: " m3",
-         4: " m4",  5: " m5",  6: " m6",  7: " m7",
-         8: " m8",  9: " m9", 10: "m10", 11: "m11",
-        12: "m12", 13: "m13", 14: "m14", 15: "m15"
-    };
     logic [19:0] pc, rg0;
+    logic [31:0] opcode;
 
     assign pc = {
         cpu.alu.p19_16.ram[3], cpu.alu.p15_12.ram[3],
@@ -225,20 +221,22 @@ task print_insn();
         cpu.busio.b16_19.RG[0], cpu.busio.b12_15.RG[0],
         cpu.busio.b8_11.RG[0],  cpu.busio.b4_7.RG[0],
         cpu.busio.b0_3.RG[0] };
+    assign opcode =
+        cpu.tkk ? cpu.bus_oDC[31:0] : cpu.bus_oDC[63:32];
 
-    $fwrite(fd, "(%0d) %05h %05h: ", ctime, pc, rg0);
+    $fwrite(fd, "(%0d) %h %h: %h", ctime, pc, rg0, opcode);
     if ($isunknown(cpu.instr_reg)) begin
-        $fdisplay(fd, "*** Unknown");
+        $fdisplay(fd, " *** Unknown");
         return;
     end
 
-    $fwrite(fd, "%s %s", mod_name[cpu.instr_reg],
-        cpu.instr_ext ? ext_name[cpu.instr_code] : op_name[cpu.instr_code]);
-
+    $fwrite(fd, " %s ", cpu.instr_ext ?
+        ext_name[cpu.instr_code] : op_name[cpu.instr_code]);
     if (cpu.addr != 0)
-        $fdisplay(fd, " %h", cpu.addr);
-    else
-        $fdisplay(fd, "");
+        $fwrite(fd, "%h", cpu.addr);
+    if (cpu.instr_reg != 0)
+        $fwrite(fd, "(%0d)", cpu.instr_reg);
+    $fdisplay(fd, "");
 endtask
 
 //

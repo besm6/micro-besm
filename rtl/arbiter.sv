@@ -27,7 +27,7 @@ module arbiter(
     input  wire        clk,
     input  wire        reset,
     input  wire        request, // input request
-    input  wire  [3:0] opcode,  // input opcode
+    input  wire  [3:0] req_op,  // input op
 
     output logic [1:0] arx,     // busio register index
     output logic       ecx,     // busio port enable
@@ -41,6 +41,7 @@ module arbiter(
 timeunit 1ns / 10ps;
 
 logic [2:0] step;               // FSM state index
+logic [3:0] opcode;             // latched opcode
 
 parameter MAXSTATE = 'h7;       // FSM state limit
 
@@ -61,6 +62,15 @@ always_ff @(posedge clk)
         step <= 0;
     else if (!done & step != MAXSTATE)
         step <= step + 1;
+
+//
+// Latched opcode
+//
+always_ff @(posedge clk)
+    if (reset)
+        opcode <= 0;
+    else if (request)
+        opcode <= req_op;
 
 //
 // Batch mode flag
