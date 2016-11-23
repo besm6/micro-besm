@@ -1,0 +1,2592 @@
+шифр 419999 зс5^
+лен 41(2048)^
+лен 50(1001-ЗП)^
+eeв1а3
+*name МКБ-загрузчик
+*
+*           Дозаписываем загрузчик в имеющуюся библиотеку
+*
+*perso:50
+*call yesmemory
+*FTN
+      FUNCTION DISSND(STR)
+С*
+С**    ОТСЫЛКА ЗАГРУЖЕННОЙ МКБ-ПРОГРАММЫ
+С*     СВОЕМУ РОДНОМУ ПРОЦЕССОРУ.
+С*       *CALL ZMACRO
+С*        PROGRAM:,NАМЕ,....
+С*          ..........
+С*         END
+С*       *CALL DISPLOAD
+С*       *CALL DISSND [:BLOAD]
+С*       *END F
+С*
+      COMMON/PROTO/АР(5),КАР(25)
+      DIMENSION М(10),MESS(20),KTAG(256),MTAG(8002)
+      DАТА MESS/'РАЗМЕР ПРОГРАММЫ: NNNNNN  БАЙТ.  ',14(' ')/
+      INTEGER WORD,TAG,CS(2)
+      DАТА KTAG/256(0)/, CS/0В,0В/
+С-----------------------------------
+      DISSND=0. $ MODE=IGETS(STR,12)
+      CALL ТАКТАР(53В)
+      JOLD=JFOCC('D705/SYSTEM,WORKIN,EXTOLD,С53 ',MTAG)
+      IF(JOLD.EQ.0) CALL CONVER(MTAG,530000В)
+      CALL ТАКТАР(53В)
+      J=JFOCC('D667/SYSTEM,MD,MADLEN,С53 ',М)
+      L=0 $ CALL WBEGIN(530300В)
+      JTAG=8 $ NW=0 $ WORD=0В $ КВ=0
+  1   L=L+2 $ CALL VMREAD(М,L,2)
+      IF(L.EQ.2) LBEG=М(2).AND.377 7777В.OR.0
+  11  IF(М(1).NЕ.0035 3535 3535 3500В) GОТО 1
+      LEND=М(2).AND.377 7777В.OR.0
+      LENDS=LEND-1
+      IF(L.LТ.20) GОТО 1102
+      L=LEND.SHIFT.-1.AND.177 7777В.OR.0
+      IF(JOLD.NЕ.0) GОТО 1101
+      CALL VMWRIT(MTAG,L+2048,4096)
+      JOLD=999 $ LEND=LEND+2048
+С      СПИСОК ЗАГРУЗКИ - В ФАЙЛ С ДИСПЕТЧЕРОМ
+ 1101 CALL VMREAD(MTAG(5000),2,1024)
+      DО 1100 I=1,512
+      CALL TEXISO(MTAG(2*I+4998),MTAG(4*I-3))
+      MTAG(4*I-2)=(MTAG(4*I-2).SHIFT.32).OR.(MTAG(4*I-3).SHIFT.-16.
+     *       AND.377 7760 0000В)
+      MTAG(4*I-3)=MTAG(4*I-3).SHIFT.16.OR.400 0000 0000В
+      MTAG(4*I-1)=MTAG(2*I+4999).SHIFT.24.OR.400 0000 0000В
+ 1100 MTAG(4*I)=MTAG(2*I+4999).AND.7777 7777В
+      CALL VMWRIT(MTAG,L,2048)
+      LEND=LEND+1024
+С        ПОДСЧЕТ КОНТР.СУММЫ И ЗАПИСЬ В @8085F
+ 1102 L=LBEG.SHIFT.-1.AND.177 7777В.OR.0
+      L1=L $ DО 1122 I=LBEG,LENDS
+      CALL VMREAD(М,L1,2)
+      IF(L1.EQ.6400 0000 0001 0276В) GОТО 1122
+      CALL CSUMM(CS,М)
+ 1122 L1=L1+2
+      CS(1)=LEXOR(CS(1),777 7777 7777В)
+      CS(2)=LEXOR(CS(2),377 7777 7777В)
+      CALL VMWRIT(CS,6400 0000 0001 0276В,2)
+      IF(MODE.EQ.58) GОТО 58
+С
+      DО 2 I=LBEG,LEND
+      CALL VMREAD(М,L,2) $ М(2)=М(2).SHIFT.-16
+      TAG=М(1).SHIFT.32.AND.377В.OR.0
+      KTAG(TAG+1)=KTAG(TAG+1)+1
+      CALL IPUTS(TAG,MTAG,JTAG) $ JTAG=JTAG+1
+С       ЕСЛИ С ТЕГОМ, ТО:  DО 3 J=1,9  !!!
+      DО 3 J=2,9
+С     LЕТ=IGETS(М,J)
+С<<<<<<<<< ВСЕ, ЧТО НИЖЕ - ЧТОБЫ ВЕРТАНУТЬ БАЙТЫ
+      JJ=J.AND.1
+      IF(JJ.EQ.0) LЕТ=IGETS(М,J+1)
+      IF(JJ.NЕ.0) LЕТ=IGETS(М,J-1)
+С>>>>>>>>>
+      N=LЕТ.SHIFT.4.AND.15.OR.0
+      ASSIGN 4 ТО MRET16 $ GОТО 16
+   4  ASSIGN 3 ТО MRET16 $ N=LЕТ.AND.15.OR.0
+С------
+  16  N=N+48 $ IF(N.GТ.57) N=N+7
+  17  CALL IPUTS(N,WORD,NW) $ NW=NW+1
+      IF(NW.NЕ.6) GОТО 18
+      CALL WRWORD(WORD) $ WORD=0В $ NW=0
+  18  GОТО MRET16,(3,4,91,92,93)
+С------
+   3  КВ=КВ+2
+   2  L = L + 2
+С ---    СЛИВ: $ + <CR> + "032" + "0"
+      ASSIGN 100 ТО М90 $ ID='ПРОГ:'
+  90  N='$$$$$$' $ ASSIGN 91 ТО MRET16 $ GОТО 17
+  91  N=15В $ ASSIGN 92 ТО MRET16 $ GОТО 17
+  92  N=32В $ ASSIGN 93 ТО MRET16 $ GОТО 17
+  93  CALL WRWORD(WORD) $ CALL WRWORD(0В)
+      CALL WRIEND
+      CALL PUTH(MESS,ID,0,6,0,IР)
+      CALL PUTG(0,КВ,0,8,0,IР)
+      CALL PUTH(0,'  БАЙТ.',0,7,0,IР)
+      CALL DIALOG(MESS,IР,-1)
+      GОТО М90,(100,200)
+С ---     ОЖИДАНИЕ ПРИЕМА НА РС :
+ 100  IF(JOLD.EQ.999) CALL DIALOG('ВКЛЮЧЕНЫ ЭКСТРАКОДЫ БЭСМ-6.',28,-1)
+      CALL DIALOQ('ПРИНЯЛИ ПРОГРАММУ НА РС ? ',26,1)
+С
+С ---     ПЕРЕДАЧА МАССИВА ТЕГОВ
+С         ОНЫЙ ПРЕДВАРЯЕТСЯ 8-Ю СЛУЖ.БАЙТАМИ:
+С      1-2 : ЧИСЛО ТЕГОВСКИХ БАЙТОВ
+С       3  : КОД САМОГО ЗЛАЧНОГО ТЕГА
+С      4-8 : РЕЗЕРВ
+      MAIN=0 $ J=0 $ ID='ТЕГИ:'
+      DО 101 I=1,256
+      IF(KTAG(I).LЕ.MAIN) GОТО 101
+      MAIN=KTAG(I) $ J=I-1
+ 101  CONTINUE
+      MAIN=J
+      MTAG=(JTAG-8).SHIFT.-32.OR.(MAIN.SHIFT.-24)
+      CALL WBEGIN(530300В)
+      NW=0 $ WORD=0В $ КВ=0
+      DО 102 I=1,JTAG $ LЕТ=IGETS(MTAG,I-1)
+      N=LЕТ.SHIFT.4.AND.15.OR.0
+      ASSIGN 104 ТО MRET16 $ GОТО 16
+ 104  ASSIGN 102 ТО MRET16 $ N=LЕТ.AND.15.OR.0 $ GОТО 16
+ 102  КВ=КВ+2
+      ASSIGN 200 ТО М90 $ GОТО 90
+ 200  CALL DIALOG('НЕ ЗАБУДЬТЕ ЗАБРАТЬ ТЕГИ !',27,-1)
+      CALL PUTH(MESS,'САМЫЙ ЗЛАЧНЫЙ ИЗ НИХ - ',0,23,0,IР)
+      CALL PUTO(0,MAIN,0,3,0,IР)
+      CALL DIALOG(MESS,IР,-1)
+      CALL DIALOG('ЖЕЛАЮ ЛЕГКОЙ ОТЛАДКИ !',24,-1)
+      RETURN
+С
+С        ПЕРЕДАЧА ОДНИМ МАССИВОМ, ВПЕРЕМЕЖКУ С ТЕГАМИ
+С     1.  ИМЯ ФАЙЛА (12 БАЙТ)
+С     2.  РАЗМЕР ДИСПЕТЧЕРА В БАЙТАХ (4 БАЙТА)
+С     3.  СМЕЩЕНИЕ НАЧАЛА ДИСПЕТЧЕРА = 18  (2 БАЙТА)
+С
+  58  CALL DIALOQ('ЗАДАЙТЕ ИМЯ РС-ФАЙЛА > ',24,1)
+      N=100 $ DО 301 I=1,12
+      IF(N.GТ.32) N=IGETS(КАР,I-1)
+      IF(N.LТ.32) N=32
+      ASSIGN 301 ТО MRET16 $ GОТО 17
+ 301  CONTINUE
+      N=LEND-LBEG+1023
+      KLIST=N.SHIFT.10.AND.7777В.OR.0
+      LENDIS=9*1024*KLIST
+      DО 302 I=2,5 $ N=IGETS(LENDIS,I)
+      ASSIGN 302 ТО MRET16 $ GОТО 17
+ 302  CONTINUE
+      N=0 $ ASSIGN 303 ТО MRET16 $ GОТО 17
+ 303  N=18 $ ASSIGN 304 ТО MRET16 $ GОТО 17
+С
+С   Т1  0  1  2  3  4  5  6  7  Т2  8  9 10 11 12 13 14 15
+С    1  0  3  2  5  4  7  6  9   8 11 10 13 12 15 14 Т1 Т2
+С
+ 304  DО 310 I=1,KLIST
+      DО 311 J=1,512
+      CALL VMREAD(М,L,4) $ L=L+4
+      MTAG(1)=IGETS(М,3) $ MTAG(2)=IGETS(М,2)
+      MTAG(3)=IGETS(М,5) $ MTAG(4)=IGETS(М,4)
+      MTAG(5)=IGETS(М(2),3) $ MTAG(6)=IGETS(М(2),2)
+      MTAG(7)=IGETS(М(2),5) $ MTAG(8)=IGETS(М(2),4)
+      MTAG( 9)=IGETS(М(3),3) $ MTAG(10)=IGETS(М(3),2)
+      MTAG(11)=IGETS(М(3),5) $ MTAG(12)=IGETS(М(3),4)
+      MTAG(13)=IGETS(М(4),3) $ MTAG(14)=IGETS(М(4),2)
+      MTAG(15)=IGETS(М(4),5) $ MTAG(16)=IGETS(М(4),4)
+      MTAG(17)=IGETS(М(1),1) $ MTAG(18)=IGETS(М(3),1)
+      N=MTAG(17)+1 $ KTAG(N)=KTAG(N)+1
+      N=MTAG(18)+1 $ KTAG(N)=KTAG(N)+1
+      DО 312 JJ=1,18 $ N=MTAG(JJ)
+      ASSIGN 312 ТО MRET16 $ GОТО 17
+ 312  CONTINUE
+ 311  CONTINUE
+ 310  CONTINUE
+      CALL WRWORD(WORD)
+      CALL WRWORD(0В)
+      CALL WRIEND
+      IF(JOLD.EQ.999) CALL DIALOG('ЕСТЬ ЭКСТРАКОДЫ БЭСМ-6.',24,-1)
+      CALL PUTG(MESS(4),LENDIS,0,6,0,IР)
+      CALL DIALOG(MESS,36,-1)
+      RETURN
+      END
+*ASSEM
+  CONVER:,NАМЕ,. (М,IR70)
+С    СТАРЫЕ ЭКСТРАКОДЫ БЭСМ-6
+  8,BASE,*
+  ,STI,12
+  ,STI,11
+  11,MTJ,10
+  10,UТМ,5000
+  ,IТА,10
+  ,ASN,64+10
+  ,ASN,64-10
+  ,ATI,10
+  ,ASN,64-20
+  12,АОХ,
+  ,АОХ,=:001
+  15,АТХ,1
+  ,ARX,=0000 0100 0000 0001
+  15,АТХ,2
+  15,*70,1
+  12,VТМ,-2047
+  15,*70,2
+  LООР:10,ХТА,
+  ,ASN,64-12
+  ,ААХ,=377 7777 0000.20 ПРАВЫХ
+  11,АТХ,1
+  10,ХТА,
+  ,AUX,=207 7777 7777.28 ЛЕВЫХ
+  11,АТХ,
+  ,ААХ,=200 0000 0000
+  :,U1А,*+1.ИНВЕРСИЯ 64 Р.
+  ,ХТА,=170 0000 0000. ==>
+  :11,АОХ,. 63-60 Р.
+  ,АОХ,=1400 0000 0000.ТЕГ=3
+  11,АТХ,
+  10,UТМ,1
+  11,UТМ,2
+  12,VLM,LООР
+  13,UJ,
+С---
+  CSUMM:,ENTRY,.(CS,W)
+  8,BASE,*
+  ,STI,10.W
+  ,STI,9.CS
+  10,ХТА,1
+  ,ААХ,М32
+  9,ARX,1
+  15,АТХ,
+  ,ААХ,М32
+  9,SТХ,1
+  ,ASN,64+32
+  10,XTS,
+  ,ААХ,М32
+  9,ARX,
+  15,ARX,.1-Й ПЕРЕНОС
+  15,АТХ,
+  ,ААХ,М32
+  9,SТХ,
+  ,ASN,64+32
+  13,UZA,
+  9,ARX,1.2-Й ПЕРЕНОС
+  9,АТХ,1
+  ,ААХ,М32
+  13,U1А,
+  9,АТХ,1
+  9,ХТА,
+  ,ARX,=1
+  9,АТХ,
+  13,UJ,
+  М32:,LOG,377 7777 7777
+  ,END,
+*MADLEN,S=MKBSTX,L=0.
+ МКВ/LOAD:,NАМЕ,
+С*
+С*    ВЫЗОВ КРОСС-ЗАГРУЗЧИКА МКБ-8601
+С*
+С*
+С*  *CALL МКВ/LOAD:<MAIN>,<LD>,<VD>,<ОГР.>
+С*
+С*       <MAIN> - ИМЯ ГОЛОВНОЙ ПОДПРОГРАММЫ
+С*                (ПО УМОЛЧАНИЮ - PROGRAM)
+С*       <LD>   - УКАЗАТЕЛЬ БИБЛИОТЕКИ ОБ'-
+С*                ЕКТНЫХ МОДУЛЕЙ  (ПО УМОЛ-
+С*                ЧАНИЮ - 30000)
+С*       <VD>   - УКАЗАТЕЛЬ  ДЛЯ РАЗМЕЩЕНИЯ
+С*                V-ПАМЯТИ   С  ЗАГРУЖЕННОЙ
+С*                ПРОГРАММОЙ  (ПО УМОЛЧАНИЮ
+С*                - НА МБ).
+С*       <ОГР.> - КОЛ-ВО ЗОН ДЛЯ МОДЕЛИРО-
+С*                ВАНИЯ  ПАМЯТИ  МКВ-8601
+С*                (УМОЛЧАНИЕ = 40В)
+С*
+С*
+С*  *CALL МКВ*LOAD:<MAIN>,<LD>,<VD>,<ОГР.>
+С*
+С*       -  ЗАГРУЗКА "СИСТЕМНОЙ ЧАСТИ"
+С*
+С*
+С*.........................................
+С*
+  ,BITS,
+ LOADER:,SUBP,
+ LOADSP:,SUBP,
+ MDC/PR:,SUBP,
+ **:,LС,7
+ *LDADS*:LС,BLOCK,ADB,ADD. V- С-СВОБОДНО
+ ,CONT,F/SYS. ПР.DISPLOAD
+ ,CONT,BEGV,BEGC. НАЧ.ТЕК.ПРОГ.
+ ,CONT,MSTAK. АДР.МАГ.
+ ,CONT,CSUM(2)
+С
+С--------------
+ ,UТС,MAIN
+ МКВ*LOAD:,ENTRY,
+ ,ХТА,
+ ,АТХ,F
+ 10,VТМ,
+ ,CALL,PARAMT*
+ 12,VZM,ENDS
+ 10,VТМ,3
+ 9,VТМ,W
+ ,CALL,PARAMT*.<MAIN>
+ 11,VZM,РР2
+ ,АТХ,MAIN
+ РР2:12,VZM,ENDS
+ 10,VТМ,4
+ 9,VТМ,W
+ ,CALL,PARAMT*.<LDEF>
+ 11,VZM,РР3
+ ,ХТА,W
+ ,АТХ,LDEF
+ РР3:12,VZM,ENDS
+ 10,VТМ,4
+ 9,VТМ,W
+ ,CALL,PARAMT*.<VDEF>
+ 11,VZM,РР4
+ ,ХТА,W
+ ,АТХ,VDEF
+ РР4:12,VZM,ENDS
+ 10,VТМ,5
+ 9,VТМ,W
+ ,CALL,PARAMT*.<ОГР.>
+ 11,VZM,ENDS
+ ,ХТА,W
+ ,АТХ,MZ
+ ENDS:,BSS,
+ 14,VТМ,LDEF
+ ,ITS,14
+ ,CALL,EXLIB
+ ,ХТА,VDEF.ГДЕ V-ОБЛАСТЬ?
+ ,UZA,GOLOAD.=> НА МБ
+ 14,VТМ,VDEF
+ ,ITS,14
+ ,CALL,VMEMOR
+ GOLOAD:,BSS,
+ ,ХТА,В20/01
+ ,АТХ,F/SYS. "USER"
+ ,ХТА,F
+ ,UZA,SYST
+ ,ХТА,MZ.РАЗМЕР ОБЛАСТИ
+ ,ASN,64+1.ПОПОЛАМ
+ ,NTR,7
+ ,А-Х,В2.ДЛЯ МАГАЗИНА
+ ,ASN,64+1
+ ,ASN,64-10
+ ,ААХ,=177 7777.В19/01
+ ,АТХ,ADD.ВЕРХНЯЯ ГРАНИЦА
+ ,АТХ,MSTAK. ОНА ЖЕ - МАГ.
+ ,ХТА,В9
+ ,АТХ,ADB. @100 - НИЗ
+ ,ХТА,MAIN
+ ,UJ,LOADER
+ SYST:,BSS,
+ ,ХТА,MZ
+ ,ARX,=7777.-1
+ ,ААХ,=7777.М7-1
+ ,ASN,64+1./2
+ ,ASN,64-10.А=(MZ-1)/2<<10
+ ,ААХ,=177 7777.В19/01
+ ,АТХ,ADD.ВЕРХНЯЯ ГРАНИЦА
+ ,АТХ,MSTAK
+ ,ХТА,MZ
+ ,ASN,64+2./4
+ ,ASN,64-10
+ ,ААХ,=177 7777.В19/01
+ ,ARX,В9
+ ,АТХ,ADB.НИЖНЯЯ ГРАНИЦА
+ ,ХТА,MAIN
+ ,UJ,LOADER
+С*
+С*
+С*     *CALL DISPLOAD  - ЗАГРУЗКА ДИСПЕТЧЕРА
+С*      НАЧ.АДРЕС = FFF8 0800  ( 514 ЛИСТ )
+С*      МАГАЗИН СО СПИСКОМ ЗАГРУЗКИ
+С*      ЗАНИМАЕТ  2-4095  СЛОВА V-ПАМЯТИ.
+С*
+  DISPLOAD:,ENTRY,
+  ,ХТА,=0200 4000
+  ,АТХ,ADD. С-ОБЛ.
+  ,ХТА,
+  ,АТХ,F/SYS. "SYSTEM"
+  ,ХТА,=340 0000. @Е0000
+  ,АТХ,ADB. V-ОБЛ.
+  ,ХТА,В1
+  ,АТХ,MSTAK
+  14,VТМ,LDEF
+  ,ITS,14
+  ,CALL,EXLIB
+  ,ХТА,INITDISP
+  ,UJ,LOADER
+  INITDISP:,ТЕХТ,8HMAIN'01'SW
+С-----------------------------
+ MAIN:,ТЕХТ,8HPROGRAM
+ LDEF:,LOG,600000
+ VDEF:,LOG,
+ MZ:,LOG,40
+ W:,BSS,1
+ F:,BSS,1
+ ,END,
+ LOADER:,NАМЕ,
+С*
+С*    КРОСС-ЗАГРУЗЧИК  МКБ-8601
+С*
+С
+С
+С    СТРУКТУРА ТАБЛИЦ  ЗАГРУЗЧИКА
+С
+С  1. ТАБЛИЦА РАСПРЕДЕЛЕНИЯ ПАМЯТИ  MDC
+С
+С     СОСТОИТ ИЗ ДВУХ ЧАСТЕЙ: ТАБЛИЦЫ
+С  РАСПРЕДЕЛЕНИЯ ПАМЯТИ ПЕРЕМЕННЫХ (VMDC)
+С  И ТАБЛИЦЫ РАСПРЕДЕЛЕНИЯ ПАМЯТИ КОМАНД
+С  (CMDC).
+С
+С     VMDC РАЗМЕЩАЕТСЯ В НАЧАЛЕ MDC, CMDC
+С  НАЧИНАЕТСЯ В КОНЦЕ MDC И РАСШИРЯЕТСЯ К
+С  ЕЕ НАЧАЛУ.
+С     КАЖДОМУ ЗАГРУЖАЕМОМУ ОБ'ЕКТУ  СООТ-
+С  ВЕТСТВУЕТ ПАРА СЛОВ MDC:
+С
+С   А: ИМЯ В КОДЕ ТЕХТ;
+С
+С   А+1:  ХАРАКТЕРИСТИКА:
+С
+С     48:46 - .NЕ.0 - COMMON
+С     20:01 - АДРЕС ОБ'ЕКТА
+С        ДЛЯ ПОДПРОГРАММ:
+С     45:36 - ТИП ИНТЕРФЕЙСА
+С     35:28 - КОЛ-ВО ПАРАМЕТРОВ
+С     27:21 - РЕЗЕРВ
+С        ДЛЯ COMMON'ОВ:
+С     44:25 - ДЛИНА
+С     24    - "BLOCK DАТА"
+С     23:21 - РЕЗЕРВ
+С
+С
+С   2. ТАБЛИЦА ОПИСАНИЙ LDT
+С
+С     ДЛИНА - 1024 СЛОВА.
+С     ПУСТЬ N - КОЛИЧЕСТВО ВНЕШНИХ ИМЕН
+С  ПОДПРОГРАММЫ. ТОГДА ПЕРВЫЕ N СЛОВ LDT
+С  СОДЕРЖАТ АДРЕСА СООТВЕТСТВУЮЩИХ ОБ'ЕК-
+С  ТОВ, ОСТАЛЬНЫЕ СЛОВА ИСПОЛЬЗУЮТСЯ В
+С  КАЧЕСТВЕ РАБ. ЯЧЕЕК ПО УКАЗАНИЯМ ЗАГ-
+С  РУЖАЕМОГО КОДА.
+С
+С
+С   3.ВСПОМОГАТЕЛЬНАЯ ТАБЛИЦА ПОДПРОГРАММ
+С
+С     ДЛИНА - 512 СЛОВ.   КАЖДОЕ  СЛОВО
+С     СООТВЕТСТВУЕТ ОДНОЙ ПОДПРОГРАММЕ:
+С
+С     35:16 - АДРЕС НАЧАЛА ПЕРЕМЕННЫХ
+С     15:01 - ССЫЛКА НА MDC
+С
+С
+С
+С-------------------------------------------
+С
+ LOADSP:,SUBP,
+ MDC/PR:,SUBP,
+ **:LС,BLOCK,NАМЕ .ИМЯ ЗАГРУЖАЕМОЙ П/П
+ ,CONT,NАМЕ2.ТЕКУЩАЯ ВНЕШНЯЯ П/П
+ ,CONT,BVAR .НАЧАЛО ПЕРЕМЕННЫХ
+ ,CONT,ВСОМ .НАЧАЛО КОМАНД
+ ,CONT,ELADR.L-АДРЕС ТЕЛА П/П
+ ,CONT,JVF  .СВОБ. АДРЕС VMDC
+ ,CONT,JCF  .СВОБ. АДРЕС CMDC
+ *LDADS*:LС,BLOCK,ADB."СВОБОДНО" В V-ОБЛ.
+ ,CONT,ADD."СВОБОДНО" В С-ОБЛ.
+ ,CONT,F/SYS. "DISPLOAD"
+ ,CONT,BEGV,BEGC. НАЧ.ТЕК.ПРОГ.
+ ,CONT,MSTAK. АДР.МАГ.
+ ,CONT,CSUM(2)
+ ,BITS,
+ *MDC*:LС,BLOCK,MDC(1024),SРТ(512)
+ *LDT*:LС,BLOCK,LDT(1024).ТАБЛИЦА ОПИСАНИЙ
+ *PBUF*:LС,BLOCK,PBUF(1025).БУФЕР
+ ,CONT,PBUF2(512). ДЛЯ ВХОДОВ
+ *ELERR*:LС,BLOCK,IREACT,IERR,IERRTX(2)
+С
+ VMSET:,SUBP,
+ *TEGS:,SUBP,
+ EXIT:,SUBP,
+С
+ BL:I,BLOCK,FSPT .СВОБ. АДРЕС SРТ
+ ,CONT,USPT .НЕДОЗАГРУЖЕННАЯ ЧАСТЬ SРТ
+ ,CONT,FATAL.БЫЛИ ФАТ. ОШИБКИ
+ ,CONT,W(2) .РАБ. ЯЧ.
+ ,CONT,MNAME.ИМЯ ГОЛОВНОЙ П/П
+ ,CONT,L
+ ,CONT,ENDBL(0)
+ ЬLBL:,EQU,ENDBL-BL
+ LBL:,EQU,7
+С
+С------------------
+ ,АТХ,MNAME
+ ,АТХ,NАМЕ2
+ ,ХТА,
+ ,CALL,DATAPR*
+ ,ХТА,
+ ,АТХ,CSUM
+ ,АТХ,CSUM+1
+ ,ХТА,=12 12 12.    ***
+ ,АТХ,NАМЕ
+ 14,VТМ,MDC
+ ,IТА,14
+ ,АТХ,JVF
+ ,ARX,=1774
+ ,АТХ,JCF
+ 14,VТМ,SРТ
+ ,IТА,14
+ ,АТХ,FSPT
+ ,АТХ,USPT
+ ,ХТА,=1
+ ,UТС,IREACT
+ ,АТХ,
+ 14,VТМ,RMLOOP
+ ,IТА,14
+ ,*50,74В
+С
+С    ЗАНЕСЕНИЕ ВХОДОВ ГОЛОВНОЙ П/П В CMDC
+С
+  М6,VТМ,BMLOOP
+  PUTENTRY:,BSS,.М6,VJM,PUTENTRY
+ 14,VТМ,NАМЕ2
+ ,ITS,14
+  ,CALL,ELMOVE
+  М6,MTJ,12
+  14,VIM,SUBABSENT
+ 14,VТМ,W
+ ,ITS,14
+ 14,VТМ,В1
+ ,ITS,14
+  ,CALL,ELREAD
+ 14,VIM,ERRL
+ ,ХТА,W
+ ,АЕХ,В46.=:1
+ ,ААХ,=:77
+ 12,VТМ,
+ ,U1А,BADC
+ ,ХТА,W
+ ,ААХ,С777
+ ,АТХ,W
+ 14,VТМ,PBUF2
+ ,ITS,14
+ 14,VТМ,W
+ ,ITS,14
+ ,CALL,ELREAD.ЧИТАЕМ TENTRY
+ 14,VIM,ERRL
+ ,ХТА,
+ М8,VТМ,PBUF2-1
+ ,WТС,W
+ М8,АТХ,1
+С
+ М8,ХТА,1.Х-КА П/П
+ ,ААХ,В20/01.ДЛИНА КОМАНД
+ ,NTR,7
+ 13,VJM,PUTC
+ М8,ХТА,1
+  ,ASN,64+20
+  13,VJM,PUTV
+  ,ХТА,BEGV. НАЧ.ПЕРЕМЕННЫХ
+ ,ASN,64-15
+ ,АОХ,JCF.ССЫЛКА НА MDC
+ ,WТС,FSPT
+ ,АТХ,
+ ,ХТА,FSPT
+ ,ARX,В1
+ ,АТХ,FSPT
+ 13,VТМ,L10
+ L10:,BSS,
+ М8,UТМ,2
+ М8,ХТА,
+  М6,UZA,. В Ы Х О Д
+ ,АТХ,W.ИМЯ ВХОДА
+ М8,ХТА,1
+ ,ARX,
+ :,UZA,*+1
+ ,UТС,1
+ :14,VТМ,.ПЕРЕМЕННЫЕ
+ ,ASN,64-3
+ ,ASN,64+3
+ 14,ARX,BEGV
+ ,АТХ,W+1
+ 14,VIM,WСМС
+ ,UJ,WVMC
+С
+С     АДРЕС ТОЧКИ ВХОДА ВПИСЫВАЕМ
+С     В 0-Е СЛОВО V-ПАМЯТИ
+С     АДРЕС МАГАЗИНА -  В 1-Е.
+С
+ BMLOOP:14,VТМ,BEGC
+ ,ITS,14
+ 14,VТМ,=I0
+ ,ITS,14
+ 14,VТМ,=I2
+ ,ITS,14
+ ,CALL,VMWRIT
+С
+ MLOOP:,BSS,
+С
+С  1.  ЧИТАЕМ ТАБЛИЦУ ВНЕШНИХ ИМЕН ОЧЕ-
+С    РЕДНОЙ ПОДПРОГРАММЫ.
+С
+ ,WТС,USPT
+ ,ХТА,
+ ,АТХ,W
+ ,UZA,RMLOOP.КОНЕЦ РАБОТЫ
+ ,ХТА,USPT
+ ,ARX,В1
+ ,АТХ,USPT
+ ,WТС,W
+ ,ХТА,
+ ,АТХ,NАМЕ
+ ,ХТА,W
+ ,ASN,64+15
+ ,АТХ,BVAR
+ ,WТС,W
+ ,ХТА,1
+ ,АРХ,=4377 7777
+ ,AUX,=:4000 0000 0377 7777
+ ,АТХ,ВСОМ
+ 14,VТМ,NАМЕ
+ ,ITS,14
+ ,CALL,ELMOVE.ПОДВОД К П/П
+ 14,VIM,ERRL
+ LЕХМ:14,VТМ,W
+ ,ITS,14
+ 14,VТМ,В1
+ ,ITS,14
+ ,CALL,ELREAD.ЧТЕНИЕ ЗАГ.ГРУППЫ
+ 14,VIM,ERRL
+ ,ХТА,W
+ ,ARX,
+ ,UZA,LOADSP/
+ ,АЕХ,=:3
+ ,ААХ,=:77
+ ,UZA,EXR.
+ ,ХТА,W
+ ,ААХ,В20/01
+ ,XTS,
+ ,CALL,IELADR
+ 15,ARX,
+ ,АТХ,W
+ 14,VТМ,W
+ ,ITS,14
+ ,CALL,ELMOVE.ПОДВОД К СЛЕД.
+ ,UJ,LЕХМ.ГРУППЕ
+ EXR:,ХТА,W
+ ,ААХ,В20/01
+ ,АТХ,W
+ ,ASN,64+9
+ ,U1А,ERR1
+ 14,VТМ,PBUF
+ ,ITS,14
+ 14,VТМ,W
+ ,ITS,14
+ ,CALL,ELREAD
+ 14,VIM,ERRL
+ М3,VТМ,PBUF.ТАБЛ.ВНЕШН.ИМЕН
+ ,ХТА,
+ ,WТС,W
+ М3,АТХ,
+ 14,VТМ,W
+ ,IТА,14
+ ,CALL,IELADR
+ ,АТХ,ELADR
+С
+С   2. ЦИКЛ ПО ВНЕШНИМ ОБ'ЕКТАМ.
+С
+С     М3 - УКАЗАТЕЛЬ НА ОЧЕРЕДНОЙ ЭЛЕМЕНТ
+С          ТАБЛИЦЫ ВНЕШНИХ ИМЕН
+С
+ LЕХТ:,BSS,
+ М3,ХТА,
+ ,UZA,RLEXT.ВСЕ ОБРАБОТАНО
+С
+С   2.1  ВЫБИРАЕМ ИМЯ И ОПРЕДЕЛЯЕМ ТИП
+С
+ ,АТХ,NАМЕ2.ИМЯ ОБ'ЕКТА
+ М3,ХТА,1.ХАРАКТЕРИСТИКА
+ ,ААХ,=:7
+ ,UZA,EXTSUB.=ПОДПРОГРАММА
+С
+С   2.2  ПОИСК  COMMON'А  В  MDC.
+С
+ 14,VТМ,MDC.VMDC
+ L220:14,ХТА,
+ ,UZA,RL220
+ ,АЕХ,NАМЕ2
+ ,UZA,CMN/IS
+ 14,UТМ,2
+ ,UJ,L220
+ RL220:,WТС,JCF
+ 14,VТМ,2.CMDC
+ L222:14,ХТА,
+ ,UZA,RL222
+ ,АЕХ,NАМЕ2
+ ,UZA,CMN/IS
+ 14,UТМ,2
+ ,UJ,L222
+ RL222:,BSS,
+С
+С   2.3  НОВЫЙ  COMMON. ПОИЩЕМ СООТВЕТСТВУЮ-
+С      ЩУЮ  "BLOCK DАТА".
+С
+ 14,VТМ,NАМЕ2
+ ,ITS,14
+ ,CALL,ELMOVE
+ 14,VZM,BLDATA
+ 14,UТМ,-3
+ 14,VZM,NEWCMN
+ ,UJ,ERRL
+С
+С   2.4  ЧИТАЕМ  BLOCK DАТА, ОФОРМЛЯЕМ
+С        ХАРАКТЕРИСТИКИ
+С
+ BLDATA:14,VТМ,W
+ ,ITS,14
+ 14,VТМ,В1
+ ,ITS,14
+ ,CALL,ELREAD
+ 14,VIM,ERRL
+ ,ХТА,W
+ ,АЕХ,В46.=:1
+ ,ААХ,=:77
+ ,U1А,BADC
+ ,ХТА,W
+ ,ААХ,С777
+ ,АТХ,W
+ 14,VТМ,PBUF
+ ,ITS,14
+ 14,VТМ,W
+ ,ITS,14
+ ,CALL,ELREAD
+ 14,VIM,ERRL
+ М8,VТМ,PBUF-1
+ ,ХТА,
+ ,WТС,W.ОБНУЛЕНИЕ
+ М8,АТХ,1.ХВОСТА
+ 12,VТМ,ELEXT
+ М8,ХТА,1.Х-КА П/П
+ ,ARX,
+ ,U1А,ERR3F.НЕ BLOCK DАТА
+ ,ААХ,В20/01
+ ,АТХ,L
+С
+С    РАЗБЕРЕМСЯ:  В КАКОЙ ОБЛАСТИ СЛЕДУЕТ
+С    РАЗМЕСТИТЬ  BLOCK DАТА
+С
+ 13,VТМ,PUTBD
+ М3,ХТА,1.Х-КА ИЗ TEXTERN
+ ,ARX,
+ ,UZA,VARBD.В V-ОБЛАСТИ
+С    РАЗМЕЩЕНИЕ В.D. В ОБЛАСТИ КОМАНД
+ М6,VТМ,1
+  ,ААХ,В46. ЛИСТОВОЙ
+ ,АОХ,L.ДЛИНА
+С
+С
+С...   PUTC - РАЗМЕЩЕНИЕ ОБЬЕКТА В С-ОБЛ.
+С      PUTV -   ---"---   ---"---  V-ОБЛ.
+С       ВХОД: СУММАТОР = <ДЛИНА ОБЬЕКТА>
+С               + В46, ЕСЛИ СТРАНИЧНЫЙ
+С             ADB,ADD - АДРЕСА "СВОБОДНО"
+С    ВЫХОД:ADB,ADD - НОВЫЕ АДРЕСА "СВОБОДНО"
+С          BEGV,BEGC - АДРЕСА НАЧАЛ ОБЬЕКТА
+С
+  PUTC:,UТС,1
+  PUTV:12,VТМ,
+  ,ITS,12
+  ,ААХ,F/SYS. 0-УВЕЛИЧИВАТЬ
+  ,STI,14. ИНАЧЕ-УМЕНЬШАТЬ
+ :15,АТХ,
+  ,NTR,7
+  14,VIM,VCMINUS
+  ,ААХ,В46
+  ,UZA,NOPAGP
+  12,ХТА,ADB
+  12,АТХ,BEGV.СТАРОЕ
+  ,ARX,С1777
+  ,ASN,64+10
+  ,ASN,64-10.ВЫХОД НА
+  12,АТХ,ADB.НАЧ.ЛИСТА
+  12,АЕХ,BEGV
+  ,UZA,NOPAGP. - УЖЕ !
+  ,IТА,8
+ ,ITS,9
+ ,ITS,10
+ ,ITS,11
+ ,ITS,12
+ ,ITS,13
+ ,ITS,14
+ 12,XTS,BEGV
+  ,ААХ,С1777
+  ,Х-А,=2000
+  ,ATI,14
+  12,ХТА,BEGV
+  13,VJM,РОСПИСЬ
+  15,ХТА,
+  ,STI,14
+  ,STI,13
+  ,STI,12
+  ,STI,11
+  ,STI,10
+  ,STI,9
+  ,ATI,8
+  NOPAGP:15,ХТА,
+  ,ААХ,В20/01
+  12,XTS,ADB
+  12,АТХ,BEGV
+  15,ARX,
+  12,АТХ,ADB
+  CHEKFULL:,ХТА,F/SYS
+  ,UZA,CHF1
+  ,ХТА,ADB
+  ,А-Х,ADD
+  TOERR:13,U1А,
+  13,MTJ,12
+  ,UJ,ERR2
+  CHF1:,ХТА,ADD
+  ,А-Х,=340 0000
+  ,UZA,TOERR
+  ,ХТА,ADB
+  ,А-Х,В20/01
+  ,UJ,TOERR
+  VCMINUS:,ААХ,В20/01
+  12,Х-А,ADB
+  12,АТХ,ADB
+  12,SТХ,BEGV
+  ,ААХ,В46
+  ,UZA,CHEKFULL
+  12,ХТА,ADB
+  ,ASN,64+10
+  ,ASN,64-10
+  12,АТХ,ADB
+  12,АТХ,BEGV
+  ,UJ,CHEKFULL
+С
+С
+ VARBD:М6,VТМ,
+ ,ААХ,В46
+ ,АОХ,L
+ ,UJ,PUTV
+С
+С----------------
+ PUTBD:,BSS,
+ М6,ХТА,JVF
+ ,WТС,FSPT
+ ,АТХ,
+ ,ХТА,FSPT
+ ,ARX,В1
+ ,АТХ,FSPT
+ 13,VТМ,L240
+ L240:,BSS,
+ М8,UТМ,2
+ М8,ХТА,
+ ,UZA,RL240
+ ,АТХ,W.ИМЯ ВХОДА
+ М8,ХТА,1
+ ,ААХ,В20/01
+ 15,АТХ,.ОТНОС. АДРЕС
+ М6,ARX,BEGV. + НАЧАЛО
+ ,SТХ,W+1
+ ,Х-А,L
+ ,ASN,64-24.ДЛИНА ОСТАТКА
+ ,АОХ,W+1.АДР.НАЧАЛА
+ М6,АОХ,В48
+ ,АОХ,В24
+ ,АТХ,W+1.Х-КА ВХОДА
+ М6,VIM,WСМС
+ ,UJ,WVMC
+С
+С     ЗАНОВО ОТЫЩЕМ НАШ ВХОД
+С
+  RL240:,WТС,FSPT
+ ,ХТА,-1.СТАРЫЙ JVF(JCF)
+ ,ATI,14
+ М6,V1М,L244
+ L242:14,ХТА,.VMDC
+ ,UZA,ERR0
+ ,АЕХ,NАМЕ2
+ ,UZA,CMN/IS
+ 14,UТМ,2
+ ,UJ,L242
+ L244:14,ХТА,.CMDC
+ ,UZA,ERR0
+ ,АЕХ,NАМЕ2
+ ,UZA,CMN/IS
+ 14,UТМ,-2
+ ,UJ,L244
+ NEWCMN:,BSS,
+С
+С   2.5  НОВЫЙ COMMON.  ОФОРМЛЕНИЕ ЕГО
+С        ХАРАКТЕРИСТИК.
+С
+ М3,ХТА,1.В КАКОЙ
+ ,ARX,.ОБЛАСТИ?
+ ,UZA,VARCMN.=> V-ОБЛАСТЬ
+С     РАЗМЕЩЕНИЕ COMMON'А В ОБЛ. КОМАНД.
+ ,ААХ,=1000 0000 0377 7777
+  13,VJM,PUTC
+  М6,VТМ,1
+  ,UJ,PUTCMN
+ VARCMN:М6,VТМ,
+С   РАЗМЕЩЕНИЕ  COMMON'А  В  V-ОБЛАСТИ
+  ,ААХ,=1000 0000 0377 7777
+  13,VJM,PUTV
+С
+С
+ PUTCMN:,BSS,
+ М3,WТС,1
+ 14,VТМ,.ДЛИНА
+  М6,XTS,BEGV
+  13,VJM,РОСПИСЬ
+С
+ М3,ХТА,1
+ ,АРХ,=:7000 0000 0377 7777
+ ,AUX,=:7377 7777
+ М6,ARX,BEGV
+ ,АТХ,W+1
+ ,ХТА,NАМЕ2
+ ,АТХ,W
+ 13,VТМ,PUTLDT
+ :М6,VIM,WСМС
+ ,UJ,WVMC
+С
+С
+ CMN/IS:,BSS,
+С
+С  2.5  ПРОВЕРКА ДЛИНЫ COMMON'А
+С
+С       ОФОРМЛЕНИЕ  LDT
+ 14,ХТА,1.MDC
+ ,ААХ,=:7
+ 12,VТМ,ELEXT
+ ,UZA,ERR3F.НЕ COMMON!
+ М3,ХТА,1
+ ,ААХ,В20/01.ДЛИНА В ОПИСАНИИ
+ 14,XTS,1
+ ,АТХ,W+1.Х-КА ИЗ MDC
+ ,ASN,64+24
+ ,ААХ,В20/01.ФАКТИЧ. ДЛИНА
+ 15,А-Х,
+ 12,VТМ,PUTLDT
+ ,U1А,ERR4.НЕВЕРНАЯ ДЛИНА
+ 14,ХТА,1
+  ,ААХ,=:1
+  ,U1А,PUTLDT
+ М3,ХТА,1
+  ,ААХ,=:1
+  ,U1А,ERR4.НАРУШ.СТРАНИЧНОСТИ
+ PUTLDT:М3,MTJ,14
+ 14,UТМ,-PBUF
+ ,IТА,14
+ ,ASN,64+1
+ ,ATI,14.АДР. ПО LDT
+ ,ХТА,W+1
+ ,ААХ,В20/01
+ 14,UТС, LDT
+ ,АТХ,
+ ELEXT:М3,UТМ,2
+ ,UJ,LЕХТ
+ EXTSUB:,BSS,
+С
+С    3.0  ВНЕШНИЙ ОБ'ЕКТ - ПОДПРОГРАММА.
+С
+С       ПОИСК ЕЕ  В  CMDC.
+С
+ ,WТС,JCF
+ М6,VТМ,2.CMDC
+ L300:М6,ХТА,
+ ,UZA,RL300
+ ,АЕХ,NАМЕ2
+ ,UZA,SВР/IS
+ М6,UТМ,2
+ ,UJ,L300
+ RL300:М6,VТМ,MDC.VMDC
+ L302:М6,ХТА,
+ ,UZA,RDSBP
+ ,АЕХ,NАМЕ2
+ ,UZA,SВР/ISV
+ М6,UТМ,2
+ ,UJ,L302
+С
+С   3.1  П/П НАЙДЕНА В MDC.   ПРОВЕРЯЕМ
+С      ИНТЕРФЕЙС И ЗАПИСЫВАЕМ ЕЕ АДРЕС
+С      В LDT
+ SВР/ISV:,BSS,
+С      ИМЯ П/П НАЙДЕНО В V-ОБЛАСТИ:
+С    - ЭТО МОЖЕТ БЫТЬ ТОЛЬКО BLOCK DАТА!
+ М3,ХТА,1
+ ,ААХ,MTI
+ ,АЕХ,MTI
+ ,UZA,PUTSBP.БЕЗ КОНТРОЛЯ
+ ,АЕХ,MTI
+ ,АЕХ,=:0042.BD
+ 12,VТМ,ELEXT
+ ,U1А,ERR3F.ТРЕБУЕТСЯ НЕ В.D.
+ ,UJ,PUTSBP
+ SВР/IS:,BSS,
+С
+С   ИМЯ П/П НАЙДЕНО. ПРОВЕРЯЕМ СОВПАДЕНИЕ
+С   ИНТЕРФЕЙСОВ.
+С
+ 13,VТМ,-1
+ 12,VТМ,RL310
+ L310:М3,ХТА,1
+ 13,ААХ,MTI+1
+ ,АТХ,W
+ М6,ХТА,1
+ 13,ААХ,MTI+1
+ ,АТХ,W+1
+ ,АОХ,W
+ 13,АЕХ,MTI+1
+ ,UZA,EL310.БЕЗ КОНТР.
+ ,ХТА,W
+ ,АЕХ,W+1
+ ,U1А,ERR3
+ EL310:13,VLM,L310
+ RL310:,BSS,
+ PUTSBP:,BSS,
+С
+С     П/П НАЙДЕНА В MDC.
+С     ЗАНОСИМ ЕЕ АДРЕС В LDT.
+ М6,ХТА,1
+ NOSBP:,BSS,
+ ,АТХ,W+1
+ ,UJ,PUTLDT
+ RDSBP:,BSS,
+С   3.2  ЧТЕНИЕ ПОДПРОГРАММЫ
+ М6,VJM,PUTENTRY
+С     ВСЕ ВХОДЫ ТРЕБУЕМОЙ П/П ПОМЕЩЕНЫ
+С     В  MDC.  ЗАНОВО НАЙДЕМ ИНТЕРЕСУЮ-
+С     ЩИЙ НАС ВХОД.
+ ,WТС,FSPT
+ ,ХТА,-1.СТАРЫЙ JCF
+ ,ATI,М6
+ L322:М6,ХТА,
+ ,UZA,NOSBP
+ ,АЕХ,NАМЕ2
+ ,UZA,PUTSBP
+ М6,UТМ,-2
+ ,UJ,L322
+ RLEXT:,ХТА,
+ ,АТХ,NАМЕ2
+С
+С
+С   4.0  ЗАГРУЗКА  ПОДПРОГРАММЫ:
+С
+С   NАМЕ - ЕЕ ИМЯ
+С   BVAR - АДР. НАЧАЛА ЕЕ ПЕРЕМЕННЫХ
+С   ВСОМ - АДР. НАЧАЛА ЕЕ КОМАНД, КРОМЕ
+С          ТОГО  В48=1  - BLOCK DАТА.
+С
+ ,ХТА,
+ LOADSP/:13,VТМ,MLOOP
+ ,UJ,LOADSP
+ RMLOOP:,BSS,
+С
+С   5.0  КОНЕЦ ЗАГРУЗКИ.  ПЕЧАТЬ MDC.
+ ,ХТА,F/SYS
+ ,U1А,*502
+С
+С      ЗАПИСЬ КОНТР.СУММЫ В ЯЧ. 8085F
+С
+ ,ХТА,CSUM
+ ,АЕХ,В32/01
+ ,АТХ,CSUM
+ ,ХТА,CSUM+1
+ ,АЕХ,В32/01
+ ,АТХ,CSUM+1
+ 14,VТМ,CSUM
+  ,ITS,14
+ 14,VТМ,=6400 0000 0001 0276
+ ,ITS,14
+ 14,VТМ,=I2
+  ,ITS,14
+ ,CALL,VMWRIT
+С
+ *502:,ХТА,
+  ,FUN,74В
+  ,CALL,MDC/PR
+  ,UТС,1
+  ,CALL,PRINT8//
+      ,ХТА,FATAL
+ ,UZA,EXIT.НА ВЫХОД
+ ,SJ,.БЫЛИ ОШИБКИ
+С========================================
+С      РОСПИСЬ ТЕГОМ НЕИНИЦИАЛИЗИРОВАННОЙ
+С      ПЕРЕМЕННОЙ (НЕ БОЛЕЕ 16К СЛОВ !)
+С      А=НАЧАЛО, И14=ДЛИНА В МКБ-СЛОВАХ.
+С
+ РОСПИСЬ:,ASN,64-1
+  ,ААХ,=177 7777."VMASK"
+  ,АОХ,=I0
+  ,АТХ,W
+  ,IТА,14
+  ,ASN,64-1
+  ,АОХ,=I0
+  ,АТХ,W+1
+  14,VТМ,*TEGS
+  ,ITS,14.КОД
+  14,VТМ,W
+  ,ITS,14.НАЧАЛО
+  14,VТМ,W+1
+  ,ITS,14.ДЛИНА
+  ,UJ,VMSET
+С-----------
+С
+ WСМС:,BSS,
+С  П/П ЗАПИСИ ИМЕНИ И Х-КИ ОБ'ЕКТА
+С  В CMDC.
+С
+ ,WТС,JCF
+ 14,VТМ,
+ ,ХТА,W
+ 14,АТХ,.ИМЯ
+ ,ХТА,W+1
+ 14,АТХ,1
+ 14,UТМ,-2
+ ,IТА,14
+ ,АТХ,JCF
+ ,АЕХ,JVF
+ ,UZA,ERR0
+ 13,UJ,
+ WVMC:,BSS,
+ ,WТС,JVF
+ 14,VТМ,
+ ,ХТА,W
+ 14,АТХ,.ИМЯ
+ ,ХТА,W+1
+ 14,АТХ,1.ХАРАКТЕРИСТИКА
+ 14,UТМ,2
+ ,IТА,14
+ ,АТХ,JVF
+ ,АЕХ,JCF
+ ,UZA,ERR0
+ 13,UJ,
+ ERR3F:,ХТА,В1
+ ,АОХ,FATAL
+ ,АТХ,FATAL
+ ,UJ,ERR3
+ ERR0:12,VТМ,.ABORT
+ ,UТС,-1
+ ERR1:14,VТМ,1
+ ,UJ,ERR
+ ERR2:,ХТА,FATAL
+ ,ААХ,В46
+ ,U1А,RETERR
+ ,UТС,-1
+ ERR3:14,VТМ,3
+ ,UJ,ERR
+ ERR4:14,VТМ,4
+ ,UJ,ERR
+ SUBABSENT:14,VТМ,5
+ ,UJ,ERR
+ BADC:14,VТМ,6
+ ,UJ,ERR
+ ERROR:,ENTRY,
+ ERR:,BSS,
+ ,IТА,13
+ ,ITS,12
+ ,ITS,11
+ ,ITS,10
+ ,ITS,9
+ ,ITS,8
+ ,ITS,7
+ ,ITS,14
+ 14,MTJ,9
+ ,ASN,64-2
+ ,ATI,8
+ 15,MTJ,7
+ 14,VТМ,NАМЕ
+ 15,UТМ,2
+ ,ITS,14
+ ,ITS,7
+ ,CALL,TEXISO
+ 15,ХТА,-1
+ ,АОХ,=6Н'''':
+ 15,АТХ,-1
+ 8,UТМ,TERRS
+ 8,ХТА,
+ 8,XTS,1
+ 8,XTS,2
+ 8,XTS,3
+ ,XTS,
+ 14,VТМ,NАМЕ2
+ 15,MTJ,13
+ 15,UТМ,2
+ ,ITS,14
+ ,ITS,13
+ ,CALL,TEXISO
+ ,ХТА,FATAL
+ ,ААХ,В1
+ ,U1А,EF
+ 8,UТМ,-TERR3
+ 8,VZM,EW
+ EF:,АЕХ,FATAL
+ 9,АОХ,В48
+ ,АТХ,FATAL
+ ,UТС,TENDFAT-TENDW
+ EW:,ХТА,TENDW
+ 15,АТХ,
+ ,ITS,7
+ ,ITS,15
+ ,XTS,
+ ,CALL,PRINT8//
+ 7,MTJ,15
+ ,STI,
+ ,STI,7
+ ,STI,8
+ ,STI,9
+ ,STI,10
+ ,STI,11
+ ,STI,12
+ ,ATI,13
+ RETERR:12,UТС,
+ 12,VIM,
+ KILLER:,UТС,1
+ ,CALL,PRINT8//
+ ,SJ,
+ ERRL:,BSS,
+ ,ХТА,=6HEXLIB:
+ ,UТС,IERR
+ ,АТХ,
+ 14,VТМ,IERR
+ ,ITS,14
+ 14,UТМ,2
+ ,ITS,14
+ ,ITS,
+ ,CALL,PRINT8//
+ ,UJ,KILLER
+ TENDFAT:,ISO,6Н(F)'''12''12'
+ TENDW:,ISO,6Н(W)'''12''12'
+ TERRS:,BSS,
+ TERR0:,ISO,24Н***АВАРИЯ ЗАГРУЗЧИКА***
+ TERR1:,ISO,24НМНОГО  ВНЕШНИХ  ИМЕН
+ TERR2:,ISO,24НМАЛО  ПАМЯТИ  ДЛЯ
+ TERR3:,ISO,24ННАРУШЕН  ИНТЕРФЕЙС
+ TERR4:,ISO,24Н НЕВЕРНАЯ  ДЛИНА
+ TERR5:,ISO,24Н ОТСУТСТВУЕТ  П/П
+ TERR6:,ISO,24НИСПОРЧЕНА  ПОДПРОГРАММА
+ TERR7:,ISO,24Н     ДЛИННЫЙ  АДРЕС  В
+ MTI:,ОСТ,0777 4
+ ,ОСТ,0000 377
+ С1777:,LOG,1777
+ С1776:,LOG,1776
+ BL:,BSS,LBL
+ ,END,
+ MDC/PR:,NАМЕ,
+С*
+С*   ПЕЧАТЬ  ТАБЛИЦЫ  ЗАГРУЗКИ
+С*   ЗАПИСЬ СПИСКА ЗАГРУЗКИ В МАГАЗИН
+С*     :----------------------------:
+С*    0:   ИМЯ ОБЬЕКТА В КОДЕ ТЕХТ  :
+С*     :--------------:-------------:
+С*    1: АДР.ЛОК.ПЕРЕМ: АДРЕС НАЧАЛА:
+С*     :--------------:-------------:
+С*      48            24           1
+С*
+  VMCLOS:,SUBP,
+ *MDC*:LС,BLOCK,MDC(1024),SРТ(512)
+ **:LС,BLOCK,(5),JVF,JCF
+ *LDADS*:LС,BLOCK,ADB,ADD
+ ,BITS,
+ 13,MTJ,М6
+  14,VТМ,=I1
+  ,IТА,14
+  ,CALL,MEMVRD
+  ,ASN,64-1
+  ,АТХ,VADR
+ М2,VТМ,SРТ
+ М2,ХТА,
+ ,ATI,М3
+ MLOOP:,BSS,
+ М3,ХТА,
+ ,U1А,TRN
+С    КОНЕЦ  С-ОБЛАСТИ
+ ,WТС,JVF
+ М3,VТМ,-2
+ М3,UТС,2
+ ,UТС,-MDC
+ 14,VТМ,
+ 14,VZM,RMLOOP.=> ВСЕ!
+  ,ХТА,=0035 3535 3535 3500
+  ,АТХ,FRAG." ------ "
+  ,ХТА,ADB
+  ,ASN,64-24
+  ,АОХ,ADD
+  ,АТХ,FRAG+1
+  14,VJM,GIVH
+  ,АТХ,MIDDLE+3
+  14,VТМ,FRAG
+  ,ITS,14
+  14,VТМ,VADR
+  ,ITS,14
+  14,VТМ,=I4
+  ,ITS,14
+  ,CALL,VMWRIT
+ ,ХТА,ADB
+ 14,VJM,GIVH
+  ,АОХ,=6Н/''''''''''
+  ,АТХ,MIDDLE+4
+  ,ХТА,=2
+  ,ARX,VADR
+  ,АТХ,VADR
+ 14,VТМ,MIDDLE
+ ,ITS,14
+ 14,UТМ,4
+ ,ITS,14
+ 14,VТМ,5
+ ,ITS,14
+ ,CALL,PRINT8//
+ TRN:,BSS,
+  М3,ХТА,
+  ,АТХ,FRAG. ИМЯ
+ ,ITS,М3
+ 14,VТМ,LВ
+ ,ITS,14
+ ,CALL,TEXISO
+ ,ХТА,LВ+1
+ ,АЕХ,=6Н'''''''41''41''41'
+ ,АТХ,LВ+1
+ М3,ХТА,1
+ ,ААХ,=:7
+ ,U1А,COMMON
+С    ВХОД В ПОДПРОГРАММУ
+С
+С   РАЗБИРАТЕЛЬСТВО - ГОЛОВНАЯ ИЛИ ENTRY?
+С
+ ,IТА,М3
+ М2,АЕХ,
+ ,ААХ,С77777
+ ,U1А,ENTRY
+ М2,UТМ,1
+ М2,ХТА,-1
+  ,ASN,64-9
+  ,АЕХ,FRAG+1
+  ,ААХ,В48/25.НАЧАЛО
+  ,АТХ,VLOC.ЛОК.ПЕРЕМ.
+  ,ASN,64+24
+ 14,VJM,GIVH
+ ,АОХ,=6Н/''''''''''
+ PV:,АТХ,LВ+4.V-АДРЕС
+ М3,ХТА,1
+ ,ASN,64-3
+ ,AUX,=6Н'37''37''''3''7''7'
+ ,АОХ,=6Н'100''100'/000
+ ,АТХ,LВ+2.ТИП
+ РС:М3,ХТА,1
+  ,ААХ,В20/01
+  ,АОХ,VLOC
+  ,АТХ,FRAG+1
+ 14,VJM,GIVH
+ ,АТХ,LВ+3.С-АДРЕС
+ 14,VТМ,LВ
+ ,ITS,14
+ 14,UТМ,4
+ ,ITS,14
+ 14,VТМ,5
+ ,ITS,14
+ ,CALL,PRINT8//
+  14,VТМ,FRAG
+  ,ITS,14
+  14,VТМ,VADR
+  ,ITS,14
+  14,VТМ,=I4
+  ,ITS,14
+  ,CALL,VMWRIT
+  ,ХТА,=2
+  ,ARX,VADR
+  ,АТХ,VADR
+ М3,UТС,
+ ,UТС,-MDC
+ 14,VТМ,
+ М3,UТМ,-2
+ 14,VIM,MLOOP
+  RMLOOP:М6,MTJ,13
+  ,UJ,VMCLOS. ВОЗВРАТ
+ ENTRY:,ХТА,=6Н/ENTRY
+ ,UJ,PV
+С
+С         COMMON - БЛОК
+С
+ COMMON:,BSS,
+ ,ХТА,=6Н
+ ,АТХ,LВ+4
+ М3,ХТА,1
+ ,ААХ,В24
+ ,UZA,РТ
+ ,ХТА,=6Н/BD
+ ,АТХ,LВ+4
+ РТ:М3,ХТА,1
+ ,ASN,64+45
+ ,ATI,14
+ 14,ХТА,TYPCMN-1
+ ,АТХ,LВ+2
+  М3,ХТА,1
+  ,ASN,64-24
+  ,АТХ,VLOC
+ ,UJ,РС
+ GIVH:,ENTRY,
+ GIVH:,ASN,64-28
+ ,AUX,=6Н'''17''17''17''17''17'
+ 15,АТХ,
+ ,ARX,=6Н'''166''166''166''166''166'
+ ,ААХ,=6Н'''160''160''160''160''160'
+ ,ASN,64+4
+ ,АЕХ,=6Н '67''67''67''67''67'
+ 15,ARX,
+ 14,UJ,
+ TYPCMN:,ISO,6Н
+ ,CONT,12Н ССВ   РССВ
+ ,CONT,12Н LСВ   РСВ
+ ,CONT,12Н
+ MIDDLE:,ISO,30Н ---- СВОБОДНО:'1''1''1' FFFFF/FFFFF
+ LВ:,BSS,6
+  VADR:,BSS,1
+  VLOC:,BSS,1
+  FRAG:,BSS,4
+ ,END,
+ LOADSP:,NАМЕ,
+С*
+С*     ЗАГРУЗКА ОТДЕЛЬНОЙ ПОДПРОГРАММЫ
+С*         НА  "СВОЕ"  МЕСТО.
+С*
+С*     АДРЕСА ВНЕШНИХ ОБ'ЕКТОВ  ЗАНЕСЕНЫ В
+С*     ТАБЛИЦУ ОПИСАНИЙ ЗАГРУЗЧИКА (LDT).
+С*
+С*     АСС.EQ.0 - С ПОДВОДОМ К НУЖНОМУ РАЗ-
+С*     ДЕЛУ L-MEMORY,  ИНАЧЕ  СРАЗУ  ЧИТАЕМ
+С*     ЗАГРУЖАЕМЫЙ КОД.
+С*
+ ERROR:,SUBP,
+ *LDADS*:LС,BLOCK,(6),CSUM(2)
+ **:LС,BLOCK,NАМЕ .ИМЯ П/П
+ ,CONT,NАМЕ2.ДЛЯ ДИАГНОСТИКИ
+ ,CONT,BVAR .НАЧАЛО ПЕРЕМЕННЫХ
+ ,CONT,ВСОМ .НАЧАЛО КОМАНД
+ ,CONT,ELADR.НАЧАЛО ЗАГРУЖ.КОДА
+ *LDT*:LС,BLOCK,LDT(1024)
+ *PBUF*:LС,BLOCK,PBUF(1025)
+ ,BITS,
+ BL:I,BLOCK,W,W2,АСС,FADR
+ ,CONT,L   .ДЛИНА ГРУППЫ
+ ,CONT,TEG .ТЕКУЩИЙ ТЕГ
+ ,CONT,WTEG.РАБОЧИЙ ТЕГ
+ ,CONT,AV  .ТЕК. АДРЕС ПО ПЕР.
+ ,CONT,АС  .---"--- ПО КОМ.
+ ,CONT,WORD(2)
+ ,CONT,RЕТ
+ ,CONT,WV
+ ,CONT,ENDBL(0)
+ ЬLBL:,EQU,ENDBL-BL
+ LBL:,EQU,13
+  VMASK:,EQU,=177 7777
+С
+С-------------------
+ 13,MTJ,М3
+ ,АТХ,W
+ ,АЕХ,
+ ,U1А,СНЕСК
+ 14,VТМ,NАМЕ
+ ,ITS,14
+ ,CALL,ELMOVE
+С      ПОДВОД К НАЧАЛУ ЗАГРУЖ. КОДА
+ 14,VТМ,ELADR
+ ,ITS,14
+ ,CALL,ELMOVE
+ 14,VТМ,W
+ ,ITS,14
+ 14,VТМ,В1
+ ,ITS,14
+ ,CALL,ELREAD
+С      ПРОЧИТАН ЗАГОЛОВОК. ЭТО ДОЛЖЕН БЫТЬ
+С      ЗАГРУЖАЕМЫЙ  КОД.
+ СНЕСК:,IТА,М3
+ ,АТХ,RЕТ
+ ,ХТА,W
+ ,ААХ,=:7
+ ,АЕХ,В48
+ ,U1А,ERR6.НЕТ ЗАГОЛОВКА
+ ,ХТА,W
+ ,ААХ,В20/01
+ ,NTR,7
+ ,Х-А,
+ ,АТХ,L.<- ДЛИНА>
+С
+С     ПРИ ОТОБРАЖЕНИИ 20-РАЗРЯДНОГО
+С     АДРЕСНОГО ПРОСТРАНСТВА ДВОЙНЫХ
+С     СЛОВ МКБ  НА 19 РАЗРЯДНУЮ V-ПАМЯТЬ
+С     ПРОСТО ГАСИМ СТАРШИЕ 2 БИТА МКБ-АДРЕСА
+С
+  ,ХТА,BVAR
+ ,ASN,64-1
+ ,ААХ,VMASK
+ ,АТХ,AV
+ ,ХТА,ВСОМ
+ ,ASN,64-1
+ ,ААХ,VMASK
+ ,АТХ,АС
+ М3,VТМ,
+ М2,VТМ,
+С
+С    РЕГИСТРЫ:
+С
+С    М2 : =0 - ГРУЗИМ В ОБЛАСТЬ ПЕРЕМЕННЫХ
+С         =1 - ГРУЗИМ В ОБЛАСТЬ КОМАНД
+С    М3 : =0 - ЛЕВОЕ ПОЛУСЛОВО
+С         =1 - ПРАВОЕ ПОЛУСЛОВО
+ MLOOP:,BSS,
+ 14,VТМ,W
+ ,ITS,14
+ 14,VТМ,В1
+ ,ITS,14
+ ,CALL,ELREAD
+ ,NTR,7
+ ,ХТА,W
+ ,ASN,64-4
+ ,УТА,
+ ,ATI,14
+ ,ХТА,W
+ 14,UJ,*+1
+ :,UJ,WRW.ЗАПИСЬ ПОЛУСЛОВА
+ :,ААХ,В20/01
+ ,UJ,WRAC.+ АДР.КОМАНД
+ :,ААХ,В20/01
+ ,UJ,WRAV.+ АДР.ПЕРЕМ.
+ :,ААХ,С7
+ ,ATI,14
+С     ПЕРЕКЛЮЧАТЕЛЬ СПЕЦУКАЗАНИЙ
+ ,ХТА,W
+ 14,UJ,*+1
+ :,UJ,TS0
+ :,UJ,TS1.1
+ :,UJ,TS2.2
+ :,UJ,TS2.3
+ :,UJ,TS4.4
+ :,UJ,TS5.5
+ :,UJ,ERR6.6
+ :,UJ,ERR6.7
+ TS0:,BSS,
+С
+С   0 - УСТАНОВИТЬ ТЕГ И НАЧАЛЬНЫЙ АДРЕС
+С       ЗАГРУЗКИ.
+С
+ ,ASN,64+24
+ 15,АТХ,
+ ,ААХ,С7.FТ
+ ,ATI,14
+ 14,ХТА,TEGS
+ ,АТХ,WTEG
+ ,SТХ,TEG
+ ,ASN,64+5
+ 15,АТХ,
+ ,ASN,64+1
+ ,АЕХ,В1.В31
+ ,ААХ,В1
+ ,STI,М2.1=КОМАНДЫ
+ ,ААХ,В1.FN
+ ,U1А,EMLOOP. - С ТЕКУЩЕГО АДРЕСА
+С     FG (23:04) СОДЕРЖИТ НОВЫЙ АДРЕС
+С     НАЧАЛА ЗАГРУЗКИ
+С
+ ,ХТА,W
+ ,ASN,64+3
+ ,ААХ,В20/01
+ М2,ARX,BVAR
+ ,ASN,64-1
+ ,ААХ,VMASK
+ М2,АТХ,AV
+ ,UJ,EMLOOP
+ TS1:,BSS,
+С
+С   1  - СФОРМИРОВАТЬ ПОЛУСЛОВО
+С
+ ,ASN,64+6
+ 15,АТХ,
+ ,ААХ,=3777.FС
+ ,STI,12
+ ,ASN,64+11
+ ,ААХ,С3.СПОСОБ
+ ,ATI,14.ФОРМ. АДРЕСА
+ ,UТС,LDT
+ 12,ХТА,
+ 14,UJ,*+1
+ :,XTS,W
+ ,UJ,СН/F
+ :,ASN,64+16
+ :,ААХ,В16/01
+ ,UJ,TS1C
+ :,ААХ,В32/01
+ ,UJ,WRW
+ СН/F:,BSS,
+С   КОНТРОЛЬ:  НЕ МАЛО-ЛИ 20-ТИ РАЗРЯДОВ?
+  ,ASN,64+20
+  ,ААХ,=377
+  ,STI,14. К О П
+  ,CALL,СНК*ADR
+ ,АЕХ,
+ ,U1А,ERRLG.=> МАЛО!
+  OKADR:,UТС,LDT
+ 12,ХТА,
+ TS1C:,АЕХ,W
+ ,ААХ,В20/01
+ ,АЕХ,W
+ ,UJ,WRW
+ TS2:,BSS,
+С
+С   2 - ВЫЧИСЛИТЬ АДРЕСНОЕ ВЫРАЖЕНИЕ И
+С       ЗАПИСАТЬ ЕГО В ТАБЛИЦУ ОПИСАНИЙ
+С
+С   3 - КРОМЕ  ТОГО,  СФОРМИРОВАТЬ ПОЛУ-
+С       СЛОВО
+С
+ ,ASN,64+3
+ ,ААХ,С7
+ ,UZA,ERR6
+ ,АЕХ,С77777
+ ,ARX,В2
+ ,ATI,М6
+ ,ХТА,
+ ,АТХ,АСС
+ LTR:14,VТМ,W2
+ ,ITS,14
+ 14,VТМ,В1
+ ,ITS,14
+ ,CALL,ELREAD
+ ,NTR,7
+ ,ХТА,L
+ ,ARX,В1
+ ,АТХ,L
+ ,ХТА,W2
+ ,ASN,64-2
+ ,ASN,64-2
+ ,УТА,
+ ,ATI,14
+ ,ХТА,W2
+ 14,UJ,*+1.ТИП ОПЕРАНДА:
+ :,UJ,WFA.0 = ГОТОВ
+ :,ARX,ВСОМ.1 = + ВСОМ
+ ,UJ,WFA
+ :,ARX,BVAR.2 = + BVAR
+ ,UJ,WFA
+ :,WТС,W2.3 = ИЗ LDT
+ ,UТС,LDT
+ ,ХТА,
+ WFA:,ААХ,В32/01
+ ,АТХ,FADR
+С    РАЗМНОЖЕНИЕ 32 Р. FADR
+С    В 33:41 РАЗРЯДЫ.
+ ,ААХ,В32
+ ,АЕХ,В32
+ ,ASN,64-1
+ ,ARX,В41/33
+ ,ААХ,В41/33
+ ,АОХ,FADR
+ ,АТХ,FADR
+С      КАКОВ ЗНАК ОПЕРАНДА?
+ ,ХТА,W2
+ ,ARX,
+ ,U1А,РТО.ЗНАК "+"
+С     ОПЕРАНД СО ЗНАКОМ МИНУС
+ ,ХТА,
+ ,А-Х,FADR
+ ,АТХ,FADR
+ РТО:,BSS,
+С     ПЕРЕКЛЮЧАТЕЛЬ ПО ТИПУ ОПЕРАЦИИ
+ ,ХТА,W2
+ ,ASN,64-5
+ ,ASN,64-3
+ ,УТА,
+ ,ATI,14
+ ,ХТА,FADR
+ 14,UJ,*+1
+ :,А+Х,АСС.0
+ ,UJ,WАСС
+ :,UJ,MUL.1
+ :,UJ,DEV.2
+ :,UJ,MOD.3
+ :,UJ,SHIFT.4
+ :,UJ,AND.5
+ :,UJ,ERR6.6
+ :,UJ,ERR6.7
+ MUL:,BSS,
+С
+С        УМНОЖЕНИЕ
+С
+ ,NTR,6
+ ,АОХ,=I0
+ ,А+Х,
+ ,XTS,АСС
+ ,АОХ,=I0
+ ,А+Х,
+ 15,А*Х,
+ ,NTR,7
+ ,А+Х,=I0
+ ,UJ,WАСС
+ DEV:,BSS,
+С
+С        ДЕЛЕНИЕ
+С
+ ,АОХ,=I0
+ ,NTR,6
+ ,А+Х,=I0
+ ,XTS,АСС
+ ,АОХ,=I0
+ ,А+Х,
+ 15,А/Х,
+ ,NTR,7
+ ,А+Х,=I0
+ ,UJ,WАСС
+ MOD:,BSS,
+С
+С      ОСТАТОК ОТ ДЕЛЕНИЯ
+С
+ ,АОХ,=I0
+ ,NTR,6
+ ,А+Х,=I0
+ ,АТХ,FADR
+ ,ХТА,АСС
+ ,АОХ,=I0
+ ,АТХ,АСС
+ ,А/Х,FADR
+ ,NTR,7
+ ,А+Х,=I0
+ ,NTR,6
+ ,А*Х,FADR
+ ,NTR,7
+ ,Х-А,АСС
+ ,UJ,WАСС
+ AND:,BSS,
+С
+С       ЛОГИЧЕСКОЕ  УМНОЖЕНИЕ
+С
+ ,ААХ,АСС
+ ,UJ,WАСС
+ SHIFT:,BSS,
+С
+С       СДВИГ СУММАТОРА
+С
+ ,ААХ,С77777
+ ,ATI,14
+ ,ХТА,АСС
+ 14,ASN,64
+ WАСС:,ААХ,В41/01
+ ,АТХ,АСС
+ М6,VLM,LTR
+ ,XTS,W
+ ,ASN,64+6
+ ,ААХ,С1777
+ ,STI,14
+ ,UТС,LDT
+ 14,АТХ,
+ ,ХТА,W
+ ,ААХ,В1
+ ,UZA,EMLOOP
+С
+С    ОБРАБАТЫВАЕТСЯ СПЕЦУКАЗАНИЕ-3
+С
+ ,ХТА,W
+ ,UJ,TS1
+ TS4:,BSS,
+С
+С   4 - ЗАПИСАТЬ ОДНО СЛОВО С ИЗМЕНЕННЫМ
+С       ТЕГОМ.
+С
+ ,ASN,64+24
+ ,ААХ,С7
+ ,ATI,14
+ 14,ХТА,TEGS
+ ,АТХ,WTEG
+ ,UJ,EMLOOP
+ TS5:,BSS,
+С
+С   5 - РАСПИСАТЬ М СЛОВ ПАМЯТИ
+С
+ ,ASN,64+24
+ ,ААХ,В1
+ ,ATI,14
+ 14,ХТА,TEGS
+ ,АТХ,WORD
+ ,ХТА,
+ ,АТХ,WORD+1
+ ,ХТА,W
+ ,ASN,64+3
+ ,АЕХ,В20/01
+ ,ARX,В1
+ ,ААХ,В20/01
+ ,АТХ,W2
+ М2,UТС,AV
+ ,ХТА,
+ ,АОХ,=I0
+ ,АТХ,WV
+ М7,VТМ,WV
+ М6,VТМ,WORD
+ LBSS:,BSS,
+ ,ITS,М6
+ ,ITS,М7
+ 14,VТМ,=I2
+ ,ITS,14
+ ,CALL,VMWRIT
+ М7,ХТА,
+ ,ARX,В2
+ М7,АТХ,
+ ,ХТА,W2
+ ,ARX,В1
+ ,ААХ,В20/01
+ ,АТХ,W2
+ ,U1А,LBSS
+ М7,ХТА,
+ ,ААХ,VMASK
+ М2,UТС,AV
+ ,АТХ,
+ ,UJ,EMLOOP
+ WRAV:,UТС,BVAR-ВСОМ
+ WRAC:,ARX,ВСОМ
+ ,АЕХ,W
+ ,ААХ,В20/01
+ ,АЕХ,W
+ WRW:,BSS,
+ ,ААХ,В32/01
+ М3,АТХ,WORD
+ М3,VZM,EWRW
+ М2,VZM,NOKS
+С      ПОДСЧЕТ КОНТР.СУММЫ
+ KS:,ARX,CSUM+1
+  15,АТХ,
+ ,ААХ,В32/01
+ ,SТХ,CSUM+1
+ ,ASN,64+32
+ ,XTS,WORD
+ ,ARX,CSUM
+ 15,ARX,.+ ПЕРЕНОС
+ 15,АТХ,
+ ,ААХ,В32/01
+ ,SТХ,CSUM
+ ,ASN,64+32
+ ,UZA,NOKS
+ ,ARX,CSUM+1
+ ,АТХ,CSUM+1
+ ,ААХ,В32/01
+ ,U1А,NOKS
+ ,АТХ,CSUM+1.ВТОРОЙ
+ ,ХТА,CSUM.ПЕРЕНОС
+ ,ARX,В1
+ ,АТХ,CSUM
+  NOKS:,ХТА,WORD
+ ,АОХ,WTEG
+ ,АТХ,WORD
+ ,ХТА,TEG
+ ,АТХ,WTEG
+ М2,UТС,AV
+ ,ХТА,
+ ,АОХ,=I0
+ ,АТХ,WV
+ М7,VТМ,WV
+ М6,VТМ,WORD
+ ,ITS,М6
+ ,ITS,М7
+ ,CALL,WRVMEM
+ М6,UТМ,1
+ ,ХТА,WV
+ ,ARX,В1
+ ,АТХ,WV
+ ,ITS,М6
+ ,ITS,М7
+ ,CALL,WRVMEM
+ ,ХТА,WV
+ ,ARX,В1
+ ,АТХ,WV
+ ,ААХ,VMASK
+ М2,UТС,AV
+ ,АТХ,
+ ,UТС,-1
+ EWRW:,BSS,
+ М3,VТМ,1
+ EMLOOP:,BSS,
+ ,ХТА,L
+ ,А+Х,В1
+ ,АТХ,L
+ ,U1А,MLOOP
+ RETURN:,WТС,RЕТ
+ ,UJ,
+ ERR6:12,VТМ,RETURN
+ 14,VТМ,6
+ ,UJ,ERROR
+ ERRLG:,BSS,
+С
+С   "ДЛИННЫЙ АДРЕС": ГОТОВИМ ОТНОСИТЕЛЬНЫЙ
+С   АДРЕС В КОДЕ ТЕХТ
+С
+ М2,ХТА,AV
+ ,ASN,64+1
+ М2,XTS,BVAR
+  ,ААХ,=300 0000
+  15,АОХ,. + СТ.РАЗР.
+ 14,CALL,GIVH
+ ,АРХ,=6Н'''137''137''137''137''137'
+ ,ASN,64+6
+ М2,VIM,*+1
+ ,АОХ,=:66
+ ,АТХ,NАМЕ2.ГОТОВО
+ 14,VТМ,7
+ 12,VJM,ERROR
+ ,ХТА,
+ ,UJ,TS1C
+С------------------------
+С
+ *TEGS:,ENTRY,. - ТЕГИ
+С
+ TEGS:,ОСТ,000 320.0 НЕИНИЦ.
+ ,ОСТ,000 300.1 ИНИЦ. ПЕРЕМ.
+ ,ОСТ,000 340.2 КОНСТАНТЫ
+ ,ОСТ,001 000.3 РЕЗЕРВ
+ ,ОСТ,000 244.4 НЕПОМЕЧ. КОМ.
+ ,ОСТ,000 044.5 ПОМЕЧ. КОМ.
+ ,ОСТ,.6
+ ,ОСТ,.7
+ С1777:,LOG,1777
+ В41/20:,LOG,0037 7777 7600 0000
+ В41/33:,ОСТ,0037 74
+ BL:,BSS,LBL
+ ,END,
+
+  V MEMOR :,NAME,
+C*
+C*********  20.10.82.  A.П.CAПOЖHИKOB
+C*
+C*       ПAKET ПPOГPAMM ДЛЯ PAБOTЫ
+C*         C BИPTYAЛЬHOЙ ПAMЯTЬЮ
+C*
+C*       SUBROUTINE  VMEMOR(LUN)
+C*       SUBROUTINE  VMWRIT(MAC,VADR,LEN)
+C*       SUBROUTINE  VMREAD(MAC,VADR,LEN)
+C*       SUBROUTINE  VMSET(WORD,VADR,LEN)
+C*       SUBROUTINE  WRVMEM(WORD,VADR)
+C*       SUBROUTINE  LANDVM(WORD,VADR)
+C*       SUBROUTINE  LORVM (WORD,VADR)
+C*       FUNCTION    RDVMEM(VADR)
+C*       FUNCTION    MEMVRD(VADR)
+C*       SUBROUTINE  VMCOPY(MT,N,IRW)
+C*       SUBROUTINE  VMSAVE(NSWIN)
+C*       SUBROUTINE  VMCLOS
+C*
+C*   BИPTYAЛЬHAЯ ПAMЯTЬ ПPEДCTABЛЯET COБOЙ
+C*   MHOЖECTBO CЛOB, AДPECYEMЫX ЦEЛOЧИCЛEH-
+C*   HOЙ ПEPEMEHHOЙ  VADR, ПPИHИMAЮЩEЙ ЗHA-
+C*   ЧEHИЯ :  0,1,2, ... , 524287.
+C*   TAKИM OБPAЗOM, OБЬEM BИPT.ПAMЯTИ PABEH
+C*   512K CЛOB, ЧTO ЭKBИBAЛEHTHO 1000(8)
+C*   ЗOHAM MAГHИTHOЙ ЛEHTЫ (ФAЙЛA HA ДИCKE)
+C*
+C*    VMEMOR - ИHИЦИИPYЮЩEE OБPAЩEHИE
+C*    LUN - YKAЗATEЛЬ ФAЙЛA, ГДE БYДET
+C*    PAЗMEЩATЬCЯ V-ПAMЯTЬ, HAПPИMEP:
+C*        CALL VMEMOR(410000B)
+C*        CALL VMEMOR(670240B)
+C*    ECЛИ  LUN=0 , A TAKЖE ПPИ OTCYTCTBИИ
+C*    ИHИЦИИPYЮЩEГO OБPAЩEHИЯ,  V-ПAMЯTЬ
+C*    PAЗMEЩAETCЯ HA  MБ 03-06,10-17,24-27,
+C*    T.E. ЯBЛЯETCЯ BPEMEHHOЙ PAБOЧEЙ
+C*    ПAMЯTЬЮ.
+C*
+C*    VMWRIT, VMREAD - ЗAПИCЬ/ЧTEHИE
+C*    ПEPBЫX  LEN  CЛOB MACCИBA  MAC  B V-
+C*    ПAMЯTЬ, HAЧИHAЯ C AДPECA  VADR.
+C*    CALL VMWRIT(M,100,8) - ЗAПИCЬ 8 CЛOB
+C*    MACCИBA M B 100-107 ЯЧEЙKИ V-ПAMЯTИ.
+C*    CALL VMREAD(M,100,8) - ЧTEHИE B MAC-
+C*    CИB M ИЗ 100-107 ЯЧEEK V-ПAMЯTИ.
+C*
+C*    VMSET  -  POCПИCЬ LEN CЛOB V-ПAMЯTИ,
+C*    HAЧИHAЯ C AДPECA VADR,  KOДOM WORD
+C*    ИЗ MOЗY.  ЗAMEЧAHИE:  LEN < 32000 !
+C*
+C*    VMCOPY - CTPAHИЧHAЯ ПEPEПИCЬ MEЖДY
+C*    OБЫЧHOЙ BHEШHEЙ И  V-ПAMЯTЬЮ.  ЗДECЬ
+C*    MT - OБЫЧHЫЙ YKAЗATEЛЬ  BИДA  NNZZZZ,
+C*    N  - ЧИCЛO ПEPEПИCЫBAEMЫX CTPAHИЦ,
+C*    IRW - HAПPABЛEHИE ПEPEПИCИ ( 0 : ИЗ
+C*        V-ПAMЯTИ HA <MT>,  1 : HAOБOPOT )
+C*    ПEPEПИCЬ HAЧИHAETCЯ C 0-ГO V-ЛИCTA.
+C*
+C*    WRVMEM, RDVMEM, MEMVRD - BXOДЫ ДЛЯ
+C*    ПOCЛOBHOЙ PAБOTЫ. PAБOTAЮT B 2-3 PAЗA
+C*    БЫCTPEE, ЧEM VWREAD,VMWRIT ПPИ LEN=1.
+C*    CALL WRVMEM(WORD,VADR) - ЗAПИCЬ B
+C*    V-ПAMЯTЬ CЛOBA WORD ПO AДPECY VADR.
+C*    WORD=RDVMEM(VADR) - ЧTEHИE ИЗ ЯЧEЙKИ
+C*    V-ПAMЯTИ C AДPECOM VADR.
+C*    MEMVRD - TO ЖE, ЧTO И RDVMEM, HO
+C*    PEЗYЛЬTAT ИMEET TИП "INTEGER".
+C*
+C*    LANDVM  (LORVM)  PEAЛИЗYЮT OПEPAЦИИ
+C*    "ЛOГИЧECKOE YMHOЖEHИE (CЛOЖEHИE)"
+C*    MEЖДY CЛOBOM ИЗ V-ПAMЯTИ C AДPECOM
+C*    VADR  И CЛOBOM  WORD  ИЗ MOЗY.
+C*    PEЗYЛЬTAT ЗAПИCЫBAETCЯ OБPATHO B
+C*    V-ПAMЯTЬ ПO AДPECY  VADR.
+C*
+C*    B KAЧECTBE OБMEHHЫX БYФEPOB ИCПOЛЬЗY-
+C*    ETCЯ BCE CBOБOДHOE ПPOCTPAHCTBO MOЗY,
+C*    OCTABШEECЯ ПOCЛE ЗAГPYЗKИ ПPOГPAMMЫ
+C*    ПOЛЬЗOBATEЛЯ. ПPИMEHЯETCЯ AЛГOPИTM
+C*    ЗAMEЩEHИЯ C БPOHИPOBAHИEM OДHOЙ CTPA-
+C*    HИЦЫ БYФEPHOЙ ПAMЯTИ, ПOЭTOMY ДЛЯ
+C*    БYФEPHOЙ OБЛACTИ TPEБYETCЯ HE MEHEE
+C*    2-X CTPAHИЦ.
+C*
+C*    CALL VMSAVE(NSWIN) - ПPИHYДИTEЛЬHЫЙ
+C*    ДOCБPOC OБMEHHЫX БYФEPOB B V-ПAMЯTЬ.
+C*    ПPИ ЭTOM B NSWIN ЗAПИCЫBAETCЯ ЦEЛOE
+C*    ЧИCЛO = 32768 * NCP + NEX,    ГДE
+C*    NCP - ЧИCЛO ПEPECЧETOB ПPИOPИTETOB
+C*    CTPAHИЦ, ПPOИЗBEДEHHOE C HAЧAЛA PA-
+C*    БOTЫ ПPOГPAMMЫ;
+C*    NEX - ЧИCЛO OБMEHOB C BHEШHEЙ ПAMЯTЬЮ.
+C*
+C*    VMCLOS - ДOCБPOC OБMEHHЫX БYФEPOB И
+C*    ЗABEPШEHИE PAБOTЫ C V-ПAMЯTЬЮ.
+C*    ПOCЛE OБPAЩEHИЯ K VMCLOS MOЖHO
+C*    OПPEДEЛИTЬ V-ПAMЯTЬ B HOBOM ФAЙЛE,
+C*    ПOBTOPHO OБPATИBШИCЬ K VMEMOR.
+C*
+C*    ДOCБPOC OБMEHHЫX БYФEPOB ПPOИЗBOДИTCЯ
+C*    ABTOMATИЧECKИ ПO KOHЦY ЗAДAЧИ   И ПPИ
+C*    KAЖДOM OБPAЩEHИИ K ПPOГPAMME  LOADGO.
+C*
+C*          Д И A Г H O C T И K A :
+C*
+C*  1. "OШ.ПAPAMETP" - HEBEPHO ЗAДAHO LUN
+C*     ПPИ ИHИЦИИPYЮЩEM OБPAЩEHИИ.
+C*  2. "MAЛO ПAMЯTИ" - ПOCЛE ЗAГPYЗKИ ПPO-
+C*     ГPAMMЫ OCTAЛOCЬ MEHEE 2 ЛИCTOB CBO-
+C*     БOДHOЙ ПAMЯTИ ДЛЯ OБMEHHЫX БYФEPOB.
+C*  3. "OШ. V-AДPEC" - ЗHAЧEHИE ПEPEMEHHOЙ
+C*     VADR  ПPEBЫШAET 524288.
+C*
+C*     BMECTE C ДИAГHOCTИKOЙ ПEЧATAETCЯ
+C*     AДPEC B ПPOГPAMME ПOЛЬЗOBATEЛЯ, ГДE
+C*     БЫЛO OШИБOЧHOE OБPAЩEHИE K VMEMOR.
+C*     ПOCЛE ПEЧATИ ДИAГHOCTИKИ PAБOTA
+C*     ПPOГPAMMЫ ПPEKPAЩAETCЯ.
+C*
+  MONITOR*:,SUBP,
+  LOADANGO:,SUBP,
+  A/I0:,LC,1
+  LAST:,EQU,16B
+  FREE:,EQU,17B
+  ABOCT:,EQU,20B
+  LVP:,EQU,512.ЧИCЛO V-ЛИCTOB
+  CONTROL:,EQU,=1777 7777 7000
+  CON DRU:,EQU,=:0757 7417.MБ:03-06,10-17,24-27
+C...   COXPAHЯEMЫE PEГИCTPЫ :
+  E:,EQU,13.BOЗBPAT
+  T:,EQU,1.TИП:R/W
+  M:,EQU,2.AДPEC MOЗY
+  L:,EQU,3.ЧИCЛO CЛOB
+C...   HECOXPAHЯEMЫE PEГИCTPЫ :
+  B:,EQU,8.БAЗA
+  V:,EQU,9.V-AДPEC
+  P:,EQU,10.V-ЛИCT
+  A:,EQU,11.AДPEC ПO БYФEPY
+  R:,EQU,12.PAБOЧИЙ
+  W:,EQU,14.PAБOЧИЙ
+C
+C------------------------------
+C
+  BEG:B,BASE,BEG
+  ,STI,R
+  R,XTA,
+  ,AAX,=0377 7777 7700 6000
+  ,U1A,ER LUN
+  ,ATX,RPBOSS
+  ,XTA,GO OPEN
+  ,CTX,GETV
+  R,XTA,
+  ,AAX,=77 7777
+  ,ATX,ABUF
+   ,UZA,SPEC
+  ,ARX,=10 0000
+  ,AAX,=40 0000
+  E,U1A,
+  ,UJ,ER LUN
+ SPEC:R,XTA,
+  ,AAX,=:2
+  ,ATX,VTYP
+  E,UJ,
+C
+   VMCOPY:,ENTRY,
+  ,STI,R
+  ,STI,P
+  ,ATI,A
+  ,ITA,M
+  ,ITS,T
+  ,ITS,L
+  V,VTM,VADR
+  R,XTS,
+  ,ATI,T.ЧT/ЗП
+  A,MTJ,M.YK.MЛ
+  P,WTC,
+  L,VTM,.N ZON
+  T,VZM,COPY1
+  T,VTM,=:001
+C---
+  COPY1:V,ATX,.BHAЧAЛE<1000
+  R,VJM,GETV
+  L,VZM,RETRAN
+  T,XTA,
+  ,ASN,64-7
+  P,AOX,
+  P,ATX,
+  ,AAX,=:0000 37
+ :M,AOX,
+  T,AOX,
+  V,XTS,
+  ,ASN,64+10
+  ,AAX,=77777
+  15,ARX,
+  ,ATX,WS
+  ,*70,WS
+  L,UTM,-1
+  V,XTA,
+  ,ARX,=2000
+  ,UJ,COPY1
+C
+C      *********************
+C
+C        OCHOBHЫE TAБЛИЦЫ :
+C
+C   1. BTAB - TAБЛИЦA БYФEPHЫX CTPAHИЦ
+C      YПOPЯДOЧEHA ПO YБЫBAHИЮ ПPИOPИ-
+C      TETOB. KOHЧAETCЯ ПYCTЫM CЛOBOM.
+C       1-15  : HOMEP БYФ.CTPAHИЦЫ
+C      16-30  : HOMEP V-CTPAHИЦЫ + 1
+C               ИЛИ 0, ECЛИ CBOБ.БYФEP
+C
+C   2. VTAB - TAБЛИЦA BИPTYAЛЬHЫX CTPAHИЦ
+C      48     : ЗAKPЫTA ПO OБPAЩEHИЮ
+C      47     : БЫЛA ЗAПИCЬ B CTPAHИЦY
+C      35-31  : HOMEP ЛИCTA ПPИПИCKИ ИЛИ 0
+C      30-11  : KOД ДЛЯ ПPИПИCKИ CTPAHИЦЫ
+C      10-1   : BCEГДA "0"
+C
+C   3. KBUF - ЧИCЛO БYФEPHЫX CTPAHИЦ-1
+C      RP   - HOMEP PEЗEPBHOЙ CTPAHИЦЫ
+C             (BCEГДA ПOCЛEДHЯЯ B BTAB)
+C      NC   - HOMEP CTPAHИЦЫ, Y KOTOPOЙ
+C             ПOCЛEДHИЙ PAЗ ПEPECЧИTЫ-
+C             BAЛИ ПPИOPИTET.
+C
+C      *********************
+C
+  WRVMEM:,ENTRY,
+  ,ATI,V
+  R,VJM,GETV
+  :15,WTC,
+  ,XTA,
+  WRA:A,ATX,
+  ,XTA,=:2.БЫЛA
+  P,AOX,.ЗAПИCЬ
+  P,STX,
+  E,UJ,
+C
+C      *********************
+C
+  LAND VM:,ENTRY,
+  ,ATI,V
+  R,VJM,GETV
+   15,WTC,
+   ,AAX,
+  ,UJ,WRA
+C
+C      *********************
+C
+  LOR VM:,ENTRY,
+  ,ATI,V
+  R,VJM,GETV
+   15,WTC,
+   ,AOX,
+  ,UJ,WRA
+C
+C     **********************
+C
+  RDVMEM:,ENTRY,
+  MEMVRD:,ENTRY,
+  ,ATI,V
+  E,MTJ,R
+C
+C      OCYЩECTBЛEHИE ПPИПИCKИ
+C
+  GETV:B,VTM,BEG
+  ,UJ,OPEN.ЗATEM : V,XTA,
+ :,ASN,64+10
+  ,ATI,P.V-ЛИCT
+  ,AAX,CONTROL
+  ,U1A,ER ADR.OШИБKA
+  P,UTM,VTAB
+  P,XTA,
+  ,ARX,
+  ,UZA,P/CLOS.ЗAKPЫT
+  GETV1:V,AEX,.ПPИПИCKA
+  ,ATI,A.K БYФEPY
+  A,XTA,
+  R,UJ,
+C
+C      ***********************
+C
+  VM SET:,ENTRY,
+  ,UTC,VSET-TRANW
+  VM WRIT:,ENTRY,
+  ,UTC,TRANW-TRANR
+  VM READ:,ENTRY,
+  W,VTM,
+  ,STI,R
+  ,STI,V.V-ADRES
+  ,ATI,A
+  ,ITA,M
+  ,ITS,T
+  ,ITS,L
+  R,XTS,
+  ,ATI,L.ЧИCЛO CЛOB
+  A,MTJ,M.MOЗY-AДPEC
+  V,VIM,NEXTV
+  V,VTM,A/I0.ДЛЯ ЛEHTЯEB
+  NEXTV:L,VZM,RETRAN
+  V,VIM,FIRST
+  T,MTJ,W
+  P,UTM,1
+  ,ITA,P
+  ,ASN,64-10
+  V,VTM,VADR
+  V,ATX,
+  FIRST:W,MTJ,T.R/W
+  R,VJM,GETV
+  :T,VZM,TRAN
+  ,XTA,=:2.БЫЛA
+  P,AOX,.ЗAПИCЬ
+  P,ATX,
+  TRAN:,ITA,A
+  ,AOX,=76000
+  ,ATI,V.-OCTATOK ЛИCTA
+  ,ITA,L
+  ,ASN,64+11
+  ,U1A,LONG
+  V,MTJ,W
+  L,J+M,W
+  W,UTM,-1
+  ,ITA,W
+  ,AAX,=40 000
+  ,U1A,SHORT
+C...  БYДET ПEPEXOД HA CЛEДYЮЩИЙ V-ЛИCT
+  LONG:V,J+M,L
+  V,UTM,1
+  P,UTM,-VTAB
+  T,UJ,TRANR
+C...  B ПPEДEЛAX TEKYЩEГO V-ЛИCTA
+  SHORT:,ITA,L
+  ,AEX,=77777
+  ,ATI,V
+  V,UTM,2
+  L,VTM,
+  T,UJ,TRANR
+C...   ЦИKЛЫ ПEPEПИCИ :
+  TRANR:A,XTA,
+  A,UTM,1
+  M,ATX,
+  M,UTM,1
+ V,VLM,*-2
+  ,UJ,NEXTV
+  TRANW:M,XTA,
+  M,UTM,1
+  A,ATX,
+  A,UTM,1
+  V,VLM,*-2
+  ,UJ,NEXTV
+   V SET:M,XTA,
+  :A,ATX,
+  A,UTM,1
+  V,VLM,*-1
+  ,UJ,NEXTV
+  RETRAN:15,XTA,
+  ,STI,L
+  ,STI,T
+  ,STI,M
+  E,UJ,
+C
+C
+C...   BXOД ПPИ ПEPBOM OБPAЩEHИИ :
+C      OTKPЫTИE БYФEPHOГO ПYЛA
+C
+  OPEN:15,MTJ,A
+  15,VTM,VTAB
+  ,XTA,=:4
+  W,VTM,1-LVP
+  :15,ATX,
+  W,VLM,*
+  ,WTC,LAST
+  W,VTM,-1777B
+  15,VTM,NC.NC=B48
+  ,ITS,W
+  ,ASN,64+10.ПOCЛEДHИЙ
+  ,WTC,FREE
+  W,VTM,1777B
+  ,ITS,W
+  ,ASN,64+10.ПEPBЫЙ
+  W,ATX,-1777B.ДЛЯ LOADGO
+  ,ATI,W
+  ,NTR,3
+  15,A-X,
+  ,UZA,ERBUF. < 2 ЛИCTOB
+  ,ATI,P
+  ,X-A,
+  ,ATX,KBUF
+  ,NTR,6
+  :,ITA,W.HAЧAЛЬHOE
+  15,ATX,.COCTOЯHИE
+  W,UTM,1.BTAB
+  P,VLM,*-1
+  ,ATX,RP
+  ,XTA,
+  ,ATX,RPBOSS. - HИЧEЙ !
+  ,XTS,LOADANGO
+  ,AEX,GO LOAD. ПEPEXBATЫ
+  ,UZA,OWN REAC. - YЖE БЫЛИ
+  ,XTA,LOADANGO
+  ,ATX,LOAD
+  ,XTA,GO LOAD
+  ,CTX,LOADANGO
+  ,XTA,GO STOP
+  ,CTX,MONITOR*+4
+  ,XTA,ABOCT
+  ,AEX,J STOP
+  ,ASN,64+24
+  ,U1A,OWN REAC.IFOVFL
+  ,XTA,GO STOP
+  ,CTX,ABOCT
+  OWN REAC:,XTA,GO WORK
+  ,CTX,GETV
+  A,MTJ,15
+  ,UJ,GETV
+C
+C...  ПEPEMEHHЫE KOMAHДЫ :
+C
+  GO STOP :W,VTM,JSTOP
+  ,UJ,CLOSE
+  GO LOAD:W,VTM,LOADANGO
+  ,UJ,CLOSE
+  GO OPEN:B,VTM,BEG
+  ,UJ,OPEN
+  GO WORK:B,VTM,BEG
+  V,XTA,
+C
+C
+C      *************************
+C
+  VM CLOS:,ENTRY,
+  E,MTJ,W.ПOЛHOCTЬЮ
+  ,UJ,CLOSE
+C
+  VM SAVE:,ENTRY,
+  B,BASE,BEG
+  ,STI,W
+  ,XTA,SWCNT
+  W,ATX,
+  ,XTA,ABUF
+  E,UZA,
+  E,MTJ,W
+  E,VTM,.TOЛЬKO ДOCБPOC
+C
+C
+C...   CПACEHИE БYФEPHOГO ПYЛA :
+C
+  CLOSE:,ITS,W
+  ,ITS,B
+  ,ITS,T
+  ,ITS,P
+  B,VTM,BEG
+  T,VTM,BTAB-1
+     ,XTS,GO OPEN
+  ,ATX,RPBOSS.HИЧEЙ
+  E,VZM,C1
+  ,CTX,GETV
+  ,XTA,LOAD
+  ,CTX,LOADANGO
+  ,XTA,JSTOP
+  ,CTX,MONITOR*+4
+   C1:T,UTM,1
+  T,XTA,
+  ,UZA,C2
+  ,ASN,64+15
+  ,ATI,P.V-ЛИCT + 1
+  P,VZM,C1.CBOБOДEH
+  P,UTM,VTAB-1
+  W,VTM,C1
+C
+C...      БЛOKИ OБMEHOB
+C      P - AДPEC CTPOKИ VTAB
+C
+  EXCH/W:,ITA,P
+  ,ATX,RPBOSS
+  P,XTA,
+  ,AAX,=:2
+  W,UZA,.HE MEHЯЛCЯ
+  P,AEX,
+  P,ATX,
+  ,UJ,EXCH
+  EXCH/R:,ITA,P
+  ,AOX,VTYP.0 ИЛИ B47
+  ,AEX,RPBOSS
+  W,UZA,
+  ,XTA,VTYP
+  P,AOX,
+  P,ATX,
+  ,XTA,=:001
+  EXCH:P,AOX,
+  ,AAX,=:0010 37
+  ,ATX,WS.ЛИCT
+  ,XTA,=1
+  ,ARX,SWCNT
+  ,ATX,SWCNT
+  ,ITA,W
+  P,MTJ,W
+  W,UTM,-VTAB
+  ,ITS,W.V-ЛИCT
+  ,XTS,ABUF
+  ,U1A,TAPE
+C...   V-ПAMЯTЬ HA MБ
+  ,ITA,W
+  ,ASN,64+5
+  ,ATI,W
+  ,XTA,=:4
+  W,ASN,64
+  ,AUX,CONDRU
+  ,ANX,=77777
+  ,ASN,64-12
+C---
+  TAPE:15,ARX,
+  ,AOX,WS
+  ,ATX,WS
+  ,*70,WS
+  15,WTC,
+  ,UJ,
+C---
+ C2 :,STX,RPBOSS.HИЧEЙ
+  ,STI,P
+  ,STI,T
+  ,STI,B
+  ,STI,W
+  W,UJ,
+C
+C
+C...   PEAKЦИЯ HA ЗAKPЫTЫЙ ЛИCT :
+C
+  P/CLOS:,AAX,=:0000 37.ПPИПИCAH
+  ,U1A,CALCPRT.- ДA
+  ,XTA,RP
+  ,ASN,64-30.B CTEK
+  P,UTM,-VTAB
+  ,ITS,P
+  P,UTM,VTAB
+  ,AEX,RP
+  ,ASN,64-10. ПPИПИCKA
+  15,AOX,-1.P  K  RP
+  P,ATX,
+  W,VJM,EXCH/R.ЧTEHИE P
+  ,XTA,
+  ,ATX,NC.RP-MAXPRT
+  P,UTM,1-VTAB
+  ,ITA,P
+  ,ASN,64-15
+  ,AOX,RP
+C...   CTAPЫЙ RP - ПOCЛEДHИЙ B BTAB
+  ,WTC,KBUF
+  A,VTM,BTAB-2
+  A,ATX,2
+C...   HOBЫЙ RP - ПEPEД CTAPЫM
+  A,XTA,1
+  ,ASN,64+15
+  ,ATI,P.EГO XOЗЯИH
+  A,XTA,1
+  ,AAX,=77777
+  A,ATX,1.OCBOБOЖДEHИE
+  ,ATX,RP.B BTAB
+  P,VZM,CLCP.И БЫЛ CBOБOДEH
+  P,UTM,VTAB-1
+  W,VTM,CLCP
+  ,UJ,EXCH/W.YKAЧKA
+C...  ЗAKPЫTИE БYФEPOB ПO ПPИOPИTETY
+  CLCP1:A,UTM,-1
+  ,ASN,64+15
+  ,ATI,W
+  W,VZM,CLCP.CBOБOДEH
+  W,UTM,VTAB-1
+  ,XTA,=:4
+  W,AOX,
+  W,ATX,
+  CLCP:A,XTA,
+  ,U1A,CLCP1
+  ,XTA,=:4
+  P,STX,.CYMM=OLDRP
+C
+C...   ПEPECЧET ПPИOPИTETOB
+C
+  CALC PRT:,ASN,64+30
+  ,ATX,WS
+  A,VTM,BTAB
+  ,XTA,=10 0000
+  ,ARX,SWCNT
+  ,ATX,SWCNT
+  SP:A,XTA,
+  ,UZA,ERBUF.OШИБKA
+  ,AEX,WS
+  ,AAX,=77777
+  ,UZA,CP
+  A,VLM,SP
+  CP:A,XTA,
+  ,ATX,WS
+  SHIFT:A,UTM,-1
+  A,XTA,.CДBИГ
+  A,ATX,1.BHИЗ
+  ,AEX,NC.BCEX
+  ,AAX,=77777.ДO NC
+  ,U1A,SHIFT
+  ,XTA,WS
+  A,ATX,1
+  ,ATX,NC
+  ,ASN,64+15
+  ,ATI,P
+  P,VZM,ER BUF.OШИБKA
+  P,UTM,VTAB-1
+  P,XTA,
+  ,AOX,=:4.OTKPЫTИE
+  ,AEX,=:4.CTPAHИЦЫ
+  P,ATX,
+  ,UJ,GETV1
+C
+C...     Д И A Г H O C T И K A :
+C
+  ER LUN:,UTC,TERL-TERB
+  ER BUF:,UTC,TERB-TERA
+  ER ADR:W,VTM,TERA
+  ,ITA,E
+  ,ASN,64-33
+  ,AUX,=6H'7''7''7''7''7'''
+  ,AOX,=17
+  ,ATX,DIAGN+2
+  W,XTA,
+  ,ATX,DIAGN+3
+  W,XTA,1
+  ,ATX,DIAGN+4
+  ,*64,PRIN
+ JSTOP:,SJ,
+  PRIN:,Z00,DIAGN
+  ,Z00,DIAGN
+  ,004,
+  9,,
+  TERA:,GOST,12HOШ. V-AДPEC'231'
+  TERB:,GOST,12HMAЛO ПAMЯTИ'231'
+  TERL:,GOST,12HOШ.ПAPAMETP'231'
+  DIAGN:,GOST,12HVMEMOR  ИЗ
+C
+C---------
+C
+  SWCNT:,INT,0
+  RPBOSS:,INT,-1
+  LOAD:,BSS,1
+  RP  :,BSS,1
+  WS  :,BSS,1
+  ABUF:,BSS,1
+  VTYP:,BSS,1
+  KBUF:,BSS,1
+  VADR:,BSS,1
+  NC:,BSS,1.ПEPEД BTAB !
+  BTAB:,BSS,32
+  VTAB:,BSS,LVP
+  ,END,
+
+*to perso:50
+*end file
+``````
+еконец

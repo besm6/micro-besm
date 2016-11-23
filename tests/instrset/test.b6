@@ -11,7 +11,7 @@ eeв1а3
 *     на компиляцию, сборку и счет и на самой МКБ-8601.
 *
 *perso:50
-*       call libinit:600000,40,тест
+*call libinit:600000,40,тест
 *stand
 *       no list
 *main мкв/ass
