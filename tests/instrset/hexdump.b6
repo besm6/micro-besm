@@ -1,0 +1,96 @@
+шифр 419999 зс5^
+лен 41(2048)^
+лен 50(1001)^
+лен 61(1003)^
+eeв1а3
+*name МКБ-тест
+*
+*     Извлекаем шестнадцатеричный файл - результат работы загрузчика
+*
+*perso:50
+*       stand
+*no list
+*call yesmemory
+*ftn
+        subroutine hexdmp
+        dimension m(10), b(8)
+        integer vstart, vend, paddr, b
+
+        l = 0
+        call vmemor(610000b)
+
+c------ Find image
+  1     l = l+2
+        call vmread(m, l, 2)
+        if (l.eq.2) vstart = m(2).and.377 7777b.or.0
+  11    if (m(1).nе.0035 3535 3535 3500b) goto 1
+
+c------ Get start (vstart) and end (vend) virtual addresses
+        vend = m(2).and.377 7777b.or.0
+        n = vend-vstart+1023
+        npg = n.shift.10.and.7777b.or.0
+
+c------ Compute physical address (base 0x80800)
+        n = 2004000b.or.0
+        paddr = vstart - n
+
+c       print 1001, vstart, vend, npg, paddr
+c1001   format('--- vstart=', o7, ' vend=', o7, ' npg=', i1,
+c    *         ' paddr=', o7)
+
+c------ Print hex image
+        l = vstart.shift.-1.and.177 7777b.or.0
+
+        print 1000
+ 1000   format('---start---')
+
+        do 50 i = 1, npg
+            do 40 j = 1, 512
+                call vmread(m, l, 4)
+                l = l+4
+
+с-------------- т1  0  1  2  3  4  5  6  7  т2  8  9 10 11 12 13 14 15  в БЭСМ
+c--------------  0  1  2  3  4  5  6  7  8   9 10 11 12 13 14 15 t1 t2  в МКБ
+
+                mtag = igets(m(1),1)
+                b(1) = igets(m(1),2)
+                b(2) = igets(m(1),3)
+                b(3) = igets(m(1),4)
+                b(4) = igets(m(1),5)
+                b(5) = igets(m(2),2)
+                b(6) = igets(m(2),3)
+                b(7) = igets(m(2),4)
+                b(8) = igets(m(2),5)
+
+                print 2000, paddr, mtag, b
+ 2000           format(' ', o7, ' ', o3, 8(' ', o3))
+                paddr = paddr+1
+
+                mtag = igets(m(3),1)
+                b(1) = igets(m(3),2)
+                b(2) = igets(m(3),3)
+                b(3) = igets(m(3),4)
+                b(4) = igets(m(3),5)
+                b(5) = igets(m(4),2)
+                b(6) = igets(m(4),3)
+                b(7) = igets(m(4),4)
+                b(8) = igets(m(4),5)
+
+                print 2000, paddr, mtag, b
+                paddr = paddr+1
+
+ 40         continue
+ 50     continue
+
+        print 3000
+ 3000   format('---end---')
+
+        return
+        end
+
+*       main hexdmp
+*       execute
+*call hexdmp
+*end f
+``````
+еконец
