@@ -66,16 +66,6 @@ initial begin
     end
     $display("--------------------------------");
 
-    if ($value$plusargs("hex=%s", hexfile)) begin
-        // Load program code into main memory.
-        load_hex();
-    end
-
-    if ($value$plusargs("uprog=%s", uprog)) begin
-        // Load microprogram code.
-        load_uprog();
-    end
-
     // Dump waveforms.
     if ($test$plusargs("dump")) begin
         $dumpfile("output.vcd");
@@ -87,6 +77,16 @@ initial begin
         $display("Generate trace file %0S", tracefile);
         tracefd = $fopen(tracefile, "w");
         $fdisplay(tracefd, "Trace file for %0S\n", uprog);
+    end
+
+    if ($value$plusargs("uprog=%s", uprog)) begin
+        // Load microprogram code.
+        load_uprog();
+    end
+
+    if ($value$plusargs("hex=%s", hexfile)) begin
+        // Load program code into main memory.
+        load_hex();
     end
 
     // Limit the simulation by specified number of cycles.
@@ -121,6 +121,7 @@ task load_hex();
     int fd, i, count;
     string line;
     logic [63:0] word;
+    logic [7:0] tag;
 
     // Open file with code.
     fd = $fopen(hexfile, "r");
@@ -135,9 +136,10 @@ task load_hex();
         if (line[0] == "#")
             continue;
 
-        if ($sscanf(line, "%x %x", i, word) == 2) begin
-            //$display("%05x: %016x", i, word);
+        if ($sscanf(line, "%x %x %x", i, tag, word) == 3) begin
+            //$fdisplay(tracefd, "%05x: %02x %016x", i, tag, word);
             ram.mem[i] = word;
+            ram.tag[i] = tag;
             count += 1;
         end
     end
@@ -172,7 +174,7 @@ task load_uprog();
             continue;
 
         if ($sscanf(line, "%d: 112'h%x,", i, opcode) == 2) begin
-            //$display("%8d: %028x", i, opcode);
+            //$fdisplay(tracefd, "%8d: %028x", i, opcode);
             cpu.memory[i] = opcode;
             count += 1;
         end
