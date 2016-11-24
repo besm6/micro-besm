@@ -8,8 +8,7 @@ eeв1а3
 *     Извлекаем шестнадцатеричный файл - результат работы загрузчика
 *
 *perso:50
-*       stand
-*no list
+*       no list
 *call yesmemory
 *ftn
 

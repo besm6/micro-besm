@@ -13,8 +13,6 @@ eeв1а3
 *
 *perso:50
 *call libinit:600000,40,тест
-*stand
-*       no list
 *main мкв/ass
 *execute
 MAIN_SW:NАМЕ QF

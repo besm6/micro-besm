@@ -1,16 +1,25 @@
 DISPAK          = dispak --input-encoding=utf8
 
-all:            assembler.txt loader.txt test.txt hexdump.txt
+all:            test.hex
 
-assembler.txt:  assembler.b6
+clean:
+		rm -f *.lst
+
+test.hex:
+		$(MAKE) assembler.lst
+		$(MAKE) loader.lst
+		$(MAKE) test.lst
+		$(MAKE) hexdump.lst
+		./listing-to-hex.py hexdump.lst > $@
+
+assembler.lst:  assembler.b6
 		$(DISPAK) $< > $@
 
-loader.txt:     loader.b6
+loader.lst:     loader.b6
 		$(DISPAK) $< > $@
 
-test.txt:       test.b6
+test.lst:       test.b6
 		$(DISPAK) $< > $@
-#		$(DISPAK) -t $< > $@ 2>&1
 
-hexdump.txt:    hexdump.b6
+hexdump.lst:    hexdump.b6
 		$(DISPAK) $< > $@
