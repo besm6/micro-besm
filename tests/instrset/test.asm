@@ -1583,568 +1583,568 @@ tanxe:      11  jmne    * + 1
 ;
 ;        45 - ASN, ASX
 ;
-t45:n vtm @45
-n xta bltest
-u1a t46
-12 vtm -48
-11 vtm 48
-tsft1e:xta c8u
-11 asn 64-1
-anx
-its 11
-15 aex
-u1a error
-11 utm -1
-12 vlm tsft1e
-12 vtm -48
-11 vtm 48
-tsft2e:xta i1
-11 asn 64-48
-anx
-its 11
-15 aex
-u1a error
-11 utm -1
-12 vlm tsft2e
-xta cful
-asx cful
-u1a error
-xta chess+1
-asx c0ful
-aex chess
-u1a error
-xta cful     ; а что
-asn 64-12 ; попадет
-yta    ; в рмр
-aex cfff    ; при
-u1a error  ; сдвигах ?
-xta cful
-asn 64+4
-yta
-aex cfu
-u1a error
-13 vjm newtest
+t45:        n   vtm     @45
+            n   xta     bltest
+                u1a     t46
+            12  vtm     -48
+            11  vtm     48
+tsft1e:         xta     c8u
+            11  asn     64 - 1
+                anx
+                its     11
+            15  aex
+                u1a     error
+            11  utm     -1
+            12  vlm     tsft1e
+            12  vtm     -48
+            11  vtm     48
+tsft2e:         xta     i1
+            11  asn     64 - 48
+                anx
+                its     11
+            15  aex
+                u1a     error
+            11  utm     -1
+            12  vlm     tsft2e
+                xta     cful
+                asx     cful
+                u1a     error
+                xta     chess + 1
+                asx     c0ful
+                aex     chess
+                u1a     error
+                xta     cful            ; а что
+                asn     64 - 12         ; попадет
+                yta                     ; в рмр
+                aex     cfff            ; при
+                u1a     error           ; сдвигах ?
+                xta     cful
+                asn     64 + 4
+                yta
+                aex     cfu
+                u1a     error
+            13  vjm     newtest
 ;
-;          46 - е+n, е-n, е+х, е-х
+;          46 - Е+N, Е-N, Е+Х, Е-Х
 ;
-t46:n vtm @46
-n xta bltest
-u1a t47
-12 vtm -@7e
-xta cfe8u
-atx ws
-l76е:xta ws
-е+n 64-1
-atx ws
-asn 64+41
-ati 14
-12 j+m 14
-14 jmne error
-12 vlm l76е
-xta ws
-е-n 64+1
-uza error
-12 vtm -@7e
-xta c008u
-atx ws
-11 vtm -1
-l761е:xta ws
-е-х c7e8u
-atx ws
-asn 64+41
-ati 14
-11 j+m 14
-14 jmne error
-11 utm -1
-12 vlm l761е
-xta ws
-е+х c008u
-aex c7e8u
-u1a error
-13 vjm newtest
+t46:        n   vtm     @46
+            n   xta     bltest
+                u1a     t47
+            12  vtm     -@7e
+                xta     cfe8u
+                atx     ws
+l76е:           xta     ws
+                e+n     64 - 1
+                atx     ws
+                asn     64 + 41
+                ati     14
+            12  j+m     14
+            14  jmne    error
+            12  vlm     l76е
+                xta     ws
+                e-n     64 + 1
+                uza     error
+            12  vtm     -@7e
+                xta     c008u
+                atx     ws
+            11  vtm     -1
+l761е:          xta     ws
+                e-x     c7e8u
+                atx     ws
+                asn     64 + 41
+                ati     14
+            11  j+m     14
+            14  jmne    error
+            11  utm     -1
+            12  vlm     l761е
+                xta     ws
+                e+x     c008u
+                aex     c7e8u
+                u1a     error
+            13  vjm     newtest
 ;
-;        47 - а+х, а-х, х-а
+;        47 - А+Х, А-Х, Х-А
 ;
-t47:n vtm @47
-n xta bltest
-u1a t48
-ntr 3
-14 vtm 64
-ita 14
-а-х i65
-uza error
-а+х i1
-u1a error
-aox
-u1a error
-xta i2
-х-а i1
-а-х iм1
-u1a error
-aox
-u1a error
-xta i2
-xts i1
-xts i2
-xts i3
-15 а-х ; 3-2=1
-u1a error
-15 а+х ; 1+1 = 2
-15 х-а ; 2-2 = 0
-u1a error
-aox
-u1a error
-xta cdu40l; 64
-а-х cdu42l; 66
-uza error
-а+х c848u; 2.
-u1a error
-aox
-uza error
-aex cdu; i0
-u1a error
-ntr 2
-xta c848u; 2.
-xts c84cu; 3.
-xts c848u; 2.
-xts c84cu; 3.
-15 а+х ; 3+2
-15 а-х ; 5-3
-15 х-а ; 2-2
-u1a error
-aox
-13 vjm newtest
+t47:        n   vtm     @47
+            n   xta     bltest
+                u1a     t48
+                ntr     3
+            14  vtm     64
+                ita     14
+                a-x     i65
+                uza     error
+                a+x     i1
+                u1a     error
+                aox
+                u1a     error
+                xta     i2
+                x-a     i1
+                a-x     iм1
+                u1a     error
+                aox
+                u1a     error
+                xta     i2
+                xts     i1
+                xts     i2
+                xts     i3
+            15  a-x                     ; 3-2=1
+                u1a     error
+            15  a+x                     ; 1+1 = 2
+            15  x-a                     ; 2-2 = 0
+                u1a     error
+                aox
+                u1a     error
+                xta     cdu40l          ; 64
+                a-x     cdu42l          ; 66
+                uza     error
+                a+x     c848u           ; 2.
+                u1a     error
+                aox
+                uza     error
+                aex     cdu             ; i0
+                u1a     error
+                ntr     2
+                xta     c848u           ; 2.
+                xts     c84cu           ; 3.
+                xts     c848u           ; 2.
+                xts     c84cu           ; 3.
+            15  a+x                     ; 3+2
+            15  a-x                     ; 5-3
+            15  x-a                     ; 2-2
+                u1a     error
+                aox
+            13  vjm     newtest
 ;
-;        48  - а*х, а/х
+;        48  - А*Х, А/Х
 ;
-t48:n vtm @48
-n xta bltest
-u1a oldfin
-ntr 3
-xta cdu5l
-а*х c5udl; 13/2**64
-15 atx
-yta 64
-stx ws
-aex cau
-u1a error
-xta ws
-aex cau41l; 65/2**24
-u1a error
-xta c5u5l; 5/2**64
-а*х cim13; = -65
-15 atx
-yta 64
-stx ws
-aex ca1ufs
-u1a error
-xta ws
-е+n 64+24
-aex cd0fsbf; -65!-
-u1a error
-ntr 2
-xta c848u; 2.
-а*х c84cu; 3.
-atx ws
-aex c84cu; 3.
-aex c02u
-u1a error; !=6
-xta ws; восст. а=6.
-а/х c84cu; 3.
-aex c848u; 2.
-u1a error
-13 vjm newtest
+t48:        n   vtm     @48
+            n   xta     bltest
+                u1a     oldfin
+                ntr     3
+                xta     cdu5l
+                a*x     c5udl           ; 13/2**64
+            15  atx
+                yta     64
+                stx     ws
+                aex     cau
+                u1a     error
+                xta     ws
+                aex     cau41l          ; 65/2**24
+                u1a     error
+                xta     c5u5l           ; 5/2**64
+                a*x     cim13           ; = -65
+            15  atx
+                yta     64
+                stx     ws
+                aex     ca1ufs
+                u1a     error
+                xta     ws
+                e+n     64 + 24
+                aex     cd0fsbf         ; -65!-
+                u1a     error
+                ntr     2
+                xta     c848u           ; 2.
+                a*x     c84cu           ; 3.
+                atx     ws
+                aex     c84cu           ; 3.
+                aex     c02u
+                u1a     error           ; !=6
+                xta     ws              ; восст. а=6.
+                a/x     c84cu           ; 3.
+                aex     c848u           ; 2.
+                u1a     error
+            13  vjm     newtest
 ;--------------------------------------
-oldfin:jmp t51 ; *** в тест нового режима
+oldfin:         jmp     t51             ; *** в тест нового режима
 ;--------------------------------------
 ;
-chstake:15 jmne error
-xta ws
-ati 2
-2 jmne error
-asn 64+24
-ati 2
-2 jmne error
-xta ws+2
-ati 2
-2 jmne error
-asn 64+24
-ati 2
-2 jmne error
-xta ws+1
-ati 2
-asn 64+24
-ati 3
-2 utm 1
-2 jmne error
-3 utm 1
-3 jmne error
- xta ufsl1
- atx ws
- atx ws+1
- atx ws+2
-13 jmp
-chst2e:15 utm -ws
-15 jmne error
-2 utm -1
-2 jmne error
-3 utm 1
-3 jmne error
-4 jmne error
-5 jmne error
-6 utm -1
-6 jmne error
-7 utm 1
-7 jmne error
-13 jmp
+chstake:    15  jmne    error
+                xta     ws
+                ati     2
+            2   jmne    error
+                asn     64 + 24
+                ati     2
+            2   jmne    error
+                xta     ws + 2
+                ati     2
+            2   jmne    error
+                asn     64 + 24
+                ati     2
+            2   jmne    error
+                xta     ws + 1
+                ati     2
+                asn     64 + 24
+                ati     3
+            2   utm     1
+            2   jmne    error
+            3   utm     1
+            3   jmne    error
+                xta     ufsl1
+                atx     ws
+                atx     ws + 1
+                atx     ws + 2
+            13  jmp
+chst2e:     15  utm     -ws
+            15  jmne    error
+            2   utm     -1
+            2   jmne    error
+            3   utm     1
+            3   jmne    error
+            4   jmne    error
+            5   jmne    error
+            6   utm     -1
+            6   jmne    error
+            7   utm     1
+            7   jmne    error
+            13  jmp
 ;
 ;       константы
 ;
-i1:atx
-atx 1
-i2:atx
-atx 2
-i3:atx
-atx 3
-i11:atx
-atx 11
-i12:atx
-atx 12
-i7:atx
-atx 7
-i48:atx
-atx 48
-cful:15 vlm @fffff
-15 vlm @fffff
-см1:15 vlm @fffff
-15 vlm @fffff
-ufsl1:15 vlm @fffff
-atx 1
-c0ful:7 vlm @fffff
-15 vlm @fffff
-iм24:15 vlm @fffff
-15 vlm @fffe8
-c8u:8 atx
-atx
-cfu:15 atx
-atx
-cfff:atx
-atx @fff
-е42х:4 ati
-atx
-cfe8u:15 jmne
-atx
-c008u:0 xta
-atx
-c7e8u:7 jmne
-atx
-i65:atx
-atx 65
-iм1: ntr @ffff
-15 vlm @ffff
-cdu40l:13 atx
-atx @40
-cdu41l:13 atx
-atx @41
-cdu42l:13 atx
-atx @42; 66
-;c828u:8 *50
-;atx
-cdu:13 atx
-atx
-c848u:8 xta @7000
-atx ; 2.
-c84cu:8 avx @7000
-atx ; 3.
-cdu5l:13 atx
-atx 5
-c5udl:5 atx
-atx @d
-c5u5l:5 atx
-atx 5
-cau:10 atx
-atx
-cau41l:10 atx
-atx @41
-;c86au:8 *52 @7000
-;atx
-;c88du:8 *71 @7000
-;atx
-c02u:ati
-atx
-cim13:13 ntr @fff
-15 vlm @7ff3
-ca1ufs:10 ntr @7fff
-15 vlm @7fff
-cd0fsbf:13 а*х @fff
-15 vlm @7fbf; -65!-
-;cim65:13 *77 @fff
-;15 vlm @7f57
-chess:10 utm @aaaaa
-10 utm @aaaaa
-atx
-atx
+i1:             atx
+                atx     1
+i2:             atx
+                atx     2
+i3:             atx
+                atx     3
+i11:            atx
+                atx     11
+i12:            atx
+                atx     12
+i7:             atx
+                atx     7
+i48:            atx
+                atx     48
+cful:       15  vlm     @fffff
+            15  vlm     @fffff
+см1:        15  vlm     @fffff
+            15  vlm     @fffff
+ufsl1:      15  vlm     @fffff
+                atx     1
+c0ful:      7   vlm     @fffff
+            15  vlm     @fffff
+iм24:       15  vlm     @fffff
+            15  vlm     @fffe8
+c8u:        8   atx
+                atx
+cfu:        15  atx
+                atx
+cfff:           atx
+                atx     @fff
+е42х:       4   ati
+                atx
+cfe8u:      15  jmne
+                atx
+c008u:      0   xta
+                atx
+c7e8u:      7   jmne
+                atx
+i65:            atx
+                atx     65
+iм1:            ntr     @ffff
+            15  vlm     @ffff
+cdu40l:     13  atx
+                atx     @40
+cdu41l:     13  atx
+                atx     @41
+cdu42l:     13  atx
+                atx     @42             ; 66
+;c828u:     8   *50
+;               atx
+cdu:        13  atx
+                atx
+c848u:      8   xta     @7000
+                atx                     ; 2.
+c84cu:      8   avx     @7000
+                atx                     ; 3.
+cdu5l:      13  atx
+                atx     5
+c5udl:      5   atx
+                atx     @d
+c5u5l:      5   atx
+                atx     5
+cau:        10  atx
+                atx
+cau41l:     10  atx
+                atx     @41
+;c86au:     8   *52     @7000
+;               atx
+;c88du:     8   *71     @7000
+;               atx
+c02u:           ati
+                atx
+cim13:      13  ntr     @fff
+            15  vlm     @7ff3
+ca1ufs:     10  ntr     @7fff
+            15  vlm     @7fff
+cd0fsbf:    13  a*x     @fff
+            15  vlm     @7fbf           ; -65!-
+;cim65:     13  *77     @fff
+;           15  vlm     @7f57
+chess:      10  utm     @aaaaa
+            10  utm     @aaaaa
+                atx
+                atx
 ;
 ;    конец теста эмуляции
 ;
-tbegin:15 vtm mst
-rmod @1c14 ; сьем часов
-aeu -1 ; инверсия
-atx ws
-rmod @15
-asn @400-32
-atx ws+1
-rmod @16
-aax =h0000 0000 ffff ffff
-aox ws+1
-aeu -1
-atx ws+1 ; время обр.прер.
-2 vtm -1
-xta ="'@0d''@0d'round-"
-xts npass
-asn @400+48
-14 vjm dhex8
-asn @400-32
-aox ="'0''0''0''0'. т="
+tbegin:     15  vtm     mst
+                rmod    @1c14           ; сьем часов
+                aeu     -1              ; инверсия
+                atx     ws
+                rmod    @15
+                asn     @400 - 32
+                atx     ws + 1
+                rmod    @16
+                aax     =h0000 0000 ffff ffff
+                aox     ws + 1
+                aeu     -1
+                atx     ws + 1          ; время обр.прер.
+            2   vtm     -1
+                xta     ="'@0d''@0d'round-"
+                xts     npass
+                asn     @400 + 48
+            14  vjm     dhex8
+                asn     @400 - 32
+                aox     ="'0''0''0''0'. т="
 ltim:
-2 xts ws+1
-а/u @400 ; "1" = 1 мсек.
-14 vjm dhex8
-2 xts cptim+1
-а/u @400
-2 xts ws+1 ; обновление
-2 atx cptim+1 ; времен
-а/u @400
-15 а-l
-14 vjm dhex8
-asn @400-24
-asn @400+16
-aox =" ('0''0''0''0''0')"
-xts ="  т/int="
-2 vlm ltim
-xta =". clock:"
-xts ="00.00.00"
-15 mtj 13
-13 msn @400-3
-xts =z".00'@0a''@0d'"
-xts clock
-aeu -1
-atx cptim+2
-a/u 10000 ; 1/100 cek.
-a/u 360000
-ati 2 ; "h"
-uta
-aoy
-a/u 6000
-ati 3 ; "m"
-uta
-aoy
-a/u 100
-ati 4 ; "s"
-uta
-aoy
-ati 5 ; "ss"
-14 vtm -3
-:14 ita 5
-a/u 10
-aou @30 ; "0"
-13 atb
-uta @30
-aoy
-13 atb 1
-13 utm 3
-:14 vlm *-4
-5 vtm newtesti
-13 vtm t51;обход режима эмуляции
-xta bltest + @21
-:jane *+2 ; - целиком
-xta new_reg
-:jalt *+1
-13 vtm t21 & m15 ; начинаем с режима эмуляции
-:uta mst
-jmp output
+            2   xts     ws+1
+                a/u     @400            ; "1" = 1 мсек.
+            14  vjm     dhex8
+            2   xts     cptim + 1
+                a/u     @400
+            2   xts     ws+1            ; обновление
+            2   atx     cptim + 1       ; времен
+                a/u     @400
+            15  a-l
+            14  vjm     dhex8
+                asn     @400 - 24
+                asn     @400 + 16
+                aox     =" ('0''0''0''0''0')"
+                xts     ="  т/int="
+            2   vlm     ltim
+                xta     =". clock:"
+                xts     ="00.00.00"
+            15  mtj     13
+            13  msn     @400 - 3
+                xts     =z".00'@0a''@0d'"
+                xts     clock
+                aeu     -1
+                atx     cptim + 2
+                a/u     10000           ; 1/100 cek.
+                a/u     360000
+                ati     2               ; "h"
+                uta
+                aoy
+                a/u     6000
+                ati     3               ; "m"
+                uta
+                aoy
+                a/u     100
+                ati     4               ; "s"
+                uta
+                aoy
+                ati     5               ; "ss"
+            14  vtm     -3
+:           14  ita     5
+                a/u     10
+                aou     @30             ; "0"
+            13  atb
+                uta     @30
+                aoy
+            13  atb     1
+            13  utm     3
+:           14  vlm     * - 4
+            5   vtm     newtesti
+            13  vtm     t51             ; обход режима эмуляции
+                xta     bltest + @21
+:               jane    * + 2           ; - целиком
+                xta     new_reg
+:               jalt    * + 1
+            13  vtm     t21 & m15       ; начинаем с режима эмуляции
+:               uta     mst
+                jmp     output
 ;
 ;
-tloop:ita 13 ; для зацикливания
-ath npass<<1 +1 ; подтеста
-uta =z"- ок.'@а''@d'"
-5 vjm output
+tloop:          ita     13              ; для зацикливания
+                ath     npass<<1 + 1    ; подтеста
+                uta     =z"- ок.'@а''@d'"
+            5   vjm     output
 ;
-newtesti:uta errint ; перехват
-2 vtm -63     ; всех преры-
-:2 atx adr+63 ; ваний - на
-2 vlm *       ; "errint"
-uta extr
-2 vtm -3
-:2 atx adr+67
-2 vlm *
-14 vtm work_reg ; раб.режим
-12 vjm setgr
+newtesti:       uta     errint          ; перехват
+            2   vtm     -63             ; всех преры-
+:           2   atx     adr + 63         ; ваний - на
+            2   vlm     *               ; "errint"
+                uta     extr
+            2   vtm     -3
+:           2   atx     adr + 67
+            2   vlm     *
+            14  vtm     work_reg        ; раб.режим
+            12  vjm     setgr
 ;
 newtest:
-xta con_in
-jane anal ; был ввод
-xta npass
-ati 2
-:2 jmne *+1 ; один тест
-13 mtj 2 ; все подряд
-:15 vtm mst ; уст.магазина
-arx =h0000 0001 0000 0000
-atx npass
-14 vtm main_reg ; уст., если
-14 clrr @e0000 ; надо, факульт.
-wtc new_reg ; режим (напр.рш)
-setr
-2 jmp
+                xta     con_in
+                jane    anal            ; был ввод
+                xta     npass
+                ati     2
+:           2   jmne    * + 1           ; один тест
+            13  mtj     2               ; все подряд
+:           15  vtm     mst             ; уст.магазина
+                arx     =h0000 0001 0000 0000
+                atx     npass
+            14  vtm     main_reg        ; уст., если
+            14  clrr    @e0000          ; надо, факульт.
+                wtc     new_reg         ; режим (напр.рш)
+                setr
+            2   jmp
 ;
 ;       обработка внешних прерываний :
 ;      ================================
 ;
-extint:rmod @1802
-15 atx 2 ; for test-05
-jmp extint1
+extint:         rmod    @1802
+            15  atx     2               ; for test-05
+                jmp     extint1
 ;
-endtim:uta quant
-ng wmod @14
-uta -1 ; подкачка таймера
-wmod @14 ; 0-й группы
+endtim:         uta     quant
+            ng  wmod    @14
+                uta     -1              ; подкачка таймера
+                wmod    @14             ; 0-й группы
 ;
 ret_int:
-cmon -1 ; ***
-rmod @1802
-extint1:aax wellint
-wmod @1802
-:jane *+1
-ng ijp
-:aau @f0000
-jaeq pult
-anu -1
-ati 2
-rmod @1802
-2 aen
-wmod @1802
-2 utm 41-65
-2 jmeq endtim ; 40-й разряд
-:n vtm 5
-jmp int ; 41-программное
+                cmon    -1              ; ***
+                rmod    @1802
+extint1:        aax     wellint
+                wmod    @1802
+:               jane    * + 1
+            ng  ijp
+:               aau     @f0000
+                jaeq    pult
+                anu     -1
+                ati     2
+                rmod    @1802
+            2   aen
+                wmod    @1802
+            2   utm     41 - 65
+            2   jmeq    endtim          ; 40-й разряд
+:           n   vtm     5
+                jmp     int             ; 41-программное
 ;
-pult:wmod @1c19 ; сброс кэша
-smon @80 ; ***
-xta ppinf
-asn @400+8
-aau @ff
-jaeq retpult ; это ввод
-ati 3 ; конец вывода
-uta -mc
-:ati 11
-11 bta que<<3
-jaeq badpult ; нет заявки
-ati 5
-3 j-м 5
-5 jmne *-2
-3 utc -1
-3 xta jов-1
-aan 64-39
-:jane *+1
-hlt @39
-:3 atx jов+511 ; -дубль
-3 bta que<<3 ; продвижка
-11 atb que<<3 ; очереди
-3 bta que<<3+4096
-11 atb que<<3+4096 ; -дубль
-bta que<<3
-3 atb que<<3
-bta que<<3+4096
-3 atb que<<3+4096 ; -дубль
-ita 3      ; в список
-atb que<<3 ; своб.заявок
-atb que<<3+4096 ; -дубль
+pult:           wmod    @1c19           ; сброс кэша
+                smon    @80             ; ***
+                xta     ppinf
+                asn     @400 + 8
+                aau     @ff
+                jaeq    retpult         ; это ввод
+                ati     3               ; конец вывода
+                uta     -mc
+:               ati     11
+            11  bta     que << 3
+                jaeq    badpult         ; нет заявки
+                ati     5
+            3   j-m     5
+            5   jmne    * - 2
+            3   utc     -1
+            3   xta     jов - 1
+                aan     64 - 39
+:               jane    * + 1
+                hlt     @39
+:           3   atx     jов + 511       ; -дубль
+            3   bta     que<<3          ; продвижка
+            11  atb     que<<3          ; очереди
+            3   bta     que<<3 + 4096
+            11  atb     que<<3 + 4096   ; -дубль
+                bta     que<<3
+            3   atb     que<<3
+                bta     que<<3 + 4096
+            3   atb     que<<3 + 4096   ; -дубль
+                ita     3               ; в список
+                atb     que<<3          ; своб.заявок
+                atb     que<<3 + 4096   ; -дубль
 ;
 retpult:
-uta
-atx ppinf
-rmod @1802 ; силин ставил
-aau @ffff1 ; сразу 3
-wmod @1802 ; единички !
-jmp ret_int
-badpult:hlt @40
-jmp retpult
+                uta
+                atx     ppinf
+                rmod    @1802 ; силин ставил
+                aau     @ffff1 ; сразу 3
+                wmod    @1802 ; единички !
+                jmp     ret_int
+badpult:        hlt     @40
+                jmp     retpult
 ;
 ;          ожидание ввода с консоли :
 ;
-:xta con_in
-jaeq *
+:               xta     con_in
+                jaeq    *
 ;
 input:
-wmod @1c19
-hta refer<<1
-jane dport
-xta con_in
-13 jane
-5 vtm input-1
-uta =z" wait> "
+                wmod    @1c19
+                hta     refer << 1
+                jane    dport
+                xta     con_in
+            13  jane
+            5   vtm     input - 1
+                uta     =z" wait> "
 ;
 ;
 ;
 ;        выдача строки на консоль :
 ;        портятся регистры: 11,12,14
 ;
-output:ati 11 ; адрес текста
-wmod @1c19
-hta refer<<1
-jane dport
-14 vtm limit
-setr @80 ;   smon @80 ; ***
-uta -mc
-:ati 12
-12 bta que<<3
-jaeq *+2
-14 vrm *-1
-xta last_out+1
-atx last_out
-:clrr @fff7f ; cmon @fff7f ; ***
-output11:rmod @1819
-asn @400-56 ; процесс
-aox last_out ; адр.в буфере
-atx last_out+1
-ati 12
-a+u con_out-refer ;
-aon 64-40 ; +готовность
-atx last_job ; заявка
-:11 xta
-12 atx con_out ; перепись
-11 utm 1       ; в кольцевой
-12 utm 1-lо
-:12 jmlt *+1
-12 vtm -lо
-:12 utm lо
-aau @ff
-jane *-4
-5 utc
-14 jmle ; сверх лимита !
-setr @80 ; smon @80 ; ***
-ita 12 ; своб.
-atx last_out ; слово
-:bta que<<3
-ati 14 ; своб.эл-т
-14 bta que<<3
-atb que<<3 ; сняли с головы
-atb que<<3+4096 ; -дубль
-xta last_job
-14 utc -1
-14 atx jов-1
-14 atx jов+511 ; -дубль
-uta -mc
-:ati 11
-11 bta que<<3
-jane *-1
-14 atb que<<3
-14 atb que<<3+4096 ; -дубль
-ita 14
-11 atb que<<3
-11 atb que<<3+4096 ; -дубль
-clrr @fff7f ; cmon @fff7f ; ***
-5 jmp
+output:         ati     11              ; адрес текста
+                wmod    @1c19
+                hta     refer << 1
+                jane    dport
+            14  vtm     limit
+                setr    @80             ; smon @80 ; ***
+                uta     -mc
+:               ati     12
+            12  bta     que << 3
+                jaeq    * + 2
+            14  vrm     * - 1
+                xta     last_out + 1
+                atx     last_out
+:               clrr    @fff7f          ; cmon @fff7f ; ***
+output11:       rmod    @1819
+                asn     @400 - 56       ; процесс
+                aox     last_out        ; адр.в буфере
+                atx     last_out + 1
+                ati     12
+                a+u     con_out - refer ;
+                aon     64 - 40         ; +готовность
+                atx     last_job        ; заявка
+:           11  xta
+            12  atx     con_out         ; перепись
+            11  utm     1               ; в кольцевой
+            12  utm     1 - lо
+:           12  jmlt    * + 1
+            12  vtm     -lо
+:           12  utm     lо
+                aau     @ff
+                jane    * - 4
+            5   utc
+            14  jmle                    ; сверх лимита!
+                setr    @80             ; smon @80 ; ***
+                ita     12              ; своб.
+                atx     last_out        ; слово
+:               bta     que<<3
+                ati     14              ; своб.эл-т
+            14  bta     que<<3
+                atb     que<<3          ; сняли с головы
+                atb     que<<3 + 4096   ; -дубль
+                xta     last_job
+            14  utc     -1
+            14  atx     jов - 1
+            14  atx     jов + 511       ; -дубль
+                uta     -mc
+:               ati     11
+            11  bta     que<<3
+                jane    * - 1
+            14  atb     que<<3
+            14  atb     que<<3 + 4096   ; -дубль
+                ita     14
+            11  atb     que<<3
+            11  atb     que<<3 + 4096   ; -дубль
+                clrr    @fff7f          ; cmon @fff7f ; ***
+            5   jmp
 ;
 ;---    анализ введенной директивы :
 ;       производится в конце каждого подтеста.
@@ -2171,193 +2171,193 @@ clrr @fff7f ; cmon @fff7f ; ***
 ;               3е : тест теговских прерываний
 ;               3f : тест страничных прерываний
 ;               4в : тест семафорных команд;
-;                     ... : прочая мелочь.
+;              ... : прочая мелочь.
 ;
-okdir:uta =z" - ок. "
-5 vjm output
-anal:15 vtm mst
-13 vjm input
-uts
-stx con_in
+okdir:          uta     =z" - ок. "
+            5   vjm     output
+anal:       15  vtm     mst
+            13  vjm     input
+                uts
+                stx     con_in
 ;
-n vtm @ff ; ***
-atx ws
-aex ="full"
-asn @400+32
-jaeq fullstep
-xta ws
-aex ="test"
-asn @400+32
-jaeq stndstep
-xta ws
-aex ="hltoff"
-asn @400+16
-jaeq sethlt+1
-asn @400+16
-jaeq sethlt
-xta ws
-aex ="мемо"
-asn @400+32
-13 vtm sс_мем
-jaeq memory
-aeu @7d
-jaeq memory2 ; "мем2"
-xta ws
-aex ="repeatnn"
-asn @400+40
-5 vtm trep
-jaeq маке_nт
-xta ws
-aex ="deletenn"
-asn @400+40
-5 vtm tdel
-jane baddir
-маке_nт:xta ws
-asn @400+24
-aau @4040
-asn @400+3
-15 atx
-asn @400+3
-15 aox
-asn @400-24
-arx ws
-apx =h0000 000f 0f00 0000
-asn @400+56
-ati 13
-13 hta atest<<1
-5 jmp
+            n   vtm     @ff             ; ***
+                atx     ws
+                aex     ="full"
+                asn     @400 + 32
+                jaeq    fullstep
+                xta     ws
+                aex     ="test"
+                asn     @400 + 32
+                jaeq    stndstep
+                xta     ws
+                aex     ="hltoff"
+                asn     @400 + 16
+                jaeq    sethlt+1
+                asn     @400 + 16
+                jaeq    sethlt
+                xta     ws
+                aex     ="memo"
+                asn     @400 + 32
+            13  vtm     sс_мем
+                jaeq    memory
+                aeu     @7d
+                jaeq    memory2         ; "mem2"
+                xta     ws
+                aex     ="repeatnn"
+                asn     @400 + 40
+            5   vtm     trep
+                jaeq    маке_nт
+                xta     ws
+                aex     ="deletenn"
+                asn     @400 + 40
+            5   vtm     tdel
+                jane    baddir
+маке_nт:        xta     ws
+                asn     @400 + 24
+                aau     @4040
+                asn     @400 + 3
+            15  atx
+                asn     @400 + 3
+            15  aox
+                asn     @400 - 24
+                arx     ws
+                apx     =h0000 000f 0f00 0000
+                asn     @400 + 56
+                ati     13
+            13  hta     atest << 1
+            5   jmp
 ;
-tdel:uta -1
-13 atx bltest
-jmp okdir
+tdel:           uta     -1
+            13  atx     bltest
+                jmp     okdir
 ;
-trep:extf 64-20
-13 ath atest<<1
-uts
-13 stx bltest
-ati 13
-13 jmne tloop
+trep:           extf    64 - 20
+            13  ath     atest << 1
+                uts
+            13  stx     bltest
+                ati     13
+            13  jmne    tloop
 ;
-baddir:uta =z"  nот und:"
-5 vjm output
-xta ws
-atx con_in
-uta con_in
-5 vjm output
-uta
-atx con_in
-jmp anal
+baddir:         uta     =z"  not und:"
+            5   vjm     output
+                xta     ws
+                atx     con_in
+                uta     con_in
+            5   vjm     output
+                uta
+                atx     con_in
+                jmp     anal
 ;
-sethlt:uta @eee
-:atx halter
-jmp okdir
+sethlt:         uta     @eee
+:               atx     halter
+                jmp     okdir
 ;
-fullstep:uta -1
-stndstep:aou -sтер
-atx nexpag
-uta lws
-atx lrw
-xta npass
-aax =hffff 0000 0000 0000
-atx npass
-jmp tbegin
+fullstep:       uta     -1
+stndstep:       aou     -sтер
+                atx     nexpag
+                uta     lws
+                atx     lrw
+                xta     npass
+                aax     =hffff 0000 0000 0000
+                atx     npass
+                jmp     tbegin
 ;
 ;         определение количества памяти :
 ;
-memory:uta nomemor
-atx adr
-atx adr+1
-atx adr+2
-atx adr+3
-3 vtmf mscale
-uta -1
-2 vtm 15
-:2 atx mscale
-2 vrm *
-xta =hс000 0000 0000 0000
-atx mscale+15 ; посл.блок "озу"
-2 vtm 1023-20-62
-4 vtm @5000 ; 20-й физ.лист
-3 utm 20
-tta begin+ @3ff
-atx рав   ; спасение ячейки
-ytx рав+1 ; из 0-го листа
+memory:         uta     nomemor
+                atx     adr
+                atx     adr + 1
+                atx     adr + 2
+                atx     adr + 3
+            3   vtmf    mscale
+                uta     -1
+            2   vtm     15
+:           2   atx     mscale
+            2   vrm     *
+                xta     =hс000 0000 0000 0000
+                atx     mscale + 15     ; посл.блок "озу"
+            2   vtm     1023 - 20 - 62
+            4   vtm     @5000           ; 20-й физ.лист
+            3   utm     20
+                tta     begin + @3ff
+                atx     рав             ; спасение ячейки
+                ytx     рав + 1         ; из 0-го листа
 ;
-rmod @400
-atx рав+2
-lмем:4 uta @3ff ; припишем
-wmod @400 ; к 0 мат.листу
-setr @178 ; блок.тег.прер.
-uta
-atx @3ff ; ***
-uta -1
-xta @3ff ; ***
-jaeq elmem+1
-elmem:3 clrf ; исключ.
-3 clrf ; из шкалы
-:clrr @fce87 ; бзо,бзз+теговские
-tta begin+ @3ff
-jaeq error ; порча памяти
-3 utm 1
-4 utm @400
-2 vrm lмем ; след.лист
-3 vtm 15
-xta рав+2
-wmod @400
-13 jmp
+                rmod    @400
+                atx     рав + 2
+lмем:       4   uta     @3ff            ; припишем
+                wmod    @400            ; к 0 мат.листу
+                setr    @178            ; блок.тег.прер.
+                uta
+                atx     @3ff            ; ***
+                uta     -1
+                xta     @3ff            ; ***
+                jaeq    elmem + 1
+elmem:      3   clrf                    ; исключ.
+            3   clrf                    ; из шкалы
+:               clrr    @fce87          ; бзо,бзз+теговские
+                tta     begin + @3ff
+                jaeq    error           ; порча памяти
+            3   utm     1
+            4   utm     @400
+            2   vrm     lмем            ; след.лист
+            3   vtm     15
+                xta     рав + 2
+                wmod    @400
+            13  jmp
 ;
-sс_мем:3 xta mscale
-jaeq esc_мем
-ita 3
-14 vjm dhex8
-asn @400-56
-asn @400+24
-aox ="'@а''@d' '0' :  "
-atx mst+10
-3 xta mscale
-14 vjm dhex8
-atx mst+12
-3 xta mscale
-asn @400+32
-14 vjm dhex8
-atx mst+11
-uta
-atx mst+13
-uta mst+10
-5 vjm output
-esc_мем:3 vrm sс_мем
-jmp okdir
+sс_мем:     3   xta     mscale
+                jaeq    esc_мем
+                ita     3
+            14  vjm     dhex8
+                asn     @400 - 56
+                asn     @400 + 24
+                aox     ="'@а''@d' '0' :  "
+                atx     mst + 10
+            3   xta     mscale
+            14  vjm     dhex8
+                atx     mst + 12
+            3   xta     mscale
+                asn     @400 + 32
+            14  vjm     dhex8
+                atx     mst + 11
+                uta
+                atx     mst + 13
+                uta     mst + 10
+            5   vjm     output
+esc_мем:    3   vrm     sс_мем
+                jmp     okdir
 ;
-;       двусторонняя долбежка :
+;       двусторонняя долбежка:
 ;
-memory2:uta =z"'@0а''@0d'begin sрес.test  "
-5 vjm output
-:bta heads<<3
-jane * ; ждем
-1 vtm
-1 rmod @1c15
-1 ati 10
-1 uta -1
-1 wmod @1c15
-1 uta долблист
-1 atx долбежка
+memory2:        uta     =z"'@0а''@0d'begin sрес.test  "
+            5   vjm     output
+:               bta     heads << 3
+                jane    *               ; ждем
+            1   vtm
+            1   rmod    @1c15
+            1   ati     10
+            1   uta     -1
+            1   wmod    @1c15
+            1   uta     долблист
+            1   atx     долбежка
 ;
-:15 vtm @aaaaa
-1 jmp *
+:           15  vtm     @aaaaa
+            1   jmp     *
 ;
-:1 uta
-1 atx долбежка
-2 vtm @7ffff
-:1 asn @400+50
-2 vrm *
-1 ita 10
-1 wmod @1c15
-5 vtm anal
-1 ita
-:1 jaeq *+1
-1 hlt 2
-:1 uta =z"  end sрес.test.'@0d''@0а'"
-1 jmp output
+:           1   uta
+            1   atx     долбежка
+            2   vtm     @7ffff
+:           1   asn     @400 + 50
+            2   vrm     *
+            1   ita     10
+            1   wmod    @1c15
+            5   vtm     anal
+            1   ita
+:           1   jaeq    * + 1
+            1   hlt     2
+:           1   uta     =z"  end sрес.test.'@0d''@0а'"
+            1   jmp     output
 ;
 ;        тест памяти двойного доступа
 ;        ============================
@@ -2376,375 +2376,375 @@ jane * ; ждем
 ;      является сигналом об окончании спец.теста.
 ;
 ;      пп работает по возрастанию адресов: 0--->ffb
-;      цп работает по убыванию адресов : ffb--->0
+;      цп работает по убыванию адресов: ffb--->0
 ;
 ;
 dport:
-wmod @1c19
-qта долбежка<<2 +1 ; ждем конца
-:jaeq dport ; росписи памяти
-1 vtm 100000
-:1 vrm * ; мелкая пауза
-1 vtm 1 ; сч.проходов
-hta долбежка<<1+1 ; начнем с
-jaeq wrport ; чтения
-hta долбежка<<1
-2 vtm 2045
-:2 ath refer<<1
-2 vrm *
-wmod @1c19
-uta 1 ; - с записи
-wrport:ati 4
-2 vtm 2045
+                wmod    @1c19
+                qta     долбежка<<2 + 1 ; ждем конца
+:               jaeq    dport           ; росписи памяти
+            1   vtm     100000
+:           1   vrm     *               ; мелкая пауза
+            1   vtm     1               ; сч.проходов
+                hta     долбежка<<1 + 1 ; начнем с
+                jaeq    wrport          ; чтения
+                hta     долбежка<<1
+            2   vtm     2045
+:           2   ath     refer<<1
+            2   vrm     *
+                wmod    @1c19
+                uta     1               ; - с записи
+wrport:         ati     4
+            2   vtm     2045
 ;
-rwport:wmod @1c19
-hta долбежка<<1
-ati 5 ; эталон
-jaeq test ; - конец режима
-aeh refer<<1
-jane dport+1 ; смена эталона
-ita 5
-4 jmeq report
-2 ath refer<<1
-jmp lport
-report:2 aeh refer<<1
-jaeq lport
-2 mtj 3
-3 msn @400+1
-5 uty
-hlt 2
-lport:2 vrm rwport
-ita 4
-aeu 1
-1 vlm wrport
+rwport:         wmod    @1c19
+                hta     долбежка<<1
+                ati     5               ; эталон
+                jaeq    test            ; - конец режима
+                aeh     refer << 1
+                jane    dport + 1       ; смена эталона
+                ita     5
+            4   jmeq    report
+            2   ath     refer << 1
+                jmp     lport
+report:     2   aeh     refer << 1
+                jaeq    lport
+            2   mtj     3
+            3   msn     @400 + 1
+            5   uty
+                hlt     2
+lport:      2   vrm     rwport
+                ita     4
+                aeu     1
+            1   vlm     wrport
 ;
 ;
 ;        тест обнаружил ошибку.
 ;        **********************
 ;
 ;
-errint1:ita n
-ng wmod 4 ; ном.прер.
-uta ; надо: rmod @1c
-ng wmod @1c
-ng rmod 6
-atx er6
+errint1:        ita     n
+            ng  wmod    4               ; ном.прер.
+                uta                     ; надо: rmod @1c
+            ng  wmod    @1c
+            ng  rmod    6
+                atx     er6
 ;
-special:ng rmod @1c ; р о п
-ng vtm 1<<5 ; группа = 1 !!!
-ng wmod 5
-ita ri
-ng wmod 3
-ita iа
-ng wmod 2
-rmod @1802
-aax wellint
-aon 64-41
-aen 64-41
-wmod @1802
-uta ругань
-jmp put_рс
+special:    ng  rmod    @1c             ; РОП
+            ng  vtm     1 << 5          ; группа = 1!!!
+            ng  wmod    5
+                ita     ri
+            ng  wmod    3
+                ita     iа
+            ng  wmod    2
+                rmod    @1802
+                aax     wellint
+                aon     64 - 41
+                aen     64 - 41
+                wmod    @1802
+                uta     ругань
+                jmp     put_рс
 ;
 ;
 ;         первым делом - встанем, чтобы можно было
 ;         посмотреть регистры. потом можно дать "gо"
 ;
-errint:wtc halter
-hlt ; ***
-rmod @1818
-jaeq errint1
-ita 6
-atx er6
+errint:         wtc     halter
+                hlt                     ; ***
+                rmod    @1818
+                jaeq    errint1
+                ita     6
+                atx     er6
 ;
-error:wtc halter
-hlt ; ***
-:uta special
-atx adr+4
-4 vtm ; "мат.реж."
-uta
-wmod @24
-wmod @1c13 ; п/п для прот.роп
-;       2-иаоп, 3-счас, 4-nint, 5-роп
-ругань:15 vtm mst
-wtc er6
-6 vtm
-uta 1
-arx ercnt
-atx ercnt
-14 vjm dhex8
-aax =h0000 0000 00ff ffff
-asn @400-24
-aox ="'@а''@d''0''0''0' - "
-xts ="error in"
-its n
-14 vjm dhex8
-aau @ffff
-aox =" test-'0''0'"
-4 jmeq ругань1
-its 4
-3 mtj 5
-14 vjm dhex8
-aau @ffff
-aox ="  int:'0''0'"
-2 jmeq ругань1
-xts ="  iаор: "
-its 2
-14 vjm dhex8
-ругань1:xts ="   adr: "
-its 5
-14 vjm dhex8
-6 jmeq ругань2
-asn @400-24
-aox =h0000 0000 002с 2020
-uts
-atx er6
-ita 6
-14 vjm dhex8
-ругань2:asn @400-16
-aou @0a0d
-asn @400-8
-uts mst
-5 vjm output
-xta begin+ @3ff
-jane norest
-setr @3178 ; восстановление
-xty рав+1 ; испорченной
-xta рав ; ячейки 0-го листа
-ttx begin+ @3ff
-norest:clrr @fce87
-5 vjm cout
-5 vtm tbegin
-14 vtm 5
+error:          wtc     halter
+                hlt                     ; ***
+:               uta     special
+                atx     adr + 4
+            4   vtm                     ; "мат.реж."
+                uta
+                wmod    @24
+                wmod    @1c13           ; п/п для прот.роп
+;       2-ИАОП, 3-СчАС, 4-NInt, 5-РОП
+ругань:     15  vtm     mst
+                wtc     er6
+            6   vtm
+                uta     1
+                arx     ercnt
+                atx     ercnt
+            14  vjm     dhex8
+                aax     =h0000 0000 00ff ffff
+                asn     @400 - 24
+                aox     ="'@а''@d''0''0''0' - "
+                xts     ="error in"
+                its     n
+            14  vjm     dhex8
+                aau     @ffff
+                aox     =" test-'0''0'"
+            4   jmeq    ругань1
+                its     4
+            3   mtj     5
+            14  vjm     dhex8
+                aau     @ffff
+                aox     ="  int:'0''0'"
+            2   jmeq    ругань1
+                xts     ="  iаор: "
+                its     2
+            14  vjm     dhex8
+ругань1:        xts     ="   adr: "
+                its     5
+            14  vjm     dhex8
+            6   jmeq    ругань2
+                asn     @400 - 24
+                aox     =h0000 0000 002с 2020
+                uts
+                atx     er6
+                ita     6
+            14  vjm     dhex8
+ругань2:        asn     @400 - 16
+                aou     @0a0d
+                asn     @400 - 8
+                uts     mst
+            5   vjm     output
+                xta     begin + @3ff
+                jane    norest
+                setr    @3178           ; восстановление
+                xty     рав + 1         ; испорченной
+                xta     рав             ; ячейки 0-го листа
+                ttx     begin + @3ff
+norest:         clrr    @fce87
+            5   vjm     cout
+            5   vtm     tbegin
+            14  vtm     5
 ;
-pause:12 vtm @1ffff
-:xta con_in ; примерно
-jane anal ; 1 сек.
-12 vrm *-1
-14 vrm pause
-5 jmp
+pause:      12  vtm     @1ffff
+:               xta     con_in          ; примерно
+                jane    anal            ; 1 сек.
+            12  vrm     * - 1
+            14  vrm     pause
+            5   jmp
 ;
 ;        организация насильственного входа
 ;
-put_рс:ng wmod @1b ; счас
-ng rmod @11
-aax =h0000 0000 c7ff ffff
-ng wmod @11 ; гаш. ппу,пиа,ппк
-ng rmod 0
-jane horror
-jmp ret_int
+put_рс:     ng  wmod    @1b             ; СчАС
+            ng  rmod    @11
+                aax     =h0000 0000 c7ff ffff
+            ng  wmod    @11             ; гаш. ППУ,ПИА,ППК
+            ng  rmod    0
+                jane    horror
+                jmp     ret_int
 ;
-nomemor:uta elmem
-jmp put_рс
+nomemor:        uta     elmem
+                jmp     put_рс
 ;
-horror:11 vtm =z" mod.0 is nот zero ! "
-5 vjm output11
-:bta heads<<3
-jane *
-:hlt -7
-jmp *
+horror:     11  vtm     =z" mod.0 is nот zero ! "
+            5   vjm     output11
+:               bta     heads << 3
+                jane    *
+:               hlt     -7
+                jmp     *
 ;
 ;************************************************
 ;
-;        i.  репертуар старой бэсм-6.
+;        I.  Репертуар старой БЭСМ-6.
 ;        ============================
 ;
 ;************************************************
 ;
-;     51,52 - проверка команд  jmeq, jmne :
+;     51,52 - проверка команд JMEQ, JMNE:
 ;
-t51:n vtm @51
-n xta bltest
-jane t53
-2 vtm 0
-2 jmeq *+1
-jmp error
-:2 jmne error
-2 jmne error
-2 vtm -1
-2 jmeq error
-:2 jmeq error
-2 jmne t52
-jmp error
+t51:        n   vtm     @51
+            n   xta     bltest
+                jane    t53
+            2   vtm     0
+            2   jmeq    * + 1
+                jmp     error
+:           2   jmne    error
+            2   jmne    error
+            2   vtm     -1
+            2   jmeq    error
+:           2   jmeq    error
+            2   jmne    t52
+                jmp     error
 ;
-t52:n vtm @52
-2 vtm 1
-3 vtm -32
-jmp *+2
-:2 j+m 2 ; сдвиг "1" влево
-3 utm 1
-:2 jmne *-1
-3 jmne error
-13 vjm newtest
+t52:        n   vtm     @52
+            2   vtm     1
+            3   vtm     -32
+                jmp     * + 2
+:           2   j+m     2               ; сдвиг "1" влево
+            3   utm     1
+:           2   jmne    * - 1
+            3   jmne    error
+            13  vjm     newtest
 ;
-;      53 - проверка команд  vlm, vrm :
+;      53 - проверка команд VLM, VRM:
 ;
-t53:n vtm @53
-n xta bltest
-jane t54
-2 vtm -999
-3 vtm -1000
-:3 utm 1
-2 vlm *
-2 jmne error
-3 jmne error
-:2 vlm error ; а что при "0"
-2 jmne error
+t53:        n   vtm     @53
+            n   xta     bltest
+                jane    t54
+            2   vtm     -999
+            3   vtm     -1000
+:           3   utm     1
+            2   vlm     *
+            2   jmne    error
+            3   jmne    error
+:           2   vlm     error           ; а что при "0"
+            2   jmne    error
 ;
-  2 vtm 999
-  3 vtm -1000
-  :3 utm 1
-  2 vrm *
-  2 jmne error
-  3 jmne error
-  :2 vrm *-2 ; а что при "0"
-  2 jmne error
-13 vjm newtest
+            2   vtm     999
+            3   vtm     -1000
+  :         3   utm     1
+            2   vrm     *
+            2   jmne    error
+            3   jmne    error
+  :         2   vrm     * - 2           ; а что при "0"
+            2   jmne    error
+            13  vjm     newtest
 ;
-;        54 - проверка команд  ati,  ita :
+;        54 - проверка команд ATI, ITA:
 ;
-t54:n vtm @54
-n xta bltest
-jane t55
-2 vtm -1
-ati 2
-2 jmne error
-xta ful
-ati 2
-2 jmeq error
-ita 2
-ati 3
-3 jmeq error
-3 utm 1
-3 jmne error
-13 vjm newtest
+t54:        n   vtm     @54
+            n   xta     bltest
+                jane    t55
+            2   vtm     -1
+                ati     2
+            2   jmne    error
+                xta     ful
+                ati     2
+            2   jmeq    error
+                ita     2
+                ati     3
+            3   jmeq    error
+            3   utm     1
+            3   jmne    error
+            13  vjm     newtest
 ;
-;          55 - проверка команд  utc, wtc :
+;          55 - проверка команд UTC, WTC:
 ;
-t55:n vtm @55
-n xta bltest
-jane t56
-utc -1
-3 vtm
-3 jmeq error
-3 utm 1
-3 jmne error
-:utc -1
-:3 vtm
-3 jmeq error
-3 utm 1
-3 jmne error
-:wtc =i-1
-3 vtm
-3 jmeq error
-3 utm 1
-:3 jmne error
-wtc =i-1
-:3 vtm
-3 jmeq error
-3 utm 1
-3 jmne error
-utc -7
-utc 8
-3 vtm -2
-3 jmeq error
-3 utm 1
-3 jmne error
-wtc =i-1
-utc 8
-3 vtm -6
-3 utm -1
-3 jmne error
-3 vtm 1
-:3 wtc chess1
-4 vtm
-ita 4
-3 aex chess1
-asn 1024-32
-jane error
-3 vrm *-3
-13 vjm newtest
+t55:        n   vtm     @55
+            n   xta     bltest
+                jane    t56
+                utc     -1
+            3   vtm
+            3   jmeq    error
+            3   utm     1
+            3   jmne    error
+:               utc     -1
+:           3   vtm
+            3   jmeq    error
+            3   utm     1
+            3   jmne    error
+:               wtc     =i-1
+            3   vtm
+            3   jmeq    error
+            3   utm     1
+:           3   jmne    error
+                wtc     =i-1
+:           3   vtm
+            3   jmeq    error
+            3   utm     1
+            3   jmne    error
+                utc     -7
+                utc     8
+            3   vtm     -2
+            3   jmeq    error
+            3   utm     1
+            3   jmne    error
+                wtc     =i-1
+                utc     8
+            3   vtm     -6
+            3   utm     -1
+            3   jmne    error
+            3   vtm     1
+:           3   wtc     chess1
+            4   vtm
+                ita     4
+            3   aex     chess1
+                asn     1024 - 32
+                jane    error
+            3   vrm     * - 3
+            13  vjm     newtest
 ;
-;        56 - проверка команды  vjm :
+;        56 - проверка команды VJM:
 ;
-t56:n vtm @56
-n xta bltest
-jane t57
-2 vjm t6_1 ; справа
-t6_1:2 utm -t6_1
-2 jmne error
-:2 vjm t6_2 ; слева
-t6_2:2 utm -t6_2
-2 jmne error
-:2 vjm *+2
-:utc -1
-:3 vtm 1
-3 jmeq error
-:3 vtm -1
-2 vjm *+2
-:3 vtm -2
-:3 utm 1
-3 jmne error
-13 vjm newtest
+t56:        n   vtm     @56
+            n   xta     bltest
+                jane    t57
+            2   vjm     t6_1            ; справа
+t6_1:       2   utm     -t6_1
+            2   jmne    error
+:           2   vjm     t6_2            ; слева
+t6_2:       2   utm     -t6_2
+            2   jmne    error
+:           2   vjm     * + 2
+:               utc     -1
+:           3   vtm     1
+            3   jmeq    error
+:           3   vtm     -1
+            2   vjm     * + 2
+:           3   vtm     -2
+:           3   utm     1
+            3   jmne    error
+            13  vjm     newtest
 ;
-;       57  - mtj, j+m, vtm, utm
+;       57 - MTJ, J+M, VTM, UTM
 ;
-t57:n vtm @57
-n xta bltest
-jane t5а
-utc -13
-2 vtm 14
-ita 2
-aex =1
-13 vjm снасс
-2 vtm 15
-2 utm -15
-ita 2
-13 vjm снасс
-3 vtm 1
-3 j+m 2
-ita 2
-aex =1
-13 vjm снасс
-13 vjm снм3
-3 mtj 2
-ita 2
-aex =1
-13 vjm снасс
-13 vjm снм3
-13 vjm newtest
+t57:        n   vtm     @57
+            n   xta     bltest
+                jane    t5а
+                utc     -13
+            2   vtm     14
+                ita     2
+                aex     =1
+            13  vjm     снасс
+            2   vtm     15
+            2   utm     -15
+                ita     2
+            13  vjm     снасс
+            3   vtm     1
+            3   j+m     2
+                ita     2
+                aex     =1
+            13  vjm     снасс
+            13  vjm     снм3
+            3   mtj     2
+                ita     2
+                aex     =1
+            13  vjm     снасс
+            13  vjm     снм3
+            13  vjm     newtest
 ;
 ;       5а,5в - проверка мат.адреса 0
-;                и модификатора 0 :
+;               и модификатора 0:
 ;
-t5а:n vtm @5a
-n xta bltest
-jane t5с
-2 vtm -1
-ita 2
-atx
-:xta ; слева
-ati 2
-2 jmne error
-2 vtm -1
-ita 2
-:atx
-xta ; справа
-ati 2
-2 jmne error
-t5в:n vtm @5b
-2 vtm -1
-ita 2
-ati
-:ita ; слева
-ati 2
-2 jmne error
-2 vtm -1
-ita 2
-:ati
-ita ; справа
-ati 2
-2 jmne error
-13 vjm newtest
+t5а:        n   vtm     @5a
+            n   xta     bltest
+                jane    t5с
+            2   vtm     -1
+                ita     2
+                atx
+:               xta                     ; слева
+                ati     2
+            2   jmne    error
+            2   vtm     -1
+                ita     2
+:               atx
+                xta                     ; справа
+                ati     2
+            2   jmne    error
+t5в:        n   vtm     @5b
+            2   vtm     -1
+                ita     2
+                ati
+:               ita                     ; слева
+                ati     2
+            2   jmne    error
+            2   vtm     -1
+                ita     2
+:               ati
+                ita                     ; справа
+                ati     2
+            2   jmne    error
+            13  vjm     newtest
 ;
 ;           5с - работа с регистром режима
 ;                uza, u1a, xtr, ntr, rte, yta
@@ -3064,7 +3064,7 @@ xts ful
 jane error
 uta 2
 l-а =1
-а-l ful
+a-l ful
 jane error
 xta ful
 15 atx
@@ -3074,7 +3074,7 @@ uta 2
 uts 1
 uts 2
 uts 3
-15 а-l ; 3-2=1
+15 a-l ; 3-2=1
 15 а+l ; +1=2
 15 l-а
 jane error
@@ -3356,7 +3356,7 @@ xta =hf000 0000 0000 0000
 jane error
 13 vjm newtest
 ;
-;        76 - е+n, е-n, е+х, е-х
+;        76 - e+n, e-n, e+x, e-x
 ;
 t76:n vtm @76
 n xta bltest
@@ -3365,15 +3365,15 @@ jane t77
 xta =hffe8 0000 0000 0000
 atx ws
 l76:xta ws
-е+n @3ff
+e+n @3ff
 atx ws
 asn 1024+53
 ati 14
-12 j-м 14
+12 j-m 14
 14 jmne error
 12 vrm l76
 xta ws
-е-n @401
+e-n @401
 jane error
 uza error
 12 vtm @7fe
@@ -3381,53 +3381,53 @@ uza error
 xta =h0008 0000 0000 0000
 atx ws
 l761: xta ws
-е-х =h7ff7 0000 0000 0000
+e-x =h7ff7 0000 0000 0000
 atx ws
 asn 1024+53
 ati 14
-11 j-м 14
+11 j-m 14
 14 jmne error
 11 utm 1
 12 vrm l761
 xta ws
-е+х =h0000 0000 0000 0000
+e+x =h0000 0000 0000 0000
 aex =h7fe8 0000 0000 0000
 u1a error
 13 vjm newtest
 ;
-;         77  -  а+х, а-х, х-а
+;         77  -  a+x, a-x, x-a
 ;
 t77:n vtm @77
 n xta bltest
 jane t78
 ntr 3
 uta 64
-а-х =65
+a-x =65
 uza error
 uza error
 jaeq error
-а+х =1
+a+x =1
 u1a error
 jane error
 xta =2
-х-а =1
-а-х =h001f ffff ffff ffff
+x-a =1
+a-x =h001f ffff ffff ffff
 u1a error
 jane error
 uta 2
 uts 1
 uts 2
 uts 3
-15 а-х ; 3-2=1
+15 a-x ; 3-2=1
 u1a error
-15 а+х ; 1+1=2
-15 х-а
+15 a+x ; 1+1=2
+15 x-a
 u1a error
 jane error
 xta =h8680 0000 0000 0040; 64
-а-х =h8680 0000 0000 0041;
+a-x =h8680 0000 0000 0041;
 uza error
-а+х =h8028 0000 0000 0000; 1.
+a+x =h8028 0000 0000 0000; 1.
 u1a error
 aex =h8680 0000 0000 0000; 0, ненормализованный
 u1a error
@@ -3436,21 +3436,21 @@ xta =h8048 0000 0000 0000; 2.
 xts =h8028 0000 0000 0000; 1.
 xts =h8048 0000 0000 0000; 2
 xts =h804с 0000 0000 0000; 3
-15 а-х
-15 а+х
-15 х-а
+15 a-x
+15 a+x
+15 x-a
 u1a error
 jane error
 13 vjm newtest
 ;
-;        78  -  а*х, а/х
+;        78  -  a*x, a/x
 ;
 t78:n vtm @78
 n xta bltest
 jane t80
 ntr 3
 xta =h8680 0000 0000 0005
-а*х =h8680 0000 0000 000d; 13
+a*x =h8680 0000 0000 000d; 13
 ytx ws
 aex =h8d00 0000 0000 0000;
 u1a error
@@ -3458,7 +3458,7 @@ xta ws
 aex =h8d00 0000 0000 0041; 65*2!52
 u1a error
 xta =h8680 0000 0000 000d; 13
-а*х =h869f ffff ffff fff3; -13
+a*x =h869f ffff ffff fff3; -13
 ytx ws
 aex =h8d1f ffff ffff ffff
 u1a error
@@ -3467,11 +3467,11 @@ aex =h8d0f ffff ffff ff57
 u1a error
 ntr 2
 xta =h806а 0000 0000 0000; 5.
-а*х =h808d 0000 0000 0000; 13.
+a*x =h808d 0000 0000 0000; 13.
 aex =h80е8 2000 0000 0000; 65.
 u1a error
 yta
-а/х =h808d 0000 0000 0000; 13.
+a/x =h808d 0000 0000 0000; 13.
 aex =h806а 0000 0000 0000; 5.
 u1a error
 13 vjm newtest
@@ -3666,7 +3666,7 @@ xts chess2
 uzas error
 aex chess1
 jane error
-15 j-м 14
+15 j-m 14
 14 jmne error
 15 mtj 14
 xta ful
@@ -3674,7 +3674,7 @@ xts
 u1as error
 aex ful
 jane error
-15 j-м 14
+15 j-m 14
 14 jmne error
 xta
 xts ful
@@ -3696,7 +3696,7 @@ xta
 xts ful
 :u1as *+1
 jmp error
-:15 j-м 14
+:15 j-m 14
 14 jmne error
 u1a error
 13 vjm newtest
@@ -3867,7 +3867,7 @@ xta =h4000 0000 0000 0000
 jane error
 13 vjm newtest
 ;
-;              95 - mcj, j-м
+;              95 - mcj, j-m
 ;
 t95:n vtm @95
 n xta bltest
@@ -3881,7 +3881,7 @@ jane t96
 ;
 2 vtm 2
 3 vtm 3
-2 j-м 3
+2 j-m 3
 3 utm -1
 3 jmne error
 2 utm -2
@@ -3898,7 +3898,7 @@ l1t56:ati 2
 2 msn 1024+3
 asn 1024+3
 ati 3
-3 j-м 2
+3 j-m 2
 2 jmne error
 jane l1t56
 ;
@@ -3908,7 +3908,7 @@ l2t56:ati 2
 asn 1024+3
 aox =h0000 0000 е000 0000
 ati 3
-3 j-м 2
+3 j-m 2
 2 jmne error
 3 utm 1
 3 jmne l2t56
@@ -3919,7 +3919,7 @@ l3t56:ati 2
 asn 1024-3
 aax =h0000 0000 7fff ffff
 ati 3
-3 j-м 2
+3 j-m 2
 2 jmne error
 3 jmne l3t56
 ;
@@ -3930,7 +3930,7 @@ l4t56:ati 2
 asn 1024-3
 aox =h0000 0000 8000 0000
 ati 3
-3 j-м 2
+3 j-m 2
 2 jmne error
 4 vrm l4t56
 13 vjm newtest
@@ -4115,7 +4115,7 @@ rpsa4:xta ws
 asna 1024+1
 atx ws+1
 xta ws
-а/u 2
+a/u 2
 jovr error
 aex ws+1
 jane error
@@ -4464,7 +4464,7 @@ uta 32
 2 utm -1
 asn 1024+16
 jane error
-2 qта
+2 qta
 15 aex
 aau @ffff
 u1as error
@@ -4715,7 +4715,7 @@ wtc adr+1
 5 jmle *+1
 :4 msn 1024+3
 jalt *+1
-:4 j-м 5
+:4 j-m 5
 jale *+1
 :asna 1024
 jaeq *+1
@@ -4751,7 +4751,7 @@ aoi 3
 4 vtm -1
 aai 4
 а+l
-а-l
+a-l
 8 ath
 9 atq
 10 atb
@@ -4806,7 +4806,7 @@ jaeq *+1
 jane *+1
 :3 j+m 4
 jalt *+1
-:3 j-м 4
+:3 j-m 4
 jale *+1
 :4 utm -1
 jagt *+1
@@ -4846,7 +4846,7 @@ aoi 3
 asna 1024+5
 asna 1024-7
 а+l ful
-а-l ful
+a-l ful
 l-а ful
 atd ws
 semr ws
@@ -4877,7 +4877,7 @@ jmp *+1
 13 vjm *+1
 :3 j+m 4
 3 jmeq *+1
-:3 j-м 4
+:3 j-m 4
 3 jmne *+1
 :atd ws
 jcry *+1
@@ -5051,7 +5051,7 @@ xta mst+9 ; стар.рапу
 a+u 16
 aei 14
 jane error
-14 j-м 15
+14 j-m 15
 15 utm 6
 15 jmne error
 ;
@@ -5402,7 +5402,7 @@ jmp ret_int
 ;
 ;        после возврата: правильно ли отработали
 ;
-contr2:7 j-м 15
+contr2:7 j-m 15
 contr3:15 jmne errint
 ytx ws+8
 aex ws+6
@@ -5511,7 +5511,7 @@ tiwh:6 utm -1
 6 utm 2
 jmp cltws
 ;----------------
-tirq:8 qта ws<<2
+tirq:8 qta ws<<2
 6 utm 1
 extf 64-16
 jmp cltws
@@ -5679,7 +5679,7 @@ sтн ws<<1 +20
 stq ws<<2 +40
 12 vjm conex
 8 msn 1024-2
-8 qта 3
+8 qta 3
 7 xta
 12 vjm conex
 15 utm 1
@@ -6204,7 +6204,7 @@ multa4:4 jmp *+1
 :а*н ws<<1
 13 jmp
 divta5:5 jmp *+1
-:2 а/u
+:2 a/u
 13 jmp
 :а/i 2
 13 jmp
