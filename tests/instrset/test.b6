@@ -2,6 +2,7 @@
 лен 41(2048)^
 лен 50(1001)^
 лен 60(1002-ЗП)^
+лен 61(1003-ЗП)^
 eeв1а3
 *name МКБ-тесты
 *call yesmemory
@@ -6307,8 +6308,9 @@ UТА
 JМР РУГАНЬ
 ;
 END
-*CALL DISPLOAD
-*CALL DISSND:BLOAD
+*main DISPLOAD
+*execute
+*       CALL DISSND:BLOAD
 *END F
 ``````
 еконец

@@ -10,3 +10,4 @@ loader.txt:     loader.b6
 
 test.txt:       test.b6
 		$(DISPAK) $< > $@
+#		$(DISPAK) -t $< > $@ 2>&1
