@@ -2747,1809 +2747,1809 @@ t5в:        n   vtm     @5b
             13  vjm     newtest
 ;
 ;           5с - работа с регистром режима
-;                uza, u1a, xtr, ntr, rte, yta
+;                UZA, U1A, XTR, NTR, RTE, YTA
 ;
-t5с:n vtm @5c
-n xta bltest
-jane t60
-2 vtm 63
-lт0с:2 ntr
-rte 63
-atx ws
-its 2
-asn 1024-53
-15 aex
-jane error
-u1a error
-xtr
-rte 63
-jane error
-uza error
-xtr ws
-rte 63
-its 2
-asn 1024-53
-15 aex
-jane error
-u1a error
+t5с:        n   vtm     @5c
+            n   xta     bltest
+                jane    t60
+            2   vtm     63
+lт0с:       2   ntr
+                rte     63
+                atx     ws
+                its     2
+                asn     1024 - 53
+            15  aex
+                jane    error
+                u1a     error
+                xtr
+                rte     63
+                jane    error
+                uza     error
+                xtr     ws
+                rte     63
+                its     2
+                asn     1024 - 53
+            15  aex
+                jane    error
+                u1a     error
 ;
-15 vtm ws+1
-15 xtr
-15 vtm mst
-rte 63
-its 2
-asn 1024-53
-15 aex
-jane error
-2 vrm lт0с
+            15  vtm     ws+1
+            15  xtr
+            15  vtm     mst
+                rte     63
+                its     2
+                asn     1024 - 53
+            15  aex
+                jane    error
+            2   vrm     lт0с
 ;
-ntr 63
-rte @21
-aex =h0420 0000 0000 0000
-jane error
-u1a error
-ntr 0
-uza error
-jane error
-:u1a *+1
-jmp error
-:ntr 7 ; лог.гр.
-u1a error
-jane error
-ntr 11 ; гр.умн.
-uza error
-jane error
-ntr 19 ; гр.слож.
-u1a error
-jane error
-xta ful
-uza error
-jaeq error
-jage error
-jagt error
-ntr 11
-u1a error
-jaeq error
-jage error
-jagt error
-ntr 19
-uza error
-jaeq error
-jage error
-jagt error
+                ntr     63
+                rte     @21
+                aex     =h0420 0000 0000 0000
+                jane    error
+                u1a     error
+                ntr     0
+                uza     error
+                jane    error
+:               u1a     *+1
+                jmp     error
+:               ntr     7               ; лог.гр.
+                u1a     error
+                jane    error
+                ntr     11              ; гр.умн.
+                uza     error
+                jane    error
+                ntr     19              ; гр.слож.
+                u1a     error
+                jane    error
+                xta     ful
+                uza     error
+                jaeq    error
+                jage    error
+                jagt    error
+                ntr     11
+                u1a     error
+                jaeq    error
+                jage    error
+                jagt    error
+                ntr     19
+                uza     error
+                jaeq    error
+                jage    error
+                jagt    error
 ;
-ntr 24 ; гс+гу=гс
-uza error
-ntr 12 ; гу+гл=гу
-u1a error
-xta =1
-ntr 20 ; гс+гл=гс
-u1a error
-jaeq error
-jalt error
-jale error
-xta ful
-aex
-xta
-yta
-aex ful
-u1a error
+                ntr     24              ; гс+гу=гс
+                uza     error
+                ntr     12              ; гу+гл=гу
+                u1a     error
+                xta     =1
+                ntr     20              ; гс+гл=гс
+                u1a     error
+                jaeq    error
+                jalt    error
+                jale    error
+                xta     ful
+                aex
+                xta
+                yta
+                aex     ful
+                u1a     error
 ;       ntr 11
 ;       yta 1025
 ;       aex =h002f ffff ffff ffff
 ;       u1a error
-arx       ; должна
-uza error ; получиться
-arx ful   ; гр.умн.
-u1a error
-aax ful   ; лог.гр.
-uza error
-13 vjm newtest
+                arx                     ; должна
+                uza     error           ; получиться
+                arx     ful             ; гр.умн.
+                u1a     error
+                aax     ful             ; лог.гр.
+                uza     error
+            13  vjm     newtest
 ;
 ;        60:69 - магазинное обращение
 ;       ===============================
-;        60: 15 atx   61: xts   62: its
-;        63: 15 xta   64: stx   65: sti
-;        66: 15 atx а      67: 15 xta а
-;        68: 15 wtc        69: 15 atd
+;        60: 15 ATX   61: XTS   62: ITS
+;        63: 15 XTA   64: STX   65: STI
+;        66: 15 ATX а      67: 15 XTA а
+;        68: 15 WTC        69: 15 ATD
 ;
-t60:n vtm @60
-n xta bltest
-jane t70
-atx ws
-atx ws+1
-atx ws+2
-15 vtm ws+1
-xta ful
-15 atx
-15 utm -2-ws
-13 vjm chstak
+t60:        n   vtm     @60
+            n   xta     bltest
+                jane    t70
+                atx     ws
+                atx     ws + 1
+                atx     ws + 2
+            15  vtm     ws + 1
+                xta     ful
+            15  atx
+            15  utm     -2 - ws
+            13  vjm     chstak
 ;
-n vtm @61
-15 vtm ws
-xta
-xts ful
-xts
-xts
-15 utm -3-ws
-13 vjm chstak
+            n   vtm     @61
+            15  vtm     ws
+                xta
+                xts     ful
+                xts
+                xts
+            15  utm     -3 - ws
+            13  vjm     chstak
 ;
-n vtm @62
-15 vtm ws
-ita
-its
-xta ful
-its
-its
-15 utm -3-ws
-13 vjm chstak
+            n   vtm     @62
+            15  vtm     ws
+                ita
+                its
+                xta     ful
+                its
+                its
+            15  utm     -3 - ws
+            13  vjm     chstak
 ;
-n vtm @66
-15 vtm ws-1
-xta
-15 atx 1
-15 atx 3
-xta ful
-utc 2
-15 atx
-15 utm 1-ws
-13 vjm chstak
+            n   vtm     @66
+            15  vtm     ws - 1
+                xta
+            15  atx     1
+            15  atx     3
+                xta     ful
+                utc     2
+            15  atx
+            15  utm     1 - ws
+            13  vjm     chstak
 ;
-n vtm @63
-xta
-atx ws+1
-15 vtm ws+3
-15 xta
-ati 2
-asn 1024+32
-ati 3
-15 xta
-ati 4
-asn 1024+32
-ati 5
-15 xta
-ati 6
-asn 1024+32
-ati 7
-13 vjm chst2
+            n   vtm     @63
+                xta
+                atx     ws + 1
+            15  vtm     ws + 3
+            15  xta
+                ati     2
+                asn     1024 + 32
+                ati     3
+            15  xta
+                ati     4
+                asn     1024 + 32
+                ati     5
+            15  xta
+                ati     6
+                asn     1024 + 32
+                ati     7
+            13  vjm     chst2
 ;
-n vtm @64
-15 vtm ws+3
-stx ws+4
-ati 2
-asn 1024+32
-ati 3
-stx ws+4
-ati 4
-asn 1024+32
-ati 5
-stx ws+4
-ati 6
-asn 1024+32
-ati 7
-13 vjm chst2
+            n   vtm     @64
+            15  vtm     ws + 3
+                stx     ws + 4
+                ati     2
+                asn     1024 + 32
+                ati     3
+                stx     ws + 4
+                ati     4
+                asn     1024 + 32
+                ati     5
+                stx     ws + 4
+                ati     6
+                asn     1024 + 32
+                ati     7
+            13  vjm     chst2
 ;
-n vtm @65
-15 vtm ws+3
-sti 6
-ati 6
-asn 1024+32
-sti 7
-ati 4
-asn 1024+32
-sti 5
-ati 2
-asn 1024+32
-ati 3
-13 vjm chst2
+            n   vtm     @65
+            15  vtm     ws + 3
+                sti     6
+                ati     6
+                asn     1024 + 32
+                sti     7
+                ati     4
+                asn     1024 + 32
+                sti     5
+                ati     2
+                asn     1024 + 32
+                ati     3
+            13  vjm     chst2
 ;
-n vtm @67
-15 vtm ws+3
-utc -1
-15 xta
-ati 6
-asn 1024+32
-ati 7
-15 xta -2
-ati 4
-asn 1024+32
-ati 5
-15 xta -3
-ati 2
-asn 1024+32
-ati 3
-15 utm -3
-13 vjm chst2
+            n   vtm     @67
+            15  vtm     ws + 3
+                utc     -1
+            15  xta
+                ati     6
+                asn     1024 + 32
+                ati     7
+            15  xta     -2
+                ati     4
+                asn     1024 + 32
+                ati     5
+            15  xta     -3
+                ati     2
+                asn     1024 + 32
+                ati     3
+            15  utm     -3
+            13  vjm     chst2
 ;
-n vtm @68
-4 vtm 1
-7 vtm -1
-3 vtm -1
-15 vtm ws+3
-15 wtc
-6 vtm
-15 wtc
-4 vtm
-15 wtc
-2 vtm
-13 vjm chst2
-15 vtm ws
-xta =1
-xts
-xts =2
-xts =3
-15 wtc -2
-2 vtm
-2 jmne error
-15 utm -3-ws
-15 jmne error
+            n   vtm     @68
+            4   vtm     1
+            7   vtm     -1
+            3   vtm     -1
+            15  vtm     ws + 3
+            15  wtc
+            6   vtm
+            15  wtc
+            4   vtm
+            15  wtc
+            2   vtm
+            13  vjm     chst2
+            15  vtm     ws
+                xta     =1
+                xts
+                xts     =2
+                xts     =3
+            15  wtc     -2
+            2   vtm
+            2   jmne    error
+            15  utm     -3 - ws
+            15  jmne    error
 ;
-n vtm @69
-15 vtm ws
-xta chess1
-aex ful
-15 atd
-15 mtj 13
-13 utm -2-ws
-13 jmne error
-aex chess2
-jane error
-xta ws+1
-aex chess1
-jane error
-xta ws
-aex chess2
-jane error
-15 dта
-ytx ws
-aex chess2
-jane error
-xta ws
-aex chess1
-jane error
-15 utm -ws
-15 jmne error
+            n   vtm     @69
+            15  vtm     ws
+                xta     chess1
+                aex     ful
+            15  atd
+            15  mtj     13
+            13  utm     -2-ws
+            13  jmne    error
+                aex     chess2
+                jane    error
+                xta     ws+1
+                aex     chess1
+                jane    error
+                xta     ws
+                aex     chess2
+                jane    error
+            15  dta
+                ytx     ws
+                aex     chess2
+                jane    error
+                xta     ws
+                aex     chess1
+                jane    error
+            15  utm     -ws
+            15  jmne    error
 ;        ранее забытые команды :
-n vtm @6a
-utcs 2
-14 vtm
-ita 14
-aeu @20000
-jane error
-15 vtm ws
-xty chess2
-15 ytx
-jane error
-15 utm -ws-1
-15 jmne error
-xta ws
-aex chess2
-jane error
-15 vtm ws+1
-aex
-15 xty
-jane error
-15 utm -ws
-15 jmne error
-уех chess2
-jane error
-15 vtm ws
-xta chess1
-xts chess2
-15 aax
-jane error
-xta chess1
-xts chess2
-15 arx
-xts chess1
-xts chess2
-15 aox
-15 aex
-jane error
-xta chess1
-xts chess2
-xts ful
-15 apx
-15 aux
-aex chess1
-jane error
-xts ful
-15 acx
-14 vtm -64
-а+i 14
-jane error
-xts ful
-15 anx
-а+l ful
-jane error
-uta 2
-l-а =1
-a-l ful
-jane error
-xta ful
-15 atx
-15 asx
-jane error
-uta 2
-uts 1
-uts 2
-uts 3
-15 a-l ; 3-2=1
-15 а+l ; +1=2
-15 l-а
-jane error
-xta chess1
-xts chess2
-xts ful
-15 xty
-15 уох
-xty ful
-аеу
-jane error
-xta chess1
-xts chess1
-xts ful
-aex
-15 уах
-aex
-15 уех
-jane error
-15 utm -ws
-15 jmne error
-13 vjm newtest
+            n   vtm     @6a
+                utcs    2
+            14  vtm
+                ita     14
+                aeu     @20000
+                jane    error
+            15  vtm     ws
+                xty     chess2
+            15  ytx
+                jane    error
+            15  utm     -ws-1
+            15  jmne    error
+                xta     ws
+                aex     chess2
+                jane    error
+            15  vtm     ws+1
+                aex
+            15  xty
+                jane    error
+            15  utm     -ws
+            15  jmne    error
+                yex     chess2
+                jane    error
+            15  vtm     ws
+                xta     chess1
+                xts     chess2
+            15  aax
+                jane    error
+                xta     chess1
+                xts     chess2
+            15  arx
+                xts     chess1
+                xts     chess2
+            15  aox
+            15  aex
+                jane    error
+                xta     chess1
+                xts     chess2
+                xts     ful
+            15  apx
+            15  aux
+                aex     chess1
+                jane    error
+                xts     ful
+            15  acx
+            14  vtm     -64
+                a+i     14
+                jane    error
+                xts     ful
+            15  anx
+                a+l     ful
+                jane    error
+                uta     2
+                l-a     =1
+                a-l     ful
+                jane    error
+                xta     ful
+            15  atx
+            15  asx
+                jane    error
+                uta     2
+                uts     1
+                uts     2
+                uts     3
+            15  a-l     ; 3-2=1
+            15  a+l     ; +1=2
+            15  l-a
+                jane    error
+                xta     chess1
+                xts     chess2
+                xts     ful
+            15  xty
+            15  yox
+                xty     ful
+                aey
+                jane    error
+                xta     chess1
+                xts     chess1
+                xts     ful
+                aex
+            15  yax
+                aex
+            15  yex
+                jane    error
+            15  utm     -ws
+            15  jmne    error
+            13  vjm     newtest
 ;
 ;         70 - запись/чтение
 ;
-t70:n vtm @70
-n xta bltest
-jane t71
-wtc lrw   ; длина массива
-6 vtm -1 ; больше кэша !
-7 vtm 66
-uta 1
-9 vjm rewr
-:asn 1024-1
-9 vjm rewr ; бегущая "1"
-7 vrm *-1
-xta =hffff ffff ffff fffe
-7 vtm 66
-6 vtm 256 ; все в кэше
-:9 vjm rewr ; бегущий "0"
-asn 1024-1
-aou 1
-7 vrm *-2
-wtc lrw ; опять больше
-6 vtm -1 ; размера кэша
-9 vtm ; номе adress
+t70:        n   vtm     @70
+            n   xta     bltest
+                jane    t71
+                wtc     lrw             ; длина массива
+            6   vtm     -1              ; больше кэша !
+            7   vtm     66
+                uta     1
+            9   vjm     rewr
+:               asn     1024 - 1
+            9   vjm     rewr            ; бегущая "1"
+            7   vrm     * - 1
+                xta     =hffff ffff ffff fffe
+            7   vtm     66
+            6   vtm     256             ; все в кэше
+:           9   vjm     rewr            ; бегущий "0"
+                asn     1024 - 1
+                aou     1
+            7   vrm     * - 2
+                wtc     lrw             ; опять больше
+            6   vtm     -1              ; размера кэша
+            9   vtm                     ; номе adress
 ;
-rewr:atx mst ; эталон
-6 mtj 4
-:9 jmne *+1 ; пост.код
-4 uta ws  ; номе adress
-:4 atx ws
-4 vrm *-1
-6 mtj 4
-9 jmeq l2rewr
-l1rewr:xta mst
-4 aex ws
-:jane ert70
-4 vrm l1rewr
-jmp rrewr
-l2rewr:4 uta ws
-4 aex ws
-:jane ert70
-4 vrm l2rewr
-rrewr:xta con_in
-jane anal ; был ввод
-xta mst
-9 jmeq сt70
-9 jmp
+rewr:           atx     mst             ; эталон
+            6   mtj     4
+:           9   jmne    * + 1           ; пост.код
+            4   uta     ws              ; номе adress
+:           4   atx     ws
+            4   vrm     * - 1
+            6   mtj     4
+            9   jmeq    l2rewr
+l1rewr:         xta     mst
+            4   aex     ws
+:               jane    ert70
+            4   vrm     l1rewr
+                jmp     rrewr
+l2rewr:     4   uta     ws
+            4   aex     ws
+:               jane    ert70
+            4   vrm     l2rewr
+rrewr:          xta     con_in
+                jane    anal            ; был ввод
+                xta     mst
+            9   jmeq    сt70
+            9   jmp
 ;     несовпадение.  сум=<разница>, рмр=<эталон>
-ert70:15 vtm mst+1
-ytx mst
-аеу
-xts ercnt
-arx =h0000 0001 0000 0000
-atx ercnt
-asn @400+32
-14 vjm dhex8
-aax =h0000 0000 00ff ffff
-aox ="'@d'err:'0''0''0'"
-xts =" in test"
-xts ="-70. ет="
-xts mst
-asn @400+32
-14 vjm dhex8
-xts mst
-14 vjm dhex8
-xts =" memory="
-xts mst+1
-asn @400+32
-14 vjm dhex8
-xts mst+1
-14 vjm dhex8
-xts ="   adr: "
-4 uts ws
-14 vjm dhex8
-asn @400-16
-aou @0a0d
-asn @400-8
-uts mst+2
-5 vjm output
-14 vtm 3
-5 vjm pause
-9 jmeq l2rewr+1
-jmp l1rewr+1
+ert70:      15  vtm     mst+1
+                ytx     mst
+                aey
+                xts     ercnt
+                arx     =h0000 0001 0000 0000
+                atx     ercnt
+                asn     @400 + 32
+            14  vjm     dhex8
+                aax     =h0000 0000 00ff ffff
+                aox     ="'@d'err:'0''0''0'"
+                xts     =" in test"
+                xts     ="-70. ет="
+                xts     mst
+                asn     @400 + 32
+            14  vjm     dhex8
+                xts     mst
+            14  vjm     dhex8
+                xts     =" memory="
+                xts     mst + 1
+                asn     @400 +32
+            14  vjm     dhex8
+                xts     mst + 1
+            14  vjm     dhex8
+                xts     ="   adr: "
+            4   uts     ws
+            14  vjm     dhex8
+                asn     @400 - 16
+                aou     @0a0d
+                asn     @400 - 8
+                uts     mst + 2
+            5   vjm     output
+            14  vtm     3
+            5   vjm     pause
+            9   jmeq    l2rewr + 1
+                jmp     l1rewr + 1
 ;
-сt70:xta chess1
-aex ful
-atd ws
-aex chess2
-jane error
-xta ws
-aex chess2
-jane error
-xta ws+1
-aex chess1
-jane error
-14 vtm ws+1
-14 dта -1
-ytx ws
-aex chess2
-jane error
-xta ws
-aex chess1
-jane error
-13 vjm newtest
+сt70:           xta     chess1
+                aex     ful
+                atd     ws
+                aex     chess2
+                jane    error
+                xta     ws
+                aex     chess2
+                jane    error
+                xta     ws + 1
+                aex     chess1
+                jane    error
+            14  vtm     ws + 1
+            14  dta     -1
+                ytx     ws
+                aex     chess2
+                jane    error
+                xta     ws
+                aex     chess1
+                jane    error
+            13  vjm     newtest
 ;
-;        71  - aax,aox,aex
+;        71  - AAX, AOX, AEX
 ;
-t71:n vtm @71
-n xta bltest
-jane t72
-xta ful
-aax
-13 vjm снасс
-xta ful
-aax ful
-aex ful
-13 vjm снасс
-xta chess1
-aax chess1
-aex chess1
-13 vjm снасс
-xta chess1
-aax chess2
-13 vjm снасс
-xta chess1
-aox chess2
-aex ful
-13 vjm снасс
-xta chess2 ; проверка
-aex chess1 ; засылки
-xta chess2 ; в рмр
-аеу
-jane error
-13 vjm newtest
+t71:        n   vtm     @71
+            n   xta     bltest
+                jane    t72
+                xta     ful
+                aax
+            13  vjm     снасс
+                xta     ful
+                aax     ful
+                aex     ful
+            13  vjm     снасс
+                xta     chess1
+                aax     chess1
+                aex     chess1
+            13  vjm     снасс
+                xta     chess1
+                aax     chess2
+            13  vjm     снасс
+                xta     chess1
+                aox     chess2
+                aex     ful
+            13  vjm     снасс
+                xta     chess2          ; проверка
+                aex     chess1          ; засылки
+                xta     chess2          ; в рмр
+                aey
+                jane    error
+            13  vjm     newtest
 ;
-;        72   -  arx
+;        72 - ARX
 ;
-t72:n vtm @72
-n xta bltest
-jane t73
-xta =11
-arx =1
-aex =12
-13 vjm снасс
-xta ful
-arx =1
-aex =1
-13 vjm снасс
-xta ful
-arx ful
-aex ful
-13 vjm снасс
-13 vjm newtest
+t72:        n   vtm     @72
+            n   xta     bltest
+                jane    t73
+                xta     =11
+                arx     =1
+                aex     =12
+            13  vjm     снасс
+                xta     ful
+                arx     =1
+                aex     =1
+            13  vjm     снасс
+                xta     ful
+                arx     ful
+                aex     ful
+            13  vjm     снасс
+            13  vjm     newtest
 ;
-;         73   -  apx, aux
+;         73 - APX, AUX
 ;
-t73:n vtm @73
-n xta bltest
-jane t74
-xta chess1
-apx ful
-aux =h7fff ffff ffff ffff
-aex chess2
-13 vjm снасс
-xta chess1
-apx chess2
-13 vjm снасс
-xta chess1
-apx chess1
-aux chess2
-aex chess2
-13 vjm снасс
-xta ful
-aux chess2
-aex chess2
-13 vjm снасс
-13 vjm newtest
+t73:        n   vtm     @73
+            n   xta     bltest
+                jane    t74
+                xta     chess1
+                apx     ful
+                aux     =h7fff ffff ffff ffff
+                aex     chess2
+            13  vjm     снасс
+                xta     chess1
+                apx     chess2
+            13  vjm     снасс
+                xta     chess1
+                apx     chess1
+                aux     chess2
+                aex     chess2
+            13  vjm     снасс
+                xta     ful
+                aux     chess2
+                aex     chess2
+            13  vjm     снасс
+            13  vjm     newtest
 ;
-;          74   -  acx, anx
+;          74 - ACX, ANX
 ;
-t74:n vtm @74
-n xta bltest
-jane t75
-acx
-13 vjm снасс
-xta ful
-acx
-aex =64
-13 vjm снасс
-xta chess2
-acx =hffff ffff ffff ffe0
-aex =1
-13 vjm снасс
-11 vtm 64
-xta =1
-tanx:11 jmne *+1
-xta
-:atx ws
-anx
-its 11
-15 aex
-13 vjm снасс
-xta ws
-asn 1024-1
-its 11
-aax =7
-15 aox
-11 vrm tanx
-xta
-anx ful
-aex ful
-13 vjm снасс
-uta 5  ; проверка
-anx ful ; засылки
-xta =h4000 0000 0000 0000
-аеу    ; остатка
-jane error ; в рмр
-13 vjm newtest
+t74:        n   vtm     @74
+            n   xta     bltest
+                jane    t75
+                acx
+            13  vjm     снасс
+                xta     ful
+                acx
+                aex     =64
+            13  vjm     снасс
+                xta     chess2
+                acx     =hffff ffff ffff ffe0
+                aex     =1
+            13  vjm     снасс
+            11  vtm     64
+                xta     =1
+tanx:       11  jmne    * + 1
+                xta
+:               atx     ws
+                anx
+                its     11
+            15  aex
+            13  vjm     снасс
+                xta     ws
+                asn     1024 - 1
+                its     11
+                aax     =7
+            15  aox
+            11  vrm     tanx
+                xta
+                anx     ful
+                aex     ful
+            13  vjm     снасс
+                uta     5               ; проверка
+                anx     ful             ; засылки
+                xta     =h4000 0000 0000 0000
+                aey                     ; остатка
+                jane    error           ; в рмр
+            13  vjm     newtest
 ;
-;        75  -  asn, asx
+;        75 - ASN, ASX
 ;
-t75:n vtm @75
-n xta bltest
-jane t76
-11 vtm 64
-tsft1:xta =h8000 0000 0000 0000
-11 asn 1024-1
-anx
-its 11
-15 aex
-13 vjm снасс
-11 vrm tsft1
-11 vtm 64
-tsft2:xta =1
-11 asn 1024-64
-anx
-its 11
-15 aex
-13 vjm снасс
-11 vrm tsft2
-xta ful
-asx ful
-13 vjm снасс
-xta chess2
-asx =h7fff ffff ffff ffff
-aex chess1
-13 vjm снасс
-xta ful     ; а что
-asn 1024-12 ; попадет
-uta @fff    ; в рмр
-аеу         ; при
-jane error  ; сдвигах ?
-xta ful
-asn 1024+4
-xta =hf000 0000 0000 0000
-аеу
-jane error
-13 vjm newtest
+t75:        n   vtm     @75
+            n   xta     bltest
+                jane    t76
+            11  vtm     64
+tsft1:          xta     =h8000 0000 0000 0000
+            11  asn     1024 - 1
+                anx
+                its     11
+            15  aex
+            13  vjm     снасс
+            11  vrm     tsft1
+            11  vtm     64
+tsft2:          xta     =1
+            11  asn     1024 - 64
+                anx
+                its     11
+            15  aex
+            13  vjm     снасс
+            11  vrm     tsft2
+                xta     ful
+                asx     ful
+            13  vjm     снасс
+                xta     chess2
+                asx     =h7fff ffff ffff ffff
+                aex     chess1
+            13  vjm     снасс
+                xta     ful             ; а что
+                asn     1024 - 12       ; попадет
+                uta     @fff            ; в рмр
+                aey                     ; при
+                jane    error           ; сдвигах ?
+                xta     ful
+                asn     1024 + 4
+                xta     =hf000 0000 0000 0000
+                aey
+                jane    error
+            13  vjm     newtest
 ;
-;        76 - e+n, e-n, e+x, e-x
+;        76 - E+N, E-N, E+X, E-X
 ;
-t76:n vtm @76
-n xta bltest
-jane t77
-12 vtm @7fe
-xta =hffe8 0000 0000 0000
-atx ws
-l76:xta ws
-e+n @3ff
-atx ws
-asn 1024+53
-ati 14
-12 j-m 14
-14 jmne error
-12 vrm l76
-xta ws
-e-n @401
-jane error
-uza error
-12 vtm @7fe
-11 vtm 1
-xta =h0008 0000 0000 0000
-atx ws
-l761: xta ws
-e-x =h7ff7 0000 0000 0000
-atx ws
-asn 1024+53
-ati 14
-11 j-m 14
-14 jmne error
-11 utm 1
-12 vrm l761
-xta ws
-e+x =h0000 0000 0000 0000
-aex =h7fe8 0000 0000 0000
-u1a error
-13 vjm newtest
+t76:        n   vtm     @76
+            n   xta     bltest
+                jane    t77
+            12  vtm     @7fe
+                xta     =hffe8 0000 0000 0000
+                atx     ws
+l76:            xta     ws
+                e+n     @3ff
+                atx     ws
+                asn     1024 + 53
+                ati     14
+            12  j-m     14
+            14  jmne    error
+            12  vrm     l76
+                xta     ws
+                e-n     @401
+                jane    error
+                uza     error
+            12  vtm     @7fe
+            11  vtm     1
+                xta     =h0008 0000 0000 0000
+                atx     ws
+l761:           xta     ws
+                e-x     =h7ff7 0000 0000 0000
+                atx     ws
+                asn     1024 + 53
+                ati     14
+            11  j-m     14
+            14  jmne    error
+            11  utm     1
+            12  vrm     l761
+                xta     ws
+                e+x     =h0000 0000 0000 0000
+                aex     =h7fe8 0000 0000 0000
+                u1a     error
+            13  vjm     newtest
 ;
-;         77  -  a+x, a-x, x-a
+;         77 - A+X, A-X, X-A
 ;
-t77:n vtm @77
-n xta bltest
-jane t78
-ntr 3
-uta 64
-a-x =65
-uza error
-uza error
-jaeq error
-a+x =1
-u1a error
-jane error
-xta =2
-x-a =1
-a-x =h001f ffff ffff ffff
-u1a error
-jane error
-uta 2
-uts 1
-uts 2
-uts 3
-15 a-x ; 3-2=1
-u1a error
-15 a+x ; 1+1=2
-15 x-a
-u1a error
-jane error
-xta =h8680 0000 0000 0040; 64
-a-x =h8680 0000 0000 0041;
-uza error
-a+x =h8028 0000 0000 0000; 1.
-u1a error
-aex =h8680 0000 0000 0000; 0, ненормализованный
-u1a error
-ntr 2
-xta =h8048 0000 0000 0000; 2.
-xts =h8028 0000 0000 0000; 1.
-xts =h8048 0000 0000 0000; 2
-xts =h804с 0000 0000 0000; 3
-15 a-x
-15 a+x
-15 x-a
-u1a error
-jane error
-13 vjm newtest
+t77:        n   vtm     @77
+            n   xta     bltest
+                jane    t78
+                ntr     3
+                uta     64
+                a-x     =65
+                uza     error
+                uza     error
+                jaeq    error
+                a+x     =1
+                u1a     error
+                jane    error
+                xta     =2
+                x-a     =1
+                a-x     =h001f ffff ffff ffff
+                u1a     error
+                jane    error
+                uta     2
+                uts     1
+                uts     2
+                uts     3
+            15  a-x                     ; 3-2=1
+                u1a     error
+            15  a+x                     ; 1+1=2
+            15  x-a
+                u1a     error
+                jane    error
+                xta     =h8680 0000 0000 0040   ; 64
+                a-x     =h8680 0000 0000 0041   ;
+                uza     error
+                a+x     =h8028 0000 0000 0000   ; 1.
+                u1a     error
+                aex     =h8680 0000 0000 0000   ; 0, ненормализованный
+                u1a     error
+                ntr     2
+                xta     =h8048 0000 0000 0000   ; 2.
+                xts     =h8028 0000 0000 0000   ; 1.
+                xts     =h8048 0000 0000 0000   ; 2
+                xts     =h804c 0000 0000 0000   ; 3
+            15  a-x
+            15  a+x
+            15  x-a
+                u1a     error
+                jane    error
+            13  vjm     newtest
 ;
-;        78  -  a*x, a/x
+;        78 - A*X, A/X
 ;
-t78:n vtm @78
-n xta bltest
-jane t80
-ntr 3
-xta =h8680 0000 0000 0005
-a*x =h8680 0000 0000 000d; 13
-ytx ws
-aex =h8d00 0000 0000 0000;
-u1a error
-xta ws
-aex =h8d00 0000 0000 0041; 65*2!52
-u1a error
-xta =h8680 0000 0000 000d; 13
-a*x =h869f ffff ffff fff3; -13
-ytx ws
-aex =h8d1f ffff ffff ffff
-u1a error
-xta ws
-aex =h8d0f ffff ffff ff57
-u1a error
-ntr 2
-xta =h806а 0000 0000 0000; 5.
-a*x =h808d 0000 0000 0000; 13.
-aex =h80е8 2000 0000 0000; 65.
-u1a error
-yta
-a/x =h808d 0000 0000 0000; 13.
-aex =h806а 0000 0000 0000; 5.
-u1a error
-13 vjm newtest
+t78:        n   vtm     @78
+            n   xta     bltest
+                jane    t80
+                ntr     3
+                xta     =h8680 0000 0000 0005
+                a*x     =h8680 0000 0000 000d   ; 13
+                ytx     ws
+                aex     =h8d00 0000 0000 0000   ;
+                u1a     error
+                xta     ws
+                aex     =h8d00 0000 0000 0041   ; 65*2!52
+                u1a     error
+                xta     =h8680 0000 0000 000d   ; 13
+                a*x     =h869f ffff ffff fff3   ; -13
+                ytx     ws
+                aex     =h8d1f ffff ffff ffff
+                u1a     error
+                xta     ws
+                aex     =h8d0f ffff ffff ff57
+                u1a     error
+                ntr     2
+                xta     =h806а 0000 0000 0000   ; 5.
+                a*x     =h808d 0000 0000 0000   ; 13.
+                aex     =h80е8 2000 0000 0000   ; 65.
+                u1a     error
+                yta
+                a/x     =h808d 0000 0000 0000   ; 13.
+                aex     =h806а 0000 0000 0000   ; 5.
+                u1a     error
+            13  vjm     newtest
 ;
-;             ii. новые команды :
+;             II. Новые команды:
 ;             ===================
 ;
-;          80 - jmlt, jmle, jmgt, jmge
+;          80 - JMLT, JMLE, JMGT, JMGE
 ;
-t80:n vtm @80
-n xta bltest
-jane t81
-3 vtm
-3 jmgt error
-3 jmlt error
-:3 jmge *+1
-jmp error
-:3 jmle *+1
-jmp error
-:xta =h0000 0000 8000 0000
-ati 3
-3 jmgt error
-3 jmge error
-:3 jmle *+1
-jmp error
-:3 jmlt *+1
-jmp error
+t80:        n   vtm     @80
+            n   xta     bltest
+                jane    t81
+            3   vtm
+            3   jmgt    error
+            3   jmlt    error
+:           3   jmge    * + 1
+                jmp     error
+:           3   jmle    * + 1
+                jmp     error
+:               xta     =h0000 0000 8000 0000
+                ati     3
+            3   jmgt    error
+            3   jmge    error
+:           3   jmle    * + 1
+                jmp     error
+:           3   jmlt    * + 1
+                jmp     error
 ;
-:2 vtm 31
- xta chess1
-lt80:asn 1024+1
-15 atx
-aax =4
-sti 4
-ati 3
-4 jmp *+1
+:           2   vtm     31
+                xta     chess1
+lt80:           asn     1024 + 1
+            15  atx
+                aax     =4
+                sti     4
+                ati     3
+            4   jmp     * + 1
 ;------------
-:3 jmgt error
-3 jmge error
-:3 jmle *+1
-jmp error
-:3 jmlt elt80
-jmp error
-:jmp error
+:           3   jmgt    error
+            3   jmge    error
+:           3   jmle    * + 1
+                jmp     error
+:           3   jmlt    elt80
+                jmp     error
+:               jmp     error
 ;------------
-:3 jmle error
-3 jmlt error
-:3 jmge *+1
-jmp error
-:3 jmgt elt80
-jmp error
+:           3   jmle    error
+            3   jmlt    error
+:           3   jmge    * + 1
+                jmp     error
+:           3   jmgt    elt80
+                jmp     error
 ;------------
-elt80:2 vrm lt80
-13 vjm newtest
+elt80:      2   vrm     lt80
+            13  vjm     newtest
 ;
-;            81 - jaeq, jane, jagt, jage, jalt, jale
+;            81 - JAEQ, JANE, JAGT, JAGE, JALT, JALE
 ;
-t81:n vtm @81
-n xta bltest
-jane t82
-uta 1
-2 vtm -63
-lt81:jaeq error
-jaeq error
-:jane *+1
-jmp error
-:asn 1024-1
-2 vlm lt81
-:jaeq *+1 ; а=0
-jmp error
-:jane error
-jane error
-jagt error
-jalt error
-:jage *+1
-jmp error
-:jale *+1
-jmp error
-:xta =h8000 0000 0000 0000
-jagt error
-:jale *+1
-jmp error
-:jalt *+1
-jmp error
-:jage error
-2 vtm -60
+t81:        n   vtm     @81
+            n   xta     bltest
+                jane    t82
+                uta     1
+            2   vtm     -63
+lt81:           jaeq    error
+                jaeq    error
+:               jane    * + 1
+                jmp     error
+:               asn     1024 - 1
+            2   vlm     lt81
+:               jaeq    * + 1           ; а=0
+                jmp     error
+:               jane    error
+                jane    error
+                jagt    error
+                jalt    error
+:               jage    * + 1
+                jmp     error
+:               jale    * + 1
+                jmp     error
+:               xta     =h8000 0000 0000 0000
+                jagt    error
+:               jale    * + 1
+                jmp     error
+:               jalt    * + 1
+                jmp     error
+:               jage    error
+            2   vtm     -60
 ;
-l1t81:xta chess1
-2 asn 1024
-its 2
-aax =1
-sti 3
-3 jmeq t81min
-t81poz:jalt error
-jale error
-:jage *+1
-jmp error
-:jagt el1t81
-jmp error
-t81min:jalt *+1
-jmp error
-:jale *+1
-jmp error
-:jagt error
-jage error
-el1t81:2 vlm l1t81
-13 vjm newtest
+l1t81:          xta     chess1
+            2   asn     1024
+                its     2
+                aax     =1
+                sti     3
+            3   jmeq    t81min
+t81poz:         jalt    error
+                jale    error
+:               jage    * + 1
+                jmp     error
+:               jagt    el1t81
+                jmp     error
+t81min:         jalt    * + 1
+                jmp     error
+:               jale    * + 1
+                jmp     error
+:               jagt    error
+                jage    error
+el1t81:     2   vlm     l1t81
+            13  vjm     newtest
 ;
-;           82 - jovr, jcry
+;           82 - JOVR, JCRY
 ;
-t82:n vtm @82
-n xta bltest
-jane t83
-jovr error
-jcry error
-uta
-a+u 1
-jcry error
-a+u -1
-:jcry *+1
-jmp error
-:a+u -1
-jcry error
-xta chess2
-а+l chess2
-:jovr *+1
-jmp error
-:xta ful
-а+l ful
-jovr error
-13 vjm newtest
+t82:        n   vtm     @82
+            n   xta     bltest
+                jane    t83
+                jovr    error
+                jcry    error
+                uta
+                a+u     1
+                jcry    error
+                a+u     -1
+:               jcry    * + 1
+                jmp     error
+:               a+u     -1
+                jcry    error
+                xta     chess2
+                a+l     chess2
+:               jovr    * + 1
+                jmp     error
+:               xta     ful
+                a+l     ful
+                jovr    error
+            13  vjm     newtest
 ;
-;           83 - jmps, rets
+;           83 - JMPS, RETS
 ;
-t83:n vtm @83
-n xta bltest
-jane t8с
-rmod @1818
-ati 5
-5 rmod @13
-ati 6 ; р а в
-6 mtj 7
-7 utm 1
-2 vtm 100
-lt33:ita 2
-aau 1
-ati 3
-3 xta chess1
-aex ful
-3 jmne снt33-1
-:jmps calls33 ; слева
-:jmp снt33
+t83:        n   vtm     @83
+            n   xta     bltest
+                jane    t8с
+                rmod    @1818
+                ati     5
+            5   rmod    @13
+                ati     6               ; РАВ
+            6   mtj     7
+            7   utm     1
+            2   vtm     100
+lt33:           ita     2
+                aau     1
+                ati     3
+            3   xta     chess1
+                aex     ful
+            3   jmne    снt33 - 1
+:               jmps    calls33         ; слева
+:               jmp     снt33
 ;
-calls33:15 atx
-ytx ws+1
-5 rmod @13
-aei 7
-aax =h0000 0000 ffff ffff
-jane error
-xty ws+1
-15 xta
-:3 jmne *+1
-rets
-:rets
+calls33:    15  atx
+                ytx     ws+1
+            5   rmod    @13
+                aei     7
+                aax     =h0000 0000 ffff ffff
+                jane    error
+                xty     ws + 1
+            15  xta
+:           3   jmne    * + 1
+                rets
+:               rets
 ;
-:utc -1
-jmps calls33+1 ; справа
+:               utc     -1
+                jmps    calls33 + 1     ; справа
 ;
-снt33:ytx ws
-3 aex chess1
-aex ful
-jane error
-xta ws
-3 aex chess1
-jane error
-5 rmod @13
-aei 6
-aax =h0000 0000 ffff ffff
-jane error
-2 vrm lt33
-13 vjm newtesti
+снt33:          ytx     ws
+            3   aex     chess1
+                aex     ful
+                jane    error
+                xta     ws
+            3   aex     chess1
+                jane    error
+            5   rmod    @13
+                aei     6
+                aax     =h0000 0000 ffff ffff
+                jane    error
+            2   vrm     lt33
+            13  vjm     newtesti
 ;
-;            8с  -  uzas, u1as
+;            8с - UZAS, U1AS
 ;
-t8с:n vtm @8c
-n xta bltest
-jane t90
-15 vtm mst
-15 mtj 14
-xta chess1
-xts chess2
-uzas error
-aex chess1
-jane error
-15 j-m 14
-14 jmne error
-15 mtj 14
-xta ful
-xts
-u1as error
-aex ful
-jane error
-15 j-m 14
-14 jmne error
-xta
-xts ful
-ntr 11 ; гр.умн
-u1as error
-u1a error ; будет лог.гр !
-xta ful
-15 atx
-ntr 11
-u1as error
-uza error
-xta
-xts ful
-ntr 19 ; гр.слож.
-uzas error
-u1a error ; будет лог.гр.
-15 mtj 14
-xta
-xts ful
-:u1as *+1
-jmp error
-:15 j-m 14
-14 jmne error
-u1a error
-13 vjm newtest
+t8с:        n   vtm     @8c
+            n   xta     bltest
+                jane    t90
+            15  vtm     mst
+            15  mtj     14
+                xta     chess1
+                xts     chess2
+                uzas    error
+                aex     chess1
+                jane    error
+            15  j-m     14
+            14  jmne    error
+            15  mtj     14
+                xta     ful
+                xts
+                u1as    error
+                aex     ful
+                jane    error
+            15  j-m     14
+            14  jmne    error
+                xta
+                xts     ful
+                ntr     11              ; гр.умн
+                u1as    error
+                u1a     error           ; будет лог.гр !
+                xta     ful
+            15  atx
+                ntr     11
+                u1as    error
+                uza     error
+                xta
+                xts     ful
+                ntr     19              ; гр.слож.
+                uzas    error
+                u1a     error           ; будет лог.гр.
+            15  mtj     14
+                xta
+                xts     ful
+:               u1as    * + 1
+                jmp     error
+:           15  j-m     14
+            14  jmne    error
+                u1a     error
+            13  vjm     newtest
 ;
-;            90 - uta, uts, uty
+;            90 - UTA, UTS, UTY
 ;
-t90:n vtm @90
-n xta bltest
-jane t91
-xta ful
-uta
-jane error
-uta -1
-aex ful
-jane error
-xta ful
-atx mst
-2 vtm -2
-utc 1
-2 uta 1
-jane error
-atx mst+1
-atx mst+2
-uts -1
-uts -1
-aex ful
-jane error
-15 xta
-aex ful
-jane error
-15 aox
-aox mst+2
-jane error
-15 utm -mst
-15 jmne error
+t90:        n   vtm     @90
+            n   xta     bltest
+                jane    t91
+                xta     ful
+                uta
+                jane    error
+                uta     -1
+                aex     ful
+                jane    error
+                xta     ful
+                atx     mst
+            2   vtm     -2
+                utc     1
+            2   uta     1
+                jane    error
+                atx     mst + 1
+                atx     mst + 2
+                uts     -1
+                uts     -1
+                aex     ful
+                jane    error
+            15  xta
+                aex     ful
+                jane    error
+            15  aox
+                aox     mst + 2
+                jane    error
+            15  utm     -mst
+            15  jmne    error
 ;
-15 vtm mst
-3 vtm -29
-2 vtm -10
-:uts -1
-uts -1
-uts -1
-2 vlm *-1
-:aex ful
-u1as error
-3 vlm *-1
+            15  vtm     mst
+            3   vtm     -29
+            2   vtm     -10
+:               uts     -1
+                uts     -1
+                uts     -1
+            2   vlm     * - 1
+:               aex     ful
+                u1as    error
+            3   vlm     * - 1
 ;
-uty 5
-uta 5
-аеу
-jane error
-uty -1
-xta ful
-аеу
-jane error
-2 vtm 32
-3 vtm 1
-15 vtm mst
-:ita 3
-2 atx ws
-3 msn @400-1
-2 vrm *-1
-2 vtm 32
-3 vtm 1
-lt50:3 uty
-2 wtc ws
-uta
-3 uts
-2 wtc ws
-uts
-аеу
-jane error
-3 uta
-15 aex
-jane error
-2 xta ws
-15 aex
-jane error
-3 msn @400-1
-2 vrm lt50
-13 vjm newtest
+                uty     5
+                uta     5
+                aey
+                jane    error
+                uty     -1
+                xta     ful
+                aey
+                jane    error
+            2   vtm     32
+            3   vtm     1
+            15  vtm     mst
+:               ita     3
+            2   atx     ws
+            3   msn     @400 - 1
+            2   vrm     * - 1
+            2   vtm     32
+            3   vtm     1
+lt50:       3   uty
+            2   wtc     ws
+                uta
+            3   uts
+            2   wtc     ws
+                uts
+                aey
+                jane    error
+            3   uta
+            15  aex
+                jane    error
+            2   xta     ws
+            15  aex
+                jane    error
+            3   msn     @400 - 1
+            2   vrm     lt50
+            13  vjm     newtest
 ;
-;          91 - aau, aou, aeu
+;          91 - AAU, AOU, AEU
 ;
-t91:n vtm @91
-n xta bltest
-jane t94
-xta ful
-aau -1
-aex ful
-jane error
-xta ful
-aau
-jane error
-uta 1
-aou -2
-aex ful
-jane error
-aex ; рмр=0
-xta ful
-aeu -1 ; проверим
-jane error ; размножение
-аеу    ; и что рмр
-jane error ; не портится
-13 vjm newtest
+t91:        n   vtm     @91
+            n   xta     bltest
+                jane    t94
+                xta     ful
+                aau     -1
+                aex     ful
+                jane    error
+                xta     ful
+                aau
+                jane    error
+                uta     1
+                aou     -2
+                aex     ful
+                jane    error
+                aex                     ; рмр=0
+                xta     ful
+                aeu     -1              ; проверим
+                jane    error           ; размножение
+                aey                     ; и что рмр
+                jane    error           ; не портится
+            13  vjm     newtest
 ;
-;             94 - acu, anu
+;             94 - ACU, ANU
 ;
 ;            (в отличие от acx,anx здесь сложение
 ;               с исп.адресом не циклическое, а
 ;               арифметическое ! )
 ;
-t94:n vtm @94
-n xta bltest
-jane t95
-acu
-jane error
-xta ful
-acu
-aeu 64
-jane error
-xta chess2
-acu -32
-jane error
-xta chess1
-acu -31
-aeu 1
-jane error
-xta chess1
-acu -33
-aex ful
-jane error
-11 vtm 64
-uta 1
-tanu:11 jmne *+1
-uta
-:atx ws
-anu
-its 11
-15 aex
-jane error
-xta ws
-asn 1024-1
-its 11
-aau 7
-15 aox
-11 vrm tanu
-uta 1
-anu -64
-jane error
-uta 1
-anu -65
-aex ful
-jane error
-uta 1
-anu -63
-aeu 1
-jane error
-anu
-jane error
-anu -1
-aex ful
-jane error
-uta 5
-anu -1
-xta =h4000 0000 0000 0000
-аеу
-jane error
-13 vjm newtest
+t94:        n   vtm     @94
+            n   xta     bltest
+                jane    t95
+                acu
+                jane    error
+                xta     ful
+                acu
+                aeu     64
+                jane    error
+                xta     chess2
+                acu     -32
+                jane    error
+                xta     chess1
+                acu     -31
+                aeu     1
+                jane    error
+                xta     chess1
+                acu     -33
+                aex     ful
+                jane    error
+            11  vtm     64
+                uta     1
+tanu:       11  jmne    * + 1
+                uta
+:               atx     ws
+                anu
+                its     11
+            15  aex
+                jane    error
+                xta     ws
+                asn     1024 - 1
+                its     11
+                aau     7
+            15  aox
+            11  vrm     tanu
+                uta     1
+                anu     -64
+                jane    error
+                uta     1
+                anu     -65
+                aex     ful
+                jane    error
+                uta     1
+                anu     -63
+                aeu     1
+                jane    error
+                anu
+                jane    error
+                anu     -1
+                aex     ful
+                jane    error
+                uta     5
+                anu     -1
+                xta     =h4000 0000 0000 0000
+                aey
+                jane    error
+            13  vjm     newtest
 ;
-;              95 - mcj, j-m
+;              95 - MCJ, J-M
 ;
-t95:n vtm @95
-n xta bltest
-jane t96
-2 vtm
-3 vtm 1
-2 mcj 3
-3 jmne error
-2 utm -1
-2 jmne error
+t95:        n   vtm     @95
+            n   xta     bltest
+                jane    t96
+            2   vtm
+            3   vtm     1
+            2   mcj     3
+            3   jmne    error
+            2   utm     -1
+            2   jmne    error
 ;
-2 vtm 2
-3 vtm 3
-2 j-m 3
-3 utm -1
-3 jmne error
-2 utm -2
-2 jmne error
-13 vjm newtest
+            2   vtm     2
+            3   vtm     3
+            2   j-m     3
+            3   utm     -1
+            3   jmne    error
+            2   utm     -2
+            2   jmne    error
+            13  vjm     newtest
 ;
-;            96 - msn
+;            96 - MSN
 ;
-t96:n vtm @96
-n xta bltest
-jane ta0
-xta =h0000 0000 4000 0000
-l1t56:ati 2
-2 msn 1024+3
-asn 1024+3
-ati 3
-3 j-m 2
-2 jmne error
-jane l1t56
+t96:        n   vtm     @96
+            n   xta     bltest
+                jane    ta0
+                xta     =h0000 0000 4000 0000
+l1t56:          ati     2
+            2   msn     1024 + 3
+                asn     1024 + 3
+                ati     3
+            3   j-m     2
+            2   jmne    error
+                jane    l1t56
 ;
-xta =h0000 0000 8000 0000
-l2t56:ati 2
-2 msn 1024+3
-asn 1024+3
-aox =h0000 0000 е000 0000
-ati 3
-3 j-m 2
-2 jmne error
-3 utm 1
-3 jmne l2t56
+                xta     =h0000 0000 8000 0000
+l2t56:          ati     2
+            2   msn     1024 + 3
+                asn     1024 + 3
+                aox     =h0000 0000 e000 0000
+                ati     3
+            3   j-m     2
+            2   jmne    error
+            3   utm     1
+            3   jmne    l2t56
 ;
-uta 1
-l3t56:ati 2
-2 msn 1024-3
-asn 1024-3
-aax =h0000 0000 7fff ffff
-ati 3
-3 j-m 2
-2 jmne error
-3 jmne l3t56
+                uta     1
+l3t56:          ati     2
+            2   msn     1024 - 3
+                asn     1024 - 3
+                aax     =h0000 0000 7fff ffff
+                ati     3
+            3   j-m     2
+            2   jmne    error
+            3   jmne    l3t56
 ;
-4 vtm 12
-uta -1
-l4t56:ati 2
-2 msn 1024-3
-asn 1024-3
-aox =h0000 0000 8000 0000
-ati 3
-3 j-m 2
-2 jmne error
-4 vrm l4t56
-13 vjm newtest
+            4   vtm     12
+                uta     -1
+l4t56:          ati     2
+            2   msn     1024 - 3
+                asn     1024 - 3
+                aox     =h0000 0000 8000 0000
+                ati     3
+            3   j-m     2
+            2   jmne    error
+            4   vrm     l4t56
+            13  vjm     newtest
 ;
-;            а0  -  работа  с   р м р :
+;            а0 - работа с РМР:
 ;
-ta0:n vtm @a0
-n xta bltest
-jane ta1
-xty ful
-ytx ws
-xta ws
-aex ful
-jane error ; у=ful
-уех chess2
-уох chess2
-aex ful
-jane error ; у=ful
-уех chess2
-aex chess1
-jane error ; у=chess1
-уах chess2
-jane error
-xta chess2
-аау
-jane error
-xta chess2
-аоу
-aex ful
-jane error ; у=ful
-xta chess2
-аеу
-aex chess1
-jane error
-13 vjm newtest
+ta0:        n   vtm     @a0
+            n   xta     bltest
+                jane    ta1
+                xty     ful
+                ytx     ws
+                xta     ws
+                aex     ful
+                jane    error           ; у=ful
+                yex     chess2
+                yox     chess2
+                aex     ful
+                jane    error           ; у=ful
+                yex     chess2
+                aex     chess1
+                jane    error           ; у=chess1
+                yax     chess2
+                jane    error
+                xta     chess2
+                aay
+                jane    error
+                xta     chess2
+                aoy
+                aex     ful
+                jane    error           ; у=ful
+                xta     chess2
+                aey
+                aex     chess1
+                jane    error
+            13  vjm     newtest
 ;
-;             а1  -  aai, aoi, aei, а-i, i-а
+;             а1 - AAI, AOI, AEI, А-I, I-А
 ;
-ta1:n vtm @a1
-n xta bltest
-jane ta2
-2 vtm -12
-lt61:uta -1
-2 ati 15
-2 aai 15
-aex ful
-jane error
-xta ful
-aai
-jane error
-xty
-xta ful
-2 aei 15
-jane error
-аоу
-jane error
-2 uta 15
-2 ati 15
-2 aei 15
-jane error
-2 aoi 15
-2 aei 15
-jane error
-2 uta 15
-2 а-i 15
-jane error
-2 uta 16
-2 а-i 15
-jale error
-2 uta 14
-2 а-i 15
-jage error
-2 uta 15
-2 i-а 15
-jane error
-2 uta 16
-2 i-а 15
-jage error
-2 uta 14
-2 i-а 15
-jale error
-2 vlm lt61
-13 vjm newtest
+ta1:        n   vtm     @a1
+            n   xta     bltest
+                jane    ta2
+            2   vtm     -12
+lt61:           uta     -1
+            2   ati     15
+            2   aai     15
+                aex     ful
+                jane    error
+                xta     ful
+                aai
+                jane    error
+                xty
+                xta     ful
+            2   aei     15
+                jane    error
+                aoy
+                jane    error
+            2   uta     15
+            2   ati     15
+            2   aei     15
+                jane    error
+            2   aoi     15
+            2   aei     15
+                jane    error
+            2   uta     15
+            2   a-i     15
+                jane    error
+            2   uta     16
+            2   a-i     15
+                jale    error
+            2   uta     14
+            2   a-i     15
+                jage    error
+            2   uta     15
+            2   i-a     15
+                jane    error
+            2   uta     16
+            2   i-a     15
+                jage    error
+            2   uta     14
+            2   i-a     15
+                jale    error
+            2   vlm     lt61
+            13  vjm     newtest
 ;
-;               а2   -   мрас, munp
+;               а2 -  МРАС, MUNP
 ;
-ta2:n vtm @a2
-n xta bltest
-jane ta3
-uta -20
-lt621:atx ws+4 ; смещение
-2 vtm -11 ; регистры 4-15
-:2 uta 15
-arx ws+4
-2 ati 15
-2 vlm *-1
-2 vtm -8
+ta2:        n   vtm     @a2
+            n   xta     bltest
+                jane    ta3
+                uta     -20
+lt621:          atx     ws + 4          ; смещение
+            2   vtm     -11             ; регистры 4-15
+:           2   uta     15
+                arx     ws + 4
+            2   ati     15
+            2   vlm     * - 1
+            2   vtm     -8
 ;
-lt62:xta
-aex
-2 мрас 12
-atx ws
-ytx ws+1
-uta
-2 ati 12
-2 ati 13
-2 ati 14
-2 ati 15
-xta ws
-2 munp 12
-ytx ws+2
-aex ws
-jane error
-xta ws+2
-aex ws+1
-jane error
-3 vtm -11
-:3 uta 15
-arx ws+4
-3 aei 15
-jane error
-3 vlm *-2
-2 vlm lt62
+lt62:           xta
+                aex
+            2   mpac    12
+                atx     ws
+                ytx     ws + 1
+                uta
+            2   ati     12
+            2   ati     13
+            2   ati     14
+            2   ati     15
+                xta     ws
+            2   munp    12
+                ytx     ws + 2
+                aex     ws
+                jane    error
+                xta     ws + 2
+                aex     ws + 1
+                jane    error
+            3   vtm     -11
+:           3   uta     15
+                arx     ws + 4
+            3   aei     15
+                jane    error
+            3   vlm     * - 2
+            2   vlm     lt62
 ;
-xta ws+4
-a+u 1
-jale lt621
-13 vjm newtest
+                xta     ws + 4
+                a+u     1
+                jale    lt621
+            13  vjm     newtest
 ;
-;            а3,а4,а5  -  целое умножение и деление
+;            а3,а4,а5 - целое умножение и деление
 ;
-ta3:n vtm @a3
-n xta bltest
-jane ta4
-uta @f
-2 vtm 2
-3 vtm 1
-rа4:atx ws
-4 vtm 24
-rра4:xta ws
-15 atx
-asna 1024-1
-atx ws+1
-xta ws
-а*u 2
-jovr error
-aex ws+1
-jane error
-xta ws
-а*i 2
-jovr error
-aex ws+1
-jane error
-uta 2
-utc ws
-а*l
-jovr error
-aex ws+1
-jane error
-uta 2
-15 а*l
-jovr error
-aex ws+1
-jane error
-6 vtmh ws
-uta 2
-6 а*н 1
-jovr error
-aex ws+1
-jane error
-ytx ws
-4 vrm rра4
-uta -1
-3 vrm rа4
+ta3:        n   vtm     @a3
+            n   xta     bltest
+                jane    ta4
+                uta     @f
+            2   vtm     2
+            3   vtm     1
+rа4:            atx     ws
+            4   vtm     24
+rра4:           xta     ws
+            15  atx
+                asna    1024 - 1
+                atx     ws + 1
+                xta     ws
+                a*u     2
+                jovr    error
+                aex     ws + 1
+                jane    error
+                xta     ws
+                a*i     2
+                jovr    error
+                aex     ws + 1
+                jane    error
+                uta     2
+                utc     ws
+                a*l
+                jovr    error
+                aex     ws + 1
+                jane    error
+                uta     2
+            15  a*l
+                jovr    error
+                aex     ws + 1
+                jane    error
+            6   vtmh    ws
+                uta     2
+            6   a*h     1
+                jovr    error
+                aex     ws + 1
+                jane    error
+                ytx     ws
+            4   vrm     rра4
+                uta     -1
+            3   vrm     rа4
 ;
-:uta @80fff
-2 vtm 2
-3 vtm 1
-rsa4:atx ws
-4 vtm 24
-rpsa4:xta ws
-asna 1024+1
-atx ws+1
-xta ws
-a/u 2
-jovr error
-aex ws+1
-jane error
-xta ws
-а/i 2
-jovr error
-aex ws+1
-jane error
-uta 2
-atx ws+2
-xta ws
-а/l ws+2
-jovr error
-aex ws+1
-jane error
-uta 2
-15 atx
-xta ws
-15 а/l
-jovr error
-aex ws+1
-jane error
-6 vtmh ws+2
-xta ws
-6 а/н 1
-jovr error
-aex ws+1
-jane error
-ytx ws
-4 vrm rpsa4
-uta -1
-3 vrm rsa4
+:               uta     @80fff
+            2   vtm     2
+            3   vtm     1
+rsa4:           atx     ws
+            4   vtm     24
+rpsa4:          xta     ws
+                asna    1024 + 1
+                atx     ws + 1
+                xta     ws
+                a/u     2
+                jovr    error
+                aex     ws + 1
+                jane    error
+                xta     ws
+                a/i     2
+                jovr    error
+                aex     ws + 1
+                jane    error
+                uta     2
+                atx     ws + 2
+                xta     ws
+                a/l     ws + 2
+                jovr    error
+                aex     ws + 1
+                jane    error
+                uta     2
+            15  atx
+                xta     ws
+            15  a/l
+                jovr    error
+                aex     ws + 1
+                jane    error
+            6   vtmh    ws + 2
+                xta     ws
+            6   a/h     1
+                jovr    error
+                aex     ws + 1
+                jane    error
+                ytx     ws
+            4   vrm     rpsa4
+                uta     -1
+            3   vrm     rsa4
 ;
-13 vjm newtest
+            13  vjm     newtest
 ;
-ta4:n vtm @a4
-n xta bltest
-jane ta6
-4 vtm 3
-lta4:uta 13
-13 vjm setoper ; множитель
-uta 5 ; множимое
-13 vjm multa4
-aeu 65
-jane error
-uta -13
-13 vjm multa4
-aeu -169
-jane error
-13 vjm multa4
-jane error
-13 vjm setoper
-uta 5
-13 vjm multa4
-jane error
-nта 64-25
-13 vjm setoper
-13 vjm multa4
-aen 64-49
-jane error
-4 vrm lta4
-13 vjm newtest
+ta4:        n   vtm     @a4
+            n   xta     bltest
+                jane    ta6
+            4   vtm     3
+lta4:           uta     13
+            13  vjm     setoper         ; множитель
+                uta     5               ; множимое
+            13  vjm     multa4
+                aeu     65
+                jane    error
+                uta     -13
+            13  vjm     multa4
+                aeu     -169
+                jane    error
+            13  vjm     multa4
+                jane    error
+            13  vjm     setoper
+                uta     5
+            13  vjm     multa4
+                jane    error
+                nta     64 - 25
+            13  vjm     setoper
+            13  vjm     multa4
+                aen     64 - 49
+                jane    error
+            4   vrm     lta4
+            13  vjm     newtest
 ;
-ta5:n vtm @a5
-5 vtm 3
-lta5:uta 7 ; делитель
-13 vjm setoper
-uta 13 ; делимое
-13 vjm divta5
-aeu 1
-jane error
-uta 6
-аеу
-jane error
-13 vjm divta5
-аоу
-jane error
-uta -20
-13 vjm divta5
-aeu -2
-jane error
-uta -6
-аеу
-jane error
-uta 77
-13 vjm divta5
-aeu 11
-аоу
-jane error
-5 vrm lta5
-13 vjm newtest
+ta5:        n   vtm     @a5
+            5   vtm     3
+lta5:           uta     7               ; делитель
+            13  vjm     setoper
+                uta     13              ; делимое
+            13  vjm     divta5
+                aeu     1
+                jane    error
+                uta     6
+                aey
+                jane    error
+            13  vjm     divta5
+                aoy
+                jane    error
+                uta     -20
+            13  vjm     divta5
+                aeu     -2
+                jane    error
+                uta     -6
+                aey
+                jane    error
+                uta     77
+            13  vjm     divta5
+                aeu     11
+                aoy
+                jane    error
+            5   vrm     lta5
+            13  vjm     newtest
 ;
-;               а6   -   asna
+;               а6 - ASNA
 ;
-ta6:n vtm @a6
-n xta bltest
-jane ta7
-xta =h4000 0000 0000 0000
-l1t66:15 atx
-asn 1024+3
-stx ws
-asna 1024+3
-aex ws
-jane error
-xta ws
-jane l1t66
+ta6:        n   vtm     @a6
+            n   xta     bltest
+                jane    ta7
+                xta     =h4000 0000 0000 0000
+l1t66:      15  atx
+                asn     1024 + 3
+                stx     ws
+                asna    1024 + 3
+                aex     ws
+                jane    error
+                xta     ws
+                jane    l1t66
 ;
-2 vtm 25
-xta =h8000 0000 0000 0000
-l2t66:15 atx
-asn 1024+3
-aox =hе000 0000 0000 0000
-stx ws
-asna 1024+3
-aex ws
-jane error
-xta ws
-2 vrm l2t66
+            2   vtm     25
+                xta     =h8000 0000 0000 0000
+l2t66:      15  atx
+                asn     1024 + 3
+                aox     =hе000 0000 0000 0000
+                stx     ws
+                asna    1024 + 3
+                aex     ws
+                jane    error
+                xta     ws
+            2   vrm     l2t66
 ;
-uta 2
-l3t66:15 atx
-asn 1024-3
-stx ws
-asna 1024-3
-aex ws
-jane error
-xta ws
-jane l3t66
+                uta     2
+l3t66:      15  atx
+                asn     1024 - 3
+                stx     ws
+                asna    1024 - 3
+                aex     ws
+                jane    error
+                xta     ws
+                jane    l3t66
 ;
-uta -1
-2 vtm 25
-l4t66:15 atx
-asn 1024-11
-aox =h8000 0000 0000 0000
-stx ws
-asna 1024-11
-aex ws
-jane error
-xta ws
-2 vrm l4t66
-13 vjm newtest
+                uta     -1
+            2   vtm     25
+l4t66:      15  atx
+                asn     1024 - 11
+                aox     =h8000 0000 0000 0000
+                stx     ws
+                asna    1024 - 11
+                aex     ws
+                jane    error
+                xta     ws
+            2   vrm     l4t66
+            13  vjm     newtest
 ;
-;             а7 - vtmh, vtmq, vtmb, vtmf
+;             а7 - VTMH, VTMQ, VTMB, VTMF
 ;
-ta7:n vtm @a7
-n xta bltest
-jane tb0
-2 vtm ws
-ita 2
-asn 1024-1
-3 vtmh ws
-its 3
-15 aex
-jane error
-ita 2
-asn 1024-2
-3 vtmq ws
-its 3
-15 aex
-jane error
-ita 2
-asn 1024-3
-3 vtmb ws
-its 3
-15 aex
-jane error
-ita 2
-asn 1024-6
-3 vtmf ws
-its 3
-15 aex
-jane error
+ta7:        n   vtm     @a7
+            n   xta     bltest
+                jane    tb0
+            2   vtm     ws
+                ita     2
+                asn     1024 - 1
+            3   vtmh    ws
+                its     3
+            15  aex
+                jane    error
+                ita     2
+                asn     1024 - 2
+            3   vtmq    ws
+                its     3
+            15  aex
+                jane    error
+                ita     2
+                asn     1024 - 3
+            3   vtmb    ws
+                its     3
+            15  aex
+                jane    error
+                ita     2
+                asn     1024 - 6
+            3   vtmf    ws
+                its     3
+            15  aex
+                jane    error
 ;
-3 vtmh 100
-3 utm -200
-3 jmne error
-3 vtmq 100
-3 utm -400
-3 jmne error
-3 vtmb 100
-3 utm -800
-3 jmne error
-3 vtmf 100
-3 utm -6400
-3 jmne error
-13 vjm newtest
+            3   vtmh    100
+            3   utm     -200
+            3   jmne    error
+            3   vtmq    100
+            3   utm     -400
+            3   jmne    error
+            3   vtmb    100
+            3   utm     -800
+            3   jmne    error
+            3   vtmf    100
+            3   utm     -6400
+            3   jmne    error
+            13  vjm     newtest
 ;
-;              в0  -  нумерованные биты :
-;                     nта,nts,aan,aon,aen
+;              в0 - нумерованные биты:
+;                   NTA, NTS, AAN, AON, AEN
 ;
-tb0:n vtm @b0
-n xta bltest
-jane tb1
-2 vtm 63
-15 vtm ws
-xta =h8000 0000 0000 0000
-:15 atx ; 64,63,...,1
-asn 1024+1
-jane *-1
-uta 1
-:15 atx ; 1,2,...,64
-asn 1024-1
-jane *-1
-15 vtm mst
+tb0:        n   vtm     @b0
+            n   xta     bltest
+                jane    tb1
+            2   vtm     63
+            15  vtm     ws
+                xta     =h8000 0000 0000 0000
+:           15  atx                     ; 64,63,...,1
+                asn     1024 + 1
+                jane    * - 1
+                uta     1
+:           15  atx                     ; 1,2,...,64
+                asn     1024 - 1
+                jane    * - 1
+            15  vtm     mst
 ;
-  :2 nта
-  2 aex ws
-  jane error
-   2 vrm *-1
+:           2   nta
+            2   aex     ws
+                jane    error
+            2   vrm     * - 1
 ;
-2 vtm 63
-3 vtm 63
-:3 nта 1024
-3 aex ws+64
-jane error
-3 vrm *-1
+            2   vtm     63
+            3   vtm     63
+:           3   nta     1024
+            3   aex     ws + 64
+                jane    error
+            3   vrm     * - 1
 ;
-:2 xta ws
-2 nts
-15 aex
-jane error
-2 vrm *-2
+:           2   xta     ws
+            2   nts
+            15  aex
+                jane    error
+            2   vrm     * - 2
 ;
-3 vtm 63
-:3 xta ws+64
-3 nts 1024
-15 aex
-jane error
-3 vrm *-2
-15 utm -mst
-15 jmne error
+            3   vtm     63
+:           3   xta     ws + 64
+            3   nts     1024
+            15  aex
+                jane    error
+            3   vrm     * - 2
+            15  utm     -mst
+            15  jmne    error
 ;
-2 vtm 63
-:2 aen
-2 vrm *
-aex ful
-jane error
-uta -1
-3 vtm 63
-:3 aen 1024
-3 vrm *
-jane error
+            2   vtm     63
+:           2   aen
+            2   vrm     *
+                aex     ful
+                jane    error
+                uta     -1
+            3   vtm     63
+:           3   aen     1024
+            3   vrm     *
+                jane    error
 ;
-2 vtm 31
-:2 utc -1
-2 aon 1
-2 vrm *-1
-aex chess1
-jane error
+            2   vtm     31
+:           2   utc     -1
+            2   aon     1
+            2   vrm     * - 1
+                aex     chess1
+                jane    error
 ;
-2 vtm 63
-:uta -1
-2 aan
-2 aex ws
-jane error
-2 vrm *-2
-13 vjm newtest
+            2   vtm     63
+:               uta     -1
+            2   aan
+            2   aex     ws
+                jane    error
+            2   vrm     * - 2
+            13  vjm     newtest
 ;
 ;            в1 - работа с полусловами
 ;
-tb1:n vtm @b1
-n xta bltest
-jane tb2
-2 vtmh ws
-uta -32
-3 vtm 63
-:2 ath ; -32,-31,...,30,31
-2 utm 1
-a+u 1
-3 vrm *-1
+tb1:        n   vtm     @b1
+            n   xta     bltest
+                jane    tb2
+            2   vtmh    ws
+                uta     -32
+            3   vtm     63
+:           2   ath                     ; -32,-31,...,30,31
+            2   utm     1
+                a+u     1
+            3   vrm     * - 1
 ;
-uta 32
-3 vtm 63
-:a-u 1
-15 atx
-2 hts -1
-2 utm -1
-15 aex
-u1as error
-3 vrm *-3
+                uta     32
+            3   vtm     63
+:               a-u     1
+            15  atx
+            2   hts     -1
+            2   utm     -1
+            15  aex
+                u1as    error
+            3   vrm     * - 3
 ;
-xta ws
-aex =hffff ffe0 ffff ffe1
-jane error
-3 vtm 31
+                xta     ws
+                aex     =hffff ffe0 ffff ffe1
+                jane    error
+            3   vtm     31
 ;
-:2 hta
-2 а-н 1
-aeu -1
-jane error
-2 hta 1
-2 н-а
-u-а -1
-jane error
-2 utm 2
-3 vrm *-4
+:           2   hta
+            2   a-h     1
+                aeu     -1
+                jane    error
+            2   hta     1
+            2   h-a
+                u-a     -1
+                jane    error
+            2   utm     2
+            3   vrm     * - 4
 ;
-3 vtm 63
-uty
-:3 uta -32
-2 aeh -1
-аоу
-jane error
-2 utm -1
-3 vrm *-2
+            3   vtm     63
+                uty
+:           3   uta     -32
+            2   aeh     -1
+                aoy
+                jane    error
+            2   utm     -1
+            3   vrm     * - 2
 ;
-atx ws
-xta chess2
-xts
-xts ful
-sтн ws<<1
-jane error
-uta 1
-а+н ws<<1
-jane error
-xta chess1
-sтн ws<<1+1
-аан ws<<1
-аон ws<<1 +1
-aex ful
-ati 14
-asn 1024+32
-jane error
-14 jmne error
-13 vjm newtest
+                atx     ws
+                xta     chess2
+                xts
+                xts     ful
+                sth     ws<<1
+                jane    error
+                uta     1
+                a+h     ws<<1
+                jane    error
+                xta     chess1
+                sth     ws<<1 + 1
+                aah     ws<<1
+                aoh     ws<<1 + 1
+                aex     ful
+                ati     14
+                asn     1024 + 32
+                jane    error
+            14  jmne    error
+            13  vjm     newtest
 ;
 ;             в2 - работа с четвертинками :
 ;
-tb2:n vtm @b2
-n xta bltest
-jane tb3
-2 vtmq ws
-3 vtm 63
-uta -32
+tb2:        n   vtm     @b2
+            n   xta     bltest
+                jane    tb3
+            2   vtmq    ws
+            3   vtm     63
+                uta     -32
 ;
-:2 atq ; -32,-31,...,30,31
-2 utm 1
-a+u 1
-3 vrm *-1
+:           2   atq                     ; -32,-31,...,30,31
+            2   utm     1
+                a+u     1
+            3   vrm     * - 1
 ;
-3 vtm 63
-uta 32
-:a-u 1
-15 atx
-2 qts -1
-2 utm -1
-asn 1024+16
-jane error
-2 qta
-15 aex
-aau @ffff
-u1as error
-3 vrm *-5
+            3   vtm     63
+                uta     32
+:               a-u     1
+            15  atx
+            2   qts     -1
+            2   utm     -1
+                asn     1024 + 16
+                jane    error
+            2   qta
+            15  aex
+                aau     @ffff
+                u1as    error
+            3   vrm     * - 5
 ;
-xta ws
-aex =hffe0 ffe1 ffe2 ffe3
-jane error
+                xta     ws
+                aex     =hffe0 ffe1 ffe2 ffe3
+                jane    error
 ;
-3 vtm -63
-uty
-:3 uta 63-32
-2 aeq
-aau @ffff
-аоу
-jane error
-2 utm 1
-3 vlm *-3
+            3   vtm     -63
+                uty
+:           3   uta     63 - 32
+            2   aeq
+                aau     @ffff
+                aoy
+                jane    error
+            2   utm     1
+            3   vlm     * - 3
 ;
-2 vtmq ws
-uts -1
-2 stq 1
-jane error
-xta ful
-2 aaq 1
-aeu @ffff
-jane error
-2 aoq 1
-aeu @ffff
-jane error
-13 vjm newtest
+            2   vtmq    ws
+                uts     -1
+            2   stq     1
+                jane    error
+                xta     ful
+            2   aaq     1
+                aeu     @ffff
+                jane    error
+            2   aoq     1
+                aeu     @ffff
+                jane    error
+            13  vjm     newtest
 ;
-;              в3 - работа с байтами :
+;              в3 - работа с байтами:
 ;
-tb3:n vtm @b3
-n xta bltest
-jane tb6
-2 vtmb ws
-3 vtm 63
-uta -32
-:2 atb
-2 utm 1
-a+u 1
-3 vrm *-1
+tb3:        n   vtm     @b3
+            n   xta     bltest
+                jane    tb6
+            2   vtmb    ws
+            3   vtm     63
+                uta     -32
+:           2   atb
+            2   utm     1
+                a+u     1
+            3   vrm     * - 1
 ;
-3 vtm 63
-uta 32
-:a-u 1
-15 atx
-2 bts -1
-asn 1024+8
-jane error
-2 bta -1
-15 aex
-aau @ff
-u1as error
-2 utm -1
-3 vrm *-5
+            3   vtm     63
+                uta     32
+:               a-u     1
+            15  atx
+            2   bts     -1
+                asn     1024 + 8
+                jane    error
+            2   bta     -1
+            15  aex
+                aau     @ff
+                u1as    error
+            2   utm     -1
+            3   vrm     * - 5
 ;
-xta ws
-aex =hе0е1 е2е3 е4е5 е6е7
-jane error
+                xta     ws
+                aex     =he0e1 e2e3 e4e5 e6e7
+                jane    error
 ;
-3 vtm -63
-uty
-:3 uta 63-32
-2 аев
-aau @ff
-аоу
-jane error
-2 utm 1
-3 vlm *-3
+            3   vtm     -63
+                uty
+:           3   uta     63 - 32
+            2   aeb
+                aau     @ff
+                aoy
+                jane    error
+            2   utm     1
+            3   vlm     * - 3
 ;
-2 vtmb ws
-uts -1
-2 sтв 3
-jane error
-2 аов 3
-aeu @ff
-jane error
-uta -1
-2 аав 3
-aeu @ff
-jane error
-13 vjm newtest
+            2   vtmb    ws
+                uts     -1
+            2   stb     3
+                jane    error
+            2   aob     3
+                aeu     @ff
+                jane    error
+                uta     -1
+            2   aab     3
+                aeu     @ff
+                jane    error
+            13  vjm     newtest
 ;
 ;           в6 - работа с битами :
 ;                fta,atf,fts,stf,aaf,aof,aef
@@ -4742,15 +4742,15 @@ uty
 ttx ws ; надо у=0 !
 xty ful
 ytx ws
-аау
+aay
 3 vtm
-а+i 3
-а-i 3
+a+i 3
+a-i 3
 aei 3
 aoi 3
 4 vtm -1
 aai 4
-а+l
+a+l
 a-l
 8 ath
 9 atq
@@ -4820,34 +4820,34 @@ ntr 0
 rte 63
 a+u -1
 a-u -1
-u-а 1
+u-a 1
 uta -1
 aau -1
 aeu
 aou -1
 acu
-уах ful
-уех ful
-уох ful
-аау
-аеу
-аоу
+yax ful
+yex ful
+yox ful
+aay
+aey
+aoy
 8 vtmh ws
 9 vtmq ws
 10 vtmb ws
 11 vtmb ws
 munp 3
-а+i 3
-а-i 3
-i-а 3
+a+i 3
+a-i 3
+i-a 3
 aai 3
 aei 3
 aoi 3
 asna 1024+5
 asna 1024-7
-а+l ful
+a+l ful
 a-l ful
-l-а ful
+l-a ful
 atd ws
 semr ws
 semw ws
@@ -4856,7 +4856,7 @@ cmon @fff7f
 rmod 1
 wmod 1
 2 xta chess1
-аеу
+aey
 jane error
 2 vrm ltc1
 13 vjm newtest
@@ -5129,7 +5129,7 @@ tta ws
 aei 2
 jane error
 ita 2
-аеу
+aey
 jane error
 2 vrm lt4а
 ;
@@ -5333,7 +5333,7 @@ ng rmod 2
 ati 2 ; страница
 xta ws+9 ; ее приписка
 2 wmod @400 ; доступ к ней
-n nта
+n nta
 aax comint
 :jaeq *+1
 ri mtj iа ; счас ==> иаоп
@@ -5350,7 +5350,7 @@ xta ws
 uty 1 ; тег=<команда нр>
 ttx ws
 5 vjm cout ; сброс кэша
-n nта
+n nta
 aax comint
 :jaeq *+1
 ri mtj iа ; счас ==> иаоп
@@ -5571,12 +5571,12 @@ tirs4:15 vtm ws+1
 ;-----------------
 tirs5:9 vtmh ws+10
 15 vtm ws+1
-9 sтн
+9 sth
 6 vlm cltws
 ;-----------------
 tirs6:9 vtmb ws+10
 15 vtm ws+1
-9 sтв 3
+9 stb 3
 6 vlm cltws
 ;-----------------
 tiws1:15 atx
@@ -5669,7 +5669,7 @@ uta
 7 aox
 12 vjm conex
 15 utm 1
-sтн ws<<1 +20
+sth ws<<1 +20
 12 vjm conex
 8 msn 1024-1
 8 hta 1
@@ -5684,7 +5684,7 @@ stq ws<<2 +40
 12 vjm conex
 15 utm 1
 9 vtmb ws+10
-9 sтв
+9 stb
 12 vjm conex
 8 msn 1024-3
 8 bta 7
@@ -5782,7 +5782,7 @@ atx oldrp ; старая приписка
 ;
 8 vtm -20 ; разряды
 9 vtm -1 ; бег."0" или "1"
-l1rp:8 nта 64-1
+l1rp:8 nta 64-1
 aei 9
 2 wmod @400
 aax =h0000 0000 000f ffff
@@ -6195,22 +6195,22 @@ ath ws<<1
 atx ws+1
 13 jmp
 multa4:4 jmp *+1
-:2 а*u
+:2 a*u
 13 jmp
-:а*i 2
+:a*i 2
 13 jmp
-:а*l ws+1
+:a*l ws+1
 13 jmp
-:а*н ws<<1
+:a*h ws<<1
 13 jmp
 divta5:5 jmp *+1
 :2 a/u
 13 jmp
-:а/i 2
+:a/i 2
 13 jmp
-:а/l ws+1
+:a/l ws+1
 13 jmp
-:а/н ws<<1
+:a/h ws<<1
 13 jmp
 ;
 dhex8:asn @400-32
