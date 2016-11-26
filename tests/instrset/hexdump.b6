@@ -175,9 +175,7 @@ c------ Get N-th hex char of word
         return
         end
 
-*       main hexdmp
-*       execute
 *call hexdmp
-*end f
+*end file
 ``````
 еконец

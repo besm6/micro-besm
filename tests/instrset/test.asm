@@ -766,7 +766,7 @@ initque:        uta
                 uta     t47 & m15
             2   ath     @47
                 uta     t48 & m15
-            2   ath     48
+            2   ath     @48
 ;
 ; подтесты нового режима:
 ;

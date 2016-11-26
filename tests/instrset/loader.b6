@@ -8,7 +8,7 @@ eeв1а3
 *
 *perso:50
 *call yesmemory
-*FTN
+*ftn
       FUNCTION DISSND(STR)
 С*
 С**    ОТСЫЛКА ЗАГРУЖЕННОЙ МКБ-ПРОГРАММЫ

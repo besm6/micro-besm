@@ -12,8 +12,8 @@ eeв1а3
 *     на компиляцию, сборку и счет и на самой МКБ-8601.
 *
 *perso:50
-*call libinit:600000,40,тест
-*main мкв/ass
+*call LIBINIT:600000,40,тест
+*main MKB/ASS
 *execute
 MAIN_SW:NАМЕ QF
 ;
@@ -6306,9 +6306,7 @@ UТА
 JМР РУГАНЬ
 ;
 END
-*main DISPLOAD
-*execute
-*       CALL DISSND:BLOAD
-*END F
+*call DISPLOAD
+*end file
 ``````
 еконец
