@@ -93,12 +93,17 @@ always @(negedge clk) begin
             if (!reset)
                 print_uop(pc_x, opcode_x, const_addr, const_value);
 
-            // Print changed state
+            // Print changed micro state
             print_changed_2901();
             print_changed_2904();
             print_changed_2910();
             print_changed_cpu(opcode_x);
             print_changed_timer();
+        end
+
+        if (testbench.trace == 1) begin
+            // Print changed architectural state
+            print_changed_regs(opcode_x);
         end
 
         // Print memory transactions
@@ -923,6 +928,82 @@ task print_changed_timer();
     if (control0 !== old_control0) begin $fdisplay(fd, "(%0d)               Write timer.Ctl0 = %h",    ctime, control0); old_control0 = control0; end
     if (control1 !== old_control1) begin $fdisplay(fd, "(%0d)               Write timer.Ctl1 = %h",    ctime, control1); old_control1 = control1; end
     if (control2 !== old_control2) begin $fdisplay(fd, "(%0d)               Write timer.Ctl2 = %h",    ctime, control2); old_control2 = control2; end
+
+endtask
+
+//
+// Print changed state at architectural level
+//
+task print_changed_regs(
+    input logic [112:1] opcode
+);
+    logic [63:0] r0, r1, r2;
+    static logic [63:0] old_r0, old_r1, old_r2;
+    logic [31:0] r3, r4, r5;
+    static logic [31:0] old_r3, old_r4, old_r5;
+    static logic  [4:0] old_modgn;
+    static logic  [7:0] old_procn;
+    static logic [31:0] old_rr;
+    static logic [31:0] old_mrmem[1024];
+    static string ir_name[32] = '{
+        0:"M0",     1:"M1",     2:"M2",     3:"M3",
+        4:"M4",     5:"M5",     6:"M6",     7:"M7",
+        8:"M8",     9:"M9",     10:"M10",   11:"M11",
+        12:"M12",   13:"M13",   14:"M14",   15:"SP",
+        16:"C",     17:"RR",    18:"RRR",   19:"SPRADR",
+        20:"CTT",   21:"CTL",   22:"CTR",   23:"ACL",
+        24:"ACR",   25:"YCL",   26:"YCR",   27:"PCC",
+        28:"PCCC",  29:"SVFA",  30:"PROCNC",31:"MREZ"
+    };
+
+    automatic logic  [4:0] modgn  = cpu.modgn;
+    automatic logic  [7:0] procn  = cpu.procn;
+    automatic logic [31:0] rr     = cpu.rr;
+    automatic logic        csm    = opcode[30];
+    automatic logic        wem    = opcode[29];
+
+    assign r0 = { cpu.alu.p63_60.ram[0], cpu.alu.p59_56.ram[0], cpu.alu.p55_52.ram[0], cpu.alu.p51_48.ram[0],
+                  cpu.alu.p47_44.ram[0], cpu.alu.p43_40.ram[0], cpu.alu.p39_36.ram[0], cpu.alu.p35_32.ram[0],
+                  cpu.alu.p31_28.ram[0], cpu.alu.p27_24.ram[0], cpu.alu.p23_20.ram[0], cpu.alu.p19_16.ram[0],
+                  cpu.alu.p15_12.ram[0], cpu.alu.p11_8.ram[0],  cpu.alu.p7_4.ram[0],   cpu.alu.p3_0.ram[0] };
+    assign r1 = { cpu.alu.p63_60.ram[1], cpu.alu.p59_56.ram[1], cpu.alu.p55_52.ram[1], cpu.alu.p51_48.ram[1],
+                  cpu.alu.p47_44.ram[1], cpu.alu.p43_40.ram[1], cpu.alu.p39_36.ram[1], cpu.alu.p35_32.ram[1],
+                  cpu.alu.p31_28.ram[1], cpu.alu.p27_24.ram[1], cpu.alu.p23_20.ram[1], cpu.alu.p19_16.ram[1],
+                  cpu.alu.p15_12.ram[1], cpu.alu.p11_8.ram[1],  cpu.alu.p7_4.ram[1],   cpu.alu.p3_0.ram[1] };
+    assign r2 = { cpu.alu.p63_60.ram[2], cpu.alu.p59_56.ram[2], cpu.alu.p55_52.ram[2], cpu.alu.p51_48.ram[2],
+                  cpu.alu.p47_44.ram[2], cpu.alu.p43_40.ram[2], cpu.alu.p39_36.ram[2], cpu.alu.p35_32.ram[2],
+                  cpu.alu.p31_28.ram[2], cpu.alu.p27_24.ram[2], cpu.alu.p23_20.ram[2], cpu.alu.p19_16.ram[2],
+                  cpu.alu.p15_12.ram[2], cpu.alu.p11_8.ram[2],  cpu.alu.p7_4.ram[2],   cpu.alu.p3_0.ram[2] };
+    assign r3 = { cpu.alu.p31_28.ram[3], cpu.alu.p27_24.ram[3], cpu.alu.p23_20.ram[3], cpu.alu.p19_16.ram[3],
+                  cpu.alu.p15_12.ram[3], cpu.alu.p11_8.ram[3],  cpu.alu.p7_4.ram[3],   cpu.alu.p3_0.ram[3] };
+    assign r4 = { cpu.alu.p31_28.ram[4], cpu.alu.p27_24.ram[4], cpu.alu.p23_20.ram[4], cpu.alu.p19_16.ram[4],
+                  cpu.alu.p15_12.ram[4], cpu.alu.p11_8.ram[4],  cpu.alu.p7_4.ram[4],   cpu.alu.p3_0.ram[4] };
+    assign r5 = { cpu.alu.p31_28.ram[5], cpu.alu.p27_24.ram[5], cpu.alu.p23_20.ram[5], cpu.alu.p19_16.ram[5],
+                  cpu.alu.p15_12.ram[5], cpu.alu.p11_8.ram[5],  cpu.alu.p7_4.ram[5],   cpu.alu.p3_0.ram[5] };
+
+    if (r0  !== old_r0)  begin $fdisplay(fd, "(%0d)               Write A = %h",    ctime, r0);  old_r0  = r0;  end // Сумматор
+    if (r1  !== old_r1)  begin $fdisplay(fd, "(%0d)               Write Y = %h",    ctime, r1);  old_r1  = r1;  end // РМР
+    if (r2  !== old_r2)  begin $fdisplay(fd, "(%0d)               Write INTR = %h", ctime, r2);  old_r2  = r2;  end // ГРП
+    if (r3  !== old_r3)  begin $fdisplay(fd, "(%0d)               Write PC = %h",   ctime, r3);  old_r3  = r3;  end // СчАС
+    if (r4  !== old_r4)  begin $fdisplay(fd, "(%0d)               Write PCCP = %h", ctime, r4);  old_r4  = r4;  end // РОП
+    if (r5  !== old_r5)  begin $fdisplay(fd, "(%0d)               Write DADR = %h", ctime, r5);  old_r5  = r5;  end // АИСП
+
+    if (modgn  !== old_modgn)  begin $fdisplay(fd, "(%0d)               Write MODGN = %h",  ctime, modgn);  old_modgn  = modgn;  end // РНГ
+    if (procn  !== old_procn)  begin $fdisplay(fd, "(%0d)               Write PROCN = %h",  ctime, procn);  old_procn  = procn;  end // РНП
+    if (rr     !== old_rr)     begin $fdisplay(fd, "(%0d)               Write RR = %h",     ctime, rr);     old_rr     = rr;     end // РР
+    //TODO: RRR
+
+    //
+    // Index-registers
+    //
+    if (csm & wem) begin
+        for (int i=old_modgn*32; i<old_modgn*32+32; i+=1)
+            if (cpu.mr_mem[i] !== old_mrmem[i]) begin
+                $fdisplay(fd, "(%0d)               Write %0s[%0d] = %h",
+                    ctime, ir_name[i[4:0]], i[9:5], cpu.mr_mem[i]);
+                old_mrmem[i] = cpu.mr_mem[i];
+            end
+    end
 
 endtask
 

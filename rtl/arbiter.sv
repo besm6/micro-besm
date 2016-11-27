@@ -199,13 +199,13 @@ always_comb begin
                     {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '0, '0, '0};
                 endcase
 
-        14: // BICLR, сброс прерываний на шине
+        14: // BICLR, сброс прерываний на шине (TODO)
             if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=BICLR not implemented yet!", $time);
+                $fdisplay(testbench.tracefd, "(%0d) *** Clear interrupts", $time);
 
-        15: // BIRD, чтение прерываний с шины
+        15: // BIRD, чтение прерываний с шины (TODO)
             if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=BIRD not implemented yet!", $time);
+                $fdisplay(testbench.tracefd, "(%0d) *** Poll interrupts", $time);
 
         default: // Unknown request
             if (request & testbench.tracefd)

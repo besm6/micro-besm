@@ -22,7 +22,7 @@ SOURCES         = ../../../rtl/cpu.sv \
 MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
 
 RUNFLAGS        = +hex=../test.hex
-RUNFLAGS	+= +limit=40000		# Limit by a number of cycles
+RUNFLAGS	+= +limit=100000	# Limit by a number of cycles
 #RUNFLAGS	+= +trace=0		# No trace
 #RUNFLAGS	+= +trace=1		# Print instructions
 RUNFLAGS	+= +trace=2		# Print micro-instructions

@@ -48,13 +48,13 @@ logic [19:0] physad;            // физический адрес, резуль
 logic [63:0] sh_out;            // результат сдвига
 logic [10:0] pshift;            // регистр параметра сдвига
 logic  [6:0] clz_out;           // результат поиска левой единицы
-logic        CCLR;              // запуск сброса кэша
 logic  [7:0] instr_code;        // код операции команды
 logic [31:0] instr_addr;        // адресная часть команды
 logic [11:0] jump_addr;         // ПНА КОП основного или дополнительного формата
 
 //TODO:
 logic [11:0] grp_addr;          // ПНА групп
+logic [11:0] rwio_addr;         // ПНА команд rmod/wmod и обмена с пультовым процессором
 
 // Signals for ALU
 logic  [8:0] alu_I;             // ALU instruction, from ALUD, FUNC and ALUS
@@ -134,6 +134,7 @@ logic [11:0] control_D;         // 12-bit data input to chip
 
 // Output signals
 logic [11:0] control_Y;         // 12-bit address output
+logic        control_nMAP;      // JMAP instruction: use rwio memory
 
 //--------------------------------------------------------------
 // Microinstruction ROM.
@@ -212,7 +213,7 @@ wire        MPS   = opcode[1];       // Выбор источника парам
 //    ПП (при наличии признака MOD, сигнал /ME);
 //  * дополнительный преобразователь адреса, задающий адреса векторов
 //    прерывания. A также знаков сомножителей для коррекции
-//    поизведения (VE). (сигнал /PE не используется).
+//    произведения (VE). (сигнал /PE не используется).
 //
 // Каждой микрокомандой вырабатывается только один сигнал
 // разрешения для внешнего источника.
@@ -227,7 +228,7 @@ wire        MPS   = opcode[1];       // Выбор источника парам
 
 am2910 control(clk,
     SQI, '0, control_nCC, ~RLD, control_CI, '0,
-    control_D, control_Y, , , , );
+    control_D, control_Y, , , control_nMAP, );
 
 // Carry-in bit for microprogram counter
 assign control_CI = (SCI ? control_nCC : '1) ^ ICI;
@@ -237,6 +238,7 @@ assign control_D =
     (MAP == 0) ? A :            // PE, конвейерный регистр
     (MAP == 1) ? jump_addr :    // ME, ПНА КОП основного или дополнительного формата
     (MAP == 2) ? grp_addr :     // GRP, ПНА групп и микропрограммные признаки "След0" И "След1"
+ !control_nMAP ? rwio_addr :    // JMAP instruction, use rwio memory
                  alu_Y[11:0];   // Выход АЛУ
 
 assign control_nCC = ICC ? cond : ~cond;
@@ -423,10 +425,10 @@ always @(posedge clk)
          7: stopm1 <= Y[0];         // STOPM1, флаг останова 1
         endcase
 
-assign CCLR = (YDST == 10);     // запуск сброса кэша
+//assign cclr = (YDST == 10);       // запуск сброса кэша
 
 assign ss_I = {CI, alu_I[7], SHMUX, STOPC};
-assign ss_Y = Y[9:6];           // status bits: Z N C V
+assign ss_Y = Y[9:6];               // status bits: Z N C V
 
 //--------------------------------------------------------------
 // Shifter.
@@ -697,6 +699,14 @@ always @(posedge clk)
 
     end else if (YDST == 4)
         pg_index <= Y[19:10];       // PHYSPG, регистр физической страницы
-      //pg_index <= ureg[19:10];    // PHYSPG, регистр физической страницы
+
+//--------------------------------------------------------------
+// RWIO table
+//
+logic [11:0] rwiotab[2048] = '{
+    `include "../microcode/rwiotab.v"
+    default: '0
+};
+assign rwio_addr = rwiotab[{tr1, tr0, instr_addr[13:10], instr_addr[4:0]}];
 
 endmodule
