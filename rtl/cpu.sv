@@ -503,7 +503,9 @@ decoder dec(
     instr_ir15,                 // stack mode flag
     addr                        // address
 );
-assign instr_addr = {{12{addr[19]}}, addr};
+
+always @(posedge clk)
+    instr_addr <= {{12{addr[19]}}, addr};
 
 logic [11:0] optab[4096] = '{
     `include "../microcode/optab.v"
