@@ -115,8 +115,10 @@ always @(negedge clk) begin
                 ctime, (cpu.arb_opc == 8) ? "Fetch" : "Load",
                 waddr_x, testbench.i_tag, testbench.i_data);
 
-        if (testbench.trace && cpu.MAP == 1 && cpu.DSRC == 8) begin
-            // When MAP=ME and DSRC=COMA: print BESM instruction.
+        if (testbench.trace && cpu.MAP == 1 &&
+            (cpu.COND == 0 || cpu.tkk) &&
+            (cpu.LETC == 0 || cpu.uflag == 0)) begin
+            // When MAP=ME, and jump taken, and not UTC: print BESM instruction.
             print_insn();
         end
 
@@ -981,17 +983,67 @@ task print_changed_regs(
     assign r5 = { cpu.alu.p31_28.ram[5], cpu.alu.p27_24.ram[5], cpu.alu.p23_20.ram[5], cpu.alu.p19_16.ram[5],
                   cpu.alu.p15_12.ram[5], cpu.alu.p11_8.ram[5],  cpu.alu.p7_4.ram[5],   cpu.alu.p3_0.ram[5] };
 
-    if (r0  !== old_r0)  begin $fdisplay(fd, "(%0d)               Write A = %h",    ctime, r0);  old_r0  = r0;  end // Сумматор
-    if (r1  !== old_r1)  begin $fdisplay(fd, "(%0d)               Write Y = %h",    ctime, r1);  old_r1  = r1;  end // РМР
-    if (r2  !== old_r2)  begin $fdisplay(fd, "(%0d)               Write INTR = %h", ctime, r2);  old_r2  = r2;  end // ГРП
-    if (r3  !== old_r3)  begin $fdisplay(fd, "(%0d)               Write PC = %h",   ctime, r3);  old_r3  = r3;  end // СчАС
-    if (r4  !== old_r4)  begin $fdisplay(fd, "(%0d)               Write PCCP = %h", ctime, r4);  old_r4  = r4;  end // РОП
-    if (r5  !== old_r5)  begin $fdisplay(fd, "(%0d)               Write DADR = %h", ctime, r5);  old_r5  = r5;  end // АИСП
+    // Сумматор
+    if (r0 !== old_r0) begin
+        $fdisplay(fd, "(%0d)               Write A = %h", ctime, r0);
+        old_r0 = r0;
+    end
 
-    if (modgn  !== old_modgn)  begin $fdisplay(fd, "(%0d)               Write MODGN = %h",  ctime, modgn);  old_modgn  = modgn;  end // РНГ
-    if (procn  !== old_procn)  begin $fdisplay(fd, "(%0d)               Write PROCN = %h",  ctime, procn);  old_procn  = procn;  end // РНП
-    if (rr     !== old_rr)     begin $fdisplay(fd, "(%0d)               Write RR = %h",     ctime, rr);     old_rr     = rr;     end // РР
-    //TODO: RRR
+    // Регистр младших разрядов (РМР)
+    if (r1 !== old_r1) begin
+        $fdisplay(fd, "(%0d)               Write Y = %h", ctime, r1);
+        old_r1 = r1;
+    end
+
+    // Главный регистр прерываний (ГРП)
+    if (r2 !== old_r2) begin
+        $fdisplay(fd, "(%0d)               Write INTR = %h", ctime, r2);
+        old_r2 = r2;
+    end
+
+    // Регистр откуда пришли (РОП)
+    if (r4 !== old_r4) begin
+        $fdisplay(fd, "(%0d)               Write PCCP = %h", ctime, r4);
+        old_r4 = r4;
+    end
+
+    // СчАС и так печатается для каждой команды.
+`ifdef notdef
+    if (r3 !== old_r3) begin
+        $fdisplay(fd, "(%0d)               Write PC = %h", ctime, r3);
+        old_r3 = r3;
+    end
+`endif
+
+    // АИСП меняется в каждой команде,
+    // зашумляет трассировку без особой пользы.
+`ifdef notdef
+    if (r5 !== old_r5) begin
+        $fdisplay(fd, "(%0d)               Write DADR = %h", ctime, r5);
+        old_r5 = r5;
+    end
+`endif
+
+    // Регистр номера группы модификаторов (РНГ)
+    if (modgn !== old_modgn) begin
+        $fdisplay(fd, "(%0d)               Write MODGN = %h", ctime, modgn);
+        old_modgn = modgn;
+    end
+
+    // Регистр номера процесса (РНП)
+    if (procn !== old_procn) begin
+        $fdisplay(fd, "(%0d)               Write PROCN = %h", ctime, procn);
+        old_procn = procn;
+    end
+
+    // Регистр режимов (РР): игнорируем биты ППК (признак правой команды)
+    // и ППУ (признак передачи управления). Меняются слишком часто.
+    if (rr[27:0] !== old_rr[27:0]) begin
+        $fdisplay(fd, "(%0d)               Write RR = %h", ctime, rr);
+        old_rr = rr;
+    end
+
+    //TODO: Расширение регистра режимов (РРР)
 
     //
     // Index-registers

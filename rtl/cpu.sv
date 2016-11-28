@@ -503,9 +503,7 @@ decoder dec(
     instr_ir15,                 // stack mode flag
     addr                        // address
 );
-
-always @(posedge clk)
-    instr_addr <= {{12{addr[19]}}, addr};
+assign instr_addr = {{12{addr[19]}}, addr};
 
 logic [11:0] optab[4096] = '{
     `include "../microcode/optab.v"
@@ -709,6 +707,8 @@ logic [11:0] rwiotab[2048] = '{
     `include "../microcode/rwiotab.v"
     default: '0
 };
-assign rwio_addr = rwiotab[{tr1, tr0, instr_addr[13:10], instr_addr[4:0]}];
+
+always @(posedge clk)
+    rwio_addr <= rwiotab[{tr1, tr0, instr_addr[13:10], instr_addr[4:0]}];
 
 endmodule
