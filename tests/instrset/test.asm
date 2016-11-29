@@ -22,8 +22,8 @@ main_sw:    name    qf
 ;  60   - вход после общего сброса машины
 ;
 beg_с:          equ     @fff8 0800      ; нач. C-обл.
-free_с:         pccb    (0)             ; конец C-обл.
-vol_с:          equ     free_с - beg_с >> 10 & @3ff
+free_c:         pccb    (0)             ; конец C-обл.
+vol_с:          equ     free_c - beg_с >> 10 & @3ff
 main_pag:       equ     beg_с >> 10 & @3ff
 ;;pplist:         equ     127             ; для пп
 pplist:         equ     @3c0            ; пп-адреса: f0000
@@ -267,17 +267,17 @@ s_мем:          atx                     ; семафор
 ; создание резервной копии программы
 ; со смещением на 16 страниц
 ;
-сору:       14  vtm     1 + begin - free_с
+сору:       14  vtm     1 + begin - free_c
                 setr    @3178
-:           14  tta     free_с - 1
-            14  ttx     free_с + @3fff
+:           14  tta     free_c - 1
+            14  ttx     free_c + @3fff
             14  vlm     * - 1
                 jmp     test
 ; восстановление основного экземпляра
-rесору:     14  vtm     1 + begin - free_с
+rесору:     14  vtm     1 + begin - free_c
                 setr    @3178
-:           14  tta     free_с + @3fff
-            14  ttx     free_с - 1
+:           14  tta     free_c + @3fff
+            14  ttx     free_c - 1
             14  vlm     * - 1
                 jmp     test
 ;
@@ -299,7 +299,7 @@ int:        n   wtc     adr - 1
 ;
 ;
 cheksumm:       uta
-            n   vtm     free_с - begin - 2
+            n   vtm     free_c - begin - 2
 :           n   arx     begin
             n   vrm     *
                 aex     ful             ; контр.сумма
@@ -545,10 +545,10 @@ setrp:          uta
             14  vtm     @2ff            ; запр.записи
             13  vtm     1 - vol_с
 :               ita     14
-            13  wmod    free_с >> 10 & @3ff + @3ff
+            13  wmod    free_c >> 10 & @3ff + @3ff
             13  wmod    vol_с + @401    ; силин
                 a+u     @4000           ; 2-й экземпляр
-            13  wmod    free_с >> 10 & @3ff + @40f
+            13  wmod    free_c >> 10 & @3ff + @40f
             14  utm     @400            ; с- приписка
             13  vlm     * - 3
             14  utm     @100            ; разр.записи
@@ -559,7 +559,7 @@ setrp:          uta
             14  utm     @400            ; v- приписка
             13  vlm     * - 2
             13  vjm     cheksumm
-                xta     free_с - 1
+                xta     free_c - 1
                 jane    initque
 ;
 ; запаковка старорежимной части теста
@@ -632,7 +632,7 @@ pack8:          asn     @400 - 12
 ;
                 uta
                 atx     csumm
-            n   vtm     free_с - begin - 2
+            n   vtm     free_c - begin - 2
 :           n   arx     begin
             n   vrm     *
                 aeu     -1
@@ -672,16 +672,16 @@ clem2:      7   vrm     clem1
                 ita     10
                 wmod    @401
 ;
-                xta     free_с - 1
+                xta     free_c - 1
                 jane    initque
-            14  vtm     1 + begin - free_с
+            14  vtm     1 + begin - free_c
                 xta     ="double-1"
-                atx     free_с - 1
-:           14  tta     free_с - 1      ; создаем свою
-            14  ttx     free_с + @3fff  ; копию
+                atx     free_c - 1
+:           14  tta     free_c - 1      ; создаем свою
+            14  ttx     free_c + @3fff  ; копию
             14  vlm     * - 1
                 xta     ="double-2"
-                atx     free_с + @3fff
+                atx     free_c + @3fff
                 clrr    main_reg + @50000
 ;
 ; нач.состояние очередей:
@@ -6044,7 +6044,7 @@ newfin:
                 uta     -1
                 wmod    @1c15           ; большой таймер
 ;
-            1   vtm     free_с - begin - 2
+            1   vtm     free_c - begin - 2
                 setr    @3178
 compare:    1   xta     begin
             1   aex     begin + @4000

@@ -5,26 +5,26 @@ MCDEF           = ../../microcode/mcasm/mcdef.py
 all:            initest.v sectest.v octtest.v memtest.v
 
 clean:
-		rm -f *.json *.pyc *.lst *.out
+		rm -f *.json *.pyc *.lst microcode.v
 
 define.json:    ../../microcode/define.src
 		$(MCDEF) $<
 
 initest.v:      INI.json INOUT.json
 		$(MCLINK) -pINI INI.json INOUT.json
-		mv microcode.out $@
+		mv microcode.v $@
 
 sectest.v:      SEC.json INOUT.json
 		$(MCLINK) -pSEC SEC.json INOUT.json
-		mv microcode.out $@
+		mv microcode.v $@
 
 octtest.v:      OCT.json INOUT.json
 		$(MCLINK) -pOCT OCT.json INOUT.json
-		mv microcode.out $@
+		mv microcode.v $@
 
 memtest.v:      MEM.json INOUT.json
 		$(MCLINK) -pMEM MEM.json INOUT.json
-		mv microcode.out $@
+		mv microcode.v $@
 
 INI.json:       initest.src define.json
 		$(MCASM) initest.src

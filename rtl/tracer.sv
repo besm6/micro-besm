@@ -115,7 +115,7 @@ always @(negedge clk) begin
                 ctime, (cpu.arb_opc == 8) ? "Fetch" : "Load",
                 waddr_x, testbench.i_tag, testbench.i_data);
 
-        if (testbench.trace && cpu.MAP == 1 &&
+        if (testbench.trace && cpu.MAP == 1 && cpu.SQI != 14 &&
             (cpu.COND == 0 || cpu.tkk) &&
             (cpu.LETC == 0 || cpu.uflag == 0)) begin
             // When MAP=ME, and jump taken, and not UTC: print BESM instruction.
@@ -799,7 +799,7 @@ task print_changed_cpu(
     static logic        old_pgused[1024];
     static logic        old_pgdirty[1024];
     static logic        old_pgreprio[1024];
-    static logic        old_stopm0, old_stopm1, old_halt, old_tkk, old_besm6;
+    static logic        old_stopm0, old_stopm1, old_halt, old_tkk, old_besm6, old_run;
 
     automatic logic  [4:0] modgn  = cpu.modgn;
     automatic logic  [7:0] procn  = cpu.procn;
@@ -811,6 +811,7 @@ task print_changed_cpu(
     automatic logic        stopm0 = cpu.stopm0;
     automatic logic        stopm1 = cpu.stopm1;
     automatic logic        halt   = cpu.halt;
+    automatic logic        run    = cpu.run;
     automatic logic        tkk    = cpu.tkk;
     automatic logic        besm6  = cpu.besm6_mode;
     automatic logic        csm    = opcode[30];
@@ -834,6 +835,7 @@ task print_changed_cpu(
     if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d)               Write PSHIFT = %h", ctime, pshift); old_pshift = pshift; end
     if (stopm0 !== old_stopm0) begin $fdisplay(fd, "(%0d)               Write STOPM0 = %h", ctime, stopm0); old_stopm0 = stopm0; end
     if (stopm1 !== old_stopm1) begin $fdisplay(fd, "(%1d)               Write STOPM1 = %h", ctime, stopm1); old_stopm1 = stopm1; end
+    if (run    !== old_run)    begin $fdisplay(fd, "(%1d)               Write RUN = %h",    ctime, run);    old_run    = run;    end
     if (halt   !== old_halt)   begin $fdisplay(fd, "(%1d)               Write HALT = %h",   ctime, halt);   old_halt   = halt;   end
     if (tkk    !== old_tkk)    begin $fdisplay(fd, "(%1d)               Write TKK = %h",    ctime, tkk);    old_tkk    = tkk;    end
     if (besm6  !== old_besm6)  begin $fdisplay(fd, "(%1d)               Write BESM6 = %h",  ctime, besm6);  old_besm6  = besm6;  end

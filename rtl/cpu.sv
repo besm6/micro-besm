@@ -182,7 +182,7 @@ wire        RLD   = opcode[41];      // Загрузка регистра сел
 wire        LETC  = opcode[40];      // Прохождение признака ПИА на вход ПНА команд
 wire  [2:0] CYSTR = opcode[39:37];   // Длительность тактового импульса
 wire        SCI   = opcode[36];      // Передача условия на вход инкрементора
-wire        ICI   = opcode[35];      // Инверсия условия на вход инкрементора (CI) СУАМ
+wire        ICI   = opcode[35];      // Инверсия условия на вход инкрементора (CI) СУАМ, не используется
 wire        ICC   = opcode[34];      // Инверсия условий, выбираемых полем COND
 wire        ISE   = opcode[33];      // Разрешение внешних и внутренних прерываний
 wire        CEM   = opcode[32];      // Разрешение записи в машинный регистр состояния M CYCC
@@ -233,7 +233,8 @@ am2910 control(clk,
     control_D, control_Y, , , control_nMAP, );
 
 // Carry-in bit for microprogram counter
-assign control_CI = (SCI ? control_nCC : '1) ^ ICI;
+// Ignore ICI, as if always enabled
+assign control_CI = !SCI ? '1 : ~control_nCC;
 
 // 12-bit data input
 assign control_D =
