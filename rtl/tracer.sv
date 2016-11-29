@@ -147,7 +147,28 @@ always @(negedge clk) begin
         $display("\n----- Fatal Error! -----");
         $finish(1);
     end
+
+    if (!cpu.run) begin
+        cpu_halted();
+        $finish(1);
+    end
 end
+
+task cpu_halted();
+    logic [19:0] pc;
+    logic [11:0] code;
+
+    assign pc = { cpu.alu.p19_16.ram[3], cpu.alu.p15_12.ram[3],
+                  cpu.alu.p11_8.ram[3],  cpu.alu.p7_4.ram[3], cpu.alu.p3_0.ram[3] };
+    assign code = { cpu.alu.p11_8.ram[5], cpu.alu.p7_4.ram[5], cpu.alu.p3_0.ram[5] };
+
+    if (fd) begin
+        $fdisplay(fd, "(%0d) *** Halted at %h with code=%h", ctime, pc, code);
+        $fdisplay(fd, "\n----- Fatal Error! -----");
+    end
+    $display("(%0d) *** Halted at %h with code=%h", ctime, pc, code);
+    $display("\n----- Fatal Error! -----");
+endtask
 
 //
 // Print BESM instruction.
@@ -541,7 +562,6 @@ task print_uop(
     // Some features not implemented yet
     //
     case (COND)
-    16: $fdisplay(fd, "(%0d) *** cond=RUN not implemented yet!", ctime);
     17: $fdisplay(fd, "(%0d) *** cond=NMLRDY not implemented yet!", ctime);
     19: $fdisplay(fd, "(%0d) *** cond=INT not implemented yet!", ctime);
     23: $fdisplay(fd, "(%0d) *** cond=CPMP not implemented yet!", ctime);
@@ -552,7 +572,6 @@ task print_uop(
         16: $fdisplay(fd, "(%0d) *** ffcnt=CLRCT not implemented yet!", ctime);
         17: $fdisplay(fd, "(%0d) *** ffcnt=CLRCTT not implemented yet!", ctime);
         25: $fdisplay(fd, "(%0d) *** ffcnt=CLRINT not implemented yet!", ctime);
-        26: $fdisplay(fd, "(%0d) *** ffcnt=CLRRUN not implemented yet!", ctime);
         27: $fdisplay(fd, "(%0d) *** ffcnt=RDMPCP not implemented yet!", ctime);
         28: $fdisplay(fd, "(%0d) *** ffcnt=LDMPCP not implemented yet!", ctime);
         29: $fdisplay(fd, "(%0d) *** ffcnt=LDCPMP not implemented yet!", ctime);
