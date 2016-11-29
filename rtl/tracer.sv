@@ -265,8 +265,12 @@ task print_insn();
 
     name = cpu.instr_ext ? ext_name[cpu.instr_code] : op_name[cpu.instr_code];
     $fwrite(fd, " %s ", name);
-    if (cpu.addr != 0)
-        $fwrite(fd, "%h", cpu.addr);
+    if (cpu.addr != 0) begin
+        if (cpu.instr_ext)
+            $fwrite(fd, "%h", cpu.addr[11:0]);
+        else
+            $fwrite(fd, "%h", cpu.addr);
+    end
     if (cpu.instr_reg != 0)
         $fwrite(fd, "(%0d)", cpu.instr_reg);
     $fdisplay(fd, "");

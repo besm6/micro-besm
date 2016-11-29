@@ -60,6 +60,7 @@ initial begin
         $display("    +hex=NAME         Load code into main memory");
         $display("    +uprog=NAME       Load microprogram code");
         $display("    +limit=NUM        Limit execution to a number of cycles (default %0d)", limit);
+        $display("    +clearmem         Initialize all memory to zero");
         $display("    +dump             Dump waveforms as output.vcd");
         $display("");
         $finish(1);
@@ -79,13 +80,23 @@ initial begin
         $fdisplay(tracefd, "Trace file for %0S\n", uprog);
     end
 
+    // Clear all RAM.
+    if ($test$plusargs("clearmem")) begin
+        for (int i=0; i<1024*1024; i+=1) begin
+            ram.mem[i] = '0;
+            ram.tag[i] = 'h34;
+        end
+        if (trace)
+            $fdisplay(tracefd, "Clear all memory");
+    end
+
+    // Load microprogram code.
     if ($value$plusargs("uprog=%s", uprog)) begin
-        // Load microprogram code.
         load_uprog();
     end
 
+    // Load program code into main memory.
     if ($value$plusargs("hex=%s", hexfile)) begin
-        // Load program code into main memory.
         load_hex();
     end
 
@@ -111,6 +122,25 @@ initial begin
         if (trace)
             $fdisplay(tracefd, "\n----- Time Limit Exceeded -----");
         $finish(1);
+    end
+end
+
+//
+// Hack for instrset test.
+//
+always @(posedge clk) begin
+    logic [19:0] pc;
+
+    assign pc = {
+        cpu.alu.p19_16.ram[3], cpu.alu.p15_12.ram[3],
+        cpu.alu.p11_8.ram[3],  cpu.alu.p7_4.ram[3],
+        cpu.alu.p3_0.ram[3] };
+
+    if (pc == 'h808c6 && cpu.mr_mem[32+7] == 'h03bf) begin
+        cpu.mr_mem[32+7] = 0;
+        if (trace)
+            $fdisplay(tracefd, "(%0d) *** Clear M7[1] to speed up memory initialization",
+                $time);
     end
 end
 
@@ -144,7 +174,9 @@ task load_hex();
         end
     end
     $fclose(fd);
-    $display("Load %0d words from %s.", count, hexfile);
+    $display("Load %0d words from %s", count, hexfile);
+    if (trace)
+        $fdisplay(tracefd, "Load %0d words from %s", count, hexfile);
 endtask
 
 //
@@ -181,6 +213,8 @@ task load_uprog();
     end
     $fclose(fd);
     $display("Load %0d instructions from %s", count, uprog);
+    if (trace)
+        $fdisplay(tracefd, "Load %0d instructions from %s", count, uprog);
 endtask
 
 endmodule
