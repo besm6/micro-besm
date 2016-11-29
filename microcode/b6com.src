@@ -200,16 +200,21 @@ PUSH А=LCW,МАР=РЕ,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=А,ALU,ЕСВ,WRB,BRA=
 ;МАТ.АДРЕС (15ИР-1) - В АИСП, WR1 (В ИАОП - ПОЗЖЕ!); ЖДЕМ ГОТ.АРБИТРА
 LООР COND=ARBRDY,МАР=РЕ,CSM,MNSA=МР,MODNM=SР,ALUS=DZ,FUNC=SUBS,ALUD=В,RВ=WR1
 >,ALU,YDST=ADRREG
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,ALUS=ZА,RА=WR1,ALUD=В,RВ=DADR,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,ALUS=ZА,RА=WR1,ALUD=В,RВ=DADR,FFCNT=СНТКК
 ;ПЕРЕХОД ПО КОП; ОПЕРАНД - В СУММАТОР; ПЕРЕПИСЫВАЕМ НОВОЕ ЗНАЧЕНИЕ SР В ОЗУ МОД.
 JRP %М%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=А,СЕМ,FFCNT=LOGGRP
 >,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР
 ;
 RDOPER:ENTRY
 ;ФИЗ.АДРЕС - В RG0, СМЕНА ТКК, ЧИТАЕМ АК В Q, ЖДЕМ ГОТ.АРБИТРА, ВОЗВРАТ
+
 LDCT А=LCW,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+RDOPER1:ENTRY
 CRTN COND=ARBRDY,SCI,%RСА%,FFCNT=CLRJMP
 ;ДОБАВЛЯЕМ ЕЩЕ 1 МК НА СЛУЧАЙ ПРЕРЫВАНИЯ!
+CRTN COND=ARBRDY,SCI
+; И ещё парочку
+CRTN COND=ARBRDY,SCI
 CRTN COND=ARBRDY,SCI
 END
 XTS:PROG;
@@ -223,7 +228,7 @@ XTS:PROG;
 ;===== 15 АТХ  -  МАГАЗИННАЯ ЗАПИСЬ
 ;      ХТА  -  ЧТЕНИЕ ПО ИСПОЛНИТ.АДРЕСУ
 ;
-EXTERN LCW,RDOPER
+EXTERN LCW,RDOPER,RDOPER1
 ;ПИШЕМ М.А.НА ЗАПИСЬ
 CONT %MAWF%
 ;ФИЗ. АДРЕС - В RG0; ПЕРЕПИСЫВАЕМ НОВОЕ ЗНАЧЕНИЕ SР - В WR5; ПЕРЕХОД, ЕСЛИ ИР15
@@ -232,7 +237,7 @@ CJP А=XTSF,МАР=РЕ,COND=IR15,%PHAW%,ALUS=ZА,RА=DADR,CI,ALUD=В,RВ=WR5
 PUSH А=LCW,МАР=РЕ,ALUS=ZВ,RВ=WR6,Н,ALUD=ВА,RА=А,ALU,ЕСВ,WRB,BRA=RG3
 ;МАТ.АДРЕС 2 - НА ЧТЕНИЕ (М + Q) - В АИСП, ИАОП; ЖДЕМ ГОТ.АРБИТРА
 LООР COND=ARBRDY,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR1,ALU,YDST=ADRREG
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,ALUS=ZА,RА=WR1,ALUD=В,RВ=DADR,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,ALUS=ZА,RА=WR1,ALUD=В,RВ=DADR,FFCNT=СНТКК
 ;ПЕРЕХОД, ПМИ, ЧИТАЕМ ОПЕРАНД В СУММАТОР, ПЕРЕПИСЫВАЕМ НОВЫЙ SР
 JRP %М%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=ВА,RА=WR5,RВ=А,СЕМ,FFCNT=LOGGRP
 >,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР
@@ -256,7 +261,7 @@ END
 ;PROM:008,408
 ;===== ЧТЕНИЕ ЧИСЛА ПО ИСПОЛНИТЕЛЬНОМУ АДРЕСУ В СУММАТОР; НЕЗАВИСИМО ОТ РЭ!
 ;
-EXTERN RDOPER,LCW,ХТА
+EXTERN RDOPER,LCW,ХТА,RDOPER1
 ;М.А. - В АИСП, ИАОП
 CJS А=RDOPER,МАР=РЕ,%МА%
 ;ПЕРЕХОД ПО КОП, ПМИ, ЧИТАЕМ В СУММАТОР
@@ -273,7 +278,7 @@ LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 PSXTAF:ENTRY
 CJP А=ХТА,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%
 ;МАГАЗИННОЕ ОБРАЩЕНИЕ НА ЧТЕНИЕ; ФИЗ.АДРЕС + МЕНЯЕМ ТКК
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;ПЕРЕХОД НА СЛЕД.КОМАНДУ, НОВЫЙ SР НА МЕСТО, ЧИТАЕМ В СУММАТОР, СБРОС ПИА, ПМИ
 JRP %М%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=А,СЕМ,FFCNT=LOGGRP
 >,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР
@@ -301,7 +306,7 @@ END
 ;PROM:009
 ;===== ЛОГИЧЕСКОЕ УМНОЖЕНИЕ СУММАТОРА НА ОПЕРАНД
 ;
-EXTERNAL RDOPER,LCW,ААХ
+EXTERNAL RDOPER,LCW,ААХ,RDOPER1
 ;М.А. - В АИСП, ИАОП
 CJS А=RDOPER,МАР=РЕ,%МА%
 ;ПЕРЕХОД ПО КОП, ПМИ, ЛОГИЧЕСКОЕ УМНОЖЕНИЕ СУММАТОРА НА ОПЕРАНД
@@ -316,7 +321,7 @@ AAXF:ENTRY
 LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 CJP А=ААХ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
 ;ЧИТАЕМ ОПЕРАНД ИЗ МАГАЗИНА: ФИЗ.АДРЕС
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;ПЕРЕХОД ПО КОП;НОВЫЙ SР ИЗ RG3 НА МЕСТО В ОЗУ МОД.;ОПЕРАНД УМНОЖАЕМ НА СУММАТОР
 JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=AND,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
 >,ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=SР
@@ -386,6 +391,7 @@ LOGER:ENTRY
 CONT А=МРР,%PHAR%,DSRC=PROM,ALUS=DА,RА=А,FUNC=NOTRS,Н,ALUD=В,RВ=WR1,CEN
 >,FFCNT=СНТКК
 ;НАДО ЛИ ПРОВЕРЯТЬ СУММАТОР И ОПЕРАНД (20 РАЗРЯД РР=1)
+LOGER1:ENTRY
 CJP A=PSLOG,MAP=PE,COND=10,%RCA%
 ;МАСКУ НА "ДЫРУ" - В WR6
 CONT А=MD,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6,FFCNT=CLRJMP
@@ -438,12 +444,12 @@ END
 ;   СУММАТОР ДО ВЫПОЛНЕНИЯ ОПЕРАЦИИ ПЕРЕСЫЛАЕТСЯ В РМР
 ;   (ВСЕ 64 РАЗРЯДА НЕЗАВИСИМО ОТ ПРИЗНАКА ГРУПП И РЭ!)
 ;
-EXTERNAL LCW,RDOPER,АЕХ
+EXTERNAL LCW,RDOPER,АЕХ,RDOPER1
 ;М.А. - В АИСП, ИАОП
 LDCT А=LCW,МАР=РЕ,%МА%
 ;ФИЗ.АДРЕС; ТКК = ПК; ПЕРЕПИСЫВАЕМ А - В РГ.У
 ;РГ.У МОЖНО ПОРТИТЬ, ДАЖЕ ЕСЛИ БУДЕТ INT, Т.К.ВСЕ РАВНО ТУДА БУДЕМ ПИСАТЬ!
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,ALUS=ZА,RА=А,Н,ALUD=В,RВ=У,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,ALUS=ZА,RА=А,Н,ALUD=В,RВ=У,FFCNT=СНТКК
 ;ПЕРЕХОД ПО КОП, ПМИ; ЛОГИЧЕСКОЕ СРАВНЕНИЕ СУММАТОРА И ОПЕРАНДА
 JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=EXOR,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
 ;
@@ -456,7 +462,7 @@ LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 ;ПЕРЕХОД, ЕСЛИ АК НЕ 0; ДЛЯ МАГАЗИННОГО ОБРАЩЕНИЯ МАТ.АДРЕС 15ИР-1 - В АИСП,ИАОП
 CJP А=АЕХ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
 ;ЧИТАЕМ ОПЕРАНД ИЗ МАГАЗИНА: ФИЗ. АДРЕС - В RG0, ПЕРЕПИСЫВАЕМ А - В РГ.У
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,ALUS=ZА,RА=А,Н,ALUD=В,RВ=У,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,ALUS=ZА,RА=А,Н,ALUD=В,RВ=У,FFCNT=СНТКК
 ;ПЕРЕХОД;НОВЫЙ SР ИЗ RG3 НА МЕСТО В ОЗУ МОД.; ОПЕРАНД СРАВНИВАЕМ С РГ.А
 JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=EXOR,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
 >,ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=SР
@@ -500,7 +506,7 @@ ARX:PROG;
 ;PROM:00В
 ;===== ЦИКЛИЧЕСКОЕ СЛОЖЕНИЕ СУММАТОРА И ОПЕРАНДА
 ;
-EXTERNAL RDOPER,LCW,ARX
+EXTERNAL RDOPER,LCW,ARX,RDOPER1
 ;М.А. - В АИСП, ИАОП
 CJS А=RDOPER,МАР=РЕ,%МА%
 ;СКЛАДЫВАЕМ СУММАТОР И ОПЕРАНД, ЗАПОМИНАЕМ ПЕРЕНОС
@@ -517,7 +523,7 @@ ARXF:ENTRY
 LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 CJP А=ARX,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
 ;ЧИТАЕМ ОПЕРАНД ИЗ МАГАЗИНА: ФИЗ.АДРЕС, МЕНЯЕМ ТКК
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;СКЛАДЫВАЕМ
 CONT ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=ADD,Н,ALUD=В,RВ=А,CEN
 ;ПЕРЕХОД НА СЛЕД.КОМАНДУ;НОВЫЙ SР ИЗ RG3 НА МЕСТО В ОЗУ МОД.; ДОБАВЛЯЕМ ПЕРЕНОС
@@ -565,7 +571,7 @@ END
 ;PROM:00D
 ;===== ЛОГИЧЕСКОЕ СЛОЖЕНИЕ СУММАТОРА И ОПЕРАНДА
 ;
-EXTERNAL RDOPER,LCW,АОХ
+EXTERNAL RDOPER,LCW,АОХ,RDOPER1
 ;М.А. - В АИСП, ИАОП
 CJS А=RDOPER,МАР=РЕ,%МА%
 ;ПЕРЕХОД НА СЛЕД.КОМАНДУ, ПМИ, ЛОГИЧЕСКОЕ СЛОЖЕНИЕ СУММАТОРА И ОПЕРАНДА
@@ -580,7 +586,7 @@ AOXF:ENTRY
 LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 CJP А=АОХ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
 ;ЧИТАЕМ ОПЕРАНД ИЗ МАГАЗИНА: Ф.А.+ МЕНЯЕМ ТКК
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;ПЕРЕХОД; НОВЫЙ SР ИЗ RG3 НА МЕСТО В ОЗУ МОД.; ДЕЛАЕМ ЛОГ.СЛОЖЕНИЕ
 JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=OR,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
 >,ЕСВ,BRA=RG3,CSM,WЕМ,MNSA=МР,MODNM=SР
@@ -1116,7 +1122,7 @@ EXTERNAL LOGER,ASXSE
 ;П/У НА П/П ПРОВЕРКИ СУММАТОРА, СДВИГАЕМ АК В СТ.РАЗРЯДЫ, ЗАПОМИНАЕМ В БОИ
 CONT А=МРР,DSRC=PROM,ALUS=DА,RА=А,FUNC=NOTRS,Н,ALUD=В,RВ=WR1,CEN
 CONT CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,FFCNT=SETTR1
-CJS А=LOGER+1,МАР=РЕ,ALUS=ZА,RА=DADR,Н,ALU,DSRC=SHIFT,MPS,PSHF=SН0-57,SHF=LOG
+CJS А=LOGER1,МАР=РЕ,ALUS=ZА,RА=DADR,Н,ALU,DSRC=SHIFT,MPS,PSHF=SН0-57,SHF=LOG
 >,ЕСА,WRA,ARA=RG3,FFCNT=СНТКК
 ;"РАСХЛАПЫВАЕМ", ЗАПОМИНАЕМ ЗНАК (НАПРАВЛЕНИЕ СДВИГА); ДАЛЬШЕ - КАК В ASX В РЭ
 CJP А=ASXSE,МАР=РЕ,ЕСВ,BRA=RG3,DSRC=SHIFT,MPS,PSHF=SН0+4,SHF=EMULF,ЕСА,WRA
@@ -1369,7 +1375,7 @@ WТС:PROG;
 ;===== СОДЕРЖИМОЕ 1-32 РАЗР.СЛОВА ПО ИСПОЛН.АДРЕСУ ЗАНОСИТСЯ В РГ.С,
 ;   УСТАНАВЛИВАЕТСЯ ПРИЗНАК ПИА=1
 ;
-EXTERN RDOPER,LCW,WТС,JQ
+EXTERN RDOPER,LCW,WТС,JQ,RDOPER1
 ;М.А. - В АИСП, ИАОП
 CJS А=RDOPER,МАР=РЕ,%МА%,FFCNT=CLRJMP
 ;ПМИ, ПИШЕМ ПРОЧИТАННОЕ В РГ.С
@@ -1385,7 +1391,7 @@ WTCF:ENTRY
 LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 CJP А=WТС,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%
 ;МАГАЗИННОЕ ЧТЕНИЕ: 15ИР-1 - В АИСП, В ИАОП, МЕНЯЕМ ТКК
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;ПИШЕМ ПРОЧИТАННОЕ В РГ.С
 LDCT А=LCW,МАР=РЕ,ЕСВ,BRA=RG2,CSM,WЕМ,MNSA=МР,MODNM=С,FFCNT=SЕТС
 ;ПЕРЕХОД ПО КОП, НОВЫЙ SР НА МЕСТО,ПМИ
@@ -1396,7 +1402,7 @@ WТСЕ:PROG;
 ;РЭ:1,15ИР:0,ПИА:0,КОП:98
 ;PROM:498
 ;
-EXTERNAL RDOPER,LCW,WТСЕ
+EXTERNAL RDOPER,LCW,WТСЕ,RDOPER1
 ;М.А. - В АИСП, ИАОП, П/У НА П/П ДЛЯ WТС В РЭ
 CJS А=RDOPER,МАР=РЕ,%МА%
 ;СДВИГАЕМ ПРОЧИТАННОЕ В МЛ.РАЗРЯДЫ
@@ -1414,7 +1420,7 @@ WTCFE:ENTRY
 CONT А=М15,DSRC=PROM,ALUS=DQ,FUNC=AND,CEN
 CJP А=WТСЕ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%
 ;МАГАЗИНН
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 CJP А=PSWTCE,МАР=РЕ,ALUS=ZА,RА=DADR,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР
 END
 VТМ:PROG;

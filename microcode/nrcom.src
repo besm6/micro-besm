@@ -399,7 +399,7 @@ XTYF:ENTRY
 LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 CJP А=ХТУ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%
 ;ЧТЕНИЕ ИЗ МАГАЗИНА: Ф.А.
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;ПЕРЕХОД ПО КОП, НОВЫЙ SР НА МЕСТО, ОПЕРАНД - В РМР, ПМИ
 JRP %М%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=У,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР
 END
@@ -427,7 +427,7 @@ YAXF:ENTRY
 LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 CJP А=УАХ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
 ;ЧИТАЕМ ИЗ МАГАЗИНА; Ф.А.
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;ПЕРЕХОД; НОВЫЙ SР ИЗ RG3 НА МЕСТО В ОЗУ МОД.; ОПЕРАНД УМНОЖАЕМ НА РМР
 JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=У,FUNC=AND,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
 >,%SPRG%
@@ -456,7 +456,7 @@ YEXF:ENTRY
 LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 CJP А=УЕХ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
 ;МАГАЗИННОЕ ОБРАЩЕНИЕ; Ф.А.
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;ПЕРЕХОД; НОВЫЙ SР ИЗ RG3 НА МЕСТО В ОЗУ МОД.;ОПЕРАНД СРАВНИВАЕМ С РМР
 JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=У,FUNC=EXOR,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
 >,%SPRG%
@@ -485,7 +485,7 @@ YOXF:ENTRY
 LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 CJP А=УОХ,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
 ;МАГАЗИННОЕ ОБРАЩЕНИЕ; Ф.А.
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;ПЕРЕХОД; НОВЫЙ SР ИЗ RG3 НА МЕСТО В ОЗУ МОД.; ДЕЛАЕМ ЛОГ.СЛОЖЕНИЕ
 JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=У,FUNC=OR,Н,ALUD=В,RВ=А,СЕМ,FFCNT=LOGGRP
 >,%SPRG%
@@ -1284,7 +1284,7 @@ ADLF:ENTRY
 LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 CJP А=ADL,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
 ;МАГАЗИН: ЗАГРУЖАЕМ АДРЕС ПЕРЕХОДА, ЕСЛИ КОМАНДА ПРАВАЯ
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;СКЛАДЫВАЕМ
 JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=ADD
 >,Н,ALUD=В,RВ=А,СЕМ,FFCNT=MULGRP,%SPRG%
@@ -1315,7 +1315,7 @@ LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 ;ПЕРЕХОД, ЕСЛИ АК НЕ РАВЕН 0; ПИШЕМ М.А. ДЛЯ МАГАЗИННОГО ОБРАЩЕНИЯ
 CJP А=ABL,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
 ;МАГАЗИН: Ф.А.
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;ВЫЧИТАЕМ
 JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=SUBR,Н,CI
 >,ALUD=В,RВ=А,СЕМ,FFCNT=MULGRP,%SPRG%
@@ -1346,7 +1346,7 @@ LDCT А=LCW,МАР=РЕ,ALUS=ZQ,CEN
 ;ПЕРЕХОД, ЕСЛИ АК НЕ РАВЕН 0; ПИШЕМ М.А. ДЛЯ МАГАЗИННОГО ОБРАЩЕНИЯ
 CJP А=LВА,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%,%SSPRG%
 ;МАГАЗИН; Ф.А.
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,FFCNT=СНТКК
 ;СКЛАДЫВАЕМ
 JRP %М%,ЕСА,ARA=RG2,ALUS=DА,RА=А,FUNC=SUBS,CI
 >,Н,ALUD=В,RВ=А,СЕМ,FFCNT=MULGRP,%SPRG%
@@ -2050,7 +2050,7 @@ CJS А=RDF,МАР=РЕ,CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=WR2,CEN
 LDCT А=LCW,МАР=РЕ,ЕСА,ARA=RG2,ALUS=DА,RА=WR2,FUNC=OR,Н,ALU,ЕСВ,WRB,BRA=RG3
 >,FFCNT=СНТКК
 PSSETF:ENTRY
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAW%
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAW%
 JRP %М%
 ;
 SETCLR:ENTRY
@@ -2065,6 +2065,9 @@ PUSH А=S0,SCI,ICI,DSRC=PROM,ALUS=DА,RА=WR1,FUNC=ADD,Н,ALU,YDST=PSHIFT
 ;СДВИГАЕМ МАСКУ ВЛЕВО НА МЕСТО ЧАСТИ СЛОВА, ВОЗВРАТ ПОСЛЕ ГОТ.АРБИТРА
 CRTN COND=ARBRDY,SCI,ALUS=DZ,Н,ALUD=ВА,RА=WR6,RВ=WR2,ALU,DSRC=SHIFT,SHF=LOG
 ;ДОБАВЛЯЕМ ЕЩЕ 1 МК НА СЛУЧАЙ ПРЕРЫВАНИЯ!
+CRTN COND=ARBRDY,SCI
+; И ещё парочку
+CRTN COND=ARBRDY,SCI
 CRTN COND=ARBRDY,SCI
 END
 CLRF:PROG;
@@ -2279,7 +2282,7 @@ CJS А=RDOPER,МАР=РЕ,%МА%
 ;МАТ.АДРЕС + 1 - В АИСП. ДЛЯ ВТОРОГО СЛОВА; ПРОЧИЩАЕМ СТЕК ДЛЯ 15ИР
 LООР ALUS=ZВ,RВ=DADR,CI,ALUD=В,ALU,YDST=ADRREG
 ;ФИЗ.АДРЕС + ЧИТАЕМ ПЕРВОЕ СЛОВО В СУМАТОР; ЖДЕМ ГОТ.АРБИТРА В П/П ЧЕРЕЗ CI СУАМ
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=А,СЕМ
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=А,СЕМ
 ;ЧИТАЕМ В РМР
 JRP %М%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=У,FFCNT=LOGGRP
 ;
@@ -2296,7 +2299,7 @@ JSRP А=DТА,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ARF%
 ;ВТОРОЙ МАТ.АДРЕС - В АИСП. (-1 ОТ ПРЕДЫДУЩЕГО)
 CONT ALUS=ZВ,RВ=DADR,FUNC=SUBR,ALUD=В,ALU,YDST=ADRREG
 ;ФИЗ.АДРЕС + ЧИТАЕМ В РМР! ЖДЕМ ГОТ.А.В П/П ЧЕРЕЗ CI СУАМ!
-CJS А=RDOPER+1,МАР=РЕ,SCI,ICI,%PHAR%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=У
+CJS А=RDOPER1,МАР=РЕ,SCI,ICI,%PHAR%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=У
 ;ПЕРЕХОД ПО КОП, НОВЫЙ SР НА МЕСТО, ЧИТАЕМ В СУММАТОР!
 JRP %М%,ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=ВА,RА=DADR,RВ=А,СЕМ
 >,ALU,CSM,WЕМ,MNSA=МР,MODNM=SР,FFCNT=LOGGRP
