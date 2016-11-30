@@ -41,20 +41,34 @@ lws:            equ     1030
                         , рапу(80)      ; п/упр.(крат.16)
                         , mst(40)       ; для магаз.команд
                         , ws(lws)       ; раб.ячейки
-;----- блок связи с пп:
-mc:             equ     40              ; каналы
-mj:             equ     64              ; заявки
-lо:             equ     200             ; выв.буфер
-@f0000:         block   refer(6), last_job, ppinf
-                        , heads(mc>>3), que(mj>>3)
-                        , jов(2*mj), con_in(16)
-                        , con_out(lо), last_out
-                        , (1), cnt
+;
+;----- Блок связи с ПП.
+; ЦП пишет только в: lаsт_job, heads, quе, job, con_out.
+; ПП пишет только в: ppinf, соn_in
+;
+MC:             equ     40              ; каналы
+MJ:             equ     64              ; заявки
+LO:             equ     200             ; выв.буфер
+@f0000:         block   refer(6)        ; ссылки на отн.адреса массивов:
+                                        ; f0000 - начало заголовков очередей (heads)
+                                        ; f0001 - начало списков очередей (que)
+                                        ; f0002 - начало массива заявок (job)
+                                        ; f0003 - начало буфера ввода (con_in)
+                                        ; f0004 - начало буфера вывода (con_out)
+                                        ; f0005 - длина буфера вывода (LO)
+                        , last_job      ; f0006 копия последней заявки от ЦП
+                        , ppinf         ; f0007 доп.информация к прерыванию от ПП
+                        , heads(MC>>3)  ; f0008 заголовки всех очередей
+                        , que(MJ>>3)    ; f000d прошитые списки очередей
+                        , job(2*MJ)     ; f0015 заявки на обмен от ЦП (одна заявка = 2 слова)
+                        , con_in(16)    ; f0095 буфер ввода
+                        , con_out(LO)   ; f00a5 кольцевой буфер вывода на консоль
+                        , last_out, (1), cnt
 ;
 долбежка:       equ     refer + @3ff
 долблист:       equ     @3f             ; лист=63
 ;
-limit:          equ     lo/12
+limit:          equ     LO/12
 free_v:         pcb     (0)             ; конец V-обл.
 vol_v:          equ     free_v - beg_v >> 10 & @3ff
 main_reg:       equ     @c17f           ; нач.режим
@@ -466,10 +480,10 @@ test:
             15  vtm     refer
                 uta     heads - refer   ; занесение
                 uts     que - refer     ; постоянных
-                uts     jов - refer     ; указателей
+                uts     job - refer     ; указателей
                 uts     con_in - refer  ; для блока
                 uts     con_out - refer ; связи с пп
-                uts     lо
+                uts     LO
                 uts
                 wmod    @1c14           ; часы
 ;
@@ -690,10 +704,10 @@ initque:        uta
             14  vtm     6 - 1023
 :           14  atx     refer + 1023
             14  vlm     *
-            14  vtm     2 - mj
+            14  vtm     2 - MJ
             15  vtm     mst
 :               a+u     1
-            14  atb     que << 3 + mj - 2
+            14  atb     que << 3 + MJ - 2
             14  vlm     * - 1
 ;
             13  vjm     cheksumm
@@ -2040,7 +2054,7 @@ pult:           wmod    @1c19           ; сброс кэша
                 aau     @ff
                 jaeq    retpult         ; это ввод
                 ati     3               ; конец вывода
-                uta     -mc
+                uta     -MC
 :               ati     11
             11  bta     que << 3
                 jaeq    badpult         ; нет заявки
@@ -2048,11 +2062,11 @@ pult:           wmod    @1c19           ; сброс кэша
             3   j-m     5
             5   jmne    * - 2
             3   utc     -1
-            3   xta     jов - 1
+            3   xta     job - 1
                 aan     64 - 39
 :               jane    * + 1
                 hlt     @39
-:           3   atx     jов + 511       ; -дубль
+:           3   atx     job + 511       ; -дубль
             3   bta     que<<3          ; продвижка
             11  atb     que<<3          ; очереди
             3   bta     que<<3 + 4096
@@ -2100,7 +2114,7 @@ output:         ati     11              ; адрес текста
                 jane    dport
             14  vtm     limit
                 setr    @80             ; smon @80 ; ***
-                uta     -mc
+                uta     -MC
 :               ati     12
             12  bta     que << 3
                 jaeq    * + 2
@@ -2119,10 +2133,10 @@ output11:       rmod    @1819
 :           11  xta
             12  atx     con_out         ; перепись
             11  utm     1               ; в кольцевой
-            12  utm     1 - lо
+            12  utm     1 - LO
 :           12  jmlt    * + 1
-            12  vtm     -lо
-:           12  utm     lо
+            12  vtm     -LO
+:           12  utm     LO
                 aau     @ff
                 jane    * - 4
             5   utc
@@ -2137,9 +2151,9 @@ output11:       rmod    @1819
                 atb     que<<3 + 4096   ; -дубль
                 xta     last_job
             14  utc     -1
-            14  atx     jов - 1
-            14  atx     jов + 511       ; -дубль
-                uta     -mc
+            14  atx     job - 1
+            14  atx     job + 511       ; -дубль
+                uta     -MC
 :               ati     11
             11  bta     que<<3
                 jane    * - 1
