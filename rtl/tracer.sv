@@ -242,10 +242,26 @@ task print_insn();
         240:"3ff0",241:"3ff1",242:"3ff2",243:"3ff3",244:"3ff4",245:"3ff5",246:"3ff6",247:"3ff7",
         248:"3ff8",249:"3ff9",250:"3ffa",251:"3ffb",252:"3ffc",253:"3ffd",254:"ret", 255:"hlt"
     };
+    static string b6_name[16] = '{
+        0:"20", 1:"21",   2:"utc", 3:"wtc", 4:"vtm",  5:"utm",  6:"uza", 7:"u1a",
+        8:"uj", 9:"vjm", 10:"32", 11:"33", 12:"vzm", 13:"v1m", 14:"36", 15:"vlm"
+    };
+    static string b6short_name[64] = '{
+         0:"atx",  1:"stx",  2:"*02",  3:"xts",  4:"a+x",  5:"a-x",  6:"x-a",  7:"amx",
+         8:"xta",  9:"aax", 10:"aex", 11:"arx", 12:"avx", 13:"aox", 14:"a/x", 15:"a*x",
+        16:"apx", 17:"aux", 18:"acx", 19:"anx", 20:"e+x", 21:"e-x", 22:"asx", 23:"xtr",
+        24:"rte", 25:"yta", 26:"*32", 27:"*33", 28:"e+n", 29:"e-n", 30:"asn", 31:"ntr",
+        32:"ati", 33:"sti", 34:"ita", 35:"its", 36:"mtj", 37:"j+m", 38:"*46", 39:"*47",
+        40:"*50", 41:"*51", 42:"*52", 43:"*53", 44:"*54", 45:"*55", 46:"*56", 47:"*57",
+        48:"*60", 49:"*61", 50:"*62", 51:"*63", 52:"*64", 53:"*65", 54:"*66", 55:"*67",
+        56:"*70", 57:"*71", 58:"*72", 59:"*73", 60:"*74", 61:"*75", 62:"*76", 63:"*77"
+    };
     logic [19:0] pc, rg0;
     logic [31:0] opcode;
+    logic besm6_mode;
     string name;
 
+    assign besm6_mode = cpu.rrr_besm6;
     assign pc = {
         cpu.alu.p19_16.ram[3], cpu.alu.p15_12.ram[3],
         cpu.alu.p11_8.ram[3],  cpu.alu.p7_4.ram[3],
@@ -263,14 +279,26 @@ task print_insn();
         return;
     end
 
-    name = cpu.instr_ext ? ext_name[cpu.instr_code] : op_name[cpu.instr_code];
+    // Instruction name
+    if (besm6_mode)
+        name = cpu.instr_code[7] ? b6_name[cpu.instr_code[6:3]] :
+                                   b6short_name[cpu.instr_code[5:0]];
+    else
+        name = cpu.instr_ext ? ext_name[cpu.instr_code] :
+                               op_name[cpu.instr_code];
     $fwrite(fd, " %s ", name);
+
+    // Address
     if (cpu.addr != 0) begin
-        if (cpu.instr_ext)
+        if (besm6_mode)
+            $fwrite(fd, "%h", cpu.addr[14:0]);
+        else if (cpu.instr_ext)
             $fwrite(fd, "%h", cpu.addr[11:0]);
         else
             $fwrite(fd, "%h", cpu.addr);
     end
+
+    // Register
     if (cpu.instr_reg != 0)
         $fwrite(fd, "(%0d)", cpu.instr_reg);
     $fdisplay(fd, "");
@@ -972,6 +1000,7 @@ task print_changed_regs(
     static logic  [7:0] old_procn;
     static logic [31:0] old_rr;
     static logic [31:0] old_mrmem[1024];
+    static logic        old_besm6;
     static string ir_name[32] = '{
         0:"M0",     1:"M1",     2:"M2",     3:"M3",
         4:"M4",     5:"M5",     6:"M6",     7:"M7",
@@ -988,6 +1017,7 @@ task print_changed_regs(
     automatic logic [31:0] rr     = cpu.rr;
     automatic logic        csm    = opcode[30];
     automatic logic        wem    = opcode[29];
+    automatic logic        besm6  = cpu.rrr_besm6;
 
     assign r0 = { cpu.alu.p63_60.ram[0], cpu.alu.p59_56.ram[0], cpu.alu.p55_52.ram[0], cpu.alu.p51_48.ram[0],
                   cpu.alu.p47_44.ram[0], cpu.alu.p43_40.ram[0], cpu.alu.p39_36.ram[0], cpu.alu.p35_32.ram[0],
@@ -1061,14 +1091,19 @@ task print_changed_regs(
         old_procn = procn;
     end
 
-    // Регистр режимов (РР): игнорируем биты ППК (признак правой команды)
-    // и ППУ (признак передачи управления). Меняются слишком часто.
+    // Регистр режимов (РР)
+    // Игнорируем биты ППК (признак правой команды) и ППУ
+    // (признак передачи управления): меняются слишком часто.
     if (rr[27:0] !== old_rr[27:0]) begin
         $fdisplay(fd, "(%0d)               Write RR = %h", ctime, rr);
         old_rr = rr;
     end
 
-    //TODO: Расширение регистра режимов (РРР)
+    // Режим БЭСМ-6
+    if (besm6 !== old_besm6) begin
+        $fdisplay(fd, "(%1d)               Write BESM6 = %h", ctime, besm6);
+        old_besm6 = besm6;
+    end
 
     //
     // Index-registers

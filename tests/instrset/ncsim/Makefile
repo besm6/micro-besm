@@ -24,7 +24,8 @@ NCSIM           = /opt/Xilinx/Vivado/2016.2/bin/$(NC)
 PROG            = $(NC)sim.dir/work.testbench/xsimk
 
 RUNFLAGS        = --testplusarg hex=../test.hex
-RUNFLAGS	+= --testplusarg limit=40000	# Limit by a number of cycles
+RUNFLAGS        += --testplusarg clearmem       # Clear RAM
+RUNFLAGS	+= --testplusarg limit=5000000	# Limit by a number of cycles
 RUNFLAGS	+= --testplusarg trace=1	# Print instructions
 #RUNFLAGS	+= --testplusarg trace=2	# Print micro-instructions
 #RUNFLAGS	+= --testplusarg dump		# Dump waveforms to output.vcd

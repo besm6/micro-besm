@@ -877,7 +877,7 @@
         "brief": "возврат из экстракода", 
         "ext_op": true, 
         "name": "RET", 
-        "opcode": "fе", 
+        "opcode": "fe", 
         "privileged": true
     }, 
     {
