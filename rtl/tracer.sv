@@ -817,7 +817,7 @@ task print_changed_cpu(
     automatic logic        halt   = cpu.halt;
     automatic logic        run    = cpu.run;
     automatic logic        tkk    = cpu.tkk;
-    automatic logic        besm6  = cpu.besm6_mode;
+    automatic logic        besm6  = cpu.rrr_besm6;
     automatic logic        csm    = opcode[30];
     automatic logic        wem    = opcode[29];
     automatic logic  [2:0] ydev   = opcode[20:18];
