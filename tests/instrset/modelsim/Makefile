@@ -18,6 +18,12 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/tracer.sv \
 		  ../../cpu/test_cpu.sv
 
+INCLUDES        = ../../../microcode/microcode.v \
+                  ../../../microcode/constants.v \
+                  ../../../microcode/optab.v \
+                  ../../../microcode/rwiotab.v \
+                  ../../../microcode/grouptab.v
+
 # Altera Quartus toolchain
 MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
 
@@ -33,7 +39,7 @@ all:            work
 clean:
 		rm -rf *.o *.vcd work
 
-work:           $(SOURCES)
+work:           $(SOURCES) $(INCLUDES)
 		[ -d word ] || $(MODELSIM)/vlib work
 		$(MODELSIM)/vlog -sv -nologo $(SOURCES)
 

@@ -12,8 +12,14 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/decoder.sv \
                   ../../../rtl/arbiter.sv \
                   ../../../rtl/shifter.sv \
+                  ../../../rtl/clz.sv \
+                  ../../../rtl/i8253.sv \
                   ../../../rtl/tracer.sv \
                   ../initest.sv
+
+INCLUDES        = ../../microcode/initest.v \
+                  ../../../microcode/constants.v \
+                  ../../../microcode/optab.v
 
 VCS             = vcs -l vcs.log -sverilog -debug_all
 
@@ -23,7 +29,7 @@ clean:
 		rm -rf simv.daidir csrc
 		rm -rf *.o *.vcd *~ simv vcs.log ucli.key
 
-simv:           $(SOURCES)
+simv:           $(SOURCES) $(INCLUDES)
 		$(VCS) +incdir+..+../../../rtl $(SOURCES)
 
 run:            simv

@@ -52,7 +52,7 @@ logic  [7:0] instr_code;        // код операции команды
 logic [31:0] instr_addr;        // адресная часть команды
 logic [11:0] jump_addr;         // ПНА КОП основного или дополнительного формата
 logic [11:0] rwio_addr;         // ПНА команд rmod/wmod и обмена с пультовым процессором
-logic [11:0] grp_addr;          // ПНА групп TODO
+logic [11:0] grp_addr;          // ПНА групп
 
 // Signals for ALU
 logic  [8:0] alu_I;             // ALU instruction, from ALUD, FUNC and ALUS
@@ -755,5 +755,15 @@ logic [11:0] rwiotab[2048] = '{
 
 always @(posedge clk)
     rwio_addr <= rwiotab[{tr1, tr0, instr_addr[13:10], instr_addr[4:0]}];
+
+//--------------------------------------------------------------
+// Group table
+//
+logic [11:0] grouptab[32] = '{
+    `include "../microcode/grouptab.v"
+    default: '0
+};
+
+assign grp_addr = grouptab[{tr1, tr0, grp}];
 
 endmodule

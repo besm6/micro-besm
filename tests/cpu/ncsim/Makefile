@@ -18,6 +18,12 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/tracer.sv \
                   ../test_cpu.sv
 
+INCLUDES        = ../../../microcode/microcode.v \
+                  ../../../microcode/constants.v \
+                  ../../../microcode/optab.v \
+                  ../../../microcode/rwiotab.v \
+                  ../../../microcode/grouptab.v
+
 # Xilinx Vivado toolchain
 NC              = x
 NCSIM           = /opt/Xilinx/Vivado/2016.2/bin/$(NC)
@@ -35,7 +41,7 @@ clean:
 		rm -rf $(NC)sim.dir .Xil
 		rm -f *.o *.vcd $(NC)vhdl.pb $(NC)vlog.pb $(NC)elab.pb $(NC)sim*.jou webtalk*.jou webtalk*.log run_*.log
 
-$(PROG):        $(SOURCES)
+$(PROG):        $(SOURCES) $(INCLUDES)
 		$(NCSIM)vlog --nolog --sv $(SOURCES)
 		$(NCSIM)elab --nolog testbench
 

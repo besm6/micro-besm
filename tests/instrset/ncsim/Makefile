@@ -18,14 +18,21 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/tracer.sv \
                   ../../cpu/test_cpu.sv
 
+INCLUDES        = ../../../microcode/microcode.v \
+                  ../../../microcode/constants.v \
+                  ../../../microcode/optab.v \
+                  ../../../microcode/rwiotab.v \
+                  ../../../microcode/grouptab.v
+
 # Xilinx Vivado toolchain
 NC              = x
 NCSIM           = /opt/Xilinx/Vivado/2016.2/bin/$(NC)
 PROG            = $(NC)sim.dir/work.testbench/xsimk
 
 RUNFLAGS        = --testplusarg hex=../test.hex
-RUNFLAGS        += --testplusarg clearmem       # Clear RAM
+RUNFLAGS        += --testplusarg clearmem	# Clear RAM
 RUNFLAGS	+= --testplusarg limit=5000000	# Limit by a number of cycles
+#RUNFLAGS       += --testplusarg trace=0	# No trace
 RUNFLAGS	+= --testplusarg trace=1	# Print instructions
 #RUNFLAGS	+= --testplusarg trace=2	# Print micro-instructions
 #RUNFLAGS	+= --testplusarg dump		# Dump waveforms to output.vcd
@@ -36,7 +43,7 @@ clean:
 		rm -rf $(NC)sim.dir .Xil
 		rm -f *.o *.vcd $(NC)vhdl.pb $(NC)vlog.pb $(NC)elab.pb $(NC)sim*.jou webtalk*.jou webtalk*.log run_*.log
 
-$(PROG):        $(SOURCES)
+$(PROG):        $(SOURCES) $(INCLUDES)
 		$(NCSIM)vlog --nolog --sv $(SOURCES)
 		$(NCSIM)elab --nolog testbench
 
