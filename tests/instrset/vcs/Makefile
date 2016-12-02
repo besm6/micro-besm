@@ -16,7 +16,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/i8253.sv \
                   ../../../rtl/tmemory.sv \
                   ../../../rtl/tracer.sv \
-                  ../test_cpu.sv
+		  ../../cpu/test_cpu.sv
 
 INCLUDES        = ../../../microcode/microcode.v \
                   ../../../microcode/constants.v \
@@ -26,8 +26,8 @@ INCLUDES        = ../../../microcode/microcode.v \
 
 VCS             = vcs -l vcs.log -sverilog -debug_all
 
-RUNFLAGS        = +hex=../test.hex
-RUNFLAGS	+= +limit=40000		# Limit by a number of cycles
+RUNFLAGS        = +hex=../test.hex +clearmem
+RUNFLAGS	+= +limit=5000000	# Limit by a number of cycles
 #RUNFLAGS	+= +trace=0		# No trace
 #RUNFLAGS	+= +trace=1		# Print instructions
 RUNFLAGS	+= +trace=2		# Print micro-instructions
