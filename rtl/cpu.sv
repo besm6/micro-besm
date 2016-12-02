@@ -146,7 +146,7 @@ logic        control_nMAP;      // JMAP instruction: use rwio memory
 //--------------------------------------------------------------
 // Microinstruction ROM.
 //
-logic [111:0] memory[4096] = '{
+const logic [111:0] memory[4096] = '{
     `include "../microcode/microcode.v"
     default: '0
 };
@@ -281,7 +281,7 @@ endcase
 //--------------------------------------------------------------
 // Constant ROM.
 //
-logic [63:0] const_ROM[512] = '{
+const logic [63:0] const_ROM[512] = '{
     `include "../microcode/constants.v"
     default: '0
 };
@@ -513,7 +513,7 @@ decoder dec(
 );
 assign instr_addr = {{12{addr[19]}}, addr};
 
-logic [11:0] optab[4096] = '{
+const logic [11:0] optab[4096] = '{
     `include "../microcode/optab.v"
     default: '0
 };
@@ -754,7 +754,7 @@ always @(posedge clk)
 //--------------------------------------------------------------
 // RWIO table
 //
-logic [11:0] rwiotab[2048] = '{
+const logic [11:0] rwiotab[2048] = '{
     `include "../microcode/rwiotab.v"
     default: '0
 };
@@ -765,11 +765,20 @@ always @(posedge clk)
 //--------------------------------------------------------------
 // Group table
 //
-logic [11:0] grouptab[32] = '{
+const logic [11:0] grouptab[32] = '{
     `include "../microcode/grouptab.v"
     default: '0
 };
 
 assign grp_addr = grouptab[{tr1, tr0, grp}];
+
+//--------------------------------------------------------------
+// Interrupt table
+//
+const logic [11:0] intrtab[32] = '{
+    `include "../microcode/intrtab.v"
+    default: '0
+};
+//TODO
 
 endmodule

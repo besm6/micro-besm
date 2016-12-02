@@ -35,7 +35,6 @@ assign waddr = ram.waddr;
 
 string tracefile = "output.trace";
 string hexfile;                         // Input hex file with code
-string uprog = "micro-BESM";            // Input file name with microprogram
 int limit;
 int trace;                              // Trace level
 int tracefd;                            // Trace file descriptor
@@ -58,7 +57,6 @@ initial begin
         $display("    +trace=1          Trace instructions and registers to file %s", tracefile);
         $display("    +trace=2          Trace micro-instructions");
         $display("    +hex=NAME         Load code into main memory");
-        $display("    +uprog=NAME       Load microprogram code");
         $display("    +limit=NUM        Limit execution to a number of cycles (default %0d)", limit);
         $display("    +clearmem         Initialize all memory to zero");
         $display("    +dump             Dump waveforms as output.vcd");
@@ -77,7 +75,6 @@ initial begin
     if (trace) begin
         $display("Generate trace file %0S", tracefile);
         tracefd = $fopen(tracefile, "w");
-        $fdisplay(tracefd, "Trace file for %0S\n", uprog);
     end
 
     // Clear all RAM.
@@ -88,11 +85,6 @@ initial begin
         end
         if (trace)
             $fdisplay(tracefd, "Clear all memory");
-    end
-
-    // Load microprogram code.
-    if ($value$plusargs("uprog=%s", uprog)) begin
-        load_uprog();
     end
 
     // Load program code into main memory.
@@ -177,44 +169,6 @@ task load_hex();
     $display("Load %0d words from %s", count, hexfile);
     if (trace)
         $fdisplay(tracefd, "Load %0d words from %s", count, hexfile);
-endtask
-
-//
-// Load microprogram code, optional.
-//
-task load_uprog();
-    int fd, i, count;
-    string line;
-    logic [111:0] opcode;
-
-    // Open file with microcode image.
-    fd = $fopen(uprog, "r");
-    if (fd == 0) begin
-        $error("%s: Cannot open", uprog);
-        $finish(1);
-    end
-
-    // Clear the microprogram memory.
-    for (i=0; i<4096; i+=1) begin
-        cpu.memory[i] = '0;
-    end
-
-    // Read microcode image.
-    count = 0;
-    while ($fgets(line, fd)) begin
-        if (line[0] == "/")
-            continue;
-
-        if ($sscanf(line, "%d: 112'h%x,", i, opcode) == 2) begin
-            //$fdisplay(tracefd, "%8d: %028x", i, opcode);
-            cpu.memory[i] = opcode;
-            count += 1;
-        end
-    end
-    $fclose(fd);
-    $display("Load %0d instructions from %s", count, uprog);
-    if (trace)
-        $fdisplay(tracefd, "Load %0d instructions from %s", count, uprog);
 endtask
 
 endmodule

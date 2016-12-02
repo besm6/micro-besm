@@ -22,6 +22,7 @@ INCLUDES        = ../../../microcode/microcode.v \
                   ../../../microcode/constants.v \
                   ../../../microcode/optab.v \
                   ../../../microcode/rwiotab.v \
+                  ../../../microcode/intrtab.v \
                   ../../../microcode/grouptab.v
 
 # Altera Quartus toolchain
