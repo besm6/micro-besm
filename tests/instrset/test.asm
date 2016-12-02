@@ -560,7 +560,7 @@ setrp:          uta
             13  vtm     1 - vol_с
 :               ita     14
             13  wmod    free_c >> 10 & @3ff + @3ff
-            13  wmod    vol_с + @401    ; силин
+            13  wmod    vol_с + @401    ; Силин
                 a+u     @4000           ; 2-й экземпляр
             13  wmod    free_c >> 10 & @3ff + @40f
             14  utm     @400            ; с- приписка
@@ -569,7 +569,7 @@ setrp:          uta
             13  vtm     1 - vol_v
 :               ita     14
             13  wmod    free_v >> 10 & @3ff + @3ff
-            13  wmod    vol_v + @3ff    ; силин
+            13  wmod    vol_v + @3ff    ; Силин
             14  utm     @400            ; v- приписка
             13  vlm     * - 2
             13  vjm     cheksumm
@@ -2082,9 +2082,9 @@ pult:           wmod    @1c19           ; сброс кэша
 retpult:
                 uta
                 atx     ppinf
-                rmod    @1802 ; силин ставил
-                aau     @ffff1 ; сразу 3
-                wmod    @1802 ; единички !
+                rmod    @1802           ; Силин ставил
+                aau     @ffff1          ; сразу 3
+                wmod    @1802           ; единички !
                 jmp     ret_int
 badpult:        hlt     @40
                 jmp     retpult

@@ -717,11 +717,17 @@ always @(posedge clk) begin
     end
 end
 
-// Translate virtual address into physical address.
-wire [9:0] pg_translated =
-    no_paging ? ureg[19:10]
-              : pg_map[ureg[19:10]][19:10];
+// Virtual page index
+wire [9:0] pg_virt =
+    rrr_besm6 ? ureg[14:10] :   // 15 bits in besm6 mode
+                ureg[19:10];    // 20 bits in normal mode
 
+// Translate virtual page into physical page index
+wire [9:0] pg_translated =
+    no_paging ? pg_virt
+              : pg_map[pg_virt][19:10];
+
+// Translate virtual address into physical address.
 assign physad = {pg_translated, ureg[9:0]};
 
 always @(posedge clk)
