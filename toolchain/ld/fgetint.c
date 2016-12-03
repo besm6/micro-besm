@@ -1,14 +1,10 @@
 
-# include <stdio.h>
+#include <stdio.h>
+#include "microbesm/a.out.h"
 
-extern long fgeth ();
-
-fgetint (f, i)
-register FILE * f;
-register *i;
+int fgetint(register FILE *f, register int *i)
 {
-	*i = fgeth (f);
-	fgeth (f);
-	return (1);
+    *i = fgeth(f);
+    fgeth(f);
+    return 1;
 }
-

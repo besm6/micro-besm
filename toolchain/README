@@ -1,18 +1,16 @@
-This is a cross-development system for PDP-11, ported from 2.11BSD.
+Here you can find a cross-development system for micro-BESM project,
+based on Portable C Compiler from Unix V7.
+
 It includes:
 
-  * as		- assembler
-  * ccom	- Ritchie's C compiler
-  * mip, pcc	- Johnson's portable C compiler
-  * cpp		- C preprocessor
-  * c2		- optimizer for assembler output of C compilers
-  * cc		- compiler front end: "cc" and "pcc"
-  * ld		- linker, archiver, disassembler, and other a.out utilities
-  * crt		- runtime library for long and unsigned arithmetics
+  * as          - assembler and disassembler
+  * ld          - linker, archiver, and other object file utilities
+  * lib         - library for long and unsigned arithmetics
+  * mip, pcc    - Johnson's portable C compiler
+  * cc          - compiler front end
+  * microbesm   - include files
 
 To build and install to /usr/local/bin, run:
 
     make
     make install
-___
-Serge Vakulenko, <serge@vak.ru>

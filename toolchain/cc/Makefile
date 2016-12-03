@@ -1,6 +1,6 @@
 
 SHELL   = /bin/sh
-INSTALL = /usr/SVSB
+DESTDIR = /usr/local
 CFLAGS  =
 CC      = /bin/cc
 cc      = cc
@@ -14,15 +14,15 @@ $(cc):  cc.c
 $(cc2): cc.c
 	$(CC) $(LDFLAGS) $(CFLAGS) -DTWOPASS cc.c -o $(cc2)
 
-install: $(INSTALL)/bin/$(cc)
+install: $(DESTDIR)/bin/$(cc)
 
 clean:
 	rm -f *.o *.b a.out core $(cc) $(cc2)
 
-$(INSTALL)/bin/$(cc): $(cc)
-	cp $(cc) $(INSTALL)/bin/$(cc)
-	strip $(INSTALL)/bin/$(cc)
+$(DESTDIR)/bin/$(cc): $(cc)
+	cp $(cc) $(DESTDIR)/bin/$(cc)
+	strip $(DESTDIR)/bin/$(cc)
 
-$(INSTALL)/bin/$(cc2): $(cc2)
-	cp $(cc2) $(INSTALL)/bin/$(cc2)
-	strip $(INSTALL)/bin/$(cc2)
+$(DESTDIR)/bin/$(cc2): $(cc2)
+	cp $(cc2) $(DESTDIR)/bin/$(cc2)
+	strip $(DESTDIR)/bin/$(cc2)
