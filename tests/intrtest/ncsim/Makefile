@@ -1,5 +1,5 @@
 #
-# Using Mentor ModelSim
+# Using Cadence IUS
 #
 SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/datapath.sv \
@@ -16,26 +16,25 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/i8253.sv \
                   ../../../rtl/tmemory.sv \
                   ../../../rtl/tracer.sv \
-		  ../memtest.sv
+                  ../intrtest.sv
 
-INCLUDES        = ../../../microcode/tests/memtest.v \
-                  ../../../microcode/constants.v \
-                  ../../../microcode/optab.v
+# Xilinx Vivado toolchain
+NC              = x
+NCSIM           = /opt/Xilinx/Vivado/2016.2/bin/$(NC)
+PROG            = $(NC)sim.dir/work.testbench/xsimk
 
-# Altera Quartus toolchain
-MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
-
-all:            work
+all:            $(PROG)
 
 clean:
-		rm -rf *.o *.vcd work
+		rm -rf $(NC)sim.dir .Xil
+		rm -f *.o *.vcd $(NC)vhdl.pb $(NC)vlog.pb $(NC)elab.pb $(NC)sim*.jou webtalk*.jou webtalk*.log run_*.log
 
-work:           $(SOURCES) $(INCLUDES)
-		[ -d word ] || $(MODELSIM)/vlib work
-		$(MODELSIM)/vlog -sv -nologo $(SOURCES)
+$(PROG):        $(SOURCES)
+		$(NCSIM)vlog --nolog --sv $(SOURCES)
+		$(NCSIM)elab --nolog testbench
 
-run:            work
-		$(MODELSIM)/vsim -c -l run.log -do 'run 10ms;quit' testbench +limit=400000 #+dump
+run:            $(PROG)
+		$(NCSIM)sim --R --log run.log testbench --testplusarg limit=400000
 
 view:
-		gtkwave output.vcd test.gtkw &
+		gtkwave testbench.vcd databus.gtkw

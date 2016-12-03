@@ -17,7 +17,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/tracer.sv \
 		  ../sectest.sv
 
-INCLUDES        = ../../microcode/sectest.v \
+INCLUDES        = ../../../microcode/tests/sectest.v \
                   ../../../microcode/constants.v \
                   ../../../microcode/optab.v
 

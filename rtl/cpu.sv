@@ -146,7 +146,7 @@ logic        control_nMAP;      // JMAP instruction: use rwio memory
 //--------------------------------------------------------------
 // Microinstruction ROM.
 //
-const logic [111:0] memory[4096] = '{
+logic [111:0] memory[4096] = '{
     `include "../microcode/microcode.v"
     default: '0
 };

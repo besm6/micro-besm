@@ -1,0 +1,1421 @@
+*NAME OC-7 (ttanal - packdate)
+*TIME:24.00
+*EXPRESS
+*PAGE:999,LIST
+*LIBRA:23
+*DISC:705/SYSTEM,LCROSS
+*FILE:LIB,67
+*FILE:MEM,30,W
+*PERSO:67
+*TAKE TAPE:67
+*          *DISC:705/SYSTEM,WORKIN
+*          *FILE:LCROSS     - PERSO ACCEMБЛEP+ЗAГPYЗЧИK+ЭMYЛЯTOP
+*          *FILE:ASSEM      - OПИCAHИE И TEKCTЫ ACCEMБЛEPA И ЗAГPYЗЧИKA
+*          *FILE:EXMEM      - ПAMЯTЬ ДЛЯ MOДYЛEЙ ЗAГPYЗKИ
+*          *FILE:EML        - TEKCTЫ ЭMYЛЯTOPA (ЗOHA=1)
+*          *FILE:OS         - MAKPOCЫ ( 0 )  И TEKCTЫ  O C  ( 120 )
+*CALL FICMEMOR
+*NO LIST
+*CALL ZMACRO
+TTANAL:NAME QF
+;*
+;*                     ...A B HYTPE Y EЯ - ДYMATEЛЬ,
+;*                        PEШATEЛЬ И OTBEЧATEЛЬ.
+;*                                 (ПPOФ. BЫБEГAЛЛO)
+;*
+;***************************************************
+;*                                                 *
+;*      AHAЛИЗATOP COOБЩEHИЙ, ПOЛYЧEHHЫX           *
+;*          C OПEPATOPCKOЙ KOHCOЛИ                 *
+;*                                                 *
+;***************************************************
+;*
+;*    AKTИBИЗИPYETCЯ OT ПPEPЫBAHИЯ ПO BBOДY C KOHCOЛИ.
+;*    COOБЩEHИЯ MOГYT БЫTЬ AДPECOBAHЫ KAK CИCTEME, TAK
+;*    И KOHKPETHOMY ПPOЦECCY NN.  B ПOCЛEДHEM CЛYЧAE
+;*    TTANAL OCYЩECTBЛЯET ПOЧTOBYЮ ФYHKЦИЮ.  OБЩИЙ BИД:
+;*
+;*         QD NN<TEKCT COOБЩEHИЯ> <RETURN>
+;*
+;*    ECЛИ COOБЩEHИE AДPECOBAHO CИCTEME, TO NN=00.
+;*    ECЛИ ПPИ ЭTOM ПEPBЫЙ CИMBOЛ TEKCTA HE ЯBЛЯETCЯ
+;*    ШECTHAДЦATИPИЧHOЙ ЦИФPOЙ, NN MOЖHO OПYCTИTЬ.
+;*
+OБMOЧ
+PCW
+PCBIT
+PSYS
+SPORT
+RRBIT
+TPP
+FATA
+VMD
+EVENT
+ATQUE:LCB LTQ,ATQ
+;
+MAINTERM:EQU 0
+KOHCOЛЬ:SUBP QF
+DHEX8:SUBP QF
+HEXB1:SUBP QF
+F_OPEN:SUBP QF
+F_CLOSE:SUBP QF
+STARTJOB:SUBP QF
+PACKDATE:SUBP QF
+PACKTIME:SUBP QF
+WEEKDAY:SUBP QF
+DATE:SUBP QF
+TIME:SUBP QF
+;
+CODE
+;
+IFP
+BUF:BLOCK NAME(2),STR(14),LSTADR,DIR
+MODIF
+T:EQU PA ; YK.ПO CTPOKE
+C:EQU CA ; TEK.CИMBOЛ
+;
+CONST
+;
+SYSDIR:CHAR "MEMORY"
+:CHAR "START"
+:CHAR "TTT"
+:CHAR "DEBUG"
+:CHAR "TECTAY"
+:CHAR "HEXCALC"
+:CHAR "DATE"
+:CHAR "OSDATE"
+:CHAR "OUTPUT"
+:CHAR "KILL"
+:HEX 0
+;
+CMD
+;
+;       ECЛИ ECTЬ BXOДHAЯ CTPOKA - ПEPEПИШEM K CEБE
+;
+;MOZY=81551      ;   -  TTANAL
+;
+BEGIN:XTA CON_IN
+JANE TRAN
+UTA 5
+PINT
+TRAN:TN VTM N_TTAN
+I VTM 10
+T VTMB STR
+P1 VTM 1
+TRAN1:I XTA CON_IN
+I ATX STR
+I VRM TRAN1
+UTA
+ATX CON_IN
+T BTA
+ATI C
+JAEQ EDIR
+;
+;      ПPOПYCK ЛEBЫX ПPOБEЛOB
+;
+:T BTA
+T UTM 1
+AEU @20
+JAEQ *-1
+;
+;       ПPOБA HA KOД AДPECATA
+;
+T BTA -1
+JMPS HEXB1
+:JALT SYSADR
+ASFT -4
+T BTS
+JMPS HEXB1
+:15 AOX
+JALT SYSADR
+ATI NP
+NP JMEQ SYSADR
+ITA NP
+A-U QPROC
+JAGE SYSADR
+NP XTA PCW
+JAEQ ERRADR
+;
+;       COOБЩEHИE ПEPEAДPECYETCЯ ПPOЦECCY NP
+;
+JMP ERRDIR
+;
+;       COOБЩEHИE AДPECOBAHO CИCTEME
+;
+SYSADR:XTA =" "
+ATX DIR
+ATX NAME
+ATX NAME+1
+I VTMB DIR
+T UTM -2
+;
+GIVDIR:T UTM 1
+T BTA
+ATI C
+JAEQ EDIR
+I ATB
+I UTM 1
+AEU @20
+JANE GIVDIR
+;
+;        ПOИCK B CПИCKE ПPИKAЗOB
+;        (ПO ПEPBЫM 3 CИMBOЛAM)
+;
+EDIR:W VTM SYSDIR
+NP VTM QPROC-1
+:W XTA
+JAEQ errdir ; START
+AEX DIR
+ASFT 40
+W JAEQ SW-SYSDIR
+W VLM EDIR+1
+;
+SW:JMP MEMORY
+:P1 VTM 1
+JMP START ; Дубна
+:P1 VTM 3
+JMP START ; Диспак
+:P1 VTM 0
+JMP START ; - DEBUG
+:P1 VTM -1
+JMP START ; - TECT AY
+:R VTM HEXCALC
+JMP HEXNUM  ; - HEXCALC
+:T MTJ IA
+JMP GETDAT ; - DATE
+:I VTM OSDATE
+JMP TOTER ; - OSDATE
+:I VTM STR
+JMP TOTER ; - OUTPUT
+:R VTM KILL
+JMP HEXNUM ; - KILL
+;
+;      ************************************
+;       START <ИMЯ ФAЙЛA C ПAKETOM ЗAДAЧИ>
+;      ************************************
+;       HEOПOЗHAHHAЯ ДИPEKTИBA  TPAKTYETCЯ
+;       KAK ЗAПYCK BATCH-ФAЙЛA !!!
+;
+;
+;      BЫБOP CЧETHOГO KAHAЛA
+;
+START:NP XTA PCW
+JAEQ FORMIF
+NP VRM *-1
+HLT 6
+;
+;       ФOPMИPOBAHИE  И П  ЗAПYCKAEMOГO ПPOЦECCA
+;       ДЛЯ  И П  OTДAEM CBOЙ PAБOЧИЙ ЛИCT.
+;       ИП ЮЗEPA COЗДAEM HA OCHOBE ИП ДИCПETЧEPA
+;
+FORMIF:I VTM 1023
+UTA
+:I ATX WSPAG+N_TTAN<<10
+I VRM *
+I VTM WSPAG+N_TTAN<<10 -IFCTIM
+J VTM FDB-IFCTIM+1 ; ФAЙЛЫ:0,1
+FIF1:J XTA IFCTIM
+J ATX WSPAG+N_TTAN<<10
+J VRM FIF1
+I MTJ W
+W UTM TMP
+W MSFT -2
+UTA
+J VTM BFPOOL-WSPAG
+:J UTC WSPAG ; БEЗ CИCT.
+W ATQ ; ЛИCTOB !!!
+J VRM *-1
+;
+XTA DIR ; KOД ДИPEKTИBЫ
+I ATX REGSCAL ; ЗAПYCKA
+ITA P1
+ASFT -32
+I ATX SAVREG ; И1,И2
+;
+UTA SAVREG+16
+I ATX ASTEC ; PAПY
+UTA SAVREG+10
+ASFT -32
+I ATX SAVREG+7 ; И15
+UTA STARTJOB
+ASFT -32
+I ATX SAVREG+8 ; CЧAC
+NTA 32-PД
+AON 32-POA
+I ATX SAVREG+9 ; PP+PPP
+SMON БBП+БПTЧ+БПИHT
+XTA CLOCK ; ACTP.BPEMЯ
+I ATX TCLOSE ; ЗAПYCKA
+;
+;         OTДAEM CBOЙ ЛИCT ЮЗEPY
+;
+QTA DTMP<<2 +WSPAG+N_TTAN
+ASFT 4
+ATI J
+UTA @F
+ATQ DTMP<<2 +WSPAG+N_TTAN
+UTA
+WMOD WSPAG+N_TTAN +@400
+QTA PCNT<<2 +3
+A-U 1
+ATQ PCNT<<2 +3
+;
+UTA IF_LIST
+ASFT -16
+AOU @F00
+AOI NP
+J ATH TPP<<1
+ITA J
+ASFT -10
+AON B_BRAN
+AON IF_FIX
+NP ATX PCW
+UTA QPROC-1 ; "OБPATHЫЙ"
+A-I NP ; HOMEP ПPOЦECCA
+ASFT -16
+AON 64-49 ; KЛACC=2
+NP ATX TABPRT
+NTA E_STOP-1
+NP ATX M_EVENTS
+ITA NP
+ASFT -32
+AOU 2
+PINT
+ITA NP
+JMPS DHEX8
+:AAU @FFFF
+ASFT -8
+AOX ="ДAЧИ-'0''0'."
+ATX NAME+1
+XTA ="CTAPT ЗA"
+ATX NAME
+XTA =Z"'@0A''@0D'"
+ATX STR
+NAMOUT:I VTM NAME
+JMP TOTER
+;
+;       *********************************
+;            KILL <НОМЕР ПРОЦЕССА>
+;       *********************************
+;
+KILL:JALT ERRNAM
+ITA IA
+A-U QPROC
+JAGE ERRNAM
+IA XTA PCW
+JAEQ ERRNAM
+AAN P_SYST
+JANE ERRADR
+SMON БВП
+IA XTA PCW
+AON B_BRAN
+AEN B_BRAN
+IA ATX PCW
+IA UTA E_STOP<<8
+ASFT -32
+AOU 1
+PINT
+JMP BEGIN
+;
+;       *********************************************
+;        MEMORY <ИMЯ, AДPEC ИЛИ ПYCTO> (CMEЩ.)KOЛИЧ.
+;       *********************************************
+;                BЫДAЧA COДEPЖИMOГO ПAMЯTИ.
+;
+MEMORY:P1 VTM ; CMEЩEHИE
+P2 VTM ; KOЛИЧECTBO
+C JMEQ NEXTADR
+ATX LSTADR ; =0
+I VTMB NAME+1
+W VTM ; TИП=<AДPEC>
+;
+;        BЫБOPKA OПEPAHДOB ДИPEKTИBЫ "MEMORY"
+;
+GIVOPER:T UTM 1
+T BTA
+ATI IA
+IA UTM -@28 ; "("
+IA JMLE EOPER1
+I ATB
+I UTM 1
+:W JMNE *+1
+JMPS HEXB1
+:JALT TYP1
+XTS LSTADR
+ASFT -4
+15 AOX
+ATX LSTADR
+JMP GIVOPER
+TYP1:W VTM 1 ; TИП=<ИMЯ>
+JMP GIVOPER
+;
+EOPER1:JAEQ EOPER
+RI VTM 1
+:IA JMEQ *+1
+RI VTM
+GIVOPER1:T UTM 1
+T BTA
+JAEQ EOPER
+JMPS HEXB1
+:JALT GIVOPER2
+RI ITS P2
+ASFT -4
+15 AOX
+RI ATI P2
+JMP GIVOPER1
+GIVOPER2:RI VRM GIVOPER1
+;
+;        ПOИCK, ECЛИ HAДO, B CПИCKE ЗAГPYЗKИ
+;        ПCEBДOИMЯ  IFPROC<NN> - BЫДAЧA  И П.
+;
+EOPER:W JMEQ NEXTADR ; - AДPEC
+W VTM LOADLIST
+XTA NAME+1
+ATX NAME
+AEX ="IFPROCNN"
+ASFT 16
+JANE SLL
+XTA NAME
+AAU @FF
+JMPS HEXB1
+:JALT SLL
+ATI NP
+XTA NAME
+ASFT 8
+AAU @FF
+JMPS HEXB1
+:JALT SLL
+ASFT -4
+AOI NP
+ATI NP
+JAEQ ERRADR
+A-U QPROC
+JAGE ERRADR
+NP XTA PCW
+AAU @3FF
+A+U WSPAG+N_TTAN<<10
+ATX LSTADR
+NP XTA PCW
+AOU @3FF
+WMOD WSPAG+N_TTAN +@400
+JMP NEXTADR
+;
+SLL:W XTA
+AEX =H2020 2020 2020 2020
+JAEQ ERRNAM
+W XTA
+AEX NAME+1
+W UTM 2
+JANE SLL
+W XTA -1
+ATX LSTADR
+;
+;         ИЗBЛEЧEHИE CЛOBA ПO MAT.AДPECY.
+;            ФOPMИPOBAHИE CTPOKИ:
+;    <ИMЯ>   MAT.AДP:XXXXX, ФИЗ: XXXXX, KOД: XX...X
+;
+NEXTADR:
+XTA ="MAT.AДP:"
+ATX STR
+LOOPOUT:XTA LSTADR
+A+I P1
+P1 VTM
+EXTF 64-20
+ATX LSTADR
+JMPS DHEX8
+:ATX STR+1
+XTA =",  ФИЗ: "
+ATX STR+2
+XTA LSTADR
+ASFT 10
+AAU @3FF
+ATI 13
+SETR БЗO+БПHП+БПTЧ+БПИHT+БЧOП
+13 RMOD @400
+AAU @3FF
+ATI IA
+JMPS DHEX8
+:AAU @3FFFF
+ASFT -16
+AOX =" П:0'0''0'  "
+ATX NAME+1
+IA UTM -@200
+IA JMLT PROTECT
+13 RMOD @400
+AEX LSTADR
+AAU @FFC00
+AEX LSTADR
+ATI IA
+XTA LSTADR
+ATI 13
+A+U 1
+ATX LSTADR
+13 TTA ; ЧTEHИE CЛOBA
+CLRR БЗO+БПHП+БПTЧ+БПИHT+БЧOП
+15 YTX ; - TEГ
+ITS IA
+JMPS DHEX8
+:ATX STR+3
+XTA=",  ИHФ: "
+ATX STR+4
+15 XTA -1
+ASFT 32
+JMPS DHEX8
+:STX STR+5
+JMPS DHEX8
+:STX STR+6
+JMPS DHEX8
+:AAU @FFFF
+ASFT -24
+AOX =" T:'0''0''@0A''@0D''0'"
+ATX STR+7
+LOUT1:I VTM NAME
+RR VJM TOTER+1
+P2 JMEQ BEGIN
+P2 VRM LOOPOUT
+;
+;      AДPEC - ИЗ YKAЧAHHOЙ CTPAHИЦЫ
+;
+PROTECT:
+CLRR БЗO+БПHП+БПTЧ+БПИHT+БЧOП
+XTA =" - ЗAЩИЩ"
+ATX STR+2
+XTA =Z"EH!'@0A''@0D'"
+ATX STR+3
+JMP NAMOUT
+;
+;        *************************************
+;         DATE <ПYCTO ИЛИ HOBЫE ДATA И BPEMЯ>
+;        *************************************
+;
+GETDAT:IA UTM 1
+IA BTA
+A-U @20
+JAEQ GETDAT
+JALT PRIDAT
+RR VJM PACKDATE
+JAEQ ERRDIR
+ATI P1 ; HOBAЯ ДATA
+XTA CLOCK
+AEU -1
+A/L =86400000000
+YTA64
+A/L =1000000
+ATI P2 ; CTAPOE BPEMЯ
+:IA BTA -1
+IA UTM 1
+A-U @20
+JAEQ *-1
+JALT OLDTIME
+IA UTM -2
+RR VJM PACKTIME
+JAEQ ERRDIR
+ATI P2 ; HOBOE BPEMЯ
+OLDTIME:ITA P1
+A*U 86400
+A+I P2
+A*L =1000000
+AEU -1
+ATX CLOCK
+;
+;        PAЗГPYЗИM PAДИ TAKOГO CЛYЧAЯ
+;        OЧEPEДЬ ПPOЦECCOB, CИДЯЩИX HA ПAYЗE
+;
+CLOPAUS:XTA ATQ
+AAU @FF
+JAEQ CLOP1
+ASFT -32
+AOU 9
+PINT
+CLOP1:XTA LTQ
+JANE CLOPAUS
+;
+;       BЫДAЧA TEKYЩИX ДATЫ И BPEMEHИ
+;
+PRIDAT:CP VTM BUF
+CP MCJ 15
+XTA ="CEГOДHЯ"
+UTS -1
+RR VJM WEEKDAY
+UTS -1
+RR VJM DATE
+XTS =" BPEMЯ: "
+UTS -1
+RR VJM TIME
+UTS @0A0D
+ASFT -48
+15 ATX
+15 MCJ CP
+I VTM BUF
+JMP TOTER
+;
+;        *************************************
+;           KAЛЬKYЛЯTOP: HEXCALC AAA+-*/BBB
+;        *************************************
+;
+HEXCALC:W VTM HPL
+C UTM -PLUS
+C JMEQ HC2
+W VTM HMIN
+C UTM PLUS-MINUS
+C JMEQ HC2
+W VTM HMUL
+C UTM MINUS-MUL
+C JMEQ HC2
+W VTM HDIV
+C UTM MUL-DIV
+C JMNE ERRDIR
+HC2:IA MTJ P1
+R VJM HEXNUM
+C JMNE ERRDIR
+IA JMEQ ERRDIR
+ITA P1
+W JMP
+HPL:A+I IA
+JMP HCEND
+HMIN:A-I IA
+JMP HCEND
+HMUL:A*I IA
+JMP HCEND
+HDIV:A/I IA
+JMP HCEND
+;
+HCEND:I VTM STR+1
+JMPS DHEX8
+:AAX =H0000 00FF FFFF FFFF
+AOX =Z" = "
+I ATX
+XTA =Z"'@0A''@0D'"
+I ATX 1
+JMP TOTER
+;
+;
+;        BЫБOPKA ШECTHAДЦATИPИЧHOГO ЧИCЛA
+;
+HEXNUM:IA VTM
+HN:T UTM 1
+T BTA
+ATI C
+R JAEQ
+AEU BL
+JAEQ HN
+AEU BL
+JMPS HEXB1
+:R JALT
+IA MSFT -4
+AOI IA
+ATI IA
+JMP HN
+;
+ERRNAM:I VTM =Z"TAKИX HE ДEPЖИM!'@0A''@0D'"
+JMP TOTER
+ERRDIR:I VTM =Z"OШ.KOMAHДA.'@0A''@0D'"
+JMP TOTER
+ERRADR:I VTM =Z"OШ.HOMEP ПPOЦECCA.'@0A''@0D'"
+TOTER:RR VTM BEGIN
+:J VTM MAINTERM
+JMP KOHCOЛЬ
+END
+DHEX8:NAME QF
+HEXB1:ENTRY QF
+;*
+;***   DHEX8 - ПEPEBOД ДBOИЧHOГO 32-PAЗPЯДHOГO
+;*             ЧИCЛA B TEKCTOBЫЙ 16-PИЧHЫЙ BИД.
+;*             APГYMEHT И PEЗYЛЬTAT HA CYMMATOPE.
+;***   HEXB1 - ПEPEBOД OДHOГO CИMBOЛA ИЗ 16-PИЧHOГO
+;*             TEKCTOBOГO BИДA B 4-БИTHOE ДBOИЧHOE
+;*             ЧИCЛO. ECЛИ ЦИФPA HE ШECTHAДЦATИPИЧHAЯ
+;*             PEЗYЛЬTAT = -1.
+;*
+CMD
+;
+;MOZY=80BA3     ;   -  DHEX8
+;
+DHEX8:
+ASFT -32
+AUX =H0F0F 0F0F 0F0F 0F0F
+15 ATX
+ARX =H0606 0606 0606 0606
+AAX =H1010 1010 1010 1010
+ASFT 2
+15 ATX ; 04
+ASFT 1
+15 AOX -1 ; 06
+ASFT 1
+15 AOX ; 07
+15 ARX
+ARX ="00000000"
+RETS
+;
+HEXB1:
+A-U @30
+JALT NEG
+A-U 9
+JALE D09
+A-U @41-@39
+JALT NEG
+A-U @46-@41
+JAGT NEG
+A+U 15
+RETS
+D09:A+U 9
+RETS
+NEG:UTA -1
+RETS
+END
+SWING:NAME QF
+;*
+;***************************************************
+;*                                                 *
+;*       YПPABЛEHИE ПAMЯTЬЮ  (ПOДKAЧKA)            *
+;*                                                 *
+;***************************************************
+;*
+SF_OPEN:SUBP QF
+F_READ:SUBP QF
+F_WRIT:SUBP QF
+INQUE:SUBP QF
+VMD
+IFP
+PCW
+PSYS
+SPORT
+PCBIT
+RRBIT
+TPP
+FATA
+;
+MODIF
+U:EQU P1 ; ЛOГ.HOM.ФAЙЛA
+RP:EQU P2 ; PEЗ.ЛИCT
+;
+P_FIX:EQU 64-15
+P_PUSH:EQU 64-32
+;
+CMD
+;
+;          ПEPBAЯ AKTИBAЦИЯ ПPOИЗBOДИTCЯ ПPИ ЗAПYCKE OC
+;          ДЛЯ ЗAKAЗA  HEOБXOДИMЫX CПEЦ-ФAЙЛOB :
+;          0 - ДИCПETЧEP,  1 - MOHИTOPHAЯ CИCTEMA
+;
+;MOZY=80BBE     ;   -  SWING
+;
+TN VTM N_SWING ; OT CEБЯ
+U VTM 1 ;
+:U MTJ I
+RR VJM SF_OPEN
+:JAEQ *+1
+U HLT 1
+:U VRM *-2
+JMP CLOSE2
+;
+FATAL:HLT 5
+;
+;        ЗABEPШEHИE OБCЛYЖИBAHИЯ И ДEЗAKTИBAЦИЯ
+;
+CLOSE:ITA RP
+ATX RES_PAGE
+;<<<<<<<<< BPEMEHHO :
+XTA SWPORT
+ASFT 32
+AAU @FF
+ATI TN
+TN XTA PCW ; KЛИEHTA -
+AON BL_SEL ; - HA BOЛЮ
+AEN BL_SEL
+TN ATX PCW
+;>>>>>>>>>>>>>>>>>>>>>>>>>>
+CLOSE2:UTA
+ATX SWPORT
+UTA 5
+PINT
+;
+;        BXOД OT CTPAHИЧHЫX ПPEPЫBAHИЙ.
+;        ПPOЦECC-KЛИEHT ПOДAET BO BXOДHOЙ ПOPT
+;        (ECЛИ SWING БЫЛ CBOБOДEH!) CBOЙ HOMEP
+;        (40:32 P.) И HOMEP MAT.ЛИCTA (16:1),
+;        A CAM ПPOCTABЛЯET CEБE "BL_SEL", HO HE
+;        ДEЗAKTИBИPYETCЯ.  SELECT OБECПEЧИBAET БЛOKИPOBKY
+;        ЗAXBATA ПPOЦECCOPA TAKИMИ ПPOЦECCAMИ B ПEPИOД
+;        ЗAHЯTOCTИ SWING-A.
+;
+;        ЗAKAЗ HA ПOДKAЧKY ПPOИЗBOДИTCЯ OT ИMEHИ KЛИEHTA,
+;        A ЗAKAЗ HA YKAЧKY - OT ИMEHИ CAMOГO SWING-A.
+;        ПPИ ЗAKAЗE MOГYT ПOДABATЬCЯ ПPИЗHAKИ :
+;         15 - ПOДKAЧKA C ФИKCAЦИEЙ ЛИCTA
+;         32 - ПPИHYДИTEЛЬHAЯ YKAЧKA БEЗ OTЬEMA ЛИCTA
+;
+XTA RES_PAGE
+ATI RP
+XTA SWPORT
+AAX =H0000 00FF 0000 03FF
+ATI NP ; MAT.ЛИCT
+ASFT 32
+ATI TN ; KЛИEHT
+JAEQ CLOSE
+R VTM PUSH
+XTA SWPORT
+AAN P_PUSH
+JANE GIV_IF
+;
+;     KЛИEHT ECTЬ. PAЗPEШИM EMY БPATЬ ПPOЦECCOP.
+;     ПEPBOE, ЧTO OH ПPИ ЭTOM CДEЛAET - TKHETCЯ
+;     B ЛИCT, ЗAKPЫTЫЙ ПO OБMEHY.
+;
+;         TN XTA PCW ; ПOKA PEШИЛИ
+;         AON BL_SEL ; CДEЛATЬ ЭTO
+;         AEN BL_SEL ; ПOПOЗЖE !!!
+;         TN ATX PCW ; (B "CLOSE")
+R VTM READ
+;
+;       ПPИПИCKA  И П  KЛИEHTA TN K CEБE CO CMEЩEHИEM
+;       HA OДИH ЛИCT.  OПPEДEЛEHИE TИПA CP ЛИCTA NP.
+;
+GIV_IF:TN XTA PCW
+AOU @3FF
+WMOD IF_LIST + @401
+CP VTM 0 ; ЮЗEP
+ITA NP
+A-U MAIN_SW>>10 & @3FF
+R JALT
+A-U NONRSDNT-MAIN_SW>>10
+JALT FATAL ; C-PEЗИДEHT
+A-U WMSP-NONRSDNT>>10
+CP VTM 1 ; ДИCПETЧEP
+R JALT
+CP VTM 2 ; PAБOЧИЙ ЛИCT
+A-U LAST_SYS
+R JALE
+CP VTM 4 ; БYФEP ФAЙЛA
+ITA NP
+A-U BFPOOL
+JALT CHIF
+A-U 63
+R JALE
+A-U FREE_V>>10 -BFPOOL-63
+JALT FATAL ; V-PEЗИДEHT
+CHIF:ITA NP
+AEU IF_LIST
+:JAEQ *+1
+UTC 5-3 ; COMMON
+:CP VTM 3 ; И П
+R JMP
+;
+;
+;       ЗAKPЫTИE ФИЗ.ЛИCTA RP ПO OБMEHY И ПOCTAHOBKA
+;       OБMEHA B OЧEPEДЬ. I = <AДPEC ДECKPИПTOPA ФAЙЛA>
+;       NP = <MAT.ЛИCT>, CP = <EГO TИП>
+;
+ПOДKAЧKA:
+XTA SWPORT ; C BOЗMOЖHOЙ
+AAN P_FIX  ; ФИKCAЦИEЙ !
+RP AOH TPP<<1
+RP ATH TPP<<1
+TN XTA PCW ; KЛИEHT
+AON W_SWIN ; ЖДET KOHЦA
+TN ATX PCW ; ПOДKAЧKИ
+UTC 3-2 ; - ЧTEHИE
+;
+YKAЧKA:J VTM 2 ; - ЗAПИCЬ
+RP HTA TPP<<1
+AON 64-16 ; ЗAKP.ПO OБM.
+RP ATH TPP<<1
+I UTC FDB
+PA VTMB
+PA BTA 1
+ATI W ; ATPИБYTЫ
+PA BTA 2
+ATI U ; "UN"
+ASFT 10-40
+AOI RP ; +ЛИCT
+ASFT -10
+CP JMP *+1
+:JMP RW_USER
+:NP UTS -DISPAGE0-2
+JMP RW9K
+:HLT @52
+:NP UTS -IF_LIST-2
+JMP RW9K
+:I XTS FDB
+JMP RW_BUF
+:HLT @55
+;
+;        ПOPЯДOK PAЗMEЩEHИЯ ЛИCTOB ЮЗEPA
+;             B EГO ФAЙЛE YKAЧKИ:
+;        -------------------------------
+;      0,1  : И П  ПPOЦECCA И EГO ПPOДOЛЖEHИE
+;      2,3  : MAT.ЛИCTЫ 512,513 (ЭKCTPAKOДЫ БЭCM)
+;      4,...: MAT.ЛИCTЫ 0-511
+RW_USER:ITS NP
+A-U 512
+:JAGE *+1
+NP UTA 2
+RW9K:A+U 2 ; БЛOKИ ПO
+AON 64-33 ; 9 K БAЙT
+A*U 9216 ; (C TEГAMИ)
+JMP R_W
+;
+;        БYФEPHЫЙ ЛИCT "CMOTPИT" B CBOЙ POДHOЙ ФAЙЛ
+;        OБMEH ПPOИЗBOДИTCЯ C HAЧAЛA TEKYЩИX 8K-БAЙT
+;        ФAЙЛA. ДЛИHA OБMEHHOЙ ПOPЦИИ OПPEДEЛЯETCЯ
+;        ПO ДECKPИПTOPY ФAЙЛA.  MAIN TAG = 0.
+;
+RW_BUF:
+ASFT 13
+AAU 7 ; TИП ЭT-TA
+A-U 3 ; ФAЙЛA
+ATI IA
+I XTA FDB
+AAU @1FFF ; ЧИCЛO ЭЛ-TOB
+A+U 1
+IA ASFT -32
+U AOH FCOOR<<1 ; HAЧAЛO
+AAU @FE000 ; 8K-БЛOKA
+R_W:
+;       JMP INQUE
+R MTJ PA
+R VJM INQUE
+UTA ; clear
+RP WMOD @800 ; "bobr,bism"
+;   <<<   BPEMEHHO: ЗAKPЫTИE ДO KOHЦA OБMEHA :
+NTA W_EXCH
+AOX PCW+N_SWING
+ATX PCW+N_SWING
+UTA
+PINT
+PA JMP
+;   >>>>>>>>>>>>>>>>>>>>>
+;
+;       POCПИCЬ RP TEГOM HEИHИЦИИPOBAHHOЙ ПEPEMEHHOЙ
+;       ИЛИ CПEЦKOДOM ДЛЯ PEЖ. ЭMYЛЯЦИИ (ЛИCTЫ 0:31)
+;       CИCTEMHЫE ЛИCTЫ ПPИДETCЯ PACПИCЫBATЬ OБЫЧHЫM
+;       TEГOM, ЧTOБ HE HAPBATЬCЯ ПPИ БAЙTOBOЙ PAБOTE.
+;       PAЗPEШEHИE ПPOЦECCY ПOЛHOГO ДOCTYПA K ЛИCTY.
+;
+FIRST_US:NP QTA TMP<<2 + @1000
+AOU @C
+NP ATQ TMP<<2 + @1000
+ITA RP
+ASFT -10
+AOU @3FF
+WMOD WSPAG+N_SWING + @400
+W VTM 1023
+UTY 2
+IA VTM =H87D7 1C70 0007 A000
+ITA NP
+AAU @FFFE0
+JAEQ OLDCODE
+IA VTM
+AAU @FFE00
+:JANE *+1
+UTC @34
+:UTY
+IA VTM
+OLDCODE:IA XTA
+SETR БПTЗ+БПИHT
+:W TTX WSPAG+N_SWING<<10
+W VRM *
+CLRR БПTЗ+БПИHT
+CPUSH
+;
+;         ПPИПИCKA MAT.ЛИCTA NP K ФИЗ.ЛИCTY RP
+;         YBEЛИЧEHИE HA 1 CЧETЧИKA CTPAHИЦ
+;         ПPOЦECCA-KЛИEHTA, HAXOДЯЩИXCЯ B OЗY.
+;         (ИП ПPOЦECCA ДOЛЖHO БЫTЬ B ПAMЯTИ!)
+;
+ПPИПИCKA:XTA PCNT+@400
+A+U 1
+ATX PCNT+@400
+NP QTA TMP<<2 + @1000
+AAU 3
+RP MSFT -4
+JANE PRIVATE
+NP QTA DTMP<<2
+AAU @F
+AOI RP
+NP ATQ DTMP<<2
+JMP TOTPP
+PRIVATE:
+NP QTA TMP<<2 + @1000
+AAU @F
+AOI RP
+NP ATQ TMP<<2 + @1000
+TN UTC -@FF
+;
+TOTPP:IA VTM @FF
+RP MSFT 4
+AAU @F ; ПOЛЯ "PR" И "T"
+15 ATX ; MEHЯЮTCЯ MECTAMИ
+ASFT -4
+15 AOX
+AAU @3C
+ASFT -6
+NP MSFT -16
+AOI NP ; + MAT.ЛИCT
+NP MSFT 16
+AOI IA ; + BЛAДEЛEЦ
+RP ATH TPP<<1
+R JMP
+;
+;         OTHЯTИE MAT.ЛИCTA NP Y ПPOЦECCA TN.
+;
+OTПИCKA:UTA
+NP WMOD @400
+RP ATH TPP<<1
+NP QTA TMP<<2 + @1000
+AAU @F
+NP ATQ TMP<<2 + @1000
+AAU 3
+R JANE
+NP QTA DTMP<<2
+AAU @F
+NP ATQ DTMP<<2
+R JMP
+;
+;         P A Б O T Ы   П O   П O Д K A Ч K E :
+;         =====================================
+;
+READ:CP JMP *+1
+:JMP R_USER
+:JMP R_DISP
+:R VTM NEW_RP
+JMP FIRST_US
+:JMP FATAL ; - ИП
+:R VTM NEW_RP
+JMP R_BUF ; - БYФEP
+COMMON:JMP FATAL ; - OБЩ.CTP.
+;
+;        ПOДKAЧKA ИЗ ФAЙЛA C ДИCПETЧEPOM
+;        (HEPEЗИДEHT, CПИCOK ЗAГPYЗKИ ИЛИ
+;        ИHTEPПPETATOP ЭKCTPAKOДOB БЭCM-6)
+;
+R_DISP:I VTM 0
+R VJM ПPИПИCKA
+R VTM NEW_RP
+JMP ПOДKAЧKA
+;
+;
+;                TPEБYETCЯ ЛИCT ДЛЯ ЮЗEPA.
+;       ECЛИ ЛИCT ИMEET PEЖИM ДOCTYПA="TOЛЬKO ЗAПИCЬ"
+;       ЭTO ПEPBOE K HEMY OБPAЩEHИE. ДAДИM ЮЗEPY RP,
+;       PACПИCAB EГO TEГOM HEИHИЦИAЛИЗИP.ПEPEMEHHOЙ,
+;       A K ЛИCTY PAЗPEШИM ПOЛHЫЙ ДOCTYП.
+;
+R_BUF:NP XTA FDB-BFPOOL+@400
+JAEQ FIRST_US
+;
+R_USER:NP QTA TMP<<2 + @1000
+ATI W
+AAU 3
+JAEQ COMMON
+W MSFT 2
+W UTM -1
+R VTM NEW_RP
+W JMEQ FIRST_US
+;
+:CP JMEQ *+1 ; COБCTBEHHЫЙ
+NP UTC -BFPOOL-2 ; ФAЙЛ ЮЗEPA
+:I VTM 2 + @400 ; ИЛИ ФAЙЛ YKAЧKИ
+R VJM ПPИПИCKA
+R VJM ПOДKAЧKA
+;
+;       BЫБOP HOBOГO PEЗEPBHOГO ЛИCTA
+;       =============================
+;       ( ПOKA - ПO KOЛЬЦY !!! )
+;
+NEW_RP:
+CHECK:RP UTM -1
+RP JMGT *+2
+WTC QPAGE
+RP VTM -1
+:ITA RP
+AEX RES_PAGE
+JAEQ CHECK
+RP MTJ W
+W MSFT 4
+XTA BLK_16P
+W AAN
+JANE CHECK
+RP HTA TPP<<1
+JAEQ CLOSE ; - CBOБOДEH
+15 ATX
+ATI NP
+AAU @C000
+U1AS CHECK ; ФИKCИPOBAH
+AAU @FF
+ATI TN ; - BЛAДEЛEЦ
+AEU @FF
+JAEQ CHECK ; - OБЩИЙ
+NP MSFT 16
+R VJM GIV_IF
+;
+;          P A Б O T Ы   П O   Y K A Ч K E :
+;          =================================
+;
+CP JMP *+1
+:R VTM W_USER
+JMP OTПИCKA
+:R VTM CLOSE ; KOKHEM
+JMP OTПИCKA ; HEPEЗИДEHT
+:TN XTA PCW
+JMP W_WORK
+:JMP CHECK ; ИП HE БEPEM
+:R VTM W_BUF
+JMP OTПИCKA ; -БYФEP
+:JMP CHECK
+;
+;         PAБOЧИЙ ЛИCT CИCTEMHOГO ПPOЦECCA MOЖHO
+;         BЗЯTЬ, ECЛИ BXOДHOЙ ПOPT ПPOЦECCA ПYCT,
+;         T.E. OH ЗAKPЫЛCЯ, HE ИMEЯ PAБOTЫ.
+;         TOГДA И YKAЧИBATЬ EГO HE HAДO !
+;
+W_WORK:
+AAU @3FF
+ATI R
+R XTA IFCTIM + @403 ; - ПOPT
+JANE CHECK ; ЗAHЯT
+R VTM CLOSE
+JMP OTПИCKA
+;
+;                 YKAЧKA ЛИCTA ЮЗEPA :
+;
+W_BUF:NP XTA FDB-BFPOOL+@400
+JAEQ CLOSE ; - KOKHEM !
+;
+W_USER:
+NP QTA TMP<<2 + @1000
+ATI W
+AAU 3
+JAEQ CHECK ; - OБЩИЙ
+;
+P_USER:
+RP RMOD @800 ; "БИЗM"
+AAU 4 ; ЛИCT MEHЯЛCЯ ?
+JAEQ EPUSH ; - HET
+TN VTM N_SWING ; OT CEБЯ
+:CP JMEQ *+1 ;
+NP UTC -BFPOOL-2 ; ФAЙЛ ЮЗEPA
+:I VTM 2 + @400 ; ИЛИ YKAЧKИ
+R VJM YKAЧKA
+;        NTA W_EXCH
+;       TN AOX PCW ; ЗAKPOEMCЯ
+;       TN ATX PCW ; ДO KOHЦA
+;        UTA        ; OБMEHA
+;        PINT
+;
+EPUSH:XTA SWPORT
+AAN P_PUSH
+JAEQ CLOSE
+RI MCJ RP ; RP - TOT ЖE !
+RI WMOD @800 ; БOБP,БИЗM = 0
+NG XTA PCW
+AON BL_SEL ; KЛИEHTA -
+AEN BL_SEL ; - HA BOЛЮ
+NG ATX PCW
+JMP CLOSE
+;
+;
+;       П P И H Y Д И T E Л Ь H A Я   Y K A Ч K A :
+;       ===========================================
+;       ЮЗEP BMECTE CO SWING-OM ЖДYT ЗABEPШEHИЯ
+;       OБMEHA. ЛИCT Y ЮЗEPA HE OTHИMAETCЯ.
+;
+PUSHC:NP QTA DTMP<<2
+JMP PUSH1
+PUSH:NP QTA TMP<<2 + @1000
+AAU 3
+JAEQ PUSHC
+NP QTA TMP<<2 + @1000
+PUSH1:ATI RI ; ФИЗ.ЛИCT ЮЗEPA
+RI MSFT 4
+RI MCJ RP ; - HA BPEMЯ CБPOCA
+TN MTJ NG ; KЛИEHT
+RP JMEQ EPUSH ; - YЖE YKAЧAH
+JMP P_USER
+;
+END
+PACKDATE:NAME QF
+PACKTIME:ENTRY QF
+DATE:ENTRY QF
+TIME:ENTRY QF
+WEEKDAY:ENTRY QF
+;*
+;*       28/07/87      A.П.CAПOЖHИKOB
+;*
+;*****************************************************
+;*
+;*   PACKDATE - ПEPEBOД ДATЫ ИЗ TEKCTOBOГO
+;*   ПPEДCTABЛEHИЯ  ДД/MM/ГГ  B 16-PAЗPЯДHOE
+;*   ЦEЛOE ЧИCЛO, PABHOE KOЛИЧECTBY ДHEЙ,
+;*   ПPOШEДШИX OT 31/12/1927, C YЧETOM BИCO-
+;*   KOCHЫX ЛET.  ПPИ BXOДE PEГИCTP 14 COДEPЖИT
+;*   БAЙTOBЫЙ AДPEC HAЧAЛA ЛEKCEMЫ "ДATA".
+;*
+;*   ПPИЧEM ECЛИ ГГ>27, ИMEETCЯ B BИДY 20-Й
+;*   BEK, A ECЛИ ГГ<28, TO 21-Й BEK.
+;*   PEЗYЛЬTAT HA CYMMATOPE B 1-16 P.  ПPИ
+;*   OШИБOЧHOM ЗAДAHИИ ДATЫ PEЗYЛЬTAT = 0.
+;*   PAЗPEШAETCЯ OПYCKATЬ ФPAГMEHTЫ ДД И MM.
+;*   ПPИ ЭTOM ПOЛAГAETCЯ ДД=1, MM=1.
+;*   ФPAГMEHT ГГ MOЖHO ЗAДABATЬ ИЗ 4 ЦИФP.
+;*
+;*   DATE - OБPATHAЯ ПPOЦEДYPA.
+;*   ПPИ BXOДE - ДATA HA CYMMATOPE B BИДE
+;*   ЦEЛOГO ЧИCЛA.  ПPИ BЫXOДE ДATA HA
+;*   CYMMATOPE B ФOPMATE   ДД/MM/ГГ.
+;*   ПPИ BXOДHOM CYMMATOPE <= 0 BЫДAETCЯ
+;*   TEKYЩAЯ KAЛEHДAPHAЯ ДATA.
+;*
+;*   WEEKDAY - BЫДAЧA HA CYMMATOPE HAИMEHOBAHИЯ
+;*   ДHЯ HEДEЛИ, A B И1 - EГO HOMEPA :
+;*       (0-BC., 1-ПH., ... , 7-CБ.)
+;*   APГYMEHT - TOT ЖE, ЧTO И Y "DATE".
+;*
+;*   PACKTIME - YПAKOBKA BPEMEHИ ИЗ TEKCTOBOГO
+;*   ПPEДCTABЛEHИЯ  ЧЧ.MM.CC  B ЦEЛOЧИCЛEHHOE
+;*   ПPEДCTABЛEHИE  3600*ЧЧ + 60*MM + CC
+;*   14 PEГИCTP ЗAДAET БAЙTOBЫЙ AДPEC HAЧAЛA
+;*   ЛEKCEMЫ "BPEMЯ".  ФPAГMEHTЫ MM И CC
+;*   MOЖHO OПYCKATЬ, TOГДA ПOЛAГAETCЯ MM=CC=0.
+;*
+;*   TIME - ПEPEBOД BPEMEHИ ИЗ YПAKOBAHHOГO ЦEЛO-
+;*   ЧИCЛEHHOГO ПPEДCTABЛEHИЯ 3600*ЧЧ+60*MM+CC
+;*   B TEKCTOBOE  ЧЧ.MM.CC
+;*   APГYMEHT И PEЗYЛЬTAT HA CYMMATOPE, ПPИЧEM
+;*   ECЛИ APГYMEHT < 0,  BЫДAETCЯ TEKYЩEE ЗHAЧEHИE
+;*   ACTPOHOMИЧECKOГO BPEMEHИ.
+;*
+;*   ПOPTЯTCЯ  1-4  PEГИCTPЫ.  BOЗBPAT: R.
+;*****************************************************
+;*
+PP_ADR:LCB (1024-8),CLOCK ; -ЧACЫ
+TIMESTD:LCB (1)
+CONST
+BDAY:INTB 0,31,28,31,30,31,30,31
+:INTB 31,30,31,30,31,255,255,255
+TWD:CHAR "BOCKP.  "
+CHAR "ПOHEД.  "
+CHAR "BTOPHИK "
+CHAR "CPEДA   "
+CHAR "ЧETBEPГ "
+CHAR "ПЯTHИЦA "
+CHAR "CYББOTA "
+;
+;======= PEГИCTPЫ
+;
+1:BLOCK D,M,Y,W(2),R
+IA:EQU 14
+;
+CMD
+;*
+;*    ПOЛYЧEHИE ДECЯTИЧHЫX  DAY,MON,YEAR (D,M,Y)
+;*
+;MOZY=80B36     ;   - PACKDATE
+;
+PACKDATE:
+M VTM 1
+Y VTM 1
+PD1:M MTJ D
+Y MTJ M
+Y VTM
+JMP PD3
+;
+PD2:A-U @39 - @2F
+JAGT ERROR
+A-U @30 - @39
+ITS Y
+A*U 10
+15 A+L
+ATI Y
+PD3:IA BTA
+IA UTM 1
+A-U @2F ; "/"
+JAEQ PD1
+JAGT PD2
+;
+;     KOHEЦ TEKCTA. KOHTPOЛЬ D,M,Y
+;
+ITA Y
+A/U 100
+YTA64
+A-U 28
+ATI Y
+:Y JMNE *+1
+Y UTM 100
+:D JMLE ERROR
+M JMLE ERROR
+M UTM -12
+M JMGT ERROR
+M UTM 12
+15 UTC 1
+W VTMB
+XTA BDAY
+15 ATX 1
+XTA BDAY+1
+15 ATX 2
+ITA Y
+AAU 3 ; BИC.ГOД
+JANE CHDAY ; - HET
+UTA 29
+W ATB 2 ; LEN(ФEBP)=29
+;
+CHDAY:M UTC
+W BTA
+I-A D
+JAGT ERROR ; D > LEN(M)
+;
+;              YЧET ЧИCЛA ДHEЙ B ПOЛHЫX MECЯЦAX
+;
+:M UTM -1
+ M UTC
+ W BTA
+ A+I D
+ ATI D
+ M JMGT *-2
+;
+;              YЧET ЧИCЛA ДHEЙ B ПOЛHЫX ГOДAX
+;
+ITA Y
+A*U 365
+Y MSFT 2
+A+I Y ; + ЧИCЛO BИC.ЛET
+A+I D
+R JMP
+;
+ERROR:UTA
+R JMP
+;
+PACKTIME:W VTM 2
+D VTM
+M VTM
+Y VTM
+PT1:IA BTA
+IA UTM 1
+A-U @2E ; "."
+JALT PT3
+A-U @30 - @2E
+JALT PT2
+A-U @39 - @30
+JAGT ERROR
+A+U 9
+W ITS D
+A*U 10
+15 A+L
+W ATI D
+A-U 60
+JAGE ERROR
+JMP PT1
+PT2:W VRM PT1
+JMP ERROR
+PT3:Y UTM -24
+Y JMGE ERROR
+Y UTA 24
+A*U 60
+A+I M
+A*U 60
+A+I D
+R JMP
+;
+WEEKDAY:JAGT WD1
+XTA CLOCK
+AEU -1
+A/L =86400000000
+JAGE WD1
+UTA
+WD1:A+U 1
+A/U 7
+YTA64
+ATI D
+D XTA TWD
+R JMP
+;
+CLOCKER:XTA ="01/01/90"
+R JMP
+;
+;    OБPATHЫЙ ПEPEBOД
+;
+DATE:JAGT NOASTRD
+XTA CLOCK
+AEU -1
+15 ATX 1
+A-L TIMESTD
+JALE CLOCKER ; ДO ЗAПYCKA
+A-L =864000
+JAGT CLOCKER ; > 10 ДHEЙ
+15 XTA 1
+A/L =86400000000
+NOASTRD:ATI D
+A/U 365
+ATI Y;ЧИCЛO ПOЛHЫX ЛET
+Y UTM 1
+;
+MAK_Y:Y UTM -1
+ITA Y
+A*U 365
+Y MTJ M
+M MSFT 2
+A+I M
+I-A D
+JALE MAK_Y ; HA ГOД MEHЬШE
+ATI D ; ДHEЙ ПOCЛ.ГOДA
+Y UTM 28-100
+:Y JMGE *+1
+Y UTM 100
+:XTA BDAY
+XTS BDAY+1
+ITS Y
+AAU 3
+15 UTC -2
+W VTMB
+M VTM 1
+JANE MAK_M
+UTA 29
+W ATB 2 ; LEN(ФEBP)=29
+;
+;               ПOЛYЧEHИE HOMEPA MECЯЦA
+;
+MAK_M:M UTC
+W BTA
+I-A D
+JALE MAK_D
+ATI D
+M VLM MAK_M
+;
+;               ПEPEBOД D,M,Y - B TEKCT
+;
+MAK_D:XTA ="00/00/00"
+15 UTM -2
+TOTEX:ITS D
+D VTM -2
+DIG2:A/U 10
+AOU @30 ; "0"
+W ATB
+YTA64
+AOU @30
+W ATB 1
+W UTM 3
+D ITA Y+1
+D VLM DIG2
+15 XTA
+R JMP
+;
+TIME:JAGE NOASTRT
+XTA CLOCK
+AEU -1
+A/L =86400000000
+YTA64
+A/L =1000000
+NOASTRT:A/U 3600
+ATI D ; ЧACЫ
+YTA64
+A/U 60
+ATI M ; MИHYTЫ
+YTA64
+ATI Y ; CEKYHДЫ
+XTA ="00.00.00"
+15 UTC -2
+W VTMB 2
+JMP TOTEX
+;
+END
+*END F

@@ -17,7 +17,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/tracer.sv \
 		  ../initest.sv
 
-INCLUDES        = ../../microcode/initest.v \
+INCLUDES        = ../../../microcode/tests/initest.v \
                   ../../../microcode/constants.v \
                   ../../../microcode/optab.v
 
