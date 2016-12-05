@@ -34,7 +34,7 @@ logic [19:0] waddr;                     // needed for tracer
 // Microinstruction ROM.
 //
 logic [111:0] memory[4096] = '{
-    `include "../microcode/initest.v"
+    `include "../../microcode/tests/initest.v"
     default: '0
 };
 

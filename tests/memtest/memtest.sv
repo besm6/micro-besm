@@ -41,7 +41,7 @@ assign waddr = ram.waddr;
 // Microinstruction ROM.
 //
 logic [111:0] memory[4096] = '{
-    `include "../microcode/memtest.v"
+    `include "../../microcode/tests/memtest.v"
     default: '0
 };
 

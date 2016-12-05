@@ -16,9 +16,9 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/i8253.sv \
                   ../../../rtl/tmemory.sv \
                   ../../../rtl/tracer.sv \
-		  ../memtest.sv
+		  ../intrtest.sv
 
-INCLUDES        = ../../../microcode/tests/memtest.v \
+INCLUDES        = ../../../microcode/tests/intrtest.v \
                   ../../../microcode/constants.v \
                   ../../../microcode/optab.v
 

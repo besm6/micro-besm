@@ -1,0 +1,22 @@
+*NAME ЗАГРУЗКА  О С
+*TIME:24.00
+*EXPRESS
+*PAGE:999,LIST
+*LIBRA:23
+*DISC:705/SYSTEM,LCROSS
+*FILE:LIB,67
+*FILE:MEM,30,W
+*PERSO:67
+*TAKE TAPE:67
+*          *DISC:705/SYSTEM,WORKIN
+*          *FILE:LCROSS     - PERSO ACCEMБЛEP+ЗAГPYЗЧИK+ЭMYЛЯTOP
+*          *FILE:ASSEM      - OПИCAHИE И TEKCTЫ ACCEMБЛEPA И ЗAГPYЗЧИKA
+*          *FILE:EXMEM      - ПAMЯTЬ ДЛЯ MOДYЛEЙ ЗAГPYЗKИ
+*          *FILE:EML        - TEKCTЫ ЭMYЛЯTOPA (ЗOHA=1)
+*          *FILE:OS         - MAKPOCЫ ( 0 )  И TEKCTЫ  O C  ( 120 )
+*CALL FICMEMOR
+*NO LIST
+*CALL ELPRESS:30
+*CALL DISPLOAD
+*             *CALL DISSND:BLOAD
+*END F
