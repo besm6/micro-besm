@@ -235,6 +235,7 @@ localparam LABEL_CONT32 = 736;
 localparam LABEL_CC32   = 738;
 localparam LABEL_CLR12  = 863;
 localparam LABEL_ERRTST = 869;
+localparam LABEL_CTTSTP = 1085;
 
 // Get time at the rising edge of the clock.
 always @(posedge clk) begin
@@ -260,10 +261,18 @@ always @(tr.instruction_retired) begin
     //
 
     // int1 - "отсутствующий блок памяти"
-    check_jump(LABEL_BEGINT-1, LABEL_CC1, LABEL_CONT2, "Test INT1 pass");
+    // Пишем число по адресу 0x40000, где в оригинальной МКБ-8601 память
+    // отсутствовала. Должны получить прерывание.
+    // Пропускаем этот тест, так как у нас все 8 мегабайт памяти присутствуют.
+    //check_jump(LABEL_BEGINT-1, LABEL_CC1, LABEL_CONT2, "Test INT1 pass");
+    check_jump(LABEL_CONT1+2, LABEL_CTTSTP, LABEL_CONT2, "Skip INT1");
 
     // int2 - "многократная ошибка"
-    check_jump(LABEL_CONT3-2, LABEL_CKL2, LABEL_CONT3, "Test INT2 pass");
+    // Пишем число в память с неправильным кодом Хэмминга, потом читаем.
+    // Должны получить прерывание.
+    // Пропускаем этот тест, так как у нас код Хэмминга не используется.
+    //check_jump(LABEL_CONT3-2, LABEL_CKL2, LABEL_CONT3, "Test INT2 pass");
+    check_jump(LABEL_CONT2+2, LABEL_BEGINT, LABEL_CONT3, "Skip INT2");
 
     // int3 - "программная интерпретация тега операнда"
     check_jump(LABEL_CONT4-2, LABEL_CKL3, LABEL_CONT4, "Test INT3 pass");

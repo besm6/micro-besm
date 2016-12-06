@@ -22,3 +22,6 @@ microcode/*.json
 microcode/*.lst
 tests/microcode/*.json
 tests/microcode/*.lst
+toolchain/as/as
+toolchain/as/dis
+toolchain/ld/ld
