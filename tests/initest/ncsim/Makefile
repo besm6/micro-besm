@@ -30,7 +30,7 @@ clean:
 
 $(PROG):        $(SOURCES)
 		$(NCSIM)vlog --nolog --sv $(SOURCES)
-		$(NCSIM)elab --nolog testbench
+		$(NCSIM)elab --nolog -O3 -cc gcc testbench
 
 run:            $(PROG)
 		$(NCSIM)sim --R --log run.log testbench --testplusarg limit=20000
