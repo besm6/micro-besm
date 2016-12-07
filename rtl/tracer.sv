@@ -58,13 +58,31 @@ logic [19:0] waddr_x;                   // Memory address
 time ctime;
 
 //
+// Instruction and micro-instruction counters
+//
+longint instr_count;
+longint uinstr_count;
+
+//
 // Signal for the test for every graduated instruction.
 //
 event instruction_retired;
 
+//
+// Import standard C function gettimeofday().
+//
+`ifdef XILINX_SIMULATOR
+typedef struct { longint sec, usec; } timeval_t;
+`else
+typedef struct { int sec, usec; } timeval_t;
+`endif
+
+import "DPI-C" function void gettimeofday(inout timeval_t tv, input chandle tz);
+
 bit old_reset = 0;                      // Previous state of reset
 logic [63:0] const_value;               // Constant value
 logic [8:0] const_addr;                 // Constant address
+timeval_t t0;                           // Start time of simulation
 
 // Get time at the rising edge of the clock.
 always @(posedge clk) begin
@@ -139,20 +157,28 @@ always @(negedge clk) begin
     end
 
     if (!reset && $isunknown(cpu.opcode)) begin
-        if (fd) begin
-            $fdisplay(fd, "(%0d) *** Unknown state: cpu.opcode=%h", ctime, cpu.opcode);
-            $fdisplay(fd, "\n----- Fatal Error! -----");
-        end
         $display("(%0d) Unknown state: cpu.opcode=%h", ctime, cpu.opcode);
-        $display("\n----- Fatal Error! -----");
-        $finish(1);
+        if (fd)
+            $fdisplay(fd, "(%0d) *** Unknown state: cpu.opcode=%h", ctime, cpu.opcode);
+        terminate("Fatal Error!");
     end
 
     if (!cpu.run) begin
         cpu_halted();
-        $finish(1);
     end
 end
+
+// Count instructions and micro-instructions
+always @(negedge clk)
+    if (! reset) begin
+        uinstr_count += 1;
+
+        if (cpu.MAP == 1 && cpu.SQI != 14 &&
+            (cpu.COND == 0 || cpu.tkk) &&
+            (cpu.LETC == 0 || cpu.uflag == 0))
+            // When MAP=ME, and jump taken, and not UTC: fetch BESM instruction.
+            instr_count += 1;
+    end
 
 task cpu_halted();
     logic [19:0] pc;
@@ -162,12 +188,49 @@ task cpu_halted();
                   cpu.alu.p11_8.ram[3],  cpu.alu.p7_4.ram[3], cpu.alu.p3_0.ram[3] };
     assign code = { cpu.alu.p11_8.ram[5], cpu.alu.p7_4.ram[5], cpu.alu.p3_0.ram[5] };
 
-    if (fd) begin
-        $fdisplay(fd, "(%0d) *** Halted at %h with code=%h", ctime, pc, code);
-        $fdisplay(fd, "\n----- Fatal Error! -----");
-    end
     $display("(%0d) *** Halted at %h with code=%h", ctime, pc, code);
-    $display("\n----- Fatal Error! -----");
+    if (fd)
+        $fdisplay(fd, "(%0d) *** Halted at %h with code=%h", ctime, pc, code);
+    terminate("Fatal Error!");
+endtask
+
+task start();
+    gettimeofday(t0, null);
+endtask
+
+task terminate(string message);
+    timeval_t t1;
+    longint usec;
+
+    gettimeofday(t1, null);
+
+    if (message != "")
+        $display("\n----- %s -----", message);
+    if (fd)
+        $fdisplay(fd, "\n----- %s -----", message);
+
+    usec = (t1.usec - t0.usec) + (t1.sec - t0.sec) * 1000000;
+    $display("   Elapsed time: %0d seconds", usec / 1000000);
+    $display("      Simulated: %0d instructions, %0d micro-instructions",
+        instr_count, uinstr_count);
+    if (usec > 0)
+        $display("Simulation rate: %.0f instructions/sec, %.0f micro-instructions/sec",
+            1000000.0 * instr_count / usec,
+            1000000.0 * uinstr_count / usec);
+
+    if (fd) begin
+        $fdisplay(fd, "   Elapsed time: %0d seconds", usec / 1000000);
+        $fdisplay(fd, "      Simulated: %0d instructions, %0d micro-instructions",
+            instr_count, uinstr_count);
+        if (usec > 0)
+            $fdisplay(fd, "Simulation rate: %.0f instructions/sec, %.0f micro-instructions/sec",
+                1000000.0 * instr_count / usec,
+                1000000.0 * uinstr_count / usec);
+    end
+
+    if (message != "")
+        $finish(1);
+    $finish;
 endtask
 
 //

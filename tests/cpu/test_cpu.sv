@@ -109,12 +109,8 @@ initial begin
     #2 reset = 0;
 
     // Run until limit.
-    #limit begin
-        $display("\n----- Time Limit Exceeded -----");
-        if (trace)
-            $fdisplay(tracefd, "\n----- Time Limit Exceeded -----");
-        $finish(1);
-    end
+    tr.start();
+    #limit tr.terminate("Time Limit Exceeded");
 end
 
 //

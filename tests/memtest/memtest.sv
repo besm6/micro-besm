@@ -94,11 +94,8 @@ initial begin
     #2 reset = 0;
 
     // Run until limit.
-    #limit begin
-        $display("\n----- Time Limit Exceeded -----");
-        $fdisplay(tracefd, "\n----- Time Limit Exceeded -----");
-        $finish(1);
-    end
+    tr.start();
+    #limit tr.terminate("Time Limit Exceeded");
 end
 
 //
@@ -238,9 +235,7 @@ always @(tr.instruction_retired) begin
     // In case of failure, the tests stop at label ERR*
     if (pc_x == LABEL_ERRTST || pc_x == LABEL_ERRINH ||
         pc_x == LABEL_ERRDAF || pc_x == LABEL_ERRDAT) begin
-        message("Test FAIL");
-        $display("--------------------------------");
-        $finish(1);
+        tr.terminate("Test FAIL");
     end
 
     //
@@ -309,7 +304,7 @@ always @(tr.instruction_retired) begin
     if (pc_x == LABEL_CONTX8) begin
         message("Test PASS");
         $display("--------------------------------");
-        $finish(0);
+        tr.terminate("");
     end
 end
 
