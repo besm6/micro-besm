@@ -117,9 +117,13 @@ assign en3 = (selA3 & !nWA) |       // data enable for latch RG3
              (selC3 & !nWC) |
              (selX3 & !nWX);
 
-// Flip-flop RG0 and latches RG1-RG3.
+// Counter overflow bit.
 logic CO;
-always @(posedge clk)
+
+//
+// Flip-flop RG0 and latches RG1-RG3.
+//
+always @(posedge clk)   // rising edge sensitive
     if (en0) begin
         if (nCI)
             {CO, RG[0]} <= RG[0] + 1;
@@ -131,19 +135,22 @@ always @(posedge clk)
             CO <= 0;
         end
     end
-always @(*)
+
+always @(clk)           // both edges sensitive!
     if (en1)
         RG[1] <= {4{!outA & !nWA & selA1}} & ~nDA |
                  {4{!outB & !nWB & selB1}} & ~nDB |
                  {4{!outC & !nWC & selC1}} & ~nDC |
                  {4{!outX & !nWX & selX1}} & ~nDX;
-always @(*)
+
+always @(clk)           // both edges sensitive!
     if (en2)
         RG[2] <= {4{!outA & !nWA & selA2}} & ~nDA |
                  {4{!outB & !nWB & selB2}} & ~nDB |
                  {4{!outC & !nWC & selC2}} & ~nDC |
                  {4{!outX & !nWX & selX2}} & ~nDX;
-always @(*)
+
+always @(clk)           // both edges sensitive!
     if (en3)
         RG[3] <= {4{!outA & !nWA & selA3}} & ~nDA |
                  {4{!outB & !nWB & selB3}} & ~nDB |
