@@ -41,8 +41,8 @@ timeunit 1ns / 10ps;
 logic  [4:0] modgn;             // РНГ: регистр номера группы памяти модификаторов
 logic  [7:0] procn;             // РНП: регистр номера процесса
 logic [31:0] rr;                // регистр режимов и триггеры признаков
-logic [31:0] ureg;              // регистр исполнительного адреса
-logic [19:0] physad;            // физический адрес, результат трансляции ureg
+logic [31:0] vaddr;             // регистр исполнительного адреса
+logic [19:0] physad;            // физический адрес, результат трансляции vaddr
 logic [63:0] sh_out;            // результат сдвига
 logic [10:0] pshift;            // регистр параметра сдвига
 logic  [6:0] clz_out;           // результат поиска левой единицы
@@ -303,7 +303,7 @@ logic [31:0] mr_read;           // read from mr_mem[]
 logic [4:0] mn;                 // номер модификатора
 
 assign mn =
-    (MNSA == 0) ? ureg[4:0] :   // U, регистр исполнительного адреса
+    (MNSA == 0) ? vaddr[4:0] :  // U, регистр исполнительного адреса
     (MNSA == 1) ? instr_reg :   // IRA, поле модификатора команды
     (MNSA == 3) ? ~MODNM :      // MP, поле MODNM микрокоманды
                   '0;           // не используется
@@ -316,9 +316,9 @@ assign mr_read =                // read modifier memory
 always @(posedge clk)
     if (CSM & WEM) begin
         if (mn == 0 & MNSA != 3)
-            ;                   // cannot write to M0 from ureg
+            ;                   // cannot write to M0 from vaddr
         else if (mn[4] & MNSA != 3 & !MOD)
-            ;                   // need MOD to write to M[16:32], no ureg
+            ;                   // need MOD to write to M[16:32], no vaddr
         else
             mr_mem[{modgn, mn}] <= Y[31:0];
     end
@@ -407,8 +407,8 @@ assign Y =
                    ALU ? alu_Y :                // Y bus output from ALU
     (YDEV == 1 & !WRB) ? bus_oDB[71:64] :       // ECBTAG, канал В БОИ тега
     (YDEV == 2 & !WRY) ? physad :               // PHYSAD, физический адрес (только на чтение)
-    (YDEV == 3 & !WRY) ? ureg :                 // RADRR, регистр исполнительного адреса (чтение)
-    (YDEV == 4 & !WRY) ? pg_map[ureg[19:10]] :  // PSMEM, память приписок (CS);
+    (YDEV == 3 & !WRY) ? vaddr :                // RADRR, регистр исполнительного адреса (чтение)
+    (YDEV == 4 & !WRY) ? pg_map[vaddr[19:10]] : // PSMEM, память приписок (CS);
     (YDEV == 5 & !WRY) ? mpmem[MPADR] :         // МРМЕМ, память обмена с ПП;
           (ECB & !WRB) ? bus_oDB[63:0] :        // канал B БОИ данных
                          '0;
@@ -421,7 +421,7 @@ always @(posedge clk)
    /*3: rr       <= Y[31:0];*/  // CNT, регистр режимов и триггеры признаков
    /*4: pg_index <= Y[19:10];*/ // PHYSPG, регистр физической страницы
    /*5: arb_opc  <= Y[3:0];*/   // ARBOPC, код операции арбитра
-     8: ureg     <= Y[31:0];    // ADRREG, регистр исполнительного адреса (запись)
+     8: vaddr    <= Y[31:0];    // ADRREG, регистр исполнительного адреса (запись)
    /*9: pshift   <= Y[10:0];*/  // PSHIFT, регистр параметра сдвига (только запись)
     endcase
 
@@ -430,7 +430,7 @@ always @(posedge clk)
     if (WRY)
         case (YDEV)
          4: begin                   // PSMEM, память приписок (CS)
-                pg_map[ureg[19:10]] <= Y[19:0];
+                pg_map[vaddr[19:10]] <= Y[19:0];
                 pg_changed <= 1;
             end
          5: mpmem[MPADR] <= Y[7:0]; // МРМЕМ, память обмена с ПП
@@ -724,8 +724,8 @@ end
 
 // Virtual page index
 wire [9:0] pg_virt =
-    rrr_besm6 ? ureg[14:10] :   // 15 bits in besm6 mode
-                ureg[19:10];    // 20 bits in normal mode
+    rrr_besm6 ? vaddr[14:10] :  // 15 bits in besm6 mode
+                vaddr[19:10];   // 20 bits in normal mode
 
 // Translate virtual page into physical page index
 wire [9:0] pg_translated =
@@ -733,7 +733,7 @@ wire [9:0] pg_translated =
               : pg_map[pg_virt][19:10];
 
 // Translate virtual address into physical address.
-assign physad = {pg_translated, ureg[9:0]};
+assign physad = {pg_translated, vaddr[9:0]};
 
 always @(posedge clk)
     if (arb_req) begin

@@ -50,7 +50,6 @@ assign fd = testbench.tracefd;
 logic [11:0] pc_f;                      // PC at fetch stage
 logic [11:0] pc_x;                      // PC at execute stage
 logic [112:1] opcode_x;                 // Opcode at execute stage
-logic [19:0] waddr_x;                   // Memory address
 
 //
 // Current time
@@ -126,12 +125,14 @@ always @(negedge clk) begin
 
         // Print memory transactions
         if (!testbench.o_astb && testbench.o_wr)
-            $fdisplay(fd, "(%0d)               Memory Store [%h] = %h:%h",
-                ctime, waddr_x, testbench.o_tag, testbench.o_ad);
+            $fdisplay(fd, "(%0d)               Memory Store [%h %h] = %h:%h",
+                ctime, testbench.mem_vaddr, testbench.mem_paddr, testbench.o_tag, testbench.o_ad);
+        else if (!testbench.o_astb && cpu.arb.wrx && cpu.arb_opc == 8)
+            $fdisplay(fd, "(%0d)               Memory Fetch [%h %h] = %h:%h",
+                ctime, testbench.mem_vaddr, testbench.fetch_paddr, testbench.i_tag, testbench.i_data);
         else if (!testbench.o_astb && cpu.arb.wrx)
-            $fdisplay(fd, "(%0d)               Memory %0s [%h] = %h:%h",
-                ctime, (cpu.arb_opc == 8) ? "Fetch" : "Load",
-                waddr_x, testbench.i_tag, testbench.i_data);
+            $fdisplay(fd, "(%0d)               Memory Load [%h %h] = %h:%h",
+                ctime, testbench.mem_vaddr, testbench.mem_paddr, testbench.i_tag, testbench.i_data);
 
         if (testbench.trace && cpu.MAP == 1 && cpu.SQI != 14 &&
             (cpu.COND == 0 || cpu.tkk) &&
@@ -151,7 +152,6 @@ always @(negedge clk) begin
         opcode_x = cpu.opcode;
         const_value = cpu.PROM;
         const_addr = cpu.A[8:0];
-        waddr_x = testbench.waddr;
 
         ->instruction_retired;
     end
@@ -168,7 +168,9 @@ always @(negedge clk) begin
     end
 end
 
+//
 // Count instructions and micro-instructions
+//
 always @(negedge clk)
     if (! reset) begin
         uinstr_count += 1;
@@ -180,6 +182,9 @@ always @(negedge clk)
             instr_count += 1;
     end
 
+//
+// CPU has been halted: print a message and finish.
+//
 task cpu_halted();
     logic [19:0] pc;
     logic [11:0] code;
@@ -194,11 +199,17 @@ task cpu_halted();
     terminate("Fatal Error!");
 endtask
 
+//
+// Fix the starting time.
+//
 task start();
     gettimeofday(t0, null);
 endtask
 
-task terminate(string message);
+//
+// Print statistics and finish the simulation.
+//
+task terminate(input string message);
     timeval_t t1;
     longint usec;
 
@@ -214,7 +225,7 @@ task terminate(string message);
     $display("      Simulated: %0d instructions, %0d micro-instructions",
         instr_count, uinstr_count);
     if (usec > 0)
-        $display("Simulation rate: %.0f instructions/sec, %.0f micro-instructions/sec",
+        $display("Simulation rate: %.1f instructions/sec, %.0f micro-instructions/sec",
             1000000.0 * instr_count / usec,
             1000000.0 * uinstr_count / usec);
 
@@ -223,7 +234,7 @@ task terminate(string message);
         $fdisplay(fd, "      Simulated: %0d instructions, %0d micro-instructions",
             instr_count, uinstr_count);
         if (usec > 0)
-            $fdisplay(fd, "Simulation rate: %.0f instructions/sec, %.0f micro-instructions/sec",
+            $fdisplay(fd, "Simulation rate: %.1f instructions/sec, %.0f micro-instructions/sec",
                 1000000.0 * instr_count / usec,
                 1000000.0 * uinstr_count / usec);
     end
@@ -319,7 +330,7 @@ task print_insn();
         48:"*60", 49:"*61", 50:"*62", 51:"*63", 52:"*64", 53:"*65", 54:"*66", 55:"*67",
         56:"*70", 57:"*71", 58:"*72", 59:"*73", 60:"*74", 61:"*75", 62:"*76", 63:"*77"
     };
-    logic [19:0] pc, rg0;
+    logic [19:0] pc;
     logic [31:0] opcode;
     logic besm6_mode;
     string name;
@@ -329,14 +340,10 @@ task print_insn();
         cpu.alu.p19_16.ram[3], cpu.alu.p15_12.ram[3],
         cpu.alu.p11_8.ram[3],  cpu.alu.p7_4.ram[3],
         cpu.alu.p3_0.ram[3] };
-    assign rg0 = {
-        cpu.busio.b16_19.RG[0], cpu.busio.b12_15.RG[0],
-        cpu.busio.b8_11.RG[0],  cpu.busio.b4_7.RG[0],
-        cpu.busio.b0_3.RG[0] };
     assign opcode =
         cpu.tkk ? cpu.bus_oDC[31:0] : cpu.bus_oDC[63:32];
 
-    $fwrite(fd, "(%0d) %h %h: %h", ctime, pc, rg0, opcode);
+    $fwrite(fd, "(%0d) %h %h: %h", ctime, pc, testbench.fetch_paddr, opcode);
     if ($isunknown(cpu.instr_reg)) begin
         $fdisplay(fd, " *** Unknown");
         return;
@@ -883,7 +890,7 @@ task print_changed_cpu(
     static logic  [7:0] old_procn;
     static logic  [9:0] old_physpg;
     static logic  [3:0] old_arbopc;
-    static logic [31:0] old_ureg;
+    static logic [31:0] old_vaddr;
     static logic [10:0] old_pshift;
     static logic [31:0] old_rr;
     static logic [31:0] old_mrmem[1024];
@@ -900,7 +907,7 @@ task print_changed_cpu(
     automatic logic  [7:0] procn  = cpu.procn;
     automatic logic  [9:0] physpg = cpu.pg_index;
     automatic logic  [3:0] arbopc = cpu.arb_opc;
-    automatic logic [31:0] ureg   = cpu.ureg;
+    automatic logic [31:0] vaddr  = cpu.vaddr;
     automatic logic [10:0] pshift = cpu.pshift;
     automatic logic [31:0] rr     = cpu.rr;
     automatic logic        stopm0 = cpu.stopm0;
@@ -925,7 +932,7 @@ task print_changed_cpu(
     if (physpg !== old_physpg) begin $fdisplay(fd, "(%0d)               Write PHYSPG = %h", ctime, physpg); old_physpg = physpg; end
     if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d)               Write ARBOPC = %h (%0s)", ctime, arbopc, arbopc_name[arbopc]);
                                                                                                             old_arbopc = arbopc; end
-    if (ureg   !== old_ureg)   begin $fdisplay(fd, "(%0d)               Write UREG = %h",   ctime, ureg);   old_ureg   = ureg;   end
+    if (vaddr  !== old_vaddr)  begin $fdisplay(fd, "(%0d)               Write VADDR = %h",  ctime, vaddr);  old_vaddr  = vaddr;  end
     if (rr     !== old_rr)     begin $fdisplay(fd, "(%0d)               Write RR = %h",     ctime, rr);     old_rr     = rr;     end
     if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d)               Write PSHIFT = %h", ctime, pshift); old_pshift = pshift; end
     if (stopm0 !== old_stopm0) begin $fdisplay(fd, "(%0d)               Write STOPM0 = %h", ctime, stopm0); old_stopm0 = stopm0; end

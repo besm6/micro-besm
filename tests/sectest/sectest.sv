@@ -28,7 +28,7 @@ cpu cpu(clk, reset, i_data, i_tag,
 
 // Setup trace moninor.
 tracer tr();
-logic [19:0] waddr;                     // needed for tracer
+logic [19:0] fetch_paddr, mem_paddr, mem_vaddr; // needed for tracer
 
 //--------------------------------------------------------------
 // Microinstruction ROM.

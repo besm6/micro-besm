@@ -34,9 +34,6 @@ tmemory ram(clk, o_ad, o_tag,
     o_astb, o_atomic, o_rd, o_wr,
     i_data, i_tag);
 
-logic [19:0] waddr;                     // needed for tracer
-assign waddr = ram.waddr;
-
 //--------------------------------------------------------------
 // Microinstruction ROM.
 //
@@ -97,6 +94,25 @@ initial begin
     tr.start();
     #limit tr.terminate("Time Limit Exceeded");
 end
+
+//
+// Latch phys addresses for tracer
+//
+logic [19:0] fetch_paddr;               // physical address of last fetch
+logic [19:0] mem_paddr;                 // physical address of last load/store
+logic [19:0] mem_vaddr;                 // virtual address of last load/store
+
+always @(cpu.o_rd, cpu.o_wr)
+    if (cpu.o_wr)
+        mem_paddr = ram.waddr;
+    else if (cpu.o_rd) begin
+        if (cpu.arb_opc == 8)
+            fetch_paddr = ram.waddr;
+        else
+            mem_paddr = ram.waddr;
+    end
+
+assign mem_vaddr = cpu.vaddr[19:0];
 
 //
 // Print a message to stdout and trace file
