@@ -70,9 +70,11 @@ logic [63:0] Y;
 logic stopm0, stopm1;           // Флаги останова
 
 // Interrupts
-logic int_flag;                 // Признак наличия прерываний TODO
-logic swint_flag;               // Генерация программного прерывания TODO
-logic extint_flag;              // Генерация внешнего прерывания TODO
+logic g_int;                    // Глобальный признак наличия прерываний TODO
+logic prg_int;                  // Генерация программного прерывания TODO
+logic ext_int;                  // Генерация внешнего прерывания TODO
+logic clock_int;                // Прерывание от часов счетного времени (CT) TODO
+logic timer_int;                // Прерывание от таймера счетного времени (CTT) TODO
 
 // Память обмена с пультовым процессором
 logic [7:0] mpmem[16];
@@ -275,7 +277,7 @@ always_comb case (COND)
      14: cond = instr_ir15; // IR15, стековый режим команды (ИР15)
      15: cond = tkk;        // TKK, признак правой команды стандартизатора (TKK)
      16: cond = run;        // RUN, "пуск" от ПП
-     19: cond = int_flag;   // INT, признак наличия прерываний
+     19: cond = g_int;      // INT, признак наличия прерываний
      20: cond = ~pg_fill;   // FULMEM, память БМСП заполнена единицами
      21: cond = arb_rdy;    // ARBRDY, готовность арбитра
      22: cond = tr0;        // TR0, След0
@@ -327,8 +329,8 @@ always @(posedge clk)
 // Timer
 //
 wire        tm_out0;                // output of timer0: use it as clock for timer1
-wire        tm_out1;                // output of timer1: interrupt TODO
-wire        tm_out2;                // output of timer2: interrupt TODO
+wire        tm_out1;                // output of timer1: interrupt
+wire        tm_out2;                // output of timer2: interrupt
 logic       tm_clk0;                // clock for timer0, 1MHz
 wire        tm_clk1 = tm_out0;      // clock for timer1, 100Hz
 logic       tm_clk2;                // clock for timer2, 100kHz
@@ -346,7 +348,7 @@ i8253 timer(clk, tm_cs, tm_rd, tm_wr,
 
 // Clock divider by 2.
 always @(posedge clk) begin
-   if (reset)
+    if (reset)
         tm_clk0 <= 0;
     else if (!halt)
         tm_clk0 <= ~tm_clk0;
@@ -364,6 +366,14 @@ always @(posedge clk) begin
     end else begin
         tm_counter2 <= tm_counter2 + 1;
     end
+end
+
+// Clock and timer interrupts
+always @(posedge clk) begin
+    if (tm_out1)
+        clock_int <= '1;            // CT interrupt flag
+    if (tm_out2)
+        timer_int <= '1;            // CTT interrupt flag
 end
 
 //--------------------------------------------------------------
@@ -544,7 +554,7 @@ assign rr = {       // регистр режимов (РР)
     no_intr,        // РР.17 - блокировка внешних прерываний (БВП)
     no_progtag,     // РР.16 - блокировка программной интерпретации тега (БПИНТ)
     no_badacc,      // РР.15 - блокировка реакции на чужой сумматор (БЧС)
-    no_rtag,        // РР.14 - блокир.проверки тега при чтении операнда (БПТЧ)
+    no_rtag,        // РР.14 - блокировка проверки тега при чтении операнда (БПТЧ)
     no_badop,       // РР.13 - блокировка реакции на чужой операнд (БЧОП)
     drg,            // РР.12 - DRG, режим диспетчера (РД)
     ovrftb,         // РР.11 - OVRFTB, блокировка проверки переполнения поля упрятывания (БППУ)
@@ -616,15 +626,15 @@ always @(posedge clk)
         22: rrr_besm6 <= '1;        // SETER, установка РЭ
         endcase
 
-// Остальные биты тега командного слова TODO
+// Остальные биты тега командного слова
 always @(posedge clk)
     if (rrr_update) begin
-        rrr_cmd     <= bus_oDC[64]; // ПК - признак команд
-        rrr_noload  <= bus_oDC[66]; // ЗЧП - запрет чтения операнда из памяти
-        rrr_nostore <= bus_oDC[67]; // ЗЗП - запрет записи операнда в память
-        rrr_nofetch <= bus_oDC[68]; // ЗВП - запрет выборки команды из памяти
-        rrr_nojump  <= bus_oDC[69]; // ЗПУ - запрет передачи управления на команду
-        rrr_pint    <= bus_oDC[71]; // ПИНТ - программная интерпретация тега
+        rrr_cmd     <= bus_oDC[64]; // ПК - признак команд TODO
+        rrr_noload  <= bus_oDC[66]; // ЗЧП - запрет чтения операнда из памяти TODO
+        rrr_nostore <= bus_oDC[67]; // ЗЗП - запрет записи операнда в память TODO
+        rrr_nofetch <= bus_oDC[68]; // ЗВП - запрет выборки команды из памяти TODO
+        rrr_nojump  <= bus_oDC[69]; // ЗПУ - запрет передачи управления на команду TODO
+        rrr_pint    <= bus_oDC[71]; // ПИНТ - программная интерпретация тега TODO
     end
 
 //--------------------------------------------------------------
@@ -646,8 +656,8 @@ always @(posedge clk)
     13: tr0 <= '1;          // SETTR0, установка мп признака "След0"
     14: tr1 <= '0;          // CLRTR1, сброс мп признака "След1"
     15: tr1 <= '1;          // SETTR1, установка мп признака "След1"
-    16: /*TODO <= '0*/;     // CLRCT, сброс прерывания от часов счетного времени
-    17: /*TODO <= '0*/;     // CLRCTT, сброс прерывания от таймера счетного времени
+    16: clock_int <= '0;    // CLRCT, сброс прерывания от часов счетного времени
+    17: timer_int <= '0;    // CLRCTT, сброс прерывания от таймера счетного времени
     18: tkk <= '0;          // CLRTKK, сброс триггера коммутации команд - ТКК (ППК стандартизатора)
     19: tkk <= '1;          // SЕТТКК, установка ТКК
     20: /*rrr_besm6 <= 0*/; // SETNR, установка НР
@@ -658,13 +668,13 @@ always @(posedge clk)
     22: /*rrr_besm6 <= 1*/; // SETER, установка РЭ
     23: tkk <= ~tkk;        // СНТКК, переброс ТКК (работает в счетном режиме!)
     24: halt <= '1;         // SETHLT, установка триггера "Останов" (Halt)
-    25: int_flag <= '0;     // CLRINT, сброс прерываний (кроме прерываний от таймеров)
+    25: g_int <= '0;        // CLRINT, сброс прерываний (кроме прерываний от таймеров)
     26: run <= '0;          // CLRRUN, сброс триггера "Пуск"
     27: rx_busy <= '0;      // RDMPCP, установка признака "память обмена ПП -> ЦП прочитана"
     28: rx_busy <= '1;      // LDMPCP, установка признака "в памяти обмена ПП -> ЦП есть информация"
     29: tx_busy <= '1;      // LDCPMP, установка признака "в памяти обмена ЦП -> ПП есть информация"
-    30: swint_flag <= '1;   // PRGINT, установка программного прерывания с номером 31
-    31: extint_flag <= '1;  // EXTINT, установка внешнего прерывания на магистраль
+    30: prg_int <= '1;      // PRGINT, установка программного прерывания с номером 31
+    31: ext_int <= '1;      // EXTINT, установка внешнего прерывания на магистраль
     endcase
 
 // Признак изменения адресом (ПИА) устанавливается и сбрасывается разными путями
@@ -784,6 +794,6 @@ const logic [11:0] intrtab[32] = '{
     `include "../microcode/intrtab.v"
     default: '0
 };
-//TODO
+//TODO: jump to intr_addr on g_int & ISE
 
 endmodule

@@ -664,21 +664,14 @@ task print_uop(
     // Some features not implemented yet
     //
     case (COND)
-    17: $fdisplay(fd, "(%0d) *** cond=NMLRDY not implemented yet!", ctime);
-    19: $fdisplay(fd, "(%0d) *** cond=INT not implemented yet!", ctime);
     23: $fdisplay(fd, "(%0d) *** cond=CPMP not implemented yet!", ctime);
     endcase
 
     if (!IOMP)
         case (FFCNT)
-        16: $fdisplay(fd, "(%0d) *** ffcnt=CLRCT not implemented yet!", ctime);
-        17: $fdisplay(fd, "(%0d) *** ffcnt=CLRCTT not implemented yet!", ctime);
-        25: $fdisplay(fd, "(%0d) *** ffcnt=CLRINT not implemented yet!", ctime);
         27: $fdisplay(fd, "(%0d) *** ffcnt=RDMPCP not implemented yet!", ctime);
         28: $fdisplay(fd, "(%0d) *** ffcnt=LDMPCP not implemented yet!", ctime);
         29: $fdisplay(fd, "(%0d) *** ffcnt=LDCPMP not implemented yet!", ctime);
-        30: $fdisplay(fd, "(%0d) *** ffcnt=PRGINT not implemented yet!", ctime);
-        31: $fdisplay(fd, "(%0d) *** ffcnt=EXTINT not implemented yet!", ctime);
         endcase
 endtask
 
@@ -902,6 +895,7 @@ task print_changed_cpu(
     static logic        old_pgdirty[1024];
     static logic        old_pgreprio[1024];
     static logic        old_stopm0, old_stopm1, old_halt, old_tkk, old_besm6, old_run;
+    static logic        old_gint, old_prgint, old_extint, old_clkint, old_tint;
 
     automatic logic  [4:0] modgn  = cpu.modgn;
     automatic logic  [7:0] procn  = cpu.procn;
@@ -923,6 +917,11 @@ task print_changed_cpu(
     automatic logic  [2:0] ddev   = opcode[16:14];
     automatic logic        wrd    = opcode[13];
     automatic logic  [4:0] cond   = opcode[6:2];
+    automatic logic        gint   = cpu.g_int;
+    automatic logic        prgint = cpu.prg_int;
+    automatic logic        extint = cpu.ext_int;
+    automatic logic        clkint = cpu.clock_int;
+    automatic logic        tint   = cpu.timer_int;
 
     //
     // Internal registers
@@ -941,6 +940,11 @@ task print_changed_cpu(
     if (halt   !== old_halt)   begin $fdisplay(fd, "(%1d)               Write HALT = %h",   ctime, halt);   old_halt   = halt;   end
     if (tkk    !== old_tkk)    begin $fdisplay(fd, "(%1d)               Write TKK = %h",    ctime, tkk);    old_tkk    = tkk;    end
     if (besm6  !== old_besm6)  begin $fdisplay(fd, "(%1d)               Write BESM6 = %h",  ctime, besm6);  old_besm6  = besm6;  end
+    if (gint   !== old_gint)   begin $fdisplay(fd, "(%1d)               Write INT = %h",    ctime, gint);   old_gint   = gint;   end
+    if (prgint !== old_prgint) begin $fdisplay(fd, "(%1d)               Write PRGINT = %h", ctime, prgint); old_prgint = prgint; end
+    if (extint !== old_extint) begin $fdisplay(fd, "(%1d)               Write EXTINT = %h", ctime, extint); old_extint = extint; end
+    if (clkint !== old_clkint) begin $fdisplay(fd, "(%1d)               Write CT = %h",     ctime, clkint); old_clkint = clkint; end
+    if (tint   !== old_tint)   begin $fdisplay(fd, "(%1d)               Write CTT = %h",    ctime, tint);   old_tint   = tint;   end
 
     //
     // Index-registers
