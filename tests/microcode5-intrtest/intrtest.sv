@@ -83,6 +83,8 @@ initial begin
 
     cpu.memory = memory;
 
+    init_intrtab();
+
     // Start with reset active
     clk = 1;
     reset = 1;
@@ -249,6 +251,7 @@ localparam LABEL_CC32   = 740;
 localparam LABEL_CLR12  = 865;
 localparam LABEL_ERRTST = 871;
 localparam LABEL_CTTSTP = 1087;
+localparam LABEL_ADRF00 = 1097;
 
 // Get time at the rising edge of the clock.
 always @(posedge clk) begin
@@ -256,6 +259,44 @@ always @(posedge clk) begin
     pc_x = tr.pc_x;
     opcode_x = tr.opcode_x;
 end
+
+//
+// Initialize intrtab[]
+//
+task init_intrtab();
+    cpu.intrtab[0]  = LABEL_ADRF00 + 'h02;  // отсутствующий блок памяти
+    cpu.intrtab[1]  = LABEL_ADRF00 + 'h03;  // многократная ошибка
+    cpu.intrtab[2]  = LABEL_ADRF00 + 'h04;  // прогр.интерпр.тега операнда
+    cpu.intrtab[3]  = LABEL_ADRF00 + 'h05;  // чужой сумматор
+    cpu.intrtab[4]  = LABEL_ADRF00 + 'h06;  // чужой операнд
+    cpu.intrtab[5]  = LABEL_ADRF00 + 'h07;  // защита адреса при чтении
+    cpu.intrtab[6]  = LABEL_ADRF00 + 'h08;  // контроль команды
+    cpu.intrtab[7]  = LABEL_ADRF00 + 'h09;  // защита выборки команды
+    cpu.intrtab[8]  = LABEL_ADRF00 + 'h0a;  // защита передачи управления
+    cpu.intrtab[9]  = LABEL_ADRF00 + 'h0b;  // прогр.интерпр.тега команды
+    cpu.intrtab[10] = LABEL_ADRF00 + 'h0d;  // защита адреса при записи
+    cpu.intrtab[11] = LABEL_ADRF00 + 'h0f;  // "time out" при обр.к ОЗУ
+    cpu.intrtab[12] = LABEL_ADRF00 + 'h11;  // "time out" при обр.к шине
+    cpu.intrtab[13] = LABEL_ADRF00 + 'h13;  // мат.адрес = 0
+    cpu.intrtab[14] = LABEL_ADRF00 + 'h14;  // чужой РП при чт/зп операнда
+    cpu.intrtab[15] = LABEL_ADRF00 + 'h15;  // чужой РП при выборке команды
+    cpu.intrtab[16] = LABEL_ADRF00 + 'h16;  // защита страницы при обращении
+    cpu.intrtab[17] = LABEL_ADRF00 + 'h17;  // защита страницы при записи
+    cpu.intrtab[18] = LABEL_ADRF00 + 'h18;  // отрицат.N страницы у команды
+    cpu.intrtab[19] = LABEL_ADRF00 + 'h19;  // отрицат.N страницы у операнда
+    cpu.intrtab[20] = LABEL_ADRF00 + 'h1a;  // резерв
+    cpu.intrtab[21] = LABEL_ADRF00 + 'h1c;  // отсутств.адрес памяти в НР
+    cpu.intrtab[22] = LABEL_ADRF00 + 'h1d;  // резерв
+    cpu.intrtab[23] = LABEL_ADRF00 + 'h1f;  // запрос модиф.приоритетов стр.
+    cpu.intrtab[24] = LABEL_ADRF00 + 'h20;  // таймер астрон.времени = 0
+    cpu.intrtab[25] = LABEL_ADRF00 + 'h21;  // таймер счетного времени = 0
+    cpu.intrtab[26] = LABEL_ADRF00 + 'h22;  // "time out" при БВП
+    cpu.intrtab[27] = LABEL_ADRF00 + 'h23;  // шаговое прерывание
+    cpu.intrtab[28] = LABEL_ADRF00 + 'h24;  // внешние прерывания
+    cpu.intrtab[29] = LABEL_ADRF00 + 'h25;  // чт/зп регистров от ПП
+    cpu.intrtab[30] = LABEL_ADRF00 + 'h26;  // программное прерывание
+    cpu.intrtab[31] = LABEL_ADRF00 + 'h27;  // останов (halt)
+endtask
 
 // At negative clock edge, when all the signals are quiet,
 // analyze the state of the processor.

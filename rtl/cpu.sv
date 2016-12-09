@@ -51,6 +51,7 @@ logic [31:0] instr_addr;        // адресная часть команды
 logic [11:0] jump_addr;         // ПНА КОП основного или дополнительного формата
 logic [11:0] rwio_addr;         // ПНА команд rmod/wmod и обмена с пультовым процессором
 logic [11:0] grp_addr;          // ПНА групп
+logic [11:0] intr_addr;         // ПНА прерываний
 
 // Signals for ALU
 logic  [8:0] alu_I;             // ALU instruction, from ALUD, FUNC and ALUS
@@ -70,12 +71,13 @@ logic [63:0] Y;
 logic stopm0, stopm1;           // Флаги останова
 
 // Interrupts
-logic int_flag;                 // Take interrupt immediately
-logic g_int;                    // Глобальный признак наличия прерываний
-logic prg_int;                  // Генерация программного прерывания TODO
-logic ext_int;                  // Генерация внешнего прерывания TODO
-logic clock_int;                // Прерывание от часов счетного времени (CT) TODO
-logic timer_int;                // Прерывание от таймера счетного времени (CTT) TODO
+logic       int_flag;           // Take interrupt immediately
+logic [4:0] int_vect;           // Interrupt vector
+logic       g_int;              // Глобальный признак наличия прерываний
+logic       prg_int;            // Генерация программного прерывания TODO
+logic       ext_int;            // Генерация внешнего прерывания TODO
+logic       clock_int;          // Прерывание от часов счетного времени (CT) TODO
+logic       timer_int;          // Прерывание от таймера счетного времени (CTT) TODO
 
 // Память обмена с пультовым процессором
 logic [7:0] mpmem[16];
@@ -149,6 +151,7 @@ logic [11:0] control_D;         // 12-bit data input to chip
 // Output signals
 logic [11:0] control_Y;         // 12-bit address output
 logic        control_nMAP;      // JMAP instruction: use rwio memory
+logic        control_nVECT;     // CJV instruction: use intr memory
 
 //--------------------------------------------------------------
 // Microinstruction ROM.
@@ -241,7 +244,7 @@ wire        MPS   = opcode[1];       // Выбор источника парам
 
 am2910 control(clk,
     SQI, '0, control_nCC, ~RLD, control_CI, '0,
-    control_D, control_Y, , , control_nMAP, );
+    control_D, control_Y, , control_nVECT, control_nMAP, );
 
 // Carry-in bit for microprogram counter
 // Ignore ICI, as if always enabled
@@ -256,6 +259,7 @@ assign control_D =
     (MAP == 1) ? jump_addr :    // ME, ПНА КОП основного или дополнительного формата
     (MAP == 2) ? grp_addr :     // GRP, ПНА групп и микропрограммные признаки "След0" И "След1"
  !control_nMAP ? rwio_addr :    // JMAP instruction, use rwio memory
+!control_nVECT ? intr_addr :    // CJV instruction, use intr memory
                  alu_Y[11:0];   // Выход АЛУ
 
 assign control_nCC = ICC ? cond : ~cond;
@@ -810,11 +814,15 @@ assign grp_addr = grouptab[{tr1, tr0, grp}];
 //--------------------------------------------------------------
 // Interrupt table
 //
-const logic [11:0] intrtab[32] = '{
+logic [11:0] intrtab[32] = '{
     `include "../microcode/intrtab.v"
     default: '0
 };
 
+// Jump address for current interrupt vector
+assign intr_addr = intrtab[int_vect];
+
+// Flag to take interrupt immediately
 assign int_flag = (g_int & ISE & !no_intr);
 
 // On interrupt, jump to address 001
@@ -822,13 +830,52 @@ assign opaddr =
     int_flag ? 'h001                // Interrupt
              : control_Y;           // Regular execution
 
-//TODO: control_nVECT -> control_D=intr_addr
-
+// Set interrupt flag
 always @(posedge clk) begin
-    if (!no_progtag &
-        ((tag_fetch & itag_pint) |
-         (tag_load & dtag_pint)))
-        g_int <= '1;                // ПИНТ & !БПИНТ - программная интерпретация тега
+    // 0 - отсутствующий блок памяти        - не бывает
+    // 1 - многократная ошибка              - не бывает
+
+    // 2 - программная интерпретация тега операнда
+    if (!no_progtag & tag_load & dtag_pint) begin
+        g_int <= '1;                // ПИНТ & !БПИНТ при чтении из памяти
+        int_vect <= 2;
+    end
+
+    // 3 - чужой сумматор                   - TODO
+    // 4 - чужой операнд                    - TODO
+    // 5 - защита адреса при чтении         - TODO
+    // 6 - контроль команды                 - TODO
+    // 7 - защита выборки команды           - TODO
+    // 8 - защита передачи управления       - TODO
+
+    // 9 - программная интерпретация тега команды
+    else if (!no_progtag & tag_fetch & itag_pint) begin
+        g_int <= '1;                // ПИНТ & !БПИНТ при выборке команды
+        int_vect <= 9;
+    end
+
+    // 10 - защита адреса при записи        - TODO
+    // 11 - "time out" при обр.к ОЗУ        - TODO
+    // 12 - "time out" при обр.к шине       - TODO
+    // 13 - мат.адрес = 0                   - TODO
+    // 14 - чужой РП при чт/зп операнда     - TODO
+    // 15 - чужой РП при выборке команды    - TODO
+    // 16 - защита страницы при обращении   - TODO
+    // 17 - защита страницы при записи      - TODO
+    // 18 - отрицат.N страницы у команды    - TODO
+    // 19 - отрицат.N страницы у операнда   - TODO
+    // 20 - резерв                          - не бывает
+    // 21 - отсутств.адрес памяти в НР      - TODO
+    // 22 - резерв                          - не бывает
+    // 23 - запрос модиф.приоритетов стр.   - TODO
+    // 24 - таймер астрон.времени = 0       - TODO
+    // 25 - таймер счетного времени = 0     - TODO
+    // 26 - "time out" при БВП              - TODO
+    // 27 - шаговое прерывание              - TODO
+    // 28 - внешние прерывания              - TODO
+    // 29 - чт/зп регистров от ПП           - TODO
+    // 30 - программное прерывание          - TODO
+    // 31 - останов (halt)                  - TODO
 end
 
 endmodule

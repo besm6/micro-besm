@@ -897,6 +897,7 @@ task print_changed_cpu(
     static logic [19:0] old_pgmap[1024];
     static logic [11:0] old_pgprio0[1024];
     static logic [11:0] old_pgprio1[1024];
+    static logic  [4:0] old_vector;
     static logic        old_pgused[1024];
     static logic        old_pgdirty[1024];
     static logic        old_pgreprio[1024];
@@ -923,6 +924,7 @@ task print_changed_cpu(
     automatic logic  [2:0] ddev   = opcode[16:14];
     automatic logic        wrd    = opcode[13];
     automatic logic  [4:0] cond   = opcode[6:2];
+    automatic logic  [4:0] vector = cpu.int_vect;
     automatic logic        gint   = cpu.g_int;
     automatic logic        prgint = cpu.prg_int;
     automatic logic        extint = cpu.ext_int;
@@ -939,6 +941,7 @@ task print_changed_cpu(
     if (tkk    !== old_tkk)    begin $fdisplay(fd, "(%1d)               Write TKK = %h",    ctime, tkk);    old_tkk    = tkk;    end
     if (besm6  !== old_besm6)  begin $fdisplay(fd, "(%1d)               Write BESM6 = %h",  ctime, besm6);  old_besm6  = besm6;  end
     if (gint   !== old_gint)   begin $fdisplay(fd, "(%1d)               Write INT = %h",    ctime, gint);   old_gint   = gint;   end
+    if (vector !== old_vector) begin $fdisplay(fd, "(%1d)               Write VECTOR = %h", ctime, vector); old_vector = vector; end
     if (prgint !== old_prgint) begin $fdisplay(fd, "(%1d)               Write PRGINT = %h", ctime, prgint); old_prgint = prgint; end
     if (extint !== old_extint) begin $fdisplay(fd, "(%1d)               Write EXTINT = %h", ctime, extint); old_extint = extint; end
     if (clkint !== old_clkint) begin $fdisplay(fd, "(%1d)               Write CT = %h",     ctime, clkint); old_clkint = clkint; end
