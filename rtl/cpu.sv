@@ -41,7 +41,6 @@ timeunit 1ns / 10ps;
 logic  [4:0] modgn;             // РНГ: регистр номера группы памяти модификаторов
 logic  [7:0] procn;             // РНП: регистр номера процесса
 logic [31:0] rr;                // регистр режимов и триггеры признаков
-logic  [7:0] rrr;               // расширение регистра режимов
 logic [31:0] vaddr;             // регистр исполнительного адреса
 logic [19:0] physad;            // физический адрес, результат трансляции vaddr
 logic [63:0] sh_out;            // результат сдвига
@@ -71,7 +70,7 @@ logic [63:0] Y;
 logic stopm0, stopm1;           // Флаги останова
 
 // Interrupts
-logic g_int;                    // Глобальный признак наличия прерываний TODO
+logic g_int;                    // Глобальный признак наличия прерываний
 logic prg_int;                  // Генерация программного прерывания TODO
 logic ext_int;                  // Генерация внешнего прерывания TODO
 logic clock_int;                // Прерывание от часов счетного времени (CT) TODO
@@ -107,14 +106,13 @@ logic no_rprot, flag_negaddr, no_procnm, no_paging, flag_jump;
 logic [1:0] rr_unused;
 
 // Биты расширения регистра режимов (РРР)
-logic rrr_cmd;                  // 1 - признак команд (ПК)
-logic rrr_besm6;                // 2 - режим эмуляции БЭСМ-6 (РЭ)
-logic rrr_noload;               // 3 - запрет чтения операнда из памяти (ЗЧП)
-logic rrr_nostore;              // 4 - запрет записи операнда в память (ЗЗП)
-logic rrr_nofetch;              // 5 - запрет выборки команды из памяти (ЗВП)
-logic rrr_nojump;               // 6 - запрет передачи управления на команду (ЗПУ)
-logic rrr_unused;               // 7 - резерв тега
-logic rrr_pint;                 // 8 - программная интерпретация тега (ПИНТ)
+logic itag_cmd;                 // ПК - признак команд TODO
+logic mode_besm6;               // РЭ - режим эмуляции БЭСМ-6
+logic dtag_noload;              // ЗЧП - запрет чтения операнда из памяти TODO
+logic dtag_nostore;             // ЗЗП - запрет записи операнда в память TODO
+logic itag_nofetch;             // ЗВП - запрет выборки команды из памяти TODO
+logic itag_nojump;              // ЗПУ - запрет передачи управления на команду TODO
+logic itag_pint, dtag_pint;     // ПИНТ - программная интерпретация тега
 
 logic instr_ir15;               // stack mode flag
 logic tkk;                      // признак правой команды стандартизатора (TKK)
@@ -127,7 +125,6 @@ logic        arb_req;           // запрос к арбитру
 logic        arb_rdy;           // ответ арбитра
 
 // External bus interface
-// Inputs
 logic [63:0] bus_DA;            // A data input
 logic [71:0] bus_DB;            // B data input
 logic [71:0] bus_DX;            // X data bus
@@ -135,12 +132,12 @@ logic  [1:0] bus_ARX;           // X address input
 logic        bus_ECBTAG;        // B tag port enable
 logic        bus_ECX;           // X port enable
 logic        bus_WRX;           // X write enable
-
-// Outputs
-logic [63:0] bus_oDA;           // A data output
+logic [63:0] bus_oDA;           // A data output, no tag
 logic [71:0] bus_oDB;           // B data output
-logic [71:0] bus_oDC;           // C data output
 logic [71:0] bus_oDX;           // X data output
+logic [63:0] bus_iword;         // fetch result: instruction word from RG1
+logic  [7:0] bus_itag;          // fetch result: tag from RG1
+logic  [7:0] bus_dtag;          // load result: tag from RG2
 
 // Control unit
 // Input signals
@@ -269,7 +266,7 @@ always_comb case (COND)
       4: cond = bnb;        // BNB, блокировка выхода числа за диапазон БЭСМ-6 (ББЧ)
       5: cond = ovrftb;     // OVRFTB, блокировка проверки переполнения поля упрятывания (БППУ)
       6: cond = drg;        // DRG, режим диспетчера (РД)
-      7: cond = rrr_besm6;  // EMLRG, режим эмуляции
+      7: cond = mode_besm6; // EMLRG, режим эмуляции
       8: cond = rcb;        // RCB, признак правой команды (ППК)
       9: cond = cb;         // CB, признак изменения адреса 16 регистром (ПИА)
      10: cond = cemlrg;     // CEMLRG, РЭС, 20-й разряд PP (резерв)
@@ -484,32 +481,34 @@ assign o_tag  = bus_oDX[71:64];
 
 extbus busio(
     clk,
-    bus_DA, bus_oDA,                    // A data bus
-    bus_DB, bus_oDB,                    // B data bus
-    72'b00, bus_oDC,                    // C data bus
-    bus_DX, bus_oDX,                    // X data bus
-    ARA, BRA,          2'b01, bus_ARX,  // address inputs
-    ECA, ECB, bus_ECBTAG, '1, bus_ECX,  // port enable
-    WRA, WRB,             '0, bus_WRX   // write enable
+    bus_DA, bus_oDA,                // A data bus
+    bus_DB, bus_oDB,                // B data bus
+    bus_DX, bus_oDX,                // X data bus
+    ARA, BRA,             bus_ARX,  // address inputs
+    ECA, ECB, bus_ECBTAG, bus_ECX,  // port enable
+    WRA, WRB,             bus_WRX,  // write enable
+    bus_iword,                      // fetch result: instruction word
+    bus_itag,                       // fetch result: tag
+    bus_dtag                        // load result: tag
 );
 
 //--------------------------------------------------------------
 // Arbiter
 //
 arbiter arb(clk, reset,
-    arb_req,                            // input request strobe
-    arb_req ? ARBI : arb_opc,           // input opcode
-    bus_ARX, bus_ECX, bus_WRX,          // X bus control
-    o_astb, o_atomic, o_rd, o_wr,       // external memory interface
-    arb_rdy                             // resulting status
+    arb_req,                        // input request strobe
+    arb_req ? ARBI : arb_opc,       // input opcode
+    bus_ARX, bus_ECX, bus_WRX,      // X bus control
+    o_astb, o_atomic, o_rd, o_wr,   // external memory interface
+    arb_rdy                         // resulting status
 );
-assign arb_req = (YDEV == 2);           // PHYSAD, request to external bus
+assign arb_req = (YDEV == 2);       // PHYSAD, request to external bus
 
 always @(posedge clk)
     if (arb_req)
-        arb_opc <= ARBI;                // PHYSAD, set from microinstruction
+        arb_opc <= ARBI;            // PHYSAD, set from microinstruction
     else if (YDST == 5)
-        arb_opc <= Y[3:0];              // ARBOPC, set from Y data bus
+        arb_opc <= Y[3:0];          // ARBOPC, set from Y data bus
 
 //--------------------------------------------------------------
 // Instruction decoder
@@ -519,8 +518,8 @@ logic [19:0] addr;
 wire uflag = LETC & cb;         // признак изменения адресом (ПИА)
 
 decoder dec(
-    bus_oDC[63:0],              // instruction word
-    rrr_besm6,                  // besm6 compatibility (РЭ)
+    bus_iword,                  // instruction word
+    mode_besm6,                 // besm6 compatibility (РЭ)
     tkk,                        // right half flag (ТКК)
     instr_reg,                  // modifier index
     instr_code,                 // instruction code (КОП)
@@ -534,7 +533,7 @@ const logic [11:0] optab[4096] = '{
     `include "../microcode/optab.v"
     default: '0
 };
-assign jump_addr = optab[{instr_ext, rrr_besm6, instr_ir15, uflag, instr_code}];
+assign jump_addr = optab[{instr_ext, mode_besm6, instr_ir15, uflag, instr_code}];
 
 //--------------------------------------------------------------
 // Mode register (РР)
@@ -604,52 +603,41 @@ always @(posedge clk)
     end
 
 //--------------------------------------------------------------
-// Extended mode register
+// Tags
 //
-logic rrr_update;                   // need to update RRR
+logic tag_fetch;                    // instruction tag update
+logic tag_load;                     // data tag update
 
-always @(posedge clk)
-    if (reset)
-        rrr_update <= '0;
-    else if (bus_WRX & bus_ARX == 'b01)
-        rrr_update <= '1;           // tag changed
-    else
-        rrr_update <= '0;
+always @(posedge clk) begin
+    // RG1 updated: fetch complete
+    tag_fetch <= !reset & bus_WRX & (bus_ARX == 'b01);
+
+    // RG2 updated: load complete
+    tag_load <= !reset & bus_WRX & (bus_ARX == 'b10);
+end
 
 // Режим эмуляции БЭСМ-6 (РЭ)
 always @(posedge clk)
     if (reset)
-        rrr_besm6 <= 0;             // изначально РЭ=0
-    else if (rrr_update)
-        rrr_besm6 <= bus_oDC[65];   // берем из тега командного слова
+        mode_besm6 <= 0;            // изначально РЭ=0
+    else if (tag_fetch)
+        mode_besm6 <= bus_itag[1];  // берем из тега командного слова
     else if (! IOMP)
         case (FFCNT)
-        20: rrr_besm6 <= '0;        // SETNR, установка НР
-        22: rrr_besm6 <= '1;        // SETER, установка РЭ
+        20: mode_besm6 <= '0;       // SETNR, установка НР
+        22: mode_besm6 <= '1;       // SETER, установка РЭ
         endcase
 
 // Остальные биты тега командного слова
-always @(posedge clk)
-    if (rrr_update) begin
-        rrr_cmd     <= bus_oDC[64]; // ПК - признак команд TODO
-        rrr_noload  <= bus_oDC[66]; // ЗЧП - запрет чтения операнда из памяти TODO
-        rrr_nostore <= bus_oDC[67]; // ЗЗП - запрет записи операнда в память TODO
-        rrr_nofetch <= bus_oDC[68]; // ЗВП - запрет выборки команды из памяти TODO
-        rrr_nojump  <= bus_oDC[69]; // ЗПУ - запрет передачи управления на команду TODO
-        rrr_pint    <= bus_oDC[71]; // ПИНТ - программная интерпретация тега TODO
-    end
+assign itag_cmd     = bus_itag[0]; // ПК - признак команд
+assign itag_nofetch = bus_itag[4]; // ЗВП - запрет выборки команды из памяти
+assign itag_nojump  = bus_itag[5]; // ЗПУ - запрет передачи управления на команду
+assign itag_pint    = bus_itag[7]; // ПИНТ - программная интерпретация тега
 
-// Extended mode register
-assign rrr = {      // расширение регистра режимов (РРР)
-    rrr_cmd,        // ПК - признак команд
-    rrr_besm6,      // РЭ - режим эмуляции БЭСМ-6
-    rrr_noload,     // ЗЧП - запрет чтения операнда из памяти
-    rrr_nostore,    // ЗЗП - запрет записи операнда в память
-    rrr_nofetch,    // ЗВП - запрет выборки команды из памяти
-    rrr_nojump,     // ЗПУ - запрет передачи управления на команду
-    rrr_unused,
-    rrr_pint        // ПИНТ - программная интерпретация тега
-};
+// Биты тега операнда, извлечённого из памяти
+assign dtag_noload  = bus_dtag[2]; // ЗЧП - запрет чтения операнда из памяти
+assign dtag_nostore = bus_dtag[3]; // ЗЗП - запрет записи операнда в память
+assign dtag_pint    = bus_dtag[7]; // ПИНТ - программная интерпретация тега
 
 //--------------------------------------------------------------
 // Триггеры признаков
@@ -674,12 +662,12 @@ always @(posedge clk)
     17: timer_int <= '0;    // CLRCTT, сброс прерывания от таймера счетного времени
     18: tkk <= '0;          // CLRTKK, сброс триггера коммутации команд - ТКК (ППК стандартизатора)
     19: tkk <= '1;          // SЕТТКК, установка ТКК
-    20: /*rrr_besm6 <= 0*/; // SETNR, установка НР
+    20: /*mode_besm6 <= 0*/; // SETNR, установка НР
     21: begin               // STRTLD, запуск загрузки памяти БМСП единицами
             pg_fill <= '1;
             pg_fcnt <= pg_index;
         end
-    22: /*rrr_besm6 <= 1*/; // SETER, установка РЭ
+    22: /*mode_besm6 <= 1*/; // SETER, установка РЭ
     23: tkk <= ~tkk;        // СНТКК, переброс ТКК (работает в счетном режиме!)
     24: halt <= '1;         // SETHLT, установка триггера "Останов" (Halt)
     25: g_int <= '0;        // CLRINT, сброс прерываний (кроме прерываний от таймеров)
@@ -748,8 +736,8 @@ end
 
 // Virtual page index
 wire [9:0] pg_virt =
-    rrr_besm6 ? vaddr[14:10] :  // 15 bits in besm6 mode
-                vaddr[19:10];   // 20 bits in normal mode
+    mode_besm6 ? vaddr[14:10] : // 15 bits in besm6 mode
+                 vaddr[19:10];  // 20 bits in normal mode
 
 // Translate virtual page into physical page index
 wire [9:0] pg_translated =
@@ -810,8 +798,11 @@ const logic [11:0] intrtab[32] = '{
 };
 //TODO: jump to intr_addr on g_int & ISE
 
-always @(posedge clk)
-    if (rrr_pint & !no_progtag)     // ПИНТ & !БПИНТ - программная интерпретация тега
-        g_int <= '1;
+always @(posedge clk) begin
+    if (!no_progtag &
+        ((tag_fetch & itag_pint) |
+         (tag_load & dtag_pint)))
+        g_int <= '1;                // ПИНТ & !БПИНТ - программная интерпретация тега
+end
 
 endmodule

@@ -335,13 +335,13 @@ task print_insn();
     logic besm6_mode;
     string name;
 
-    assign besm6_mode = cpu.rrr_besm6;
+    assign besm6_mode = cpu.mode_besm6;
     assign pc = {
         cpu.alu.p19_16.ram[3], cpu.alu.p15_12.ram[3],
         cpu.alu.p11_8.ram[3],  cpu.alu.p7_4.ram[3],
         cpu.alu.p3_0.ram[3] };
     assign opcode =
-        cpu.tkk ? cpu.bus_oDC[31:0] : cpu.bus_oDC[63:32];
+        cpu.tkk ? cpu.bus_iword[31:0] : cpu.bus_iword[63:32];
 
     $fwrite(fd, "(%0d) %h %h: %h", ctime, pc, testbench.fetch_paddr, opcode);
     if ($isunknown(cpu.instr_reg)) begin
@@ -886,7 +886,6 @@ task print_changed_cpu(
     static logic [31:0] old_vaddr;
     static logic [10:0] old_pshift;
     static logic [31:0] old_rr;
-    static logic  [7:0] old_rrr;
     static logic [31:0] old_mrmem[1024];
     static logic  [7:0] old_mpmem[16];
     static logic [19:0] old_pgmap[1024];
@@ -905,13 +904,12 @@ task print_changed_cpu(
     automatic logic [31:0] vaddr  = cpu.vaddr;
     automatic logic [10:0] pshift = cpu.pshift;
     automatic logic [31:0] rr     = cpu.rr;
-    automatic logic  [7:0] rrr    = cpu.rrr;
     automatic logic        stopm0 = cpu.stopm0;
     automatic logic        stopm1 = cpu.stopm1;
     automatic logic        halt   = cpu.halt;
     automatic logic        run    = cpu.run;
     automatic logic        tkk    = cpu.tkk;
-    automatic logic        besm6  = cpu.rrr_besm6;
+    automatic logic        besm6  = cpu.mode_besm6;
     automatic logic        csm    = opcode[30];
     automatic logic        wem    = opcode[29];
     automatic logic  [2:0] ydev   = opcode[20:18];
@@ -946,7 +944,6 @@ task print_changed_cpu(
                                                                                                             old_arbopc = arbopc; end
     if (vaddr  !== old_vaddr)  begin $fdisplay(fd, "(%0d)               Write VADDR = %h",  ctime, vaddr);  old_vaddr  = vaddr;  end
     if (rr     !== old_rr)     begin $fdisplay(fd, "(%0d)               Write RR = %h",     ctime, rr);     old_rr     = rr;     end
-    if (rrr    !== old_rrr)    begin $fdisplay(fd, "(%0d)               Write RRR = %h",    ctime, rrr);    old_rrr    = rrr;    end
     if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d)               Write PSHIFT = %h", ctime, pshift); old_pshift = pshift; end
 
     //
@@ -1094,7 +1091,7 @@ task print_changed_regs(
     automatic logic [31:0] rr     = cpu.rr;
     automatic logic        csm    = opcode[30];
     automatic logic        wem    = opcode[29];
-    automatic logic        besm6  = cpu.rrr_besm6;
+    automatic logic        besm6  = cpu.mode_besm6;
 
     assign r0 = { cpu.alu.p63_60.ram[0], cpu.alu.p59_56.ram[0], cpu.alu.p55_52.ram[0], cpu.alu.p51_48.ram[0],
                   cpu.alu.p47_44.ram[0], cpu.alu.p43_40.ram[0], cpu.alu.p39_36.ram[0], cpu.alu.p35_32.ram[0],
