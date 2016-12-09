@@ -886,6 +886,7 @@ task print_changed_cpu(
     static logic [31:0] old_vaddr;
     static logic [10:0] old_pshift;
     static logic [31:0] old_rr;
+    static logic  [7:0] old_rrr;
     static logic [31:0] old_mrmem[1024];
     static logic  [7:0] old_mpmem[16];
     static logic [19:0] old_pgmap[1024];
@@ -904,6 +905,7 @@ task print_changed_cpu(
     automatic logic [31:0] vaddr  = cpu.vaddr;
     automatic logic [10:0] pshift = cpu.pshift;
     automatic logic [31:0] rr     = cpu.rr;
+    automatic logic  [7:0] rrr    = cpu.rrr;
     automatic logic        stopm0 = cpu.stopm0;
     automatic logic        stopm1 = cpu.stopm1;
     automatic logic        halt   = cpu.halt;
@@ -926,14 +928,6 @@ task print_changed_cpu(
     //
     // Internal registers
     //
-    if (modgn  !== old_modgn)  begin $fdisplay(fd, "(%0d)               Write MODGN = %h",  ctime, modgn);  old_modgn  = modgn;  end
-    if (procn  !== old_procn)  begin $fdisplay(fd, "(%0d)               Write PROCN = %h",  ctime, procn);  old_procn  = procn;  end
-    if (physpg !== old_physpg) begin $fdisplay(fd, "(%0d)               Write PHYSPG = %h", ctime, physpg); old_physpg = physpg; end
-    if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d)               Write ARBOPC = %h (%0s)", ctime, arbopc, arbopc_name[arbopc]);
-                                                                                                            old_arbopc = arbopc; end
-    if (vaddr  !== old_vaddr)  begin $fdisplay(fd, "(%0d)               Write VADDR = %h",  ctime, vaddr);  old_vaddr  = vaddr;  end
-    if (rr     !== old_rr)     begin $fdisplay(fd, "(%0d)               Write RR = %h",     ctime, rr);     old_rr     = rr;     end
-    if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d)               Write PSHIFT = %h", ctime, pshift); old_pshift = pshift; end
     if (stopm0 !== old_stopm0) begin $fdisplay(fd, "(%0d)               Write STOPM0 = %h", ctime, stopm0); old_stopm0 = stopm0; end
     if (stopm1 !== old_stopm1) begin $fdisplay(fd, "(%1d)               Write STOPM1 = %h", ctime, stopm1); old_stopm1 = stopm1; end
     if (run    !== old_run)    begin $fdisplay(fd, "(%1d)               Write RUN = %h",    ctime, run);    old_run    = run;    end
@@ -945,6 +939,15 @@ task print_changed_cpu(
     if (extint !== old_extint) begin $fdisplay(fd, "(%1d)               Write EXTINT = %h", ctime, extint); old_extint = extint; end
     if (clkint !== old_clkint) begin $fdisplay(fd, "(%1d)               Write CT = %h",     ctime, clkint); old_clkint = clkint; end
     if (tint   !== old_tint)   begin $fdisplay(fd, "(%1d)               Write CTT = %h",    ctime, tint);   old_tint   = tint;   end
+    if (modgn  !== old_modgn)  begin $fdisplay(fd, "(%0d)               Write MODGN = %h",  ctime, modgn);  old_modgn  = modgn;  end
+    if (procn  !== old_procn)  begin $fdisplay(fd, "(%0d)               Write PROCN = %h",  ctime, procn);  old_procn  = procn;  end
+    if (physpg !== old_physpg) begin $fdisplay(fd, "(%0d)               Write PHYSPG = %h", ctime, physpg); old_physpg = physpg; end
+    if (arbopc !== old_arbopc) begin $fdisplay(fd, "(%0d)               Write ARBOPC = %h (%0s)", ctime, arbopc, arbopc_name[arbopc]);
+                                                                                                            old_arbopc = arbopc; end
+    if (vaddr  !== old_vaddr)  begin $fdisplay(fd, "(%0d)               Write VADDR = %h",  ctime, vaddr);  old_vaddr  = vaddr;  end
+    if (rr     !== old_rr)     begin $fdisplay(fd, "(%0d)               Write RR = %h",     ctime, rr);     old_rr     = rr;     end
+    if (rrr    !== old_rrr)    begin $fdisplay(fd, "(%0d)               Write RRR = %h",    ctime, rrr);    old_rrr    = rrr;    end
+    if (pshift !== old_pshift) begin $fdisplay(fd, "(%0d)               Write PSHIFT = %h", ctime, pshift); old_pshift = pshift; end
 
     //
     // Index-registers
