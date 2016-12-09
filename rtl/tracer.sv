@@ -47,9 +47,10 @@ assign fd = testbench.tracefd;
 //
 // Last fetch address
 //
-logic [11:0] pc_f;                      // PC at fetch stage
-logic [11:0] pc_x;                      // PC at execute stage
+logic  [11:0] pc_f;                     // PC at fetch stage
+logic  [11:0] pc_x;                     // PC at execute stage
 logic [112:1] opcode_x;                 // Opcode at execute stage
+logic         int_flag_x;               // Interrupt flag
 
 //
 // Current time
@@ -86,7 +87,7 @@ timeval_t t0;                           // Start time of simulation
 // Get time at the rising edge of the clock.
 always @(posedge clk) begin
     ctime = $time;
-    pc_f = cpu.control_Y;
+    pc_f = cpu.opaddr;
 end
 
 // At negative clock edge, when all the signals are quiet,
@@ -147,9 +148,14 @@ always @(negedge clk) begin
             print_changed_bb1();
         end
 
+        if (int_flag_x) begin
+            $fdisplay(fd, "(%0d) *** Interrupt", ctime);
+        end
+
         // Get data from fetch stage
         pc_x = pc_f;
         opcode_x = cpu.opcode;
+        int_flag_x = cpu.int_flag;
         const_value = cpu.PROM;
         const_addr = cpu.A[8:0];
 

@@ -70,6 +70,7 @@ logic [63:0] Y;
 logic stopm0, stopm1;           // Флаги останова
 
 // Interrupts
+logic int_flag;                 // Take interrupt immediately
 logic g_int;                    // Глобальный признак наличия прерываний
 logic prg_int;                  // Генерация программного прерывания TODO
 logic ext_int;                  // Генерация внешнего прерывания TODO
@@ -157,15 +158,14 @@ logic [111:0] memory[4096] = '{
     default: '0
 };
 
+logic  [11:0] opaddr;           // opcode address
 logic [112:1] opcode;           // 112-bit latched opcode
 
 always @(posedge clk)
-    if (reset) begin
+    if (reset)
         opcode <= '0;           // Reset state
-        halt <= 0;              // триггер "Останов"
-        run <= 1;               // триггер "Пуск"
-    end else
-        opcode <= memory[control_Y];
+    else
+        opcode <= memory[opaddr];
 
 // Microinstruction fields.
 wire  [3:0] SQI   = opcode[112:109]; // Код операции селектора адреса микропрограмм СУАМ
@@ -245,7 +245,10 @@ am2910 control(clk,
 
 // Carry-in bit for microprogram counter
 // Ignore ICI, as if always enabled
-assign control_CI = !SCI ? '1 : ~control_nCC;
+assign control_CI =
+    int_flag ? '0 :             // Interrupt: no address increment
+        !SCI ? '1 :             // Increment by 1
+               ~control_nCC;    // Conditional
 
 // 12-bit data input
 assign control_D =
@@ -663,15 +666,12 @@ always @(posedge clk)
     18: tkk <= '0;          // CLRTKK, сброс триггера коммутации команд - ТКК (ППК стандартизатора)
     19: tkk <= '1;          // SЕТТКК, установка ТКК
     20: /*mode_besm6 <= 0*/; // SETNR, установка НР
-    21: begin               // STRTLD, запуск загрузки памяти БМСП единицами
-            pg_fill <= '1;
-            pg_fcnt <= pg_index;
-        end
+    21: pg_fcnt <= pg_index; // STRTLD, запуск загрузки памяти БМСП единицами
     22: /*mode_besm6 <= 1*/; // SETER, установка РЭ
     23: tkk <= ~tkk;        // СНТКК, переброс ТКК (работает в счетном режиме!)
-    24: halt <= '1;         // SETHLT, установка триггера "Останов" (Halt)
+    24: /*halt <= '1*/;     // SETHLT, установка триггера "Останов" (Halt)
     25: g_int <= '0;        // CLRINT, сброс прерываний (кроме прерываний от таймеров)
-    26: run <= '0;          // CLRRUN, сброс триггера "Пуск"
+    26: /*run <= '0*/;      // CLRRUN, сброс триггера "Пуск"
     27: rx_busy <= '0;      // RDMPCP, установка признака "память обмена ПП -> ЦП прочитана"
     28: rx_busy <= '1;      // LDMPCP, установка признака "в памяти обмена ПП -> ЦП есть информация"
     29: tx_busy <= '1;      // LDCPMP, установка признака "в памяти обмена ЦП -> ПП есть информация"
@@ -679,12 +679,26 @@ always @(posedge clk)
     31: ext_int <= '1;      // EXTINT, установка внешнего прерывания на магистраль
     endcase
 
+// Триггер "Останов"
+always @(posedge clk)
+    if (reset)
+        halt <= '0;
+    else if (!IOMP && FFCNT == 24)  // ffcnt=SETHLT
+        halt <= '1;                 // установка триггера "Останов" (Halt)
+
+// Триггер "Пуск"
+always @(posedge clk)
+    if (reset)
+        run <= '1;
+    else if (!IOMP && FFCNT == 26)  // ffcnt=CLRRUN
+        run <= '0;                  // сброс триггера "Пуск"
+
 // Признак изменения адресом (ПИА) устанавливается и сбрасывается разными путями
 always @(posedge clk)
-    if (DDEV == 3)          // ddev=CLRCD
-        cb <= '0;           // сброс ПИА, дополнительный сигнал
+    if (DDEV == 3)                  // ddev=CLRCD
+        cb <= '0;                   // сброс ПИА, дополнительный сигнал
     else if (!IOMP & FFCNT == 5)    // ffcnt=SЕТС
-        cb <= '1;           // установка триггера ПИА
+        cb <= '1;                   // установка триггера ПИА
 
 // ППК, признак правой команды
 always @(posedge clk)
@@ -709,11 +723,13 @@ assign pg_access = { pg_dirty[pg_index], pg_used[pg_index], 1'b0 };
 // БМСП, бит модификации списка приоритетов
 always @(posedge clk)
     if (reset)
-        pg_fill <= 0;
-    else if (pg_fill) begin     // Заполнение памяти БМСП единицами
+        pg_fill <= '0;
+    else if (!IOMP && FFCNT == 21)  // ffcnt=STRTLD
+        pg_fill <= '1;              // запуск загрузки памяти БМСП единицами
+    else if (pg_fill) begin         // заполнение памяти БМСП единицами
         pg_reprio[pg_fcnt] <= 1;
         if (pg_fcnt[9:0] == 1023)
-            pg_fill <= 0;
+            pg_fill <= '0;
         else;
             pg_fcnt <= pg_fcnt + 1;
         pg_changed <= 1;
@@ -768,6 +784,8 @@ always @(posedge clk)
     end else if (YDST == 4)
         pg_index <= Y[19:10];       // PHYSPG, регистр физической страницы
 
+//TODO: rewrite pg_dirty, pg_changed and pg_used as single always block
+
 //--------------------------------------------------------------
 // RWIO table
 //
@@ -796,7 +814,15 @@ const logic [11:0] intrtab[32] = '{
     `include "../microcode/intrtab.v"
     default: '0
 };
-//TODO: jump to intr_addr on g_int & ISE
+
+assign int_flag = (g_int & ISE & !no_intr);
+
+// On interrupt, jump to address 001
+assign opaddr =
+    int_flag ? 'h001                // Interrupt
+             : control_Y;           // Regular execution
+
+//TODO: control_nVECT -> control_D=intr_addr
 
 always @(posedge clk) begin
     if (!no_progtag &
