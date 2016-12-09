@@ -147,8 +147,9 @@ assign nG = !(temp_g[3] ||
 assign F3 = result[3];
 assign F30 = (result[3:0] == 'b0000);
 
-// TODO: For logical functions, C4 output is a bit more complicated than that.
+// For logical functions, C4 output is a bit more complicated than that.
 // See Figure 9 in Am2901B/Am2901C datasheet.
+// We don't need it for micro-BESM though.
 assign C4 = result[4];
 
 //-----------------------------------------------------------------------

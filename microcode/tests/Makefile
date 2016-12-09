@@ -27,7 +27,7 @@ memtest.v:      MEM.json INOUT.json
 		mv microcode.v $@
 
 intrtest.v:     INTRPT.json INOUT.json
-		$(MCLINK) -pINTRPT INTRPT.json CTTWR.json INOUT.json
+		$(MCLINK) -pINTRPT INTRPT.json CTTWR.json INOUT.json RINT.json
 		mv microcode.v $@
 
 INI.json:       initest.src define.json

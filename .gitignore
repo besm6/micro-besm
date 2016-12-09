@@ -20,8 +20,8 @@ tests/*/vcs/simv.daidir/
 tests/*/vcs/ucli.key
 microcode/*.json
 microcode/*.lst
-tests/microcode/*.json
-tests/microcode/*.lst
+microcode/tests/*.json
+microcode/tests/*.lst
 toolchain/as/as
 toolchain/as/dis
 toolchain/ld/ld
