@@ -111,6 +111,8 @@ logic [1:0] rr_unused;
 // Биты расширения регистра режимов (РРР)
 logic itag_cmd;                 // ПК - признак команд TODO
 logic mode_besm6;               // РЭ - режим эмуляции БЭСМ-6
+logic itag_besm6;               // режим совместимости команды
+logic dtag_besm6;               // режим совместимости операнда
 logic dtag_noload;              // ЗЧП - запрет чтения операнда из памяти TODO
 logic dtag_nostore;             // ЗЗП - запрет записи операнда в память TODO
 logic itag_nofetch;             // ЗВП - запрет выборки команды из памяти TODO
@@ -642,11 +644,13 @@ always @(posedge clk)
 
 // Остальные биты тега командного слова
 assign itag_cmd     = bus_itag[0]; // ПК - признак команд
+assign itag_besm6   = bus_itag[1]; // режим совместимости команды
 assign itag_nofetch = bus_itag[4]; // ЗВП - запрет выборки команды из памяти
 assign itag_nojump  = bus_itag[5]; // ЗПУ - запрет передачи управления на команду
 assign itag_pint    = bus_itag[7]; // ПИНТ - программная интерпретация тега
 
 // Биты тега операнда, извлечённого из памяти
+assign dtag_besm6   = bus_dtag[1]; // режим совместимости операнда
 assign dtag_noload  = bus_dtag[2]; // ЗЧП - запрет чтения операнда из памяти
 assign dtag_nostore = bus_dtag[3]; // ЗЗП - запрет записи операнда в память
 assign dtag_pint    = bus_dtag[7]; // ПИНТ - программная интерпретация тега
@@ -856,15 +860,21 @@ always @(posedge clk) begin
         int_vect <= 10;
     end
 
+    // 11 - защита адреса при чтении
+    else if (tag_load & dtag_noload & !no_rtag) begin
+        g_int <= '1;                // ЗЧП (при БПТЧ=0) при чтении из памяти
+        int_vect <= 11;
+    end
+
     // 21 - чужой сумматор
-    else if (tag_fetch & bus_itag[1] != acc_besm6 & !no_badacc) begin
+    else if (tag_fetch & (itag_besm6 != acc_besm6) & !no_badacc) begin
         g_int <= '1;                // несовпадение РЭ с тегом сумматора (при БЧС=0)
         int_vect <= 21;
     end
 
     // 22 - чужой операнд
-    else if (tag_load & bus_dtag[1] != acc_besm6 & !no_badop) begin
-        g_int <= '1;                // несовпадение РЭ с тегом сумматора (при БЧОП=0)
+    else if (tag_load & (dtag_besm6 != acc_besm6) & !no_badop) begin
+        g_int <= '1;                // несовпадение РЭ с тегом операнда (при БЧОП=0)
         int_vect <= 22;
     end
 
@@ -873,7 +883,6 @@ always @(posedge clk) begin
     // 6 - отсутствующий адрес памяти в новом режиме
     // 7 - отрицательный номер страницы у команды
     // 8 - отрицательный номер страницы у операнда
-    // 11 - защита адреса при чтении
     // 12 - контроль команды
     // 13 - математический адрес равен 0
     // 14 - чужой регистр приписки при чтении/записи операнда
