@@ -31,6 +31,7 @@ module tmemory(
     input  wire         i_atomic,       // r-m-w transaction
     input  wire         i_rd,           // read op
     input  wire         i_wr,           // write op
+    input  wire         i_wforce,       // ignore write protection TODO
     output logic [63:0] o_data,         // data bus input
     output logic  [7:0] o_tag           // tag output
 );
@@ -41,12 +42,48 @@ logic  [7:0] tag[1024*1024];            // tags
 logic [19:0] waddr;                     // latched word address
 logic [19:0] laddr;                     // last r/w address
 
+function [7:0] get_tag(input [19:0] addr);
+    case (addr)
+    'hfffff: return 0;                  // read Hamming syndrome
+    'hffffe: return 0;                  // read address latch
+    'hffffd: return 0;                  // error correction mode
+    default: return tag[addr];          // memory load
+    endcase
+endfunction
+
 always @(posedge clk) begin
     if (i_astb) begin
+        //
+        // Address latch.
+        //
         laddr = waddr;                  // remember address of last r/w
         waddr = i_ad[19:0];             // address latch
+        o_tag = get_tag(waddr);         // update tag early, for write protection
 
-    end else if (i_wr) begin
+    end else if (i_rd) begin
+        //
+        // Memory load.
+        //
+        case (waddr)
+        'hfffff: o_data = 0;            // read Hamming syndrome
+        'hffffe: o_data = laddr;        // read address latch
+        'hffffd: o_data = 0;            // error correction mode
+        default: begin                  // memory load
+                o_data = mem[waddr];
+
+                o_tag = get_tag(waddr);
+
+                if (! i_atomic)
+                    waddr = waddr + 1;  // increment address for batch mode
+            end
+        endcase
+
+    end else if (i_wr & (i_wforce | !o_tag[3])) begin
+        //
+        // Memory store.
+        // Tag bit 3 protects the word from write.
+        // Signal i_wforce overrides the protection.
+        //
         if (i_atomic)                   // read-modify-write, set bit 55
             mem[waddr] = {i_ad[63:56], 1'b1, i_ad[54:0]};
         else
@@ -54,30 +91,10 @@ always @(posedge clk) begin
 
         tag[waddr] = i_tag;
 
-        if (! i_atomic)
+        if (! i_atomic) begin
             waddr = waddr + 1;          // increment address for batch mode
-
-    end else if (i_rd) begin
-        case (waddr)
-        'hfffff: begin                  // read Hamming syndrome
-                o_data = 0;
-                o_tag = 0;
-            end
-        'hffffe: begin                  // read address latch
-                o_data = laddr;
-                o_tag = 0;
-            end
-        'hffffd: begin                  // error correction mode
-                o_data = 0;
-                o_tag = 0;
-            end
-        default: begin                  // memory load
-                o_data = mem[waddr];
-                o_tag = tag[waddr];
-                if (! i_atomic)
-                    waddr = waddr + 1;  // increment address for batch mode
-            end
-        endcase
+            o_tag = get_tag(waddr);     // get next tag, for write protection
+        end
     end
 end
 

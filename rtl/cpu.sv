@@ -24,8 +24,8 @@
 `default_nettype none
 
 module cpu(
-    input  wire         clk,        // Clock
-    input  wire         reset,      // Global reset
+    input  wire         clk,        // clock
+    input  wire         reset,      // global reset
     input  wire  [63:0] i_data,     // data bus input
     input  wire   [7:0] i_tag,      // tag bus input
     output logic [63:0] o_ad,       // address/data output
@@ -33,7 +33,8 @@ module cpu(
     output logic        o_astb,     // address strobe
     output logic        o_atomic,   // r-m-w transaction
     output logic        o_rd,       // read op
-    output logic        o_wr        // write op
+    output logic        o_wr,       // write op
+    output logic        o_wforce    // ignore write protection bit
 );
 timeunit 1ns / 10ps;
 
@@ -104,7 +105,7 @@ logic cond;
 logic [2:0] grp;
 logic normb, rndb, ovrib, bnb, ovrftb, drg, rcb, cb, cemlrg, intstp, tr0, tr1;
 logic flag_v, flag_c, flag_n, flag_z, no_badop;
-logic no_rtag, no_badacc, no_progtag, no_intr, no_wtag, single_step, no_wprot;
+logic no_rtag, no_badacc, no_progtag, no_intr, single_step, no_wprot;
 logic no_rprot, flag_negaddr, no_procnm, no_paging, flag_jump;
 logic [1:0] rr_unused;
 
@@ -560,7 +561,7 @@ assign rr = {       // регистр режимов (РР)
     intstp,         // РР.21 - признак останова по прерыванию (ПОП)
     single_step,    // РР.20 - режим пошагового выполнения команд (РШ)
     cemlrg,         // РР.19 - CEMLRG, РЭС, 20-й разряд PP (резерв)
-    no_wtag,        // РР.18 - блокировка проверки тега при записи (БПТЗ)
+    o_wforce,       // РР.18 - блокировка проверки тега при записи (БПТЗ)
     no_intr,        // РР.17 - блокировка внешних прерываний (БВП)
     no_progtag,     // РР.16 - блокировка программной интерпретации тега (БПИНТ)
     no_badacc,      // РР.15 - блокировка реакции на чужой сумматор (БЧС)
@@ -592,7 +593,7 @@ always @(posedge clk)
         intstp       <= Y[21];
         single_step  <= Y[20];
         cemlrg       <= Y[19];
-        no_wtag      <= Y[18];
+        o_wforce     <= Y[18];
         no_intr      <= Y[17];
         no_progtag   <= Y[16];
         no_badacc    <= Y[15];
@@ -839,7 +840,7 @@ assign opaddr =
     int_flag ? 'h001                // Interrupt
              : control_Y;           // Regular execution
 
-// Set interrupt flag
+// Set interrupt flag and vector
 always @(posedge clk) begin
     // Этих прерываний не бывает:
     // 0 - отсутствующий блок памяти
@@ -884,6 +885,12 @@ always @(posedge clk) begin
         int_vect <= 19;
     end
 
+    // 20 - защита адреса при записи
+    else if (o_wr & i_tag[3] & !o_wforce) begin
+        g_int <= '1;                // ЗЗП (при БПТЗ=0) при записи в память
+        int_vect <= 20;
+    end
+
     // 21 - чужой сумматор
     else if (tag_fetch & (itag_besm6 != acc_besm6) & !no_badacc) begin
         g_int <= '1;                // несовпадение РЭ с тегом сумматора (при БЧС=0)
@@ -906,7 +913,6 @@ always @(posedge clk) begin
     // 15 - чужой регистр приписки при выборке команд
     // 16 - защита страницы при обращении
     // 17 - защита страницы при записи
-    // 20 - защита адреса при записи
     // 23 - запрос модификации приоритетов страниц
     // 24 - останов при совпадении адресов по запросу ПП
     // 25 - “time-out” при блокировке внешних прерываний
