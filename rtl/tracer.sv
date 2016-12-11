@@ -163,9 +163,16 @@ always @(negedge clk) begin
     end
 
     if (!reset && $isunknown(cpu.opcode)) begin
-        $display("(%0d) Unknown state: cpu.opcode=%h", ctime, cpu.opcode);
+        $display("(%0d) Unknown instruction: cpu.opcode=%h", ctime, cpu.opcode);
         if (fd)
-            $fdisplay(fd, "(%0d) *** Unknown state: cpu.opcode=%h", ctime, cpu.opcode);
+            $fdisplay(fd, "(%0d) *** Unknown instruction: cpu.opcode=%h", ctime, cpu.opcode);
+        terminate("Fatal Error!");
+    end
+
+    if (cpu.o_astb && $isunknown(cpu.o_ad)) begin
+        $display("(%0d) Unknown physical address: cpu.o_ad=%h", ctime, cpu.o_ad);
+        if (fd)
+            $fdisplay(fd, "(%0d) *** Unknown physical address: cpu.o_ad=%h", ctime, cpu.o_ad);
         terminate("Fatal Error!");
     end
 

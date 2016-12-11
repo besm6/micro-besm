@@ -11,8 +11,8 @@ timeunit 1ns / 10ps;
 
 // Inputs.
 logic        clk, reset;
-logic [63:0] i_data;
-logic  [7:0] i_tag;
+wire  [63:0] i_data = '0;
+wire   [7:0] i_tag = '0;
 
 // Outputs.
 logic [63:0] o_ad;                      // address/data output
@@ -24,12 +24,11 @@ logic        o_wr;                      // write op
 logic        o_wforce;                  // ignore write protection
 
 // Instantiate CPU.
-cpu cpu(clk, reset, i_data, i_tag,
+cpu cpu(clk, reset, '0, '0,
     o_ad, o_tag, o_astb, o_atomic, o_rd, o_wr, o_wforce);
 
 // Setup trace moninor.
 tracer tr();
-logic [19:0] fetch_paddr, mem_paddr, mem_vaddr; // needed for tracer
 
 //--------------------------------------------------------------
 // Microinstruction ROM.
@@ -91,6 +90,22 @@ initial begin
     tr.start();
     #limit tr.terminate("Time Limit Exceeded");
 end
+
+//
+// Latch phys addresses for tracer
+//
+logic [19:0] fetch_paddr;               // physical address of last fetch
+logic [19:0] mem_paddr;                 // physical address of last load/store
+logic [19:0] mem_vaddr;                 // virtual address of last load/store
+
+always @(posedge clk)
+    if (o_astb)
+        if (cpu.arb_opc == 8)
+            fetch_paddr = o_ad[19:0];
+        else
+            mem_paddr = o_ad[19:0];
+
+assign mem_vaddr = cpu.vaddr[19:0];
 
 //
 // Print a message to stdout and trace file
