@@ -136,21 +136,21 @@ always @(posedge clk)   // rising edge sensitive
         end
     end
 
-always @(clk)           // both edges sensitive!
+always @(negedge clk)   // falling edge sensitive!
     if (en1)
         RG[1] <= {4{!outA & !nWA & selA1}} & ~nDA |
                  {4{!outB & !nWB & selB1}} & ~nDB |
                  {4{!outC & !nWC & selC1}} & ~nDC |
                  {4{!outX & !nWX & selX1}} & ~nDX;
 
-always @(clk)           // both edges sensitive!
+always @(negedge clk)   // falling edge sensitive!
     if (en2)
         RG[2] <= {4{!outA & !nWA & selA2}} & ~nDA |
                  {4{!outB & !nWB & selB2}} & ~nDB |
                  {4{!outC & !nWC & selC2}} & ~nDC |
                  {4{!outX & !nWX & selX2}} & ~nDX;
 
-always @(clk)           // both edges sensitive!
+always @(negedge clk)   // falling edge sensitive!
     if (en3)
         RG[3] <= {4{!outA & !nWA & selA3}} & ~nDA |
                  {4{!outB & !nWB & selB3}} & ~nDB |
