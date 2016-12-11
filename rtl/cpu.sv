@@ -129,7 +129,8 @@ logic acc_besm6;                // тег РЭ сумматора
 // Signals for arbiter
 logic  [3:0] arb_opc;           // код операции арбитра
 logic        arb_req;           // запрос к арбитру
-logic        arb_rdy;           // ответ арбитра
+logic        arb_suspend;       // блокировка арбитра
+logic        arb_ready;         // ответ арбитра
 
 // External bus interface
 logic [63:0] bus_DA;            // A data input
@@ -288,7 +289,7 @@ always_comb case (COND)
      16: cond = run;        // RUN, "пуск" от ПП
      19: cond = g_int;      // INT, признак наличия прерываний
      20: cond = ~pg_fill;   // FULMEM, память БМСП заполнена единицами
-     21: cond = arb_rdy;    // ARBRDY, готовность арбитра
+     21: cond = arb_ready;  // ARBRDY, готовность арбитра
      22: cond = tr0;        // TR0, След0
      23: cond = ~tx_busy;   // CPMP, память обмена "ЦП -> ПП" свободна
 default: cond = 1;
@@ -507,12 +508,19 @@ extbus busio(
 //
 arbiter arb(clk, reset,
     arb_req,                        // input request strobe
+    arb_suspend,                    // input suspend condition
     arb_req ? ARBI : arb_opc,       // input opcode
     bus_ARX, bus_ECX, bus_WRX,      // X bus control
     o_astb, o_atomic, o_rd, o_wr,   // external memory interface
-    arb_rdy                         // resulting status
+    arb_ready                       // resulting status
 );
 assign arb_req = (YDEV == 2);       // PHYSAD, request to external bus
+
+// Запуск арбитра блокируется в трёх случаях:
+assign arb_suspend =
+    (vaddr == 0);                   // виртуальный адрес равен 0
+                                    // чужой РП при чтении/записи операнда TODO
+                                    // отсутствующий адрес памяти в новом режиме TODO
 
 always @(posedge clk)
     if (arb_req)
@@ -873,6 +881,12 @@ always @(posedge clk) begin
         int_vect <= 12;
     end
 
+    // 13 - математический адрес равен 0
+    else if (arb_req & (vaddr == 0)) begin
+        g_int <= '1;                // АИСП=0 при обращении в память
+        int_vect <= 13;
+    end
+
     // 18 - защита выборки команды
     else if (tag_fetch & itag_nofetch) begin
         g_int <= '1;                // ЗВП при выборке команды
@@ -908,7 +922,6 @@ always @(posedge clk) begin
     // 6 - отсутствующий адрес памяти в новом режиме
     // 7 - отрицательный номер страницы у команды
     // 8 - отрицательный номер страницы у операнда
-    // 13 - математический адрес равен 0
     // 14 - чужой регистр приписки при чтении/записи операнда
     // 15 - чужой регистр приписки при выборке команд
     // 16 - защита страницы при обращении

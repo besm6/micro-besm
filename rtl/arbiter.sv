@@ -27,6 +27,7 @@ module arbiter(
     input  wire        clk,
     input  wire        reset,
     input  wire        request, // input request
+    input  wire        suspend, // input suspend condition
     input  wire  [3:0] req_op,  // input op
 
     output logic [1:0] arx,     // busio register index
@@ -60,14 +61,14 @@ always_ff @(posedge clk)
         step <= 0;
     else if (request)
         step <= 0;
-    else if (!done & step != MAXSTATE)
+    else if (!done & !suspend & step != MAXSTATE)
         step <= step + 1;
 
 //
 // Latched opcode
 //
 always_ff @(posedge clk)
-    if (reset)
+    if (reset | suspend)
         opcode <= 0;
     else if (request)
         opcode <= req_op;
@@ -96,7 +97,7 @@ always_comb begin
     // Initial state
     {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
 
-    if (! request) begin
+    if (!request & !suspend) begin
         case (opcode)
 
          0: // Idle
