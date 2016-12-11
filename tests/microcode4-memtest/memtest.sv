@@ -21,17 +21,18 @@ logic        o_astb;                    // address strobe
 logic        o_atomic;                  // read-modify-write flag
 logic        o_rd;                      // read op
 logic        o_wr;                      // write op
+logic        o_wforce;                  // ignore write protection
 
 // Instantiate CPU.
 cpu cpu(clk, reset, i_data, i_tag,
-    o_ad, o_tag, o_astb, o_atomic, o_rd, o_wr);
+    o_ad, o_tag, o_astb, o_atomic, o_rd, o_wr, o_wforce);
 
 // Setup trace moninor.
 tracer tr();
 
 // 1Mword x 64bit of tagged RAM.
 tmemory ram(clk, o_ad, o_tag,
-    o_astb, o_atomic, o_rd, o_wr,
+    o_astb, o_atomic, o_rd, o_wr, o_wforce,
     i_data, i_tag);
 
 //--------------------------------------------------------------

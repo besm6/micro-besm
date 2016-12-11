@@ -580,7 +580,7 @@ assign rr = {       // регистр режимов (РР)
     normb           // РР.0 - NORMB, блокировка нормализации (БНОР)
 };
 always @(posedge clk)
-    if (YDST == 3) begin
+    if (YDST == 3) begin            // CNT, регистр режимов и триггеры признаков
         rr_unused    <= Y[31:30];
         flag_jump    <= Y[29];
         rcb          <= Y[28];

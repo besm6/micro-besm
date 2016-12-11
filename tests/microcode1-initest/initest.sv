@@ -290,6 +290,10 @@ always @(posedge clk) begin
     opcode_x = tr.opcode_x;
 end
 
+// Keep interrupts disabled.
+always @(posedge clk)
+    cpu.no_intr = 1;
+
 // At negative clock edge, when all the signals are quiet,
 // analyze the state of the processor.
 always @(tr.instruction_retired) begin

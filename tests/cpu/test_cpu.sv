@@ -17,6 +17,7 @@ logic        o_astb;                    // address strobe
 logic        o_atomic;                  // read-modify-write flag
 logic        o_rd;                      // read op
 logic        o_wr;                      // write op
+logic        o_wforce;                  // ignore write protection
 
 // Instantiate CPU.
 cpu cpu(clk, reset, i_data, i_tag,
