@@ -88,6 +88,7 @@ logic rx_busy;                  // В памяти обмена ПП->ЦП ес�
 // Память приписок страниц
 logic [19:0] pg_map[1024];
 logic  [9:0] pg_virt;           // page index for current virtual address
+logic  [9:0] pg_translated;     // translated physical page index
 logic  [7:0] pg_procn;          // process number for current page
 logic        pg_valid;          // access allowed for current page
 logic        pg_rw;             // write allowed for current page
@@ -751,6 +752,19 @@ always @(posedge clk)
         pg_used[pg_index] <= D[1];
         pg_dirty[pg_index] <= D[2];
         pg_changed <= 1;
+
+    end else if (arb_req) begin
+        pg_used[pg_translated] <= 1;
+        pg_changed <= 1;
+
+        case (ARBI)
+         2, // CCWR, запись в кэш команд
+         4, // DCWR, запись в кэш операндов
+        10, // DWR, запись результата
+        11, // RDMWR, чтение - модификация - запись
+        12: // BTRWR, запись в режиме блочной передачи
+            pg_dirty[pg_translated] <= 1;
+        endcase
     end
 
 assign pg_access = { pg_dirty[pg_index], pg_used[pg_index], 1'b0 };
@@ -765,7 +779,7 @@ always @(posedge clk)
         pg_reprio[pg_fcnt] <= 1;
         if (pg_fcnt[9:0] == 1023)
             pg_fill <= '0;
-        else;
+        else
             pg_fcnt <= pg_fcnt + 1;
         pg_changed <= 1;
     end else if (WRD & DDEV == 2) begin // MODB, БМСП
@@ -791,7 +805,7 @@ assign pg_virt =
                  vaddr[19:10];  // 20 bits in normal mode
 
 // Translate virtual page into physical page index
-wire [9:0] pg_translated =
+assign pg_translated =
     no_paging ? pg_virt
               : pg_map[pg_virt][19:10];
 
@@ -807,28 +821,14 @@ assign pg_valid = pg_map[pg_virt][9];
 // Write permit for current page
 assign pg_rw = pg_map[pg_virt][8];
 
+// Physical page index
 always @(posedge clk)
-    if (arb_req) begin
+    if (arb_req)
         pg_index <= pg_translated;  // PHYSAD, set from microinstruction
-
-        // Update `used' bit (БОБР)
-        pg_used[pg_translated] <= 1;
-        pg_changed <= 1;
-
-        // Update `dirty' bit (БИЗМ)
-        case (ARBI)
-         2, // CCWR, запись в кэш команд
-         4, // DCWR, запись в кэш операндов
-        10, // DWR, запись результата
-        11, // RDMWR, чтение - модификация - запись
-        12: // BTRWR, запись в режиме блочной передачи
-            pg_dirty[pg_translated] <= 1;
-        endcase
-
-    end else if (YDST == 4)
+    else if (YDST == 4)
         pg_index <= Y[19:10];       // PHYSPG, регистр физической страницы
 
-//TODO: rewrite pg_dirty, pg_changed and pg_used as single always block
+//TODO: rewrite pg_changed as single always block
 
 //--------------------------------------------------------------
 // RWIO table
@@ -974,9 +974,10 @@ always @(posedge clk) begin
         int_vect <= 22;
     end
 
+    // 23 - запрос модификации приоритетов страниц
+
     //TODO: interrupts
     // 4 - программное прерывание
-    // 23 - запрос модификации приоритетов страниц
     // 24 - останов при совпадении адресов по запросу ПП
     // 25 - “time-out” при блокировке внешних прерываний
     // 26 - внешние прерывания
