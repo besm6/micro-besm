@@ -95,6 +95,7 @@ logic        pg_rw;             // write allowed for current page
 logic        pg_used[1024];     // БОБР, page has been referenced
 logic        pg_dirty[1024];    // БИЗМ, page had been modified
 logic        pg_reprio[1024];   // БМСП, reprioritize request
+logic        pg_reprio_intr;    // interrupt when reprioritize finished
 logic  [2:0] pg_access;         // both for current page
 logic  [9:0] pg_index;          // РФС: регистр физической страницы
 logic [11:0] pg_prio0[1024];    // page priority 0
@@ -702,7 +703,7 @@ always @(posedge clk)
     18: tkk <= '0;          // CLRTKK, сброс триггера коммутации команд - ТКК (ППК стандартизатора)
     19: tkk <= '1;          // SЕТТКК, установка ТКК
     20: /*mode_besm6 <= 0*/; // SETNR, установка НР
-    21: pg_fcnt <= pg_index; // STRTLD, запуск загрузки памяти БМСП единицами
+    21: /*pg_fcnt <= pg_index*/; // STRTLD, запуск загрузки памяти БМСП единицами
     22: /*mode_besm6 <= 1*/; // SETER, установка РЭ
     23: tkk <= ~tkk;        // СНТКК, переброс ТКК (работает в счетном режиме!)
     24: /*halt <= '1*/;     // SETHLT, установка триггера "Останов" (Halt)
@@ -771,21 +772,27 @@ assign pg_access = { pg_dirty[pg_index], pg_used[pg_index], 1'b0 };
 
 // БМСП, бит модификации списка приоритетов
 always @(posedge clk)
-    if (reset)
+    if (reset) begin
         pg_fill <= '0;
-    else if (!IOMP && FFCNT == 21)  // ffcnt=STRTLD
-        pg_fill <= '1;              // запуск загрузки памяти БМСП единицами
-    else if (pg_fill) begin         // заполнение памяти БМСП единицами
+        pg_reprio_intr <= '0;
+    end else if (!IOMP && FFCNT == 21) begin // ffcnt=STRTLD
+        pg_fill <= '1;                  // запуск загрузки памяти БМСП единицами
+        pg_fcnt <= pg_index;
+        pg_reprio_intr <= '0;
+    end else if (pg_fill) begin         // заполнение памяти БМСП единицами
         pg_reprio[pg_fcnt] <= 1;
-        if (pg_fcnt[9:0] == 1023)
+        if (pg_fcnt[9:0] == 1023) begin
             pg_fill <= '0;
-        else
+            pg_reprio_intr <= '1;
+        end else
             pg_fcnt <= pg_fcnt + 1;
         pg_changed <= 1;
     end else if (WRD & DDEV == 2) begin // MODB, БМСП
         pg_reprio[pg_index] <= D[0];
+        pg_reprio_intr <= D[0];
         pg_changed <= 1;
-    end
+    end else
+        pg_reprio_intr <= '0;
 
 // PPMEM0/1, память приоритетов страниц
 always @(posedge clk) begin
@@ -975,6 +982,10 @@ always @(posedge clk) begin
     end
 
     // 23 - запрос модификации приоритетов страниц
+    else if (pg_reprio_intr) begin
+        g_int <= '1;                // изменение приоритета закончено
+        int_vect <= 23;
+    end
 
     //TODO: interrupts
     // 4 - программное прерывание
