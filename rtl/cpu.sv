@@ -89,6 +89,8 @@ logic rx_busy;                  // В памяти обмена ПП->ЦП ес�
 logic [19:0] pg_map[1024];
 logic  [9:0] pg_virt;           // page index for current virtual address
 logic  [7:0] pg_procn;          // process number for current page
+logic        pg_valid;          // access allowed for current page
+logic        pg_rw;             // write allowed for current page
 logic        pg_used[1024];     // БОБР, page has been referenced
 logic        pg_dirty[1024];    // БИЗМ, page had been modified
 logic        pg_reprio[1024];   // БМСП, reprioritize request
@@ -108,7 +110,7 @@ logic [2:0] grp;
 logic normb, rndb, ovrib, bnb, ovrftb, drg, rcb, cb, cemlrg, intstp, tr0, tr1;
 logic flag_v, flag_c, flag_n, flag_z, no_badop;
 logic no_rtag, no_badacc, no_progtag, no_intr, single_step, no_wprot;
-logic no_rprot, flag_negaddr, no_procnm, no_paging, flag_jump;
+logic no_pgprot, flag_negaddr, no_procnm, no_paging, flag_jump;
 logic [1:0] rr_unused;
 
 // Биты расширения регистра режимов (РРР)
@@ -518,12 +520,16 @@ arbiter arb(clk, reset,
 );
 assign arb_req = (YDEV == 2);       // PHYSAD, request to external bus
 
-// Запуск арбитра блокируется в трёх случаях:
+// Запуск арбитра блокируется в нескольких случаях:
 assign arb_suspend =
     (vaddr == 0) |                  // виртуальный адрес равен 0
-    (arb_req & !no_procnm &         // чужой РП при чтении/записи операнда
-     procn != pg_procn &
-     pg_procn != 'hff);
+    (!no_paging & !no_procnm &
+     procn != pg_procn &            // страница принадлежит другому процессу
+     pg_procn != 'hff) |
+    (!no_paging &
+     !no_pgprot & !pg_valid) |      // защита страницы по обращению
+    (!no_paging &
+     !no_wprot & !pg_rw);           // защита страницы по записи
                                     // отсутствующий адрес памяти в новом режиме TODO
 
 always @(posedge clk)
@@ -568,7 +574,7 @@ assign rr = {       // регистр режимов (РР)
     no_paging,      // РР.26 - блокировка приписки (БП)
     no_procnm,      // РР.25 - блокировка проверки номера процесса (БПНП)
     flag_negaddr,   // РР.24 - режим отрицательных адресов (РОА)
-    no_rprot,       // РР.23 - блокировка защиты страниц по обращению (БЗО)
+    no_pgprot,      // РР.23 - блокировка защиты страниц по обращению (БЗО)
     no_wprot,       // РР.22 - блокировка защиты страниц по записи (БЗЗ)
     intstp,         // РР.21 - признак останова по прерыванию (ПОП)
     single_step,    // РР.20 - режим пошагового выполнения команд (РШ)
@@ -600,7 +606,7 @@ always @(posedge clk)
         no_paging    <= Y[26];
         no_procnm    <= Y[25];
         flag_negaddr <= Y[24];
-        no_rprot     <= Y[23];
+        no_pgprot    <= Y[23];
         no_wprot     <= Y[22];
         intstp       <= Y[21];
         single_step  <= Y[20];
@@ -792,6 +798,12 @@ assign physad = {pg_translated, vaddr[9:0]};
 // Process number for current page
 assign pg_procn = pg_map[pg_virt][7:0];
 
+// Access permit for current page
+assign pg_valid = pg_map[pg_virt][9];
+
+// Write permit for current page
+assign pg_rw = pg_map[pg_virt][8];
+
 always @(posedge clk)
     if (arb_req) begin
         pg_index <= pg_translated;  // PHYSAD, set from microinstruction
@@ -896,10 +908,24 @@ always @(posedge clk) begin
 
     // 14 - чужой регистр приписки при чтении/записи операнда
     // 15 - чужой регистр приписки при выборке команд
-    else if (arb_req & (procn != pg_procn) & (pg_procn != 'hff) & !no_procnm) begin
+    else if (arb_req & !no_paging & !no_procnm &
+             (procn != pg_procn) & (pg_procn != 'hff))
+    begin
         g_int <= '1;                // РНП не соответствует регистру приписки
-        int_vect <= (ARBI == 8) ?   // (при БПНП=0) при обращении в память
+        int_vect <= (ARBI == 8) ?   // (при БПНП=0 и БП=0) при обращении в память
                     15 : 14;
+    end
+
+    // 16 - защита страницы при обращении
+    else if (arb_req & !no_paging & !no_pgprot & !pg_valid) begin
+        g_int <= '1;                // нет бита доступа (при БЗО=0 и БП=0)
+        int_vect <= 16;
+    end
+
+    // 17 - защита страницы при записи
+    else if (arb_req & !no_paging & !no_wprot & !pg_rw) begin
+        g_int <= '1;                // нет бита разрешения записи (при БЗЗ=0 и БП=0)
+        int_vect <= 17;
     end
 
     // 18 - защита выборки команды
@@ -937,8 +963,6 @@ always @(posedge clk) begin
     // 6 - отсутствующий адрес памяти в новом режиме
     // 7 - отрицательный номер страницы у команды
     // 8 - отрицательный номер страницы у операнда
-    // 16 - защита страницы при обращении
-    // 17 - защита страницы при записи
     // 23 - запрос модификации приоритетов страниц
     // 24 - останов при совпадении адресов по запросу ПП
     // 25 - “time-out” при блокировке внешних прерываний
