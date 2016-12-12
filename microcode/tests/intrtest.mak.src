@@ -400,8 +400,8 @@ CJP А=СС1,МАР=РЕ,%TIK3%
 BEGINT:ENTRY
 ;===== УСТАНАВЛИВАЕМ МАСКУ, ПРОВЕРЯЕМ СБРОС ПРЕРЫВАНИЙ, ОБНУЛЯЕМ РЕГИСТРЫ И БОПП
 CONT FFCNT=CLREI
+CONT FFCNT=CLRCTT
 CONT FFCNT=CLRINT
-CONT FFCNT=CLRCT
 CONT ALUS=DZ,FUNC=AND,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=2
 CONT ALUS=ZВ,RВ=WR3,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
 CONT А=С1,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=1
@@ -1392,7 +1392,7 @@ RFCT
 ;ОШИБКА, ЕСЛИ ВСЕ ЕЩЕ НЕТ ПРЕРЫВАНИЯ, ОШ=2
 CJS А=ERRINT,МАР=РЕ,COND=INT,IСС
 ;СБРАСЫВАЕМ КОНКРЕТНОЕ ПРЕРЫВАНИЕ: INT26
-ОК26:PUSH А=2,МАР=РЕ,FFCNT=CLRCT
+ОК26:PUSH А=2,МАР=РЕ,FFCNT=CLRCTT
 ;ПОДОЖДЕМ ЧУТЬ-ЧУТЬ
 RFCT %TIK3%
 ;ЧТО-ТО НЕ ТО, ЕСЛИ ВСЕ-ТАКИ ЕСТЬ ПРЕРЫВАНИЯ, ОШ=3

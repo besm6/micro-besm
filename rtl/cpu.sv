@@ -347,6 +347,8 @@ always @(posedge clk)
 wire        tm_out0;                // output of timer0: use it as clock for timer1
 wire        tm_out1;                // output of timer1: interrupt
 wire        tm_out2;                // output of timer2: interrupt
+logic       tm_out1_last;           // delayed tm_out1
+logic       tm_out2_last;           // delayed tm_out2
 logic       tm_clk0;                // clock for timer0, 1MHz
 wire        tm_clk1 = tm_out0;      // clock for timer1, 100Hz
 logic       tm_clk2;                // clock for timer2, 100kHz
@@ -386,10 +388,22 @@ end
 
 // Clock and timer interrupts
 always @(posedge clk) begin
-    if (tm_out1)
+    if (reset)
+        clock_int <= '0;
+    else if (tm_out1 & !tm_out1_last)
         clock_int <= '1;            // CT interrupt flag
-    if (tm_out2)
+    else if (!IOMP && FFCNT == 16)
+        clock_int <= '0;            // CLRCT, сброс прерывания от часов счетного времени
+
+    if (reset)
+        timer_int <= '0;
+    else if (tm_out2 & !tm_out2_last)
         timer_int <= '1;            // CTT interrupt flag
+    else if (!IOMP && FFCNT == 17)
+        timer_int <= '0;            // CLRCTT, сброс прерывания от таймера счетного времени
+
+    tm_out1_last <= tm_out1;
+    tm_out2_last <= tm_out2;
 end
 
 //--------------------------------------------------------------
@@ -698,8 +712,8 @@ always @(posedge clk)
     13: tr0 <= '1;          // SETTR0, установка мп признака "След0"
     14: tr1 <= '0;          // CLRTR1, сброс мп признака "След1"
     15: tr1 <= '1;          // SETTR1, установка мп признака "След1"
-    16: clock_int <= '0;    // CLRCT, сброс прерывания от часов счетного времени
-    17: timer_int <= '0;    // CLRCTT, сброс прерывания от таймера счетного времени
+    16: /*clock_int <= '0*/; // CLRCT, сброс прерывания от часов счетного времени
+    17: /*timer_int <= '0*/; // CLRCTT, сброс прерывания от таймера счетного времени
     18: tkk <= '0;          // CLRTKK, сброс триггера коммутации команд - ТКК (ППК стандартизатора)
     19: tkk <= '1;          // SЕТТКК, установка ТКК
     20: /*mode_besm6 <= 0*/; // SETNR, установка НР
@@ -707,7 +721,7 @@ always @(posedge clk)
     22: /*mode_besm6 <= 1*/; // SETER, установка РЭ
     23: tkk <= ~tkk;        // СНТКК, переброс ТКК (работает в счетном режиме!)
     24: /*halt <= '1*/;     // SETHLT, установка триггера "Останов" (Halt)
-    25: g_int <= '0;        // CLRINT, сброс прерываний (кроме прерываний от таймеров)
+    25: /*g_int <= '0*/;    // CLRINT, сброс прерываний (кроме прерываний от таймеров)
     26: /*run <= '0*/;      // CLRRUN, сброс триггера "Пуск"
     27: rx_busy <= '0;      // RDMPCP, установка признака "память обмена ПП -> ЦП прочитана"
     28: rx_busy <= '1;      // LDMPCP, установка признака "в памяти обмена ПП -> ЦП есть информация"
@@ -987,6 +1001,25 @@ always @(posedge clk) begin
         int_vect <= 23;
     end
 
+    else if (!IOMP &&
+             (FFCNT == 25 |         // CLRINT, сброс прерываний (кроме прерываний от таймеров)
+              FFCNT == 16 |         // CLRCT, сброс прерывания от часов счетного времени
+              FFCNT == 17)) begin   // CLRCTT, сброс прерывания от таймера счетного времени
+        g_int <= '0;
+    end
+
+    // 30 - аппаратная часть часов счетного времени равна 0
+    else if (clock_int) begin
+        g_int <= '1;                // счетчик часов уменьшился до нуля
+        int_vect <= 30;
+    end
+
+    // 31 - аппаратная часть таймера счетного времени равна 0
+    else if (timer_int) begin
+        g_int <= '1;                // счетчик таймера уменьшился до нуля
+        int_vect <= 31;
+    end
+
     //TODO: interrupts
     // 4 - программное прерывание
     // 24 - останов при совпадении адресов по запросу ПП
@@ -995,8 +1028,6 @@ always @(posedge clk) begin
     // 27 - останов (halt)
     // 28 - шаговое прерывание
     // 29 - обращение блока связи ПП на чтение/запись регистров
-    // 30 - аппаратная часть часов счетного времени равна 0
-    // 31 - аппаратная часть таймера счетного времени равна 0
 end
 
 endmodule
