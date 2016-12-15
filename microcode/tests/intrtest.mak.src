@@ -573,6 +573,7 @@ CRTN
 INTPS:CJS А=ERRINT,МАР=РЕ,COND=ARBRDY,IСС,%ТУРЕ%
 INTMAS:ENTRY
 CJS А=ERRINT,МАР=РЕ,COND=INT,IСС,ISE,%ТУРЕ%
+INTMAS1:ENTRY
 ;СБРАСЫВАЕМ ПРЕРЫВАНИЯ
 PUSH А=2,МАР=РЕ,FFCNT=CLRINT
 ;ПОДОЖДЕМ ЧУТЬ-ЧУТЬ
@@ -1529,7 +1530,7 @@ CONT ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=У,ALU,ЕСВ,WRB,BRA=RG3
 CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6,YDEV=PHYSAD,ARBI=BICLR
 WС30:CJP А=WС30,%WА%
 ;ОШ=2,3 (НЕТ ПР.ПРЕР.; НЕТ СБРОСА)
-CJS А=INTMAS+1,МАР=РЕ,%ТУРЕ%
+CJS А=INTMAS1,МАР=РЕ,%ТУРЕ%
 ;ЖДЕМ, КОГДА В WR1 ПОЯВИТСЯ N ПРЕРЫВАНИЯ
 WI30:CONT ALUS=ZА,RА=WR1,CEN,ISE
 CJP А=WI30,МАР=РЕ,COND=СТ,SТОРС=20
