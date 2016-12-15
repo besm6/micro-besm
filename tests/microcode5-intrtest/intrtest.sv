@@ -393,10 +393,13 @@ always @(tr.instruction_retired) begin
     check_jump(LABEL_CONT27-2, LABEL_CC26, LABEL_CONT27, "Test INT26 pass");
 
     // int27 - "time-out при блокировке внешних прерываний"
-    check_jump(LABEL_CONT28-2, LABEL_CC27, LABEL_CONT28, "Test INT27 pass");
+    // Пропускаем этот тест, так как у нас таймаут не возникает.
+    //check_jump(LABEL_CONT28-2, LABEL_CC27, LABEL_CONT28, "Test INT27 pass");
+    check_jump(LABEL_CONT27+2, LABEL_BEGINT, LABEL_CONT29, "Skip INT27,28");
 
     // int28  - "обращение ПП на чт/зп регистров"
-    check_jump(LABEL_CONT29-2, LABEL_CC28, LABEL_CONT29, "Test INT28 pass");
+    // Пропускаем этот тест, так как у нас пультовый процессор не реализован.
+    //check_jump(LABEL_CONT29-2, LABEL_CC28, LABEL_CONT29, "Test INT28 pass");
 
     // int29 - "шаговое прерывание"
     check_jump(LABEL_CONT30-2, LABEL_CC29, LABEL_CONT30, "Test INT29 pass");
