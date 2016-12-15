@@ -37,6 +37,7 @@ module arbiter(
     output logic       atomic,  // atomic r-m-w operation
     output logic       rd,      // memory read
     output logic       wr,      // memory write
+    output logic       iack,    // interrupt acknowledge
     output logic       done     // resulting acknowledge
 );
 timeunit 1ns / 10ps;
@@ -93,9 +94,11 @@ assign atomic = (opcode == 11);
 //
 // Output assignments
 //
+`define OUTPUT {arx, ecx, wrx, astb, rd, wr, iack, done}
+
 always_comb begin
-    // Initial state
-    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '0, '0, '0, '0, '0, '1};
+    // Initial arx -- ecx wrx astb rd wr iack done
+    `OUTPUT = {RDATA, '0, '0, '0, '0, '0, '0, '1};
 
     if (!request & !suspend) begin
         case (opcode)
@@ -120,84 +123,60 @@ always_comb begin
                 $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DCWR not implemented yet!", $time);
 
          8: // FЕТСН, чтение команды
-            case (step)
-             0: // Send address                        arx -- ecx wrx astb rd wr  done
-                {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
-             1: // Get data
-                {arx, ecx, wrx, astb, rd, wr, done} = {CMD,   '1, '0, '0, '1, '0, '0};
-             2: // Read word
-                {arx, ecx, wrx, astb, rd, wr, done} = {CMD,   '1, '1, '0, '0, '0, '0};
+            case (step) // arx -- ecx wrx astb rd wr iack done
+             0: `OUTPUT = {ADDR,  '1, '0, '1, '0, '0, '0, '0}; // Send address
+             1: `OUTPUT = {CMD,   '1, '0, '0, '1, '0, '0, '0}; // Get data
+             2: `OUTPUT = {CMD,   '1, '1, '0, '0, '0, '0, '0}; // Read word
             endcase
 
          9: // DRD, чтение операнда
-            case (step)
-             0: // Send address                        arx -- ecx wrx astb rd wr  done
-                {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
-             1: // Get data
-                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '1, '0, '0};
-             2: // Read word
-                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '0, '0, '0};
+            case (step) // arx -- ecx wrx astb rd wr iack done
+             0: `OUTPUT = {ADDR,  '1, '0, '1, '0, '0, '0, '0}; // Send address
+             1: `OUTPUT = {RDATA, '1, '0, '0, '1, '0, '0, '0}; // Get data
+             2: `OUTPUT = {RDATA, '1, '1, '0, '0, '0, '0, '0}; // Read word
             endcase
 
         10: // DWR, запись результата
-            case (step)
-             0: // Send address                        arx -- ecx wrx astb rd wr  done
-                {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
-             1: // Send data
-                {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '0, '0};
-             2: // Write word
-                {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '1, '0};
+            case (step) // arx -- ecx wrx astb rd wr iack done
+             0: `OUTPUT = {ADDR,  '1, '0, '1, '0, '0, '0, '0}; // Send address
+             1: `OUTPUT = {WDATA, '1, '0, '0, '0, '0, '0, '0}; // Send data
+             2: `OUTPUT = {WDATA, '1, '0, '0, '0, '1, '0, '0}; // Write word
             endcase
 
         11: // RDMWR, чтение - модификация - запись (семафорная)
             // Read a word; set bit 55, write it back.
-            case (step)
-             0: // Send address                        arx -- ecx wrx astb rd wr  done
-                {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
-             1: // Get data
-                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '1, '0, '0};
-             2: // Read word
-                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '0, '0, '0};
-             3: // Send data from RG2
-                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '0, '0, '0};
-             4: // Write word
-                {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '0, '1, '0};
+            case (step) // arx -- ecx wrx astb rd wr iack done
+             0: `OUTPUT = {ADDR,  '1, '0, '1, '0, '0, '0, '0}; // Send address
+             1: `OUTPUT = {RDATA, '1, '0, '0, '1, '0, '0, '0}; // Get data
+             2: `OUTPUT = {RDATA, '1, '1, '0, '0, '0, '0, '0}; // Read word
+             3: `OUTPUT = {RDATA, '1, '0, '0, '0, '0, '0, '0}; // Send data from RG2
+             4: `OUTPUT = {RDATA, '1, '0, '0, '0, '1, '0, '0}; // Write word
             endcase
 
         12: // BTRWR, запись в режиме блочной передачи
             if (batch_mode)
-                case (step)
-                 0: // Send data                            arx -- ecx wrx astb rd wr  done
-                    {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '0, '0};
-                 1: // Write word
-                    {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '1, '0};
+                case (step) // arx -- ecx wrx astb rd wr iack done
+                 0: `OUTPUT = {WDATA, '1, '0, '0, '0, '0, '0, '0}; // Send data
+                 1: `OUTPUT = {WDATA, '1, '0, '0, '0, '1, '0, '0}; // Write word
                 endcase
             else
-                case (step)
-                 0: // Send address                        arx -- ecx wrx astb rd wr  done
-                    {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
-                 1: // Get data
-                    {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '0, '0};
-                 2: // Write word
-                    {arx, ecx, wrx, astb, rd, wr, done} = {WDATA, '1, '0, '0, '0, '1, '0};
+                case (step) // arx -- ecx wrx astb rd wr iack done
+                 0: `OUTPUT = {ADDR,  '1, '0, '1, '0, '0, '0, '0}; // Send address
+                 1: `OUTPUT = {WDATA, '1, '0, '0, '0, '0, '0, '0}; // Get data
+                 2: `OUTPUT = {WDATA, '1, '0, '0, '0, '1, '0, '0}; // Write word
                 endcase
 
         13: // BTRRD, чтение в режиме блочной передачи
             if (batch_mode)
-                case (step)
-                 0: // Get data                            arx -- ecx wrx astb rd wr  done
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '1, '0, '0};
-                 1: // Read word
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '0, '0, '0};
+                case (step) // arx -- ecx wrx astb rd wr iack done
+                 0: `OUTPUT = {RDATA, '1, '0, '0, '1, '0, '0, '0}; // Get data
+                 1: `OUTPUT = {RDATA, '1, '1, '0, '0, '0, '0, '0}; // Read word
                 endcase
             else
-                case (step)
-                 0: // Send address                        arx -- ecx wrx astb rd wr  done
-                    {arx, ecx, wrx, astb, rd, wr, done} = {ADDR,  '1, '0, '1, '0, '0, '0};
-                 1: // Get data
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '0, '0, '1, '0, '0};
-                 2: // Read word
-                    {arx, ecx, wrx, astb, rd, wr, done} = {RDATA, '1, '1, '0, '0, '0, '0};
+                case (step) // arx -- ecx wrx astb rd wr iack done
+                 0: `OUTPUT = {ADDR,  '1, '0, '1, '0, '0, '0, '0}; // Send address
+                 1: `OUTPUT = {RDATA, '1, '0, '0, '1, '0, '0, '0}; // Get data
+                 2: `OUTPUT = {RDATA, '1, '1, '0, '0, '0, '0, '0}; // Read word
                 endcase
 
         14: // BICLR, сброс прерываний на шине (TODO)

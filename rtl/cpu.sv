@@ -34,7 +34,9 @@ module cpu(
     output logic        o_atomic,   // r-m-w transaction
     output logic        o_rd,       // read op
     output logic        o_wr,       // write op
-    output logic        o_wforce    // ignore write protection bit
+    output logic        o_wforce,   // ignore write protection bit
+    input  wire         i_irq,      // external interrupt request
+    output logic        o_iack      // interrupt acknowledge
 );
 timeunit 1ns / 10ps;
 
@@ -532,6 +534,7 @@ arbiter arb(clk, reset,
     arb_req ? ARBI : arb_opc,       // input opcode
     bus_ARX, bus_ECX, bus_WRX,      // X bus control
     o_astb, o_atomic, o_rd, o_wr,   // external memory interface
+    o_iack,                         // external interrupt interface
     arb_ready                       // resulting status
 );
 assign arb_req = (YDEV == 2);       // PHYSAD, request to external bus
@@ -1003,6 +1006,9 @@ always @(posedge clk) begin
         int_vect <= 23;
     end
 
+    // 26 - внешние прерывания
+    // TODO
+
     // 28 - шаговое прерывание
     else if (single_step) begin
         g_int <= '1;                // шаговое прерывание
@@ -1031,7 +1037,6 @@ always @(posedge clk) begin
     //TODO: interrupts
     // 4 - программное прерывание
     // 24 - останов при совпадении адресов по запросу ПП
-    // 26 - внешние прерывания
     // 27 - останов (halt)
 end
 

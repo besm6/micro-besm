@@ -11,8 +11,9 @@ timeunit 1ns / 10ps;
 
 // Inputs.
 logic        clk, reset;
-logic [63:0] i_data;
-logic  [7:0] i_tag;
+logic [63:0] i_data;                    // data input
+logic  [7:0] i_tag;                     // tag input
+logic        i_irq;                     // interrupt request
 
 // Outputs.
 logic [63:0] o_ad;                      // address/data output
@@ -22,10 +23,14 @@ logic        o_atomic;                  // read-modify-write flag
 logic        o_rd;                      // read op
 logic        o_wr;                      // write op
 logic        o_wforce;                  // ignore write protection
+logic        o_iack;                    // interrupt acknowledge
+logic [63:0] ram_data;                  // data output from RAM
+logic [63:0] irq_pending;               // mask of pending interrupts
 
 // Instantiate CPU.
 cpu cpu(clk, reset, i_data, i_tag,
-    o_ad, o_tag, o_astb, o_atomic, o_rd, o_wr, o_wforce);
+    o_ad, o_tag, o_astb, o_atomic, o_rd, o_wr, o_wforce,
+    i_irq, o_iack);
 
 // Setup trace moninor.
 tracer tr();
@@ -33,15 +38,18 @@ tracer tr();
 // 1Mword x 64bit of tagged RAM.
 tmemory ram(clk, o_ad, o_tag,
     o_astb, o_atomic, o_rd, o_wr, o_wforce,
-    i_data, i_tag);
+    ram_data, i_tag);
 
-//--------------------------------------------------------------
 // Microinstruction ROM.
-//
 logic [111:0] memory[4096] = '{
     `include "../../microcode/tests/intrtest.v"
     default: '0
 };
+
+// Interrupt processing.
+assign i_data = o_iack ? irq_pending : ram_data;
+
+assign irq_pending = 'ha5;              // some test value
 
 string tracefile = "output.trace";
 int limit;
@@ -403,9 +411,15 @@ always @(tr.instruction_retired) begin
 
     // int29 - "шаговое прерывание"
     check_jump(LABEL_CONT30-2, LABEL_CC29, LABEL_CONT30, "Test INT29 pass");
+    if (pc_x == LABEL_CONT30)
+        cpu.single_step = '0;   // disable single-step interrupt
 
     // int30 - "внешние прерывания"
     check_jump(LABEL_CONT31-2, LABEL_CC30, LABEL_CONT31, "Test INT30 pass");
+    if (pc_x == LABEL_CONT30+1) begin
+        message("Generate external interrupt");
+        i_irq = '1;             // activate external interrupt request
+    end
 
     // int31 - "программное прерывание"
     check_jump(LABEL_CONT32-2, LABEL_CC31, LABEL_CONT32, "Test INT31 pass");
