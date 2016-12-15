@@ -108,19 +108,19 @@ always_comb begin
 
          1: // CCRD, чтение кэша команд
             if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=CCRD not implemented yet!", $time);
+                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=CCRD not supported!", $time);
 
          2: // CCWR, запись в кэш команд
             if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=CCWR not implemented yet!", $time);
+                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=CCWR not supported!", $time);
 
          3: // DCRD, чтение кэш операндов
             if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DCRD not implemented yet!", $time);
+                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DCRD not supported!", $time);
 
          4: // DCWR, запись в кэш операндов
             if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DCWR not implemented yet!", $time);
+                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DCWR not supported!", $time);
 
          8: // FЕТСН, чтение команды
             case (step) // arx -- ecx wrx astb rd wr iack done
@@ -180,12 +180,21 @@ always_comb begin
                 endcase
 
         14: // BICLR, сброс прерываний на шине (TODO)
-            if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Clear interrupts", $time);
+            begin
+                if (testbench.tracefd && step == 0)
+                    $fdisplay(testbench.tracefd, "(%0d) *** Clear interrupts", $time);
+            end
 
-        15: // BIRD, чтение прерываний с шины (TODO)
-            if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Poll interrupts", $time);
+        15: // BIRD, чтение прерываний с шины
+            begin
+                if (testbench.tracefd && step == 0)
+                    $fdisplay(testbench.tracefd, "(%0d) *** Poll interrupts", $time);
+
+                case (step) // arx -- ecx wrx astb rd wr iack done
+                 0: `OUTPUT = {RDATA, '1, '0, '0, '0, '0, '1, '0}; // Get data
+                 1: `OUTPUT = {RDATA, '1, '1, '0, '0, '0, '1, '0}; // Read word
+                endcase
+            end
 
         default: // Unknown request
             if (request & testbench.tracefd)

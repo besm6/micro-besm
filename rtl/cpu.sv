@@ -1007,7 +1007,10 @@ always @(posedge clk) begin
     end
 
     // 26 - внешние прерывания
-    // TODO
+    else if (i_irq) begin
+        g_int <= '1;                // флаг внешнего прерывания
+        int_vect <= 26;
+    end
 
     // 28 - шаговое прерывание
     else if (single_step) begin

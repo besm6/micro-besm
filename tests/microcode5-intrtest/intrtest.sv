@@ -51,6 +51,10 @@ assign i_data = o_iack ? irq_pending : ram_data;
 
 assign irq_pending = 'ha5;              // some test value
 
+always @(posedge clk)
+    if (o_iack)
+        i_irq = '0;                     // deactivate interrupt request
+
 string tracefile = "output.trace";
 int limit;
 int trace;                              // Trace level
@@ -416,7 +420,7 @@ always @(tr.instruction_retired) begin
 
     // int30 - "внешние прерывания"
     check_jump(LABEL_CONT31-2, LABEL_CC30, LABEL_CONT31, "Test INT30 pass");
-    if (pc_x == LABEL_CONT30+1) begin
+    if (pc_x == LABEL_CC30+1) begin
         message("Generate external interrupt");
         i_irq = '1;             // activate external interrupt request
     end
