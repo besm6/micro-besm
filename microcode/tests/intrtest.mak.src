@@ -1529,8 +1529,6 @@ CONT ЕСА,ARA=RG2,ALUS=DZ,Н,ALUD=В,RВ=У,ALU,ЕСВ,WRB,BRA=RG3
 ;ПЕРЕПИСЫВАЕМ, ЧТО ПРОЧИТАЛИ С ШИНЫ, В БОПП; СБРАСЫВАЕМ ПРЕРЫВАНИЯ НА ШИНЕ
 CJS А=OUT8/F,МАР=РЕ,ALUS=ZА,RА=У,Н,ALUD=В,RВ=WR6,YDEV=PHYSAD,ARBI=BICLR
 WС30:CJP А=WС30,%WА%
-;ОШ=2,3 (НЕТ ПР.ПРЕР.; НЕТ СБРОСА)
-CJS А=INTMAS1,МАР=РЕ,%ТУРЕ%
 ;ЖДЕМ, КОГДА В WR1 ПОЯВИТСЯ N ПРЕРЫВАНИЯ
 WI30:CONT ALUS=ZА,RА=WR1,CEN,ISE
 CJP А=WI30,МАР=РЕ,COND=СТ,SТОРС=20
@@ -1538,6 +1536,8 @@ CJP А=WI30,МАР=РЕ,COND=СТ,SТОРС=20
 CONT ALUS=АВ,RА=WR1,RВ=EXPN,FUNC=EXOR,CEN
 ;ОШ=4 (НЕ ТОТ ВЕКТОР)
 CJS А=ERRINT,МАР=РЕ,COND=СТ,SТОРС=21,%ТУРЕ%
+;ОШ=2,3 (НЕТ ПР.ПРЕР.; НЕТ СБРОСА)
+CJS А=INTMAS1,МАР=РЕ,%ТУРЕ%
 ;ЧИТАЕМ ПРЕРЫВАНИЯ С ШИНЫ
 CONT YDEV=PHYSAD,ARBI=BIRD
 WRI30:CJP А=WRI30,%WА%

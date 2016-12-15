@@ -101,6 +101,7 @@ initial begin
     // Start with reset active
     clk = 1;
     reset = 1;
+    i_irq = 0;
 
     // Hold reset for a while.
     #2 reset = 0;
@@ -430,7 +431,7 @@ always @(tr.instruction_retired) begin
 
     // int30 - "внешние прерывания"
     check_jump(LABEL_CONT31-2, LABEL_CC30, LABEL_CONT31, "Test INT30 pass");
-    if (pc_x == LABEL_CC30+1) begin
+    if (pc_x == LABEL_CC30+1 && !i_irq) begin
         message("Generate external interrupt");
         i_irq = '1;             // activate external interrupt request
     end

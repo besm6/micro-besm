@@ -149,7 +149,7 @@ always @(negedge clk) begin
         end
 
         if (int_flag_x) begin
-            $fdisplay(fd, "(%0d) *** Interrupt", ctime);
+            $fdisplay(fd, "(%0d) *** Interrupt #%0d", ctime, cpu.int_vect);
         end
 
         // Get data from fetch stage
