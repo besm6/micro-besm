@@ -887,7 +887,7 @@ logic [11:0] intrtab[32] = '{
 assign intr_addr = intrtab[int_vect];
 
 // Flag to take interrupt immediately
-assign int_flag = (g_int & ISE & !no_intr);
+assign int_flag = (g_int | prg_int) & ISE & !no_intr;
 
 // On interrupt, jump to address 001
 assign opaddr =
@@ -907,7 +907,6 @@ always @(posedge clk) begin
 
     // 4 - программное прерывание
     if (prg_int & !no_intr) begin
-        g_int <= '1;                // программное прерывание
         int_vect <= 4;
     end
 
