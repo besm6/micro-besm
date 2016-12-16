@@ -71,8 +71,6 @@ logic        ss_CT;             // Conditional test output
 logic [63:0] D;
 logic [63:0] Y;
 
-logic stopm0, stopm1;           // Флаги останова
-
 // Interrupts
 logic       int_flag;           // Take interrupt immediately
 logic [4:0] int_vect;           // Interrupt vector
@@ -139,6 +137,7 @@ logic  [3:0] arb_opc;           // код операции арбитра
 logic        arb_req;           // запрос к арбитру
 logic        arb_suspend;       // блокировка арбитра
 logic        arb_ready;         // ответ арбитра
+logic  [3:0] stopm0, stopm1;    // останов при совпадении кода операции арбитра
 
 // External bus interface
 logic [63:0] bus_DA;            // A data input
@@ -475,9 +474,18 @@ always @(posedge clk)
                 pg_map[pg_virt] <= Y[19:0];
                 pg_changed <= 1;
             end
+
          5: mpmem[MPADR] <= Y[7:0]; // МРМЕМ, память обмена с ПП
-         6: stopm0 <= Y[0];         // STOPM0, флаг останова 0
-         7: stopm1 <= Y[0];         // STOPM1, флаг останова 1
+
+         6: if (Y[0])               // STOPM0, флаг останова 0
+                stopm0 <= '0;
+            else
+                stopm0 <= arb_opc;
+
+         7: if (Y[0])               // STOPM1, флаг останова 1
+                stopm1 <= '0;
+            else
+                stopm1 <= arb_opc;
         endcase
 
 //assign cclr = (YDST == 10);       // запуск сброса кэша
@@ -902,6 +910,7 @@ always @(posedge clk) begin
     // 2 - "time out" при обращении к памяти
     // 3 - "time out" при обращении к шине
     // 5 - резерв
+    // 24 - останов при совпадении адресов по запросу ПП
     // 25 - “time-out” при блокировке внешних прерываний
     // 29 - обращение блока связи ПП на чтение/запись регистров
 
@@ -1023,6 +1032,12 @@ always @(posedge clk) begin
         int_vect <= 26;
     end
 
+    // 27 - останов (halt) по обращению к памяти (stopm0, stopm1)
+    else if (arb_req & (stopm0 == arb_opc | stopm1 == arb_opc)) begin
+        g_int <= '1;                // совпадение флагов останова с кодом арбитра
+        int_vect <= 27;
+    end
+
     // Команды CLRCT и CLRCTT сбрасывают не только флаги прерываний часов и таймера,
     // но и общий флаг прерывания (если нет других причин).
     else if (!IOMP &&
@@ -1043,10 +1058,6 @@ always @(posedge clk) begin
         g_int <= '1;                // счетчик таймера уменьшился до нуля
         int_vect <= 31;
     end
-
-    //TODO: interrupts
-    // 24 - останов при совпадении адресов по запросу ПП
-    // 27 - останов (halt)
 end
 
 // Set soft interrupt flag

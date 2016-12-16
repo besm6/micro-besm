@@ -262,6 +262,25 @@ localparam LABEL_CONT31 = 722;
 localparam LABEL_CC31   = 724;
 localparam LABEL_CONT32 = 738;
 localparam LABEL_CC32   = 740;
+localparam LABEL_CLRW11 = 752;
+localparam LABEL_CLRW12 = 756;
+localparam LABEL_CLRW21 = 765;
+localparam LABEL_CLRW22 = 769;
+localparam LABEL_CLRW31 = 778;
+localparam LABEL_CLRW32 = 782;
+localparam LABEL_CLRW41 = 789;
+localparam LABEL_CLRW42 = 793;
+localparam LABEL_CLRW51 = 808;
+localparam LABEL_CLRW52 = 812;
+localparam LABEL_CLRW61 = 819;
+localparam LABEL_CLRW62 = 823;
+localparam LABEL_CLRW71 = 830;
+localparam LABEL_CLRW72 = 834;
+localparam LABEL_CLRW81 = 841;
+localparam LABEL_CLRW82 = 845;
+localparam LABEL_CLR9   = 851;
+localparam LABEL_CLR10  = 856;
+localparam LABEL_CLR11  = 861;
 localparam LABEL_CLR12  = 865;
 localparam LABEL_ERRTST = 871;
 localparam LABEL_CTTSTP = 1087;
@@ -439,8 +458,22 @@ always @(tr.instruction_retired) begin
     // int31 - "программное прерывание"
     check_jump(LABEL_CONT32-2, LABEL_CC31, LABEL_CONT32, "Test INT31 pass");
 
-    // int32 - "программная интерпретация тега операнда"
+    // int32 - "halt"
     check_jump(LABEL_CLR12+1, LABEL_CC32, LABEL_CC32, "Test INT32 pass");
+    if (pc_x == LABEL_CLRW11 | pc_x == LABEL_CLRW12 |
+        pc_x == LABEL_CLRW21 | pc_x == LABEL_CLRW22 |
+        pc_x == LABEL_CLRW31 | pc_x == LABEL_CLRW32 |
+        pc_x == LABEL_CLRW41 | pc_x == LABEL_CLRW42 |
+        pc_x == LABEL_CLRW51 | pc_x == LABEL_CLRW52 |
+        pc_x == LABEL_CLRW61 | pc_x == LABEL_CLRW62 |
+        pc_x == LABEL_CLRW71 | pc_x == LABEL_CLRW72 |
+        pc_x == LABEL_CLRW81 | pc_x == LABEL_CLRW82 |
+        pc_x == LABEL_CLR9   | pc_x == LABEL_CLR10 |
+        pc_x == LABEL_CLR11  | pc_x == LABEL_CLR12) begin
+        // Clear interrupt from pult processor
+        message("Clear interrupt");
+        cpu.g_int = '0;
+    end
 
     if (pc_x == LABEL_CLR12+1) begin
         message("Test PASS");
