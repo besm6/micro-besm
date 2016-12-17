@@ -236,6 +236,7 @@ def write_optab():
             offset = s[1]
             name = find_label(offset)
             file.write("'h%x_%02x: %4d,   // %s\n" % (op >> 8, op & 0xff, offset, name))
+        file.write("default: %3d    // EXTDR\n" % symtab["EXTDR"])
         file.close()
         print "Instruction table: %d opcodes" % (len(optab))
 

@@ -546,7 +546,7 @@ assign arb_suspend =
      !no_pgprot & !pg_valid) |      // защита страницы по обращению
     (!no_paging &
      !no_wprot & !pg_rw) |          // защита страницы по записи
-    (!no_paging &
+    (!no_paging & !drg &
      !flag_negaddr & vaddr[19]) |   // отрицательный виртуальный адрес
     (vaddr[31:19] != '0 &
      vaddr[31:19] != '1);           // отсутствующий адрес памяти в новом режиме
@@ -578,7 +578,6 @@ assign instr_addr = {{12{addr[19]}}, addr};
 
 const logic [11:0] optab[4096] = '{
     `include "../microcode/optab.v"
-    default: '0
 };
 assign jump_addr = optab[{instr_ext, mode_besm6, instr_ir15, uflag, instr_code}];
 
@@ -914,7 +913,7 @@ always @(posedge clk) begin
 
     // 7 - отрицательный номер страницы у команды
     // 8 - отрицательный номер страницы у операнда
-    else if (arb_req & !no_paging & !flag_negaddr & vaddr[19]) begin
+    else if (arb_req & !no_paging & !flag_negaddr & !drg & vaddr[19]) begin
         g_int <= '1;                // РОА=0 (при БП=0) при обращении в память
         int_vect <= (ARBI == 8) ? 7 : 8;
     end
