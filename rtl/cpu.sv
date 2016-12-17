@@ -836,10 +836,10 @@ assign physad = {pg_translated, vaddr[9:0]};
 assign pg_procn = pg_map[pg_virt][7:0];
 
 // Access permit for current page
-assign pg_valid = pg_map[pg_virt][9];
+assign pg_valid = pg_map[pg_virt][9] | drg;
 
 // Write permit for current page
-assign pg_rw = pg_map[pg_virt][8];
+assign pg_rw = pg_map[pg_virt][8] | drg;
 
 // Physical page index
 always @(posedge clk)
