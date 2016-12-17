@@ -75,7 +75,7 @@ logic [63:0] Y;
 logic       int_flag;           // Take interrupt immediately
 logic [4:0] int_vect;           // Interrupt vector
 logic       g_int;              // Глобальный признак наличия прерываний
-logic       prg_int;            // Генерация программного прерывания TODO
+logic       prg_int;            // Генерация программного прерывания
 logic       ext_int;            // Генерация внешнего прерывания TODO
 logic       clock_int;          // Прерывание от часов счетного времени (CT)
 logic       timer_int;          // Прерывание от таймера счетного времени (CTT)
@@ -137,7 +137,6 @@ logic  [3:0] arb_opc;           // код операции арбитра
 logic        arb_req;           // запрос к арбитру
 logic        arb_suspend;       // блокировка арбитра
 logic        arb_ready;         // ответ арбитра
-logic  [3:0] stopm0, stopm1;    // останов при совпадении кода операции арбитра
 
 // External bus interface
 logic [63:0] bus_DA;            // A data input
@@ -477,15 +476,9 @@ always @(posedge clk)
 
          5: mpmem[MPADR] <= Y[7:0]; // МРМЕМ, память обмена с ПП
 
-         6: if (Y[0])               // STOPM0, флаг останова 0
-                stopm0 <= '0;
-            else
-                stopm0 <= arb_opc;
+         6: /*not supported*/;      // STOPM0, останов по заданному адресу
 
-         7: if (Y[0])               // STOPM1, флаг останова 1
-                stopm1 <= '0;
-            else
-                stopm1 <= arb_opc;
+         7: /*not supported*/;      // STOPM1, останов по заданному адресу
         endcase
 
 //assign cclr = (YDST == 10);       // запуск сброса кэша
@@ -912,6 +905,7 @@ always @(posedge clk) begin
     // 5 - резерв
     // 24 - останов при совпадении адресов по запросу ПП
     // 25 - “time-out” при блокировке внешних прерываний
+    // 27 - останов (halt) по обращению к памяти (stopm0, stopm1)
     // 29 - обращение блока связи ПП на чтение/запись регистров
 
     // 4 - программное прерывание
@@ -1030,12 +1024,6 @@ always @(posedge clk) begin
     else if (i_irq) begin
         g_int <= '1;                // флаг внешнего прерывания
         int_vect <= 26;
-    end
-
-    // 27 - останов (halt) по обращению к памяти (stopm0, stopm1)
-    else if (arb_req & (stopm0 == arb_opc | stopm1 == arb_opc)) begin
-        g_int <= '1;                // совпадение флагов останова с кодом арбитра
-        int_vect <= 27;
     end
 
     // Команды CLRCT и CLRCTT сбрасывают не только флаги прерываний часов и таймера,

@@ -458,22 +458,11 @@ always @(tr.instruction_retired) begin
     // int31 - "программное прерывание"
     check_jump(LABEL_CONT32-2, LABEL_CC31, LABEL_CONT32, "Test INT31 pass");
 
-    // int32 - "halt"
-    check_jump(LABEL_CLR12+1, LABEL_CC32, LABEL_CC32, "Test INT32 pass");
-    if (pc_x == LABEL_CLRW11 | pc_x == LABEL_CLRW12 |
-        pc_x == LABEL_CLRW21 | pc_x == LABEL_CLRW22 |
-        pc_x == LABEL_CLRW31 | pc_x == LABEL_CLRW32 |
-        pc_x == LABEL_CLRW41 | pc_x == LABEL_CLRW42 |
-        pc_x == LABEL_CLRW51 | pc_x == LABEL_CLRW52 |
-        pc_x == LABEL_CLRW61 | pc_x == LABEL_CLRW62 |
-        pc_x == LABEL_CLRW71 | pc_x == LABEL_CLRW72 |
-        pc_x == LABEL_CLRW81 | pc_x == LABEL_CLRW82 |
-        pc_x == LABEL_CLR9   | pc_x == LABEL_CLR10 |
-        pc_x == LABEL_CLR11  | pc_x == LABEL_CLR12) begin
-        // Clear interrupt from pult processor
-        message("Clear interrupt");
-        cpu.g_int = '0;
-    end
+    // int32 - останов по заданному адресу обращения к памяти
+    // Это было средство аппаратной отладки через пультовый процессор.
+    // Нам это прерывание не нужно.
+    //check_jump(LABEL_CLR12+1, LABEL_CC32, LABEL_CC32, "Test INT32 pass");
+    check_jump(LABEL_CONT32+2, LABEL_BEGINT, LABEL_CLR12, "Skip INT32");
 
     if (pc_x == LABEL_CLR12+1) begin
         message("Test PASS");
