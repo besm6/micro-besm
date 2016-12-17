@@ -117,11 +117,11 @@ always @(negedge clk) begin
             print_changed_2910();
             print_changed_cpu(opcode_x);
             print_changed_timer();
-        end
-
-        if (testbench.trace == 1) begin
+            print_changed_vm();
+        end else begin
             // Print changed architectural state
             print_changed_regs(opcode_x);
+            print_changed_vm();
         end
 
         // Print memory transactions
@@ -901,13 +901,7 @@ task print_changed_cpu(
     static logic [31:0] old_rr;
     static logic [31:0] old_mrmem[1024];
     static logic  [7:0] old_mpmem[16];
-    static logic [19:0] old_pgmap[1024];
-    static logic [11:0] old_pgprio0[1024];
-    static logic [11:0] old_pgprio1[1024];
     static logic  [4:0] old_vector;
-    static logic        old_pgused[1024];
-    static logic        old_pgdirty[1024];
-    static logic        old_pgreprio[1024];
     static logic        old_halt, old_tkk, old_besm6, old_run;
     static logic        old_gint, old_prgint, old_extint, old_clkint, old_tint;
 
@@ -981,49 +975,111 @@ task print_changed_cpu(
                 old_mpmem[i] = cpu.mpmem[i];
             end
     end
+endtask
 
-    //
-    // Page map
-    //
-    if (cpu.pg_changed) begin
-        cpu.pg_changed = 0;
-        for (int i=0; i<1024; i+=1)
-            if (cpu.pg_map[i] !== old_pgmap[i]) begin
-                $fdisplay(fd, "(%0d)               Write Page[%0d] = %h",
-                    ctime, i, cpu.pg_map[i]);
-                old_pgmap[i] = cpu.pg_map[i];
-            end
-        for (int i=0; i<1024; i+=1)
-            if (cpu.pg_used[i] !== old_pgused[i]) begin
-                $fdisplay(fd, "(%0d)               Write PageUsed[%0d] = %h",
-                    ctime, i, cpu.pg_used[i]);
-                old_pgused[i] = cpu.pg_used[i];
-            end
-        for (int i=0; i<1024; i+=1)
-            if (cpu.pg_dirty[i] !== old_pgdirty[i]) begin
-                $fdisplay(fd, "(%0d)               Write PageDirty[%0d] = %h",
-                    ctime, i, cpu.pg_dirty[i]);
-                old_pgdirty[i] = cpu.pg_dirty[i];
-            end
-        for (int i=0; i<1024; i+=1)
-            if (cpu.pg_reprio[i] !== old_pgreprio[i]) begin
-                $fdisplay(fd, "(%0d)               Write PageReprio[%0d] = %h",
-                    ctime, i, cpu.pg_reprio[i]);
-                old_pgreprio[i] = cpu.pg_reprio[i];
-            end
-        for (int i=0; i<1024; i+=1)
-            if (cpu.pg_prio0[i] !== old_pgprio0[i]) begin
-                $fdisplay(fd, "(%0d)               Write PagePrio0[%0d] = %h",
-                    ctime, i, cpu.pg_prio0[i]);
-                old_pgprio0[i] = cpu.pg_prio0[i];
-            end
-        for (int i=0; i<1024; i+=1)
-            if (cpu.pg_prio1[i] !== old_pgprio1[i]) begin
-                $fdisplay(fd, "(%0d)               Write PagePrio1[%0d] = %h",
-                    ctime, i, cpu.pg_prio1[i]);
-                old_pgprio1[i] = cpu.pg_prio1[i];
-            end
+//
+// Print changed pg_map
+//
+task print_pg_map(input int i);
+    static logic [19:0] old_pgmap[1024];
+
+    if (cpu.pg_map[i] !== old_pgmap[i]) begin
+        $fdisplay(fd, "(%0d)               Write Page[%0d] = %h",
+            ctime, i, cpu.pg_map[i]);
+        old_pgmap[i] = cpu.pg_map[i];
     end
+endtask
+
+//
+// Print changed pg_used and pg_dirty
+//
+task print_pg_dirty(input int i);
+    static logic old_pgused[1024];
+    static logic old_pgdirty[1024];
+
+    if (cpu.pg_used[i] !== old_pgused[i]) begin
+        $fdisplay(fd, "(%0d)               Write PageUsed[%0d] = %h",
+            ctime, i, cpu.pg_used[i]);
+        old_pgused[i] = cpu.pg_used[i];
+    end
+    if (cpu.pg_dirty[i] !== old_pgdirty[i]) begin
+        $fdisplay(fd, "(%0d)               Write PageDirty[%0d] = %h",
+            ctime, i, cpu.pg_dirty[i]);
+        old_pgdirty[i] = cpu.pg_dirty[i];
+    end
+endtask
+
+//
+// Print changed pg_reprio
+//
+task print_pg_reprio(input int i);
+    static logic old_pgreprio[1024];
+
+    if (cpu.pg_reprio[i] !== old_pgreprio[i]) begin
+        $fdisplay(fd, "(%0d)               Write PageReprio[%0d] = %h",
+            ctime, i, cpu.pg_reprio[i]);
+        old_pgreprio[i] = cpu.pg_reprio[i];
+    end
+endtask
+
+//
+// Print changed pg_prio0
+//
+task print_pg_prio0(input int i);
+    static logic [11:0] old_pgprio0[1024];
+
+    if (cpu.pg_prio0[i] !== old_pgprio0[i]) begin
+        $fdisplay(fd, "(%0d)               Write PagePrio0[%0d] = %h",
+            ctime, i, cpu.pg_prio0[i]);
+        old_pgprio0[i] = cpu.pg_prio0[i];
+    end
+endtask
+
+//
+// Print changed pg_prio1
+//
+task print_pg_prio1(input int i);
+    static logic [11:0] old_pgprio1[1024];
+
+    if (cpu.pg_prio1[i] !== old_pgprio1[i]) begin
+        $fdisplay(fd, "(%0d)               Write PagePrio1[%0d] = %h",
+            ctime, i, cpu.pg_prio1[i]);
+        old_pgprio1[i] = cpu.pg_prio1[i];
+    end
+endtask
+
+//
+// Print changed page map
+//
+task print_changed_vm();
+    logic  [2:0] YDEV;
+    logic  [2:0] DDEV;
+    logic        WRY, WRD;
+
+    assign YDEV = opcode_x[20:18];
+    assign DDEV = opcode_x[16:14];
+    assign WRY  = opcode_x[17];
+    assign WRD  = opcode_x[13];
+
+    if (WRY && YDEV == 4)
+        print_pg_map(cpu.pg_virt);          // ydev=PSMEM, память приписок
+
+    if (WRD && (DDEV == 1 || DDEV == 2))    // ddev=ВВ, ddev=MODB: БОБР, БИЗМ
+        print_pg_dirty(cpu.pg_index);
+    if (YDEV == 2)                          // arb_req
+        print_pg_dirty(cpu.pg_translated);
+
+    if (cpu.pg_fill)                        // заполнение памяти БМСП единицами
+        for (int i=0; i<1024; i+=1)
+            print_pg_reprio(i);
+    else if (WRD && DDEV == 2)              // ddev=MODB, БМСП
+        print_pg_reprio(cpu.pg_index);
+
+    if (WRD && DDEV == 6)                   // ddev=РРМЕМ0, приоритеты страниц 0
+        print_pg_prio0(cpu.pg_index);
+
+    if (WRD && DDEV == 7)                   // ddev=РРМЕМ1, приоритеты страниц 1
+        print_pg_prio1(cpu.pg_index);
 endtask
 
 //

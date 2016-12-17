@@ -93,7 +93,7 @@ logic  [7:0] pg_procn;          // process number for current page
 logic        pg_valid;          // access allowed for current page
 logic        pg_rw;             // write allowed for current page
 logic        pg_used[1024];     // БОБР, page has been referenced
-logic        pg_dirty[1024];    // БИЗМ, page had been modified
+logic        pg_dirty[1024];    // БИЗМ, page has been modified
 logic        pg_reprio[1024];   // БМСП, reprioritize request
 logic        pg_reprio_intr;    // interrupt when reprioritize finished
 logic  [2:0] pg_access;         // both for current page
@@ -102,7 +102,6 @@ logic [11:0] pg_prio0[1024];    // page priority 0
 logic [11:0] pg_prio1[1024];    // page priority 1
 logic        pg_fill;           // fill pg_prio[] with 1s
 logic  [9:0] pg_fcnt;           // fill count
-logic        pg_changed;        // flag for tracer
 
 // Мультиплексор условий
 logic cond;
@@ -276,7 +275,7 @@ assign control_nCC = ICC ? cond : ~cond;
 
 // Выбор условия, подлежащего проверке.
 always_comb case (COND)
-      0: cond = 1;          // YES, "да"
+      0: cond = '1;         // YES, "да"
       1: cond = normb;      // NORMB, блокировка нормализации (БНОР)
       2: cond = rndb;       // RNDB, блокировка округления (БОКР)
       3: cond = ovrib;      // OVRIB, блокировка прерывания по переполнению (БПП)
@@ -298,7 +297,7 @@ always_comb case (COND)
      21: cond = arb_ready;  // ARBRDY, готовность арбитра
      22: cond = tr0;        // TR0, След0
      23: cond = ~tx_busy;   // CPMP, память обмена "ЦП -> ПП" свободна
-default: cond = 1;
+default: cond = '1;
 endcase
 
 //--------------------------------------------------------------
@@ -367,7 +366,7 @@ i8253 timer(clk, tm_cs, tm_rd, tm_wr,
 // Clock divider by 2.
 always @(posedge clk) begin
     if (reset)
-        tm_clk0 <= 0;
+        tm_clk0 <= '0;
     else if (!halt)
         tm_clk0 <= ~tm_clk0;
 end
@@ -375,10 +374,10 @@ end
 // Clock divider by 20.
 always @(posedge clk) begin
     if (reset) begin
-        tm_counter2 <= 0;
-        tm_clk2 <= 0;
+        tm_counter2 <= '0;
+        tm_clk2 <= '0;
     end else if (tm_counter2 == 9) begin
-        tm_counter2 <= 0;
+        tm_counter2 <= '0;
         if (!halt)
             tm_clk2 <= ~tm_clk2;
     end else begin
@@ -469,10 +468,7 @@ always @(posedge clk)
 always @(posedge clk)
     if (WRY)
         case (YDEV)
-         4: begin                   // PSMEM, память приписок (CS)
-                pg_map[pg_virt] <= Y[19:0];
-                pg_changed <= 1;
-            end
+         4: pg_map[pg_virt] <= Y[19:0]; // PSMEM, память приписок (CS)
 
          5: mpmem[MPADR] <= Y[7:0]; // МРМЕМ, память обмена с ПП
 
@@ -670,7 +666,7 @@ end
 // Режим эмуляции БЭСМ-6 (РЭ)
 always @(posedge clk)
     if (reset)
-        mode_besm6 <= 0;            // изначально РЭ=0
+        mode_besm6 <= '0;           // изначально РЭ=0
     else if (tag_fetch)
         mode_besm6 <= bus_itag[1];  // берем из тега командного слова
     else if (! IOMP)
@@ -758,23 +754,21 @@ always @(posedge clk)
 // ППК, признак правой команды
 always @(posedge clk)
     if (ISE)
-        rcb <= tkk;         // Копирование ТКК в ППК
+        rcb <= tkk;                 // Копирование ТКК в ППК
     else if (!IOMP)
         case (FFCNT)
-          6: rcb <= '0;     // CLRRCB, сброс триггера ППК
-          7: rcb <= '1;     // SETRCB, установка триггера ППК
+          6: rcb <= '0;             // CLRRCB, сброс триггера ППК
+          7: rcb <= '1;             // SETRCB, установка триггера ППК
         endcase
 
 // БОБР, БИЗМ: блокировка обращения, блокировка изменения
 always @(posedge clk)
-    if (WRD & DDEV == 1) begin  // ddev=ВВ: БОБР, БИЗМ
+    if (WRD & DDEV == 1) begin      // ddev=ВВ: БОБР, БИЗМ
         pg_used[pg_index] <= D[1];
         pg_dirty[pg_index] <= D[2];
-        pg_changed <= 1;
 
     end else if (arb_req) begin
-        pg_used[pg_translated] <= 1;
-        pg_changed <= 1;
+        pg_used[pg_translated] <= '1;
 
         case (ARBI)
          2, // CCWR, запись в кэш команд
@@ -782,7 +776,7 @@ always @(posedge clk)
         10, // DWR, запись результата
         11, // RDMWR, чтение - модификация - запись
         12: // BTRWR, запись в режиме блочной передачи
-            pg_dirty[pg_translated] <= 1;
+            pg_dirty[pg_translated] <= '1;
         endcase
     end
 
@@ -793,41 +787,42 @@ always @(posedge clk)
     if (reset) begin
         pg_fill <= '0;
         pg_reprio_intr <= '0;
+
     end else if (!IOMP && FFCNT == 21) begin // ffcnt=STRTLD
         pg_fill <= '1;                  // запуск загрузки памяти БМСП единицами
         pg_fcnt <= pg_index;
         pg_reprio_intr <= '0;
+
     end else if (pg_fill) begin         // заполнение памяти БМСП единицами
-        pg_reprio[pg_fcnt] <= 1;
+        pg_reprio[pg_fcnt] <= '1;
         if (pg_fcnt[9:0] == 1023) begin
             pg_fill <= '0;
             pg_reprio_intr <= '1;
         end else
             pg_fcnt <= pg_fcnt + 1;
-        pg_changed <= 1;
+
     end else if (WRD & DDEV == 2) begin // MODB, БМСП
         pg_reprio[pg_index] <= D[0];
         pg_reprio_intr <= D[0];
-        pg_changed <= 1;
+        pg_used[pg_index] <= '0;        // clear used and dirty flags
+        pg_dirty[pg_index] <= '0;
+
     end else
         pg_reprio_intr <= '0;
 
 // PPMEM0/1, память приоритетов страниц
 always @(posedge clk) begin
-    if (WRD & DDEV == 6) begin  // РРМЕМ0, ОЗУ приоритетов страниц 0
+    if (WRD & DDEV == 6)                // РРМЕМ0, ОЗУ приоритетов страниц 0
         pg_prio0[pg_index] <= Y;
-        pg_changed <= 1;
-    end
-    if (WRD & DDEV == 7) begin  // РРМЕМ1, ОЗУ приоритетов страниц 1
+
+    if (WRD & DDEV == 7)                // РРМЕМ1, ОЗУ приоритетов страниц 1
         pg_prio1[pg_index] <= Y;
-        pg_changed <= 1;
-    end
 end
 
 // Virtual page index
 assign pg_virt =
-    mode_besm6 ? vaddr[14:10] : // 15 bits in besm6 mode
-                 vaddr[19:10];  // 20 bits in normal mode
+    mode_besm6 ? vaddr[14:10] :     // 15 bits in besm6 mode
+                 vaddr[19:10];      // 20 bits in normal mode
 
 // Translate virtual page into physical page index
 assign pg_translated =
@@ -852,8 +847,6 @@ always @(posedge clk)
         pg_index <= pg_translated;  // PHYSAD, set from microinstruction
     else if (YDST == 4)
         pg_index <= Y[19:10];       // PHYSPG, регистр физической страницы
-
-//TODO: rewrite pg_changed as single always block
 
 //--------------------------------------------------------------
 // RWIO table
