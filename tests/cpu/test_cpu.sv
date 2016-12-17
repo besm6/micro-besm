@@ -7,8 +7,9 @@ timeunit 1ns / 10ps;
 
 // Inputs.
 logic        clk, reset;
-logic [63:0] i_data;
-logic  [7:0] i_tag;
+logic [63:0] i_data;                    // data input
+logic  [7:0] i_tag;                     // tag input
+logic        i_irq;                     // interrupt request
 
 // Outputs.
 logic [63:0] o_ad;                      // address/data output
@@ -18,10 +19,14 @@ logic        o_atomic;                  // read-modify-write flag
 logic        o_rd;                      // read op
 logic        o_wr;                      // write op
 logic        o_wforce;                  // ignore write protection
+logic        o_iack;                    // interrupt acknowledge
+logic [63:0] ram_data;                  // data output from RAM
+logic [63:0] irq_pending;               // mask of pending interrupts
 
 // Instantiate CPU.
 cpu cpu(clk, reset, i_data, i_tag,
-    o_ad, o_tag, o_astb, o_atomic, o_rd, o_wr, o_wforce);
+    o_ad, o_tag, o_astb, o_atomic, o_rd, o_wr, o_wforce,
+    i_irq, o_iack);
 
 // Setup trace moninor.
 tracer tr();
@@ -29,7 +34,14 @@ tracer tr();
 // 1Mword x 64bit of tagged RAM.
 tmemory ram(clk, o_ad, o_tag,
     o_astb, o_atomic, o_rd, o_wr, o_wforce,
-    i_data, i_tag);
+    ram_data, i_tag);
+
+// Interrupt processing.
+assign i_data = o_iack ? irq_pending : ram_data;
+
+always @(posedge clk)
+    if (o_iack)
+        i_irq = '0;                     // deactivate interrupt request
 
 string tracefile = "output.trace";
 string hexfile;                         // Input hex file with code
@@ -102,6 +114,8 @@ initial begin
     // Start with reset active
     clk = 1;
     reset = 1;
+    i_irq = 0;
+    irq_pending = '0;
 
     // Hold reset for a while.
     #2 reset = 0;

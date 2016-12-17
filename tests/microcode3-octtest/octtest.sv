@@ -13,6 +13,7 @@ timeunit 1ns / 10ps;
 logic        clk, reset;
 wire  [63:0] i_data = '0;
 wire   [7:0] i_tag = '0;
+logic        i_irq;                     // interrupt request
 
 // Outputs.
 logic [63:0] o_ad;                      // address/data output
@@ -22,10 +23,12 @@ logic        o_atomic;                  // read-modify-write flag
 logic        o_rd;                      // read op
 logic        o_wr;                      // write op
 logic        o_wforce;                  // ignore write protection
+logic        o_iack;                    // interrupt acknowledge
 
 // Instantiate CPU.
 cpu cpu(clk, reset, '0, '0,
-    o_ad, o_tag, o_astb, o_atomic, o_rd, o_wr, o_wforce);
+    o_ad, o_tag, o_astb, o_atomic, o_rd, o_wr, o_wforce,
+    i_irq, o_iack);
 
 // Setup trace moninor.
 tracer tr();
