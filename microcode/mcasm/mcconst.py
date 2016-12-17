@@ -54,7 +54,7 @@ def write_results(filename):
         value = const[name]['value']
         file.write("%8d: 64'h%016x,    // %s\n" % (index, value, name))
     file.close()
-    print "%s: %d constants" % (filename, len(const))
+    print "Constants: %d words" % len(const)
 
 if __name__ == "__main__":
     main()

@@ -24,6 +24,7 @@ label_defined = []              # Labels defined in the current routine
 label_external = []             # External labels for the current routine
 label_local = {}                # Local labels for the current routine
 code = []                       # Accumulated code of current routine
+prog_names = []                 # Generated output files
 
 #
 # Process the input file.
@@ -37,8 +38,15 @@ def main(filename):
     a = map(do_flist, a)
     a = map(do_check, a)
     a = map(do_macro, a)
-    listing_start(filename)
+    #listing_start(filename)
     translate(a)
+
+    # Print generated names
+    if prog_names:
+        print "Compile:",
+        for name in prog_names:
+            print name,
+        print
 
 #
 # Build a value of default microinstruction code when no parameters present.
@@ -139,7 +147,7 @@ def label_define(name, offset):
     global label_defined
     #print "--- Label", name
     label_defined.append([name, offset])
-    listing_label(name)
+    #listing_label(name)
 
 #
 # Declare an external label.
@@ -189,7 +197,7 @@ def translate(a):
             label_local = {}
             code = []
             offset = 0
-            listing_hline()
+            #listing_hline()
             continue
 
         if len(op) > 1 and op[1] == "PROG":
@@ -230,14 +238,17 @@ def rename_locals():
 # Write the current routine to a separate JSON file.
 #
 def write_results():
+    global prog_names
+
     # Create a safe file name: replace / by %.
     filename = prog_name.replace('/', '%') + ".json"
     file = open(filename,'w')
     json.dump([label_defined, label_external, code], file,
         indent=4, sort_keys=True)
     file.close()
-    print "%s: %d symbols, %d externals, %d instructions" % \
-        (prog_name, len(label_defined), len(label_external), len(code))
+    prog_names.append(prog_name)
+    #print "%s: %d symbols, %d externals, %d instructions" % \
+    #    (prog_name, len(label_defined), len(label_external), len(code))
 
 def expand_macro(list):
     i = 0
@@ -324,10 +335,10 @@ def generate_code(op, args):
         opcode |= value << (lower-1)
     if ref:
         code.append([opcode, ref])
-        listing_opcode(opcode, ref)
+        #listing_opcode(opcode, ref)
     else:
         code.append([opcode])
-        listing_opcode(opcode, '')
+        #listing_opcode(opcode, '')
 
 if __name__ == "__main__":
     main(sys.argv[1])

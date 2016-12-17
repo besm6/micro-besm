@@ -201,7 +201,7 @@ def write_microcode(filename):
         file.write("\n")
         offset += 1
     file.close()
-    print "%s: %d words" % (filename, len(code))
+    print "Microcode: %d words" % len(code)
 
 #
 # Write the table of opcode addresses.
@@ -238,7 +238,7 @@ def write_optab():
             file.write("'h%x_%02x: %4d,   // %s\n" % (op >> 8, op & 0xff, offset, name))
         file.write("default: %3d    // EXTDR\n" % symtab["EXTDR"])
         file.close()
-        print "Instruction table: %d opcodes" % (len(optab))
+        print "Instruction map: %d opcodes" % (len(optab))
 
     if rwiotab:
         file = open("rwiotab.v", 'w')
@@ -249,7 +249,7 @@ def write_optab():
             name = find_label(offset)
             file.write("'h%03x: %4d,    // %s\n" % (op, offset, name))
         file.close()
-        print "RW/IO table: %d entries" % (len(rwiotab))
+        print "RW/IO map: %d entries" % (len(rwiotab))
 
     if grouptab:
         file = open("grouptab.v", 'w')
@@ -260,7 +260,7 @@ def write_optab():
             name = find_label(offset)
             file.write("'h%02x: %4d,     // %s\n" % (op, offset, name))
         file.close()
-        print "Group table: %d entries" % (len(grouptab))
+        print "Group map: %d entries" % (len(grouptab))
 
     if intrtab:
         file = open("intrtab.v", 'w')
@@ -271,7 +271,7 @@ def write_optab():
             name = find_label(offset)
             file.write("'h%02x: %4d,     // %s\n" % (op, offset, name))
         file.close()
-        print "Interrupt table: %d entries" % (len(intrtab))
+        print "Interrupt map: %d entries" % (len(intrtab))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
