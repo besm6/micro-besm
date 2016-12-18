@@ -135,10 +135,12 @@ always @(negedge clk) begin
             $fdisplay(fd, "(%0d)               Memory Load [%h %h] = %h:%h",
                 ctime, testbench.mem_vaddr, testbench.mem_paddr, testbench.i_tag, testbench.i_data);
 
-        if (testbench.trace && cpu.MAP == 1 && cpu.SQI != 14 &&
-            (cpu.COND == 0 || cpu.tkk) &&
-            (cpu.LETC == 0 || cpu.uflag == 0)) begin
-            // When MAP=ME, and jump taken, and not UTC: print BESM instruction.
+        if (cpu.int_flag)
+            $fdisplay(fd, "(%0d) *** Interrupt #%0d", ctime, cpu.int_vect);
+        else if (cpu.MAP == 1 && cpu.SQI != 14 &&
+                 (cpu.COND == 0 || cpu.tkk) &&
+                 (!cpu.LETC || !cpu.uflag)) begin
+            // When MAP=ME and jump taken, and not UTC: print BESM instruction.
             print_insn();
         end
 
@@ -146,10 +148,6 @@ always @(negedge clk) begin
             // Print changed busio state _last_,
             // as it actually comes from the _next_ microinstruction.
             print_changed_bb1();
-        end
-
-        if (int_flag_x) begin
-            $fdisplay(fd, "(%0d) *** Interrupt #%0d", ctime, cpu.int_vect);
         end
 
         // Get data from fetch stage
