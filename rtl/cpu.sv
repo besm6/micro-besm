@@ -557,6 +557,14 @@ always @(posedge clk)
     else if (YDST == 5)
         arb_opc <= Y[3:0];          // ARBOPC, set from Y data bus
 
+logic exception;
+
+always @(posedge clk)
+    if (reset)
+        exception <= '0;
+    else
+        exception <= arb_req & (ARBI != 0) & arb_suspend;
+
 //--------------------------------------------------------------
 // Instruction decoder
 //
@@ -880,7 +888,7 @@ logic [11:0] intrtab[32] = '{
 assign intr_addr = intrtab[int_vect];
 
 // Flag to take interrupt immediately
-assign int_flag = (g_int | prg_int) & ISE & !no_intr;
+assign int_flag = exception | ((g_int | prg_int) & ISE & !no_intr);
 
 // On interrupt, jump to address 001
 assign opaddr =
@@ -900,22 +908,45 @@ always @(posedge clk) begin
     // 27 - останов (halt) по обращению к памяти (stopm0, stopm1)
     // 29 - обращение блока связи ПП на чтение/запись регистров
 
-    // 4 - программное прерывание
-    if (prg_int & !no_intr) begin
-        int_vect <= 4;
-    end
-
     // 6 - отсутствующий адрес памяти в новом режиме
-    else if (arb_req & (vaddr[31:19] != '0) & (vaddr[31:19] != '1)) begin
-        g_int <= '1;                // старшие разряды виртуального адреса
-        int_vect <= 6;
+    if (arb_req & (vaddr[31:19] != '0) & (vaddr[31:19] != '1)) begin
+        int_vect <= 6;              // старшие разряды виртуального адреса
     end
 
     // 7 - отрицательный номер страницы у команды
     // 8 - отрицательный номер страницы у операнда
     else if (arb_req & !no_paging & !flag_negaddr & !drg & vaddr[19]) begin
-        g_int <= '1;                // РОА=0 (при БП=0) при обращении в память
-        int_vect <= (ARBI == 8) ? 7 : 8;
+        int_vect <= (ARBI == 8) ?   // РОА=0 (при БП=0) при обращении в память
+                    7 : 8;
+    end
+
+    // 13 - математический адрес равен 0
+    else if (arb_req & (vaddr == 0)) begin
+        int_vect <= 13;             // АИСП=0 при обращении в память
+    end
+
+    // 14 - чужой регистр приписки при чтении/записи операнда
+    // 15 - чужой регистр приписки при выборке команд
+    else if (arb_req & !no_paging & !no_procnm &
+             (procn != pg_procn) & (pg_procn != 'hff))
+    begin
+        int_vect <= (ARBI == 8) ?   // РНП не соответствует регистру приписки
+                    15 : 14;        // (при БПНП=0 и БП=0) при обращении в память
+    end
+
+    // 16 - защита страницы при обращении
+    else if (arb_req & !no_paging & !no_pgprot & !pg_valid) begin
+        int_vect <= 16;             // нет бита доступа (при БЗО=0 и БП=0)
+    end
+
+    // 17 - защита страницы при записи
+    else if (arb_req & !no_paging & !no_wprot & !pg_rw) begin
+        int_vect <= 17;             // нет бита разрешения записи (при БЗЗ=0 и БП=0)
+    end
+
+    // 4 - программное прерывание
+    else if (prg_int & !no_intr) begin
+        int_vect <= 4;
     end
 
     // 9 - программная интерпретация тега команды
@@ -940,34 +971,6 @@ always @(posedge clk) begin
     else if (tag_fetch & !itag_cmd) begin
         g_int <= '1;                // ПК при выборке команды
         int_vect <= 12;
-    end
-
-    // 13 - математический адрес равен 0
-    else if (arb_req & (vaddr == 0)) begin
-        g_int <= '1;                // АИСП=0 при обращении в память
-        int_vect <= 13;
-    end
-
-    // 14 - чужой регистр приписки при чтении/записи операнда
-    // 15 - чужой регистр приписки при выборке команд
-    else if (arb_req & !no_paging & !no_procnm &
-             (procn != pg_procn) & (pg_procn != 'hff))
-    begin
-        g_int <= '1;                // РНП не соответствует регистру приписки
-        int_vect <= (ARBI == 8) ?   // (при БПНП=0 и БП=0) при обращении в память
-                    15 : 14;
-    end
-
-    // 16 - защита страницы при обращении
-    else if (arb_req & !no_paging & !no_pgprot & !pg_valid) begin
-        g_int <= '1;                // нет бита доступа (при БЗО=0 и БП=0)
-        int_vect <= 16;
-    end
-
-    // 17 - защита страницы при записи
-    else if (arb_req & !no_paging & !no_wprot & !pg_rw) begin
-        g_int <= '1;                // нет бита разрешения записи (при БЗЗ=0 и БП=0)
-        int_vect <= 17;
     end
 
     // 18 - защита выборки команды
@@ -1006,7 +1009,7 @@ always @(posedge clk) begin
         int_vect <= 23;
     end
 
-    // 28 - шаговое прерывание
+    // 28 - шаговое прерывание (приоритет выше, чем у внешних прерываний)
     else if (single_step) begin
         g_int <= '1;                // установлен бит РР[20]
         int_vect <= 28;
