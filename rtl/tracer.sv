@@ -51,6 +51,8 @@ logic  [11:0] pc_f;                     // PC at fetch stage
 logic  [11:0] pc_x;                     // PC at execute stage
 logic [112:1] opcode_x;                 // Opcode at execute stage
 logic         int_flag_x;               // Interrupt flag
+logic         tkk_x;
+logic         cb_x;
 
 //
 // Current time
@@ -115,6 +117,7 @@ always @(negedge clk) begin
             print_changed_2901();
             print_changed_2904();
             print_changed_2910();
+            print_changed_bb1();
             print_changed_cpu(opcode_x);
             print_changed_timer();
             print_changed_vm();
@@ -135,25 +138,19 @@ always @(negedge clk) begin
             $fdisplay(fd, "(%0d)               Memory Load [%h %h] = %h:%h",
                 ctime, testbench.mem_vaddr, testbench.mem_paddr, testbench.i_tag, testbench.i_data);
 
-        if (cpu.int_flag)
-            $fdisplay(fd, "(%0d) *** Interrupt #%0d", ctime, cpu.int_vect);
-        else if (cpu.MAP == 1 && cpu.SQI != 14 &&
-                 (cpu.COND == 0 || cpu.tkk) &&
-                 (!cpu.LETC || !cpu.uflag)) begin
-            // When MAP=ME and jump taken, and not UTC: print BESM instruction.
+        // Print BESM instruction
+        if (!reset)
             print_insn();
-        end
 
-        if (testbench.trace > 1 && !reset) begin
-            // Print changed busio state _last_,
-            // as it actually comes from the _next_ microinstruction.
-            print_changed_bb1();
-        end
+        if (int_flag_x)
+            $fdisplay(fd, "(%0d) *** Interrupt #%0d", ctime, cpu.int_vect);
 
         // Get data from fetch stage
         pc_x = pc_f;
         opcode_x = cpu.opcode;
         int_flag_x = cpu.int_flag;
+        tkk_x = cpu.tkk;
+        cb_x = cpu.cb;
         const_value = cpu.PROM;
         const_addr = cpu.A[8:0];
 
@@ -341,6 +338,10 @@ task print_insn();
         48:"*60", 49:"*61", 50:"*62", 51:"*63", 52:"*64", 53:"*65", 54:"*66", 55:"*67",
         56:"*70", 57:"*71", 58:"*72", 59:"*73", 60:"*74", 61:"*75", 62:"*76", 63:"*77"
     };
+    automatic logic  [1:0] MAP  = opcode_x[96:95];
+    automatic logic  [3:0] SQI  = opcode_x[112:109];
+    automatic logic  [4:0] COND = opcode_x[6:2];
+    automatic logic        LETC = opcode_x[40];
     logic [19:0] pc;
     logic [31:0] opcode;
     logic besm6_mode;
@@ -354,6 +355,13 @@ task print_insn();
     assign opcode =
         cpu.tkk ? cpu.bus_iword[31:0] : cpu.bus_iword[63:32];
 
+    // Only when MAP=ME and jump taken, and not UTC.
+    if (MAP != 1 || SQI == 14 ||
+        (COND != 0 && !tkk_x) ||
+        (LETC && cb_x))
+        return;
+
+    // Print BESM instruction.
     $fwrite(fd, "(%0d) %h %h: %h", ctime, pc, testbench.fetch_paddr, opcode);
     if ($isunknown(cpu.instr_reg)) begin
         $fdisplay(fd, " *** Unknown");
