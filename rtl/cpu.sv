@@ -527,7 +527,7 @@ extbus busio(
 //
 arbiter arb(clk, reset,
     arb_req,                        // input request strobe
-    arb_suspend,                    // input suspend condition
+    arb_suspend & arb_req,          // input suspend condition
     arb_req ? ARBI : arb_opc,       // input opcode
     bus_ARX, bus_ECX, bus_WRX,      // X bus control
     o_astb, o_atomic, o_rd, o_wr,   // external memory interface
