@@ -49,9 +49,9 @@ assign ir15 = (ir == 15);                   // stack mode
 // Base opcode
 assign bop =
     pe ? tkk ? dc[32] ? {dc[32:28], 3'd0}   // besm6 right half
-                      : dc[32:25]
+                      : dc[30:25]
              : dc[56] ? {dc[56:52], 3'd0}   // besm6 left half
-                      : dc[56:49]
+                      : dc[54:49]
        : tkk ? dc[28:21]                    // right half
              : dc[60:53];                   // left half
 
