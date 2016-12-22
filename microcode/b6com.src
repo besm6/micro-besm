@@ -825,18 +825,20 @@ LDCT А=LCW,МАР=РЕ,ЕСА,ARA=RG2,ALUS=DА,RА=WR3,Н,ALUD=В,RВ=А,CEN
 JRP %М%,ALUS=ZВ,RВ=А,Н,CI=CIC,ALUD=В,СЕМ,FFCNT=LOGGRP
 ;
 ;===== П/П ПОДСЧЕТА ЧИСЛА ЕДИНИЦ СУММАТОРА В НР
-;ФИЗ.АДРЕС - В RG0, СУММАТОР - В WR1
-ACXN:CONT %PHAR%,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR1,SТОРС=CLRM,СЕМ,FFCNT=СНТКК
-ACXNC:ENTRY
-;0 - В WR3
-PUSH А=63,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR3
+; Физ.адрес - в RG0, сумматор - в WR1
+ACXN:CONT %PHAR%,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR1,FFCNT=СНТКК
+; Регистр M может портиться прерыванием по причине нулевого мат.адреса.
+; Приходится ждать здесь.
+; Проверяем готовность арбитра, читаем АК в Q
+WAS:CJP А=WAS,%WА%,%RСА%
+; 0 - в WR3, обнуляем M
+PUSH А=63,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR3,SТОРС=CLRM,СЕМ
 ;СДВИГ ЛОГ.СУММАТОРА - СЕМ; ВЫХОД, ЕСЛИ ОН РАВЕН 0
-CJPP А=WAS,МАР=РЕ,COND=СТ,SТОРС=MZ,ALUS=ZВ,RВ=WR1,Н,ALUD=RSB,SHMUX=ASLLS,СЕМ
+CJPP А=RET,МАР=РЕ,COND=СТ,SТОРС=MZ,ALUS=ZВ,RВ=WR1,Н,ALUD=RSB,SHMUX=ASLLS,СЕМ
 ;ДОБАВЛЯЕМ ПЕРЕНОС (ВЫШЕДШИЙ РАЗРЯД)
 RFCT ALUS=ZВ,RВ=WR3,Н,CI=CIC,ALUD=В,SТОРС=MZ
-;ПРОВЕРЯЕМ ГОТ.АРБИТРА, ЧИТАЕМ АК В Q, ВОЗВРАТ
-WAS:CJP А=WAS,%WА%,%RСА%,FFCNT=CLRJMP
-CRTN
+; Возврат
+RET:CRTN FFCNT=CLRJMP
 ;
 ;
 ACXF:ENTRY

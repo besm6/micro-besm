@@ -287,13 +287,19 @@ ACU:PROG;
 ;===== ПОДСЧЕТ ЧИСЛА ЕДИНИЦ В СУММАТОРЕ;
 ;ЗАТЕМ ВЫПОЛНЯЕТСЯ АРИФМЕТИЧЕСКОЕ(!) СЛОЖЕНИЕ РЕЗ-ТА С АДРЕСОМ (С РАЗМНОЖ.ЗНАКА
 ;
-EXTERNAL LCW,NADR,ACXNC,JQ
+EXTERNAL LCW,NADR,JQ
 ;ВЫЧИСЛЯЕМ АИСП., ПРОВЕРЯЕМ ЗНАК, РАЗМНОЖАЕМ, ЕСЛИ НАДО
 CONT CSM,MNSA=IRA,ALUS=DQ,FUNC=ADD,ALUD=В,RВ=DADR,CEN,ALU,ЕСВ,WRB,BRA=RG2
 CJS А=NADR,МАР=РЕ,COND=СТ,SТОРС=NN,ЕСА,ARA=RG2,ALUS=DА,RА=HALF,FUNC=AND
 >,Н,ALUD=В,RВ=WR2
 ;СУММАТОР - В WR1
-CJS А=ACXNC,МАР=РЕ,ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR1,SТОРС=CLRM,СЕМ,FFCNT=СНТКК
+CONT ALUS=ZА,RА=А,Н,ALUD=В,RВ=WR1,SТОРС=CLRM,СЕМ,FFCNT=СНТКК
+;0 - В WR3
+PUSH А=63,МАР=РЕ,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR3
+;СДВИГ ЛОГ.СУММАТОРА - СЕМ; ВЫХОД, ЕСЛИ ОН РАВЕН 0
+CJPP А=PSACU,МАР=РЕ,COND=СТ,SТОРС=MZ,ALUS=ZВ,RВ=WR1,Н,ALUD=RSB,SHMUX=ASLLS,СЕМ
+;ДОБАВЛЯЕМ ПЕРЕНОС (ВЫШЕДШИЙ РАЗРЯД)
+RFCT ALUS=ZВ,RВ=WR3,Н,CI=CIC,ALUD=В,SТОРС=MZ
 ;ДЕЛАЕМ АРИФМЕТИЧЕСКОЕ(!) СЛОЖЕНИЕ
 PSACU:ENTRY
 LDCT А=LCW,МАР=РЕ,ALUS=АВ,RА=WR2,RВ=WR3,FUNC=ADD,Н,ALUD=В,FFCNT=CLRJMP
