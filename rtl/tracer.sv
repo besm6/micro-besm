@@ -131,12 +131,12 @@ always @(negedge clk) begin
         if (!testbench.o_astb && testbench.o_wr)
             $fdisplay(fd, "(%0d)               Memory Store [%h %h] = %h:%h",
                 ctime, testbench.mem_vaddr, testbench.mem_paddr, testbench.o_tag, testbench.o_ad);
-        else if (!testbench.o_astb && cpu.arb.wrx && cpu.arb_opc == 8)
-            $fdisplay(fd, "(%0d)               Memory Fetch [%h %h] = %h:%h",
-                ctime, testbench.mem_vaddr, testbench.fetch_paddr, testbench.i_tag, testbench.i_data);
-        else if (!testbench.o_astb && cpu.arb.wrx)
+        else if (!testbench.o_astb && cpu.arb.wrx && cpu.arb_opc != 8)
             $fdisplay(fd, "(%0d)               Memory Load [%h %h] = %h:%h",
                 ctime, testbench.mem_vaddr, testbench.mem_paddr, testbench.i_tag, testbench.i_data);
+        else if (!testbench.o_astb && cpu.arb.wrx && cpu.arb_opc == 8 && testbench.trace > 1)
+            $fdisplay(fd, "(%0d)               Memory Fetch [%h %h] = %h:%h",
+                ctime, testbench.mem_vaddr, testbench.fetch_paddr, testbench.i_tag, testbench.i_data);
 
         // Print BESM instruction
         if (!reset)
@@ -344,6 +344,7 @@ task print_insn();
     automatic logic        LETC = opcode_x[40];
     logic [19:0] pc;
     logic [31:0] opcode;
+    logic [23:0] b6_opcode;
     logic besm6_mode;
     string name;
 
@@ -352,8 +353,12 @@ task print_insn();
         cpu.alu.p19_16.ram[3], cpu.alu.p15_12.ram[3],
         cpu.alu.p11_8.ram[3],  cpu.alu.p7_4.ram[3],
         cpu.alu.p3_0.ram[3] };
-    assign opcode =
-        cpu.tkk ? cpu.bus_iword[31:0] : cpu.bus_iword[63:32];
+    assign opcode =                         // native opcode, 32 bits
+        cpu.tkk ? cpu.bus_iword[31:0]
+                : cpu.bus_iword[63:32];
+    assign b6_opcode =                      // besm6 opcode, 24 bits
+        cpu.tkk ? cpu.bus_iword[35:12]
+                : {cpu.bus_iword[63], cpu.bus_iword[58:36]};
 
     // Only when MAP=ME and jump taken, and not UTC.
     if (MAP != 1 || SQI == 14 ||
@@ -362,7 +367,12 @@ task print_insn();
         return;
 
     // Print BESM instruction.
-    $fwrite(fd, "(%0d) %h %h: %h", ctime, pc, testbench.fetch_paddr, opcode);
+    $fwrite(fd, "(%0d) %h %h: ", ctime, pc, testbench.fetch_paddr);
+    if (besm6_mode)
+        $fwrite(fd, "%h", b6_opcode);
+    else
+        $fwrite(fd, "%h", opcode);
+
     if ($isunknown(cpu.instr_reg)) begin
         $fdisplay(fd, " *** Unknown");
         return;

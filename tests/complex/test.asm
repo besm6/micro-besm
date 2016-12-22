@@ -2717,21 +2717,21 @@ t57:        n   vtm     @57
             2   vtm     14
                 ita     2
                 aex     =1
-            13  vjm     снасс
+            13  vjm     chacc
             2   vtm     15
             2   utm     -15
                 ita     2
-            13  vjm     снасс
+            13  vjm     chacc
             3   vtm     1
             3   j+m     2
                 ita     2
                 aex     =1
-            13  vjm     снасс
+            13  vjm     chacc
             13  vjm     снм3
             3   mtj     2
                 ita     2
                 aex     =1
-            13  vjm     снасс
+            13  vjm     chacc
             13  vjm     снм3
             13  vjm     newtest
 ;
@@ -3235,22 +3235,22 @@ t71:        n   vtm     @71
                 jane    t72
                 xta     ful
                 aax
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     ful
                 aax     ful
                 aex     ful
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     chess1
                 aax     chess1
                 aex     chess1
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     chess1
                 aax     chess2
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     chess1
                 aox     chess2
                 aex     ful
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     chess2          ; проверка
                 aex     chess1          ; засылки
                 xta     chess2          ; в рмр
@@ -3266,15 +3266,15 @@ t72:        n   vtm     @72
                 xta     =11
                 arx     =1
                 aex     =12
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     ful
                 arx     =1
                 aex     =1
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     ful
                 arx     ful
                 aex     ful
-            13  vjm     снасс
+            13  vjm     chacc
             13  vjm     newtest
 ;
 ; 73 - APX, AUX
@@ -3286,19 +3286,19 @@ t73:        n   vtm     @73
                 apx     ful
                 aux     =h7fff ffff ffff ffff
                 aex     chess2
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     chess1
                 apx     chess2
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     chess1
                 apx     chess1
                 aux     chess2
                 aex     chess2
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     ful
                 aux     chess2
                 aex     chess2
-            13  vjm     снасс
+            13  vjm     chacc
             13  vjm     newtest
 ;
 ; 74 - ACX, ANX
@@ -3307,15 +3307,15 @@ t74:        n   vtm     @74
             n   xta     bltest
                 jane    t75
                 acx
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     ful
                 acx
                 aex     =64
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     chess2
                 acx     =hffff ffff ffff ffe0
                 aex     =1
-            13  vjm     снасс
+            13  vjm     chacc
             11  vtm     64
                 xta     =1
 tanx:       11  jmne    * + 1
@@ -3324,7 +3324,7 @@ tanx:       11  jmne    * + 1
                 anx
                 its     11
             15  aex
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     ws
                 asn     1024 - 1
                 its     11
@@ -3334,7 +3334,7 @@ tanx:       11  jmne    * + 1
                 xta
                 anx     ful
                 aex     ful
-            13  vjm     снасс
+            13  vjm     chacc
                 uta     5               ; проверка
                 anx     ful             ; засылки
                 xta     =h4000 0000 0000 0000
@@ -3353,7 +3353,7 @@ tsft1:          xta     =h8000 0000 0000 0000
                 anx
                 its     11
             15  aex
-            13  vjm     снасс
+            13  vjm     chacc
             11  vrm     tsft1
             11  vtm     64
 tsft2:          xta     =1
@@ -3361,15 +3361,15 @@ tsft2:          xta     =1
                 anx
                 its     11
             15  aex
-            13  vjm     снасс
+            13  vjm     chacc
             11  vrm     tsft2
                 xta     ful
                 asx     ful
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     chess2
                 asx     =h7fff ffff ffff ffff
                 aex     chess1
-            13  vjm     снасс
+            13  vjm     chacc
                 xta     ful             ; а что
                 asn     1024 - 12       ; попадет
                 uta     @fff            ; в рмр
@@ -6204,7 +6204,7 @@ cout:           wmod    @1c19 ; сброс кэша
 ;
 снм3:           ita     3
                 aex     =1
-снасс:          jane    error
+chacc:          jane    error
 ;;                ati     2
 ;;            2   jmne    error
 ;;                asn     1024+32
