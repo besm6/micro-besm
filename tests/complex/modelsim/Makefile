@@ -29,7 +29,7 @@ INCLUDES        = ../../../microcode/microcode.v \
 MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
 
 RUNFLAGS        = +hex=../test.hex +clearmem
-RUNFLAGS	+= +limit=5000000	# Limit by a number of cycles
+RUNFLAGS	+= +limit=20000000	# Limit by a number of cycles
 #RUNFLAGS	+= +trace=0		# No trace
 RUNFLAGS	+= +trace=1		# Print instructions
 #RUNFLAGS	+= +trace=2		# Print micro-instructions
@@ -45,7 +45,7 @@ work:           $(SOURCES) $(INCLUDES)
 		$(MODELSIM)/vlog -sv -nologo $(SOURCES)
 
 run:            work
-		$(MODELSIM)/vsim -c -l run.log -do 'run 10ms;quit' testbench $(RUNFLAGS)
+		$(MODELSIM)/vsim -c -l run.log -do 'run 1000ms;quit' testbench $(RUNFLAGS)
 
 view:
 		gtkwave output.vcd test.gtkw &
