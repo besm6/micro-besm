@@ -770,9 +770,13 @@ always @(posedge clk)
 
 // БОБР, БИЗМ: блокировка обращения, блокировка изменения
 always @(posedge clk)
-    if (WRD & DDEV == 1) begin      // ddev=ВВ: БОБР, БИЗМ
+    if (WRD & DDEV == 1) begin          // ddev=ВВ: БОБР, БИЗМ
         pg_used[pg_index] <= D[1];
         pg_dirty[pg_index] <= D[2];
+
+    end else if (WRD & DDEV == 2) begin // MODB, БМСП
+        pg_used[pg_index] <= '0;        // clear used and dirty flags
+        pg_dirty[pg_index] <= '0;
 
     end else if (arb_req) begin
         pg_used[pg_translated] <= '1;
@@ -795,6 +799,10 @@ always @(posedge clk)
         pg_fill <= '0;
         pg_reprio_intr <= '0;
 
+    end else if (WRD & DDEV == 2) begin // MODB, БМСП
+        pg_reprio[pg_index] <= D[0];
+        pg_reprio_intr <= D[0];
+
     end else if (!IOMP && FFCNT == 21) begin // ffcnt=STRTLD
         pg_fill <= '1;                  // запуск загрузки памяти БМСП единицами
         pg_fcnt <= pg_index;
@@ -807,12 +815,6 @@ always @(posedge clk)
             pg_reprio_intr <= '1;
         end else
             pg_fcnt <= pg_fcnt + 1;
-
-    end else if (WRD & DDEV == 2) begin // MODB, БМСП
-        pg_reprio[pg_index] <= D[0];
-        pg_reprio_intr <= D[0];
-        pg_used[pg_index] <= '0;        // clear used and dirty flags
-        pg_dirty[pg_index] <= '0;
 
     end else
         pg_reprio_intr <= '0;
