@@ -127,16 +127,8 @@ always @(negedge clk) begin
             print_changed_vm();
         end
 
-        // Print memory transactions
-        if (!testbench.o_astb && testbench.o_wr)
-            $fdisplay(fd, "(%0d)               Memory Store [%h %h] = %h:%h",
-                ctime, testbench.mem_vaddr, testbench.mem_paddr, testbench.o_tag, testbench.o_ad);
-        else if (!testbench.o_astb && cpu.arb.wrx && cpu.arb_opc != 8)
-            $fdisplay(fd, "(%0d)               Memory Load [%h %h] = %h:%h",
-                ctime, testbench.mem_vaddr, testbench.mem_paddr, testbench.i_tag, testbench.i_data);
-        else if (!testbench.o_astb && cpu.arb.wrx && cpu.arb_opc == 8 && testbench.trace > 1)
-            $fdisplay(fd, "(%0d)               Memory Fetch [%h %h] = %h:%h",
-                ctime, testbench.mem_vaddr, testbench.fetch_paddr, testbench.i_tag, testbench.i_data);
+        // Print transactions on external bus
+        print_ext_bus();
 
         // Print BESM instruction
         if (!reset)
@@ -171,7 +163,7 @@ always @(negedge clk) begin
         terminate("Fatal Error!");
     end
 
-    if (!cpu.run) begin
+    if (!cpu.run || (!cpu.mode_besm6 && !cpu.instr_ext && cpu.instr_code == 'hff)) begin
         cpu_halted();
     end
 end
@@ -253,6 +245,45 @@ task terminate(input string message);
 endtask
 
 //
+// Print transactions on external bus: memory loads/stores/fetches etc.
+//
+task print_ext_bus();
+    if (!cpu.arb.astb && cpu.arb.wr)
+        $fdisplay(fd, "(%0d)               Memory Store [%h %h] = %h:%h",
+            ctime, testbench.mem_vaddr, testbench.mem_paddr, testbench.o_tag, testbench.o_ad);
+
+    else if (cpu.arb.wrx && cpu.arb_opc == 15)
+        $fdisplay(fd, "(%0d) *** Poll interrupts = %h",
+            ctime, testbench.i_data);
+
+    else if (cpu.arb.request && cpu.arb_opc == 14)
+        $fdisplay(fd, "(%0d) *** Clear interrupts (not implemented yet)",
+            ctime);
+
+    else if (cpu.arb.request && cpu.arb_opc == 1)
+        $fdisplay(fd, "(%0d) *** Arbiter op=CCRD not supported!", ctime);
+
+    else if (cpu.arb.request && cpu.arb_opc == 2)
+        $fdisplay(fd, "(%0d) *** Arbiter op=CCWR not supported!", ctime);
+
+    else if (cpu.arb.request && cpu.arb_opc == 3)
+        $fdisplay(fd, "(%0d) *** Arbiter op=DCRD not supported!", ctime);
+
+    else if (cpu.arb.request && cpu.arb_opc == 4)
+        $fdisplay(fd, "(%0d) *** Arbiter op=DCWR not supported!", ctime);
+
+    else if (!cpu.arb.astb && cpu.arb.wrx && cpu.arb_opc != 8)
+        $fdisplay(fd, "(%0d)               Memory Load [%h %h] = %h:%h",
+            ctime, testbench.mem_vaddr, testbench.mem_paddr,
+            testbench.i_tag, testbench.i_data);
+
+    else if (!cpu.arb.astb && cpu.arb.wrx && cpu.arb_opc == 8 && testbench.trace > 1)
+        $fdisplay(fd, "(%0d)               Memory Fetch [%h %h] = %h:%h",
+            ctime, testbench.mem_vaddr, testbench.fetch_paddr,
+            testbench.i_tag, testbench.i_data);
+endtask
+
+//
 // Print BESM instruction.
 //
 task print_insn();
@@ -307,8 +338,8 @@ task print_insn();
         104:"3f68",105:"3f69",106:"3f6a",107:"3f6b",108:"3f6c",109:"3f6d",110:"3f6e",111:"3f6f",
         112:"3f70",113:"3f71",114:"3f72",115:"3f73",116:"3f74",117:"3f75",118:"3f76",119:"3f77",
         120:"3f78",121:"3f79",122:"3f7a",123:"3f7b",124:"3f7c",125:"3f7d",126:"3f7e",127:"3f7f",
-        128:"ita", 129:"yta", 130:"ntr", 131:"rte", 132:"aay", 133:"aey", 134:"aoy", 135:"retsz",
-        136:"rets",137:"3f89",138:"3f8a",139:"3f8b",140:"3f8c",141:"3f8d",142:"3f8e",143:"3f8f",
+        128:"ita", 129:"yta", 130:"ntr", 131:"rte", 132:"aay", 133:"aey", 134:"aoy", 135:"rets",
+        136:"3f88",137:"3f89",138:"3f8a",139:"3f8b",140:"3f8c",141:"3f8d",142:"3f8e",143:"3f8f",
         144:"mcj", 145:"msn", 146:"3f92",147:"3f93",148:"mpac",149:"munp",150:"asna",151:"3f97",
         152:"3f98",153:"3f99",154:"3f9a",155:"3f9b",156:"3f9c",157:"3f9d",158:"3f9e",159:"3f9f",
         160:"3fa0",161:"extf",162:"a+i", 163:"a-i", 164:"i-a", 165:"3fa5",166:"3fa6",167:"a/i",

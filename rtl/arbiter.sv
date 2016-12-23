@@ -107,20 +107,16 @@ always_comb begin
             ;
 
          1: // CCRD, чтение кэша команд
-            if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=CCRD not supported!", $time);
+            ; // Not used
 
          2: // CCWR, запись в кэш команд
-            if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=CCWR not supported!", $time);
+            ; // Not used
 
          3: // DCRD, чтение кэш операндов
-            if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DCRD not supported!", $time);
+            ; // Not used
 
          4: // DCWR, запись в кэш операндов
-            if (testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Arbiter op=DCWR not supported!", $time);
+            ; // Not used
 
          8: // FЕТСН, чтение команды
             case (step) // arx -- ecx wrx astb rd wr iack done
@@ -179,26 +175,14 @@ always_comb begin
                  2: `OUTPUT = {RDATA, '1, '1, '0, '0, '0, '0, '0}; // Read word
                 endcase
 
-        14: // BICLR, сброс прерываний на шине (TODO)
-            begin
-                if (testbench.tracefd && step == 0)
-                    $fdisplay(testbench.tracefd, "(%0d) *** Clear interrupts", $time);
-            end
+        14: // BICLR, сброс прерываний на шине
+            ; //TODO
 
         15: // BIRD, чтение прерываний с шины
-            begin
-                if (testbench.tracefd && step == 0)
-                    $fdisplay(testbench.tracefd, "(%0d) *** Poll interrupts", $time);
-
-                case (step) // arx -- ecx wrx astb rd wr iack done
-                 0: `OUTPUT = {RDATA, '1, '0, '0, '0, '0, '1, '0}; // Get data
-                 1: `OUTPUT = {RDATA, '1, '1, '0, '0, '0, '1, '0}; // Read word
-                endcase
-            end
-
-        default: // Unknown request
-            if (request & testbench.tracefd)
-                $fdisplay(testbench.tracefd, "(%0d) *** Wrong arbiter op=%0d!", $time, opcode);
+            case (step) // arx -- ecx wrx astb rd wr iack done
+             0: `OUTPUT = {RDATA, '1, '0, '0, '0, '0, '1, '0}; // Get data
+             1: `OUTPUT = {RDATA, '1, '1, '0, '0, '0, '1, '0}; // Read word
+            endcase
 
         endcase
     end
