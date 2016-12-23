@@ -25,6 +25,7 @@
 
 module shifter(
     input  wire  [63:0] in,         // input data
+    input  wire         psel,       // parameter select
     input  wire   [6:0] param,      // shift amount
     input  wire  [10:0] wide_param, // shift parameter, wide
     input  wire   [1:0] op,         // shift mode
@@ -32,15 +33,19 @@ module shifter(
 );
 timeunit 1ns / 10ps;
 
-wire right =
-    (param == 64) ? wide_param[10]
-                  : param[6];
+//
+// Shift direction
+//
+wire right = psel ? param[6]
+                  : wide_param[10];
 
-wire [6:0] n =
-    (param == 64) ? (right ? wide_param[6:0]
-                           : -wide_param[6:0])
-                  : (right ? {1'b0, param[5:0]}
-                           : {1'b0, -param[5:0]});
+//
+// Shift amount
+//
+wire [6:0] n = psel ? (right ? {1'b0, param[5:0]}
+                             : {1'b0, -param[5:0]})
+                    : (right ? wide_param[6:0]
+                             : -wide_param[6:0]);
 
 always_comb
     if (right)

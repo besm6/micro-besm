@@ -485,13 +485,11 @@ assign ss_Y = Y[9:6];               // status bits: Z N C V
 //--------------------------------------------------------------
 // Shifter.
 //
-shifter sh(Y, PSHF, pshift, sh_op, sh_out);
+shifter sh(Y, MPS, PSHF, pshift, sh_op, sh_out);
 
 always @(posedge clk)
     if (YDST == 9)
         pshift <= Y[10:0];
-    else if (PSHF != 64)
-        pshift <= '0;
 
 //--------------------------------------------------------------
 // Count leading zeroes.

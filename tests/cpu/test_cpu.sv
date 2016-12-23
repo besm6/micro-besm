@@ -145,6 +145,16 @@ always @(cpu.o_rd, cpu.o_wr)
 assign mem_vaddr = cpu.vaddr[19:0];
 
 //
+// Detect HLT instruction
+//
+always @(posedge clk) begin
+    if (!cpu.mode_besm6 &&              // Native mode
+        !cpu.instr_ext &&               // Base instruction format
+        cpu.instr_code == 'hff)         // HLT opcode
+        tr.cpu_halted();
+end
+
+//
 // Hack for instrset test.
 //
 always @(posedge clk) begin

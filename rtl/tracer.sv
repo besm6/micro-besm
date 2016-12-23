@@ -163,7 +163,7 @@ always @(negedge clk) begin
         terminate("Fatal Error!");
     end
 
-    if (!cpu.run || (!cpu.mode_besm6 && !cpu.instr_ext && cpu.instr_code == 'hff)) begin
+    if (!cpu.run) begin
         cpu_halted();
     end
 end
