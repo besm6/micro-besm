@@ -2166,7 +2166,7 @@ CJS А=ERRTST,МАР=РЕ,COND=RСВ,%ТУРЕ%
 ;9
 CJS А=ERRTST,МАР=РЕ,COND=СВ,%ТУРЕ%
 ;А
-CJS А=ERRTST,МАР=РЕ,COND=CEMLRG,%ТУРЕ%
+CJS А=ERRTST,МАР=РЕ,COND=CEMLRG,IСС,%ТУРЕ%
 ;В
 CJS А=ERRTST,МАР=РЕ,COND=INTSTP,%ТУРЕ%
 %J% А=CTG2D,МАР=РЕ,%TIK%
@@ -2202,7 +2202,7 @@ CJS А=ERRTST,МАР=РЕ,COND=RСВ,IСС,%ТУРЕ%
 ;8
 CJS А=ERRTST,МАР=РЕ,COND=СВ,IСС,%ТУРЕ%
 ;9
-CJS А=ERRTST,МАР=РЕ,COND=CEMLRG,IСС,%ТУРЕ%
+CJS А=ERRTST,МАР=РЕ,COND=CEMLRG,%ТУРЕ%
 ;А
 CJS А=ERRTST,МАР=РЕ,COND=INTSTP,IСС,%ТУРЕ%
 %J% А=CTG2E,МАР=РЕ,%TIK%
