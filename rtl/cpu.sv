@@ -431,11 +431,11 @@ assign D =
     (DSRC == 14) ? tm_dout :            // RTIME, сигнал чтения часов/таймеров
 
     // DDEV mux
-    (DDEV == 1)  ? pg_access :          // ВВ: БОБР, БИЗМ
-    (DDEV == 2)  ? pg_reprio[pg_index] : // MODB: БМСП
-    (DDEV == 5)  ? {ss_oY, 6'd0} :      // STATUS: Y bus output from Status/Shift
-    (DDEV == 6)  ? pg_prio0[pg_index] : // PPMEM0: память приоритетов страниц 0
-    (DDEV == 7)  ? pg_prio1[pg_index] : // PPMEM1: память приоритетов страниц 1
+    (DDEV == 1 & !WRD) ? pg_access :            // ВВ: БОБР, БИЗМ
+    (DDEV == 2 & !WRD) ? pg_reprio[pg_index] :  // MODB: БМСП
+    (DDEV == 5 & !WRD) ? {ss_oY, 6'd0} :        // STATUS: Y bus output from Status/Shift
+    (DDEV == 6 & !WRD) ? pg_prio0[pg_index] :   // PPMEM0: память приоритетов страниц 0
+    (DDEV == 7 & !WRD) ? pg_prio1[pg_index] :   // PPMEM1: память приоритетов страниц 1
 
     // Others
     (CSM & !WEM) ? mr_read :            // регистр-модификатор
