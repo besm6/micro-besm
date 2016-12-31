@@ -758,7 +758,7 @@ always @(posedge clk)
 
 // ППК, признак правой команды
 always @(posedge clk)
-    if (ISE)
+    if (ISE & !int_flag)
         rcb <= tkk;                 // Копирование ТКК в ППК
     else if (!IOMP)
         case (FFCNT)
