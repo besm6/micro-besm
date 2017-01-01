@@ -751,10 +751,10 @@ always @(posedge clk)
 
 // Признак изменения адресом (ПИА) устанавливается и сбрасывается разными путями
 always @(posedge clk)
-    if (DDEV == 3)                  // ddev=CLRCD
-        cb <= '0;                   // сброс ПИА, дополнительный сигнал
-    else if (!IOMP & FFCNT == 5)    // ffcnt=SЕТС
+    if (!IOMP & FFCNT == 5)         // ffcnt=SЕТС
         cb <= '1;                   // установка триггера ПИА
+    else if (DDEV == 3 & !int_flag) // ddev=CLRCD
+        cb <= '0;                   // сброс ПИА, дополнительный сигнал
 
 // ППК, признак правой команды
 always @(posedge clk)
