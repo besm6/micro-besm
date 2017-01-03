@@ -336,6 +336,8 @@ always @(posedge clk)
             ;                   // cannot write to M0 from vaddr
         else if (mn[4] & MNSA != 3 & !MOD)
             ;                   // need MOD to write to M[16:32], no vaddr
+        else if (ISE & int_flag)
+            ;                   // don't modify SP when interrupted
         else
             mr_mem[{modgn, mn}] <= Y[31:0];
     end
@@ -750,11 +752,14 @@ always @(posedge clk)
         run <= '0;                  // сброс триггера "Пуск"
 
 // Признак изменения адресом (ПИА) устанавливается и сбрасывается разными путями
+// Если команда прервана, флаг ПИА не должен изменяться
 always @(posedge clk)
-    if (!IOMP & FFCNT == 5)         // ffcnt=SЕТС
-        cb <= '1;                   // установка триггера ПИА
-    else if (DDEV == 3 & !int_flag) // ddev=CLRCD
-        cb <= '0;                   // сброс ПИА, дополнительный сигнал
+    if (!g_int) begin
+        if (!IOMP & FFCNT == 5)     // ffcnt=SЕТС
+            cb <= '1;               // установка триггера ПИА
+        else if (DDEV == 3)         // ddev=CLRCD
+            cb <= '0;               // сброс ПИА, дополнительный сигнал
+    end
 
 // ППК, признак правой команды
 always @(posedge clk)
