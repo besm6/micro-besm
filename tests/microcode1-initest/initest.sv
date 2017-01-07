@@ -56,6 +56,13 @@ logic [112:1] opcode_x;                 // Current opcode at execution stage
 always #1 clk = ~clk;
 
 //
+// Keep interrupts disabled.
+//
+always @(cpu.g_int)
+    if (cpu.g_int)
+        cpu.g_int <= 0;
+
+//
 // Main loop.
 //
 initial begin
