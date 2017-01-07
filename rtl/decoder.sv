@@ -66,9 +66,9 @@ assign op = extop ? xop : bop;
 // Address field
 assign addr =
     pe ? tkk ? dc[32] ? {5'd0, dc[27:13]}           // besm6 right half
-                      : {5'd0, {3{dc[31]}}, dc[24:13]}
+                      : {{8{dc[31]}}, dc[24:13]}
              : dc[56] ? {5'd0, dc[51:37]}           // besm6 left half
-                      : {5'd0, {3{dc[55]}}, dc[48:37]}
+                      : {{8{dc[55]}}, dc[48:37]}
        : tkk ? dc[20:1]                             // right half
              : dc[52:33];                           // left half
 
