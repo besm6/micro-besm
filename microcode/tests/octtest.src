@@ -1372,14 +1372,14 @@ CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
 CONT А=В55,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=WR6,FFCNT=CLRTKK
 CONT А=В31,DSRC=PROM,ALUS=DА,RА=WR6,Н,ALUD=В,RВ=WR6,ALU,ЕСВ,WRB,BRA=RG1
 ;
-;INTR=C; ЛК: АДРЕС КОМАНДЫ = 7000, 13-15 РАЗРЯДЫ = 1
+;INTR=C; ЛК: адрес команды = fffff000, 13-32 разряды = 1
 CONT DSRC=СОМА,ALUS=DZ,ALUD=B,RB=Y
-CONT ALUS=ZA,RA=WR1,H,ALUD=B,RB=A
+CONT А=M52L,DSRC=PROM,ALUS=DZ,H,ALUD=В,RВ=A
 CONT АLUS=AB,RА=A,RB=Y,FUNC=EXOR,ALUD=Q,CEN
 CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
-;INTR=D; К О П, 7-Й РАЗРЯД НЕ ОБНУЛЯЕТСЯ В СТАНДАРТИЗАТОРЕ !!!!!
+;INTR=D; КОП, 7-й разряд обнуляется в стандартизаторе
 CONT DSRC=ОРС,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
-CONT A=B7,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
+CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
 CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,ALUD=Q,CEN
 CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
 ;INTR=E; ЧИТАЕМ ПО АДРЕСУ IRA
@@ -1388,14 +1388,15 @@ CONT ALUS=ZA,RA=PC,H,ALUD=B,RB=A
 CONT АLUS=AB,RА=A,RB=Y,FUNC=EXOR,ALUD=Q,CEN
 CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
 ;
-;INTR=F; ПК: АДРЕС КОМАНДЫ, 13-15 РАЗРЯДЫ = 1
-CONT ALUS=ZA,RA=WR1,H,ALUD=B,RB=A,FFCNT=SЕТТКК
+;INTR=F; ПК: адрес команды = fffff000, 13-32 разряды = 1
+;CONT ALUS=ZA,RA=WR1,H,ALUD=B,RB=A,FFCNT=SЕТТКК
+CONT А=M52L,DSRC=PROM,ALUS=DZ,H,ALUD=В,RВ=A,FFCNT=SЕТТКК
 CONT DSRC=СОМА,ALUS=DZ,ALUD=B,RB=Y
 CONT АLUS=AB,RА=A,RB=Y,FUNC=EXOR,ALUD=Q,CEN
 CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
-;INTR=10; К О П, 7-Й РАЗРЯД НЕ ОБНУЛЯЕТСЯ В СТАНДАРТИЗАТОРЕ !!!!!
+;INTR=10; КОП, 7-й разряд обнуляется в стандартизаторе
 CONT DSRC=ОРС,ALUS=DА,RА=ВУТЕ,FUNC=AND,Н,ALUD=В,RВ=У
-CONT A=B7,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
+CONT A=ZER,DSRC=PROM,ALUS=DZ,H,ALUD=B,RB=A
 CONT ALUS=AB,RA=A,RB=Y,FUNC=EXOR,H,ALUD=Q,CEN
 CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
 ;INTR=11; ЧИТАЕМ ПО АДРЕСУ IRA
@@ -1665,15 +1666,15 @@ LONG:CONT DSRC=СОМА,ALUS=DZ,ALUD=B,RB=Y
 CONT АLUS=AB,RА=A,RB=Y,FUNC=EXOR,ALUD=Q
 CONT A=M15,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=Q,CEN
 CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
-;01: К О П, 7-Й РАЗРЯД НЕ ОБНУЛЯЕМ !!!!!
+;01: К О П
 ;КОП ПК - В МЛ.РАЗРЯДЫ; ПРОВЕРЯЕМ, ДЛИННЫЙ ЛИ КОП
-CJP А=RОРСR,МАР=РЕ,COND=СТ,SТОРС=MZ
+CJP А=OPCB7,МАР=РЕ,COND=СТ,SТОРС=MZ
 >,ALUS=DZ,Н,ALUD=ВА,RА=WR3,RВ=A,ALU,DSRC=SHIFT,MPS,PSHF=SН0+24,SHF=LOG
 ;КОП = 5 РАЗРЯДОВ, ОБНУЛЯЕМ МЛ.3 РАЗРЯДА КОП (ТАМ ДЛИННЫЙ АДРЕС)
 CONT А=С7,DSRC=PROM,ALUS=DА,RА=A,FUNC=NOTRS,ALUD=В,RВ=A
-;CJP A=ROPCR,MAP=PE
-;КОП = 8 РАЗРЯДОВ, ЧТО С 7 РАЗРЯДОМ ?
-;OPCB7:CONT A=B7,DSRC=PROM,ALUS=DA,RA=A,FUNC=NOTRS,ALUD=B,RB=A
+CJP A=ROPCR,MAP=PE
+;КОП = 8 разрядов, обнуляем 7-й разряд
+OPCB7:CONT A=B7,DSRC=PROM,ALUS=DA,RA=A,FUNC=NOTRS,ALUD=B,RB=A
 ;ЧИТАЕМ, СРАВНИВАЕМ
 ROPCR:CONT DSRC=ОРС,ALUS=DZ,ALUD=B,RB=Y
 CONT АLUS=AB,RА=A,RB=Y,FUNC=EXOR,ALUD=Q
@@ -1711,13 +1712,13 @@ CONT ALUS=АQ,RА=РС,FUNC=AND,Н,ALUD=Q,CEN
 CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
 ;04: К О П
 ;КОП ЛК - В МЛ.РАЗРЯДЫ, ПРОВЕРЯЕМ, ДЛИННЫЙ ЛИ КОП
-CJP А=RDOPCL,МАР=РЕ,COND=СТ,SТОРС=MZ
+CJP А=ОРСLNG,МАР=РЕ,COND=СТ,SТОРС=MZ
 >,ALUS=DZ,Н,ALUD=ВА,RА=WR3,RВ=A,ALU,DSRC=SHIFT,MPS,PSHF=SН0+48,SHF=LOG
 ;ОБНУЛЯЕМ МЛ.3 РАЗРЯДА КОП, ЕСЛИ ОН КОРОТКИЙ
 CONT А=С7,DSRC=PROM,ALUS=DА,RА=A,FUNC=NOTRS,ALUD=В,RВ=A
-;CJP A=RDOPCL,MAP=PE
+CJP A=RDOPCL,MAP=PE
 ;УБИРАЕМ 7-Й РАЗРЯД КОП
-;ОРСLNG:CONT A=B7,DSRC=PROM,ALUS=DA,RA=A,FUNC=NOTRS,ALUD=B,RB=A
+ОРСLNG:CONT A=B7,DSRC=PROM,ALUS=DA,RA=A,FUNC=NOTRS,ALUD=B,RB=A
 ;ЧИТАЕМ, СРАВНИВАЕМ
 RDOPCL:CONT DSRC=ОРС,ALUS=DZ,ALUD=B,RB=Y
 CONT АLUS=AB,RА=A,RB=Y,FUNC=EXOR,ALUD=Q
@@ -1788,15 +1789,15 @@ LONGB:CONT DSRC=СОМА,ALUS=DZ,ALUD=B,RB=Y
 CONT АLUS=AB,RА=A,RB=Y,FUNC=EXOR,ALUD=Q
 CONT A=M15,DSRC=PROM,ALUS=DQ,FUNC=AND,Н,ALUD=Q,CEN
 CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%CLRTYP%
-;01: К О П, 7-Й РАЗРЯД НЕ ОБНУЛЯЕМ !!!!!
+;01: КОП
 ;КОП ПК - В МЛ.РАЗРЯДЫ; ПРОВЕРЯЕМ, ДЛИННЫЙ ЛИ КОП
-CJP А=RОРСRB,МАР=РЕ,COND=СТ,SТОРС=MZ
+CJP А=OPCB7B,МАР=РЕ,COND=СТ,SТОРС=MZ
 >,ALUS=DZ,Н,ALUD=ВА,RА=WR3,RВ=A,ALU,DSRC=SHIFT,MPS,PSHF=SН0+24,SHF=LOG
 ;КОП = 5 РАЗРЯДОВ, ОБНУЛЯЕМ МЛ.3 РАЗРЯДА КОП (ТАМ ДЛИННЫЙ АДРЕС)
 CONT А=С7,DSRC=PROM,ALUS=DА,RА=A,FUNC=NOTRS,ALUD=В,RВ=A
-;CJP A=ROPCRB,MAP=PE
-;КОП = 8 РАЗРЯДОВ, ЧТО С 7 РАЗРЯДОМ ?
-;OPCB7B:CONT A=B7,DSRC=PROM,ALUS=DA,RA=A,FUNC=NOTRS,ALUD=B,RB=A
+CJP A=ROPCRB,MAP=PE
+;КОП = 8 разрядов, обнуляем 7-й разряд
+OPCB7B:CONT A=B7,DSRC=PROM,ALUS=DA,RA=A,FUNC=NOTRS,ALUD=B,RB=A
 ;ЧИТАЕМ, СРАВНИВАЕМ
 ROPCRB:CONT DSRC=ОРС,ALUS=DZ,ALUD=B,RB=Y
 CONT АLUS=AB,RА=A,RB=Y,FUNC=EXOR,ALUD=Q
@@ -1834,13 +1835,13 @@ CONT ALUS=АQ,RА=РС,FUNC=AND,Н,ALUD=Q,CEN
 CJS А=ERRINH,МАР=РЕ,COND=СТ,SТОРС=/NZ,%ТУРЕ%
 ;04: К О П
 ;КОП ЛК - В МЛ.РАЗРЯДЫ, ПРОВЕРЯЕМ, ДЛИННЫЙ ЛИ КОП
-CJP А=RDLB,МАР=РЕ,COND=СТ,SТОРС=MZ
+CJP А=LNGB,МАР=РЕ,COND=СТ,SТОРС=MZ
 >,ALUS=DZ,Н,ALUD=ВА,RА=WR3,RВ=A,ALU,DSRC=SHIFT,MPS,PSHF=SН0+48,SHF=LOG
 ;ОБНУЛЯЕМ МЛ.3 РАЗРЯДА КОП, ЕСЛИ ОН КОРОТКИЙ
 CONT А=С7,DSRC=PROM,ALUS=DА,RА=A,FUNC=NOTRS,ALUD=В,RВ=A
-;CJP A=RDLB,MAP=PE
+CJP A=RDLB,MAP=PE
 ;УБИРАЕМ 7-Й РАЗРЯД КОП
-;LNGB:CONT A=B7,DSRC=PROM,ALUS=DA,RA=A,FUNC=NOTRS,ALUD=B,RB=A
+LNGB:CONT A=B7,DSRC=PROM,ALUS=DA,RA=A,FUNC=NOTRS,ALUD=B,RB=A
 ;ЧИТАЕМ, СРАВНИВАЕМ
 RDLB:CONT DSRC=ОРС,ALUS=DZ,ALUD=B,RB=Y
 CONT АLUS=AB,RА=A,RB=Y,FUNC=EXOR,ALUD=Q
