@@ -82,6 +82,9 @@ initial begin
 
     cpu.memory = memory;
 
+    // Map page #0: arbiter test needs it.
+    cpu.pg_map[0] = 'h3ff;
+
     // Start with reset active
     clk = 1;
     reset = 1;
