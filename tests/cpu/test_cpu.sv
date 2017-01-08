@@ -142,7 +142,10 @@ always @(cpu.o_rd, cpu.o_wr)
             mem_paddr = ram.waddr;
     end
 
-assign mem_vaddr = cpu.vaddr[19:0];
+always @(cpu.o_astb)
+    if (cpu.o_astb)
+        mem_vaddr <= cpu.mode_besm6 ? cpu.vaddr[14:0]
+                                    : cpu.vaddr[19:0];
 
 //
 // Detect HLT instruction
