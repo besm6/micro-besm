@@ -89,7 +89,13 @@ always_ff @(posedge clk)
 //
 // Flag of atomic read-modify-write operation (RDMWR)
 //
-assign atomic = (opcode == 11);
+always_ff @(posedge clk)
+    if (reset)
+        atomic <= '0;
+    else if (opcode == 11)              // RDMWR
+        atomic <= '1;
+    else if (opcode == 10 & step == 2)  // DWR
+        atomic <= '0;
 
 //
 // Output assignments
@@ -125,7 +131,10 @@ always_comb begin
              2: `OUTPUT = {CMD,   '1, '1, '0, '0, '0, '0, '0}; // Read word
             endcase
 
-         9: // DRD, чтение операнда
+         9, // DRD, чтение операнда
+        11: // RDMWR, чтение - модификация - запись (семафорная)
+            // Read a word; set bit 55, write it back.
+            // Write part follows as DWR.
             case (step) // arx -- ecx wrx astb rd wr iack done
              0: `OUTPUT = {ADDR,  '1, '0, '1, '0, '0, '0, '0}; // Send address
              1: `OUTPUT = {RDATA, '1, '0, '0, '1, '0, '0, '0}; // Get data
@@ -137,16 +146,6 @@ always_comb begin
              0: `OUTPUT = {ADDR,  '1, '0, '1, '0, '0, '0, '0}; // Send address
              1: `OUTPUT = {WDATA, '1, '0, '0, '0, '0, '0, '0}; // Send data
              2: `OUTPUT = {WDATA, '1, '0, '0, '0, '1, '0, '0}; // Write word
-            endcase
-
-        11: // RDMWR, чтение - модификация - запись (семафорная)
-            // Read a word; set bit 55, write it back.
-            case (step) // arx -- ecx wrx astb rd wr iack done
-             0: `OUTPUT = {ADDR,  '1, '0, '1, '0, '0, '0, '0}; // Send address
-             1: `OUTPUT = {RDATA, '1, '0, '0, '1, '0, '0, '0}; // Get data
-             2: `OUTPUT = {RDATA, '1, '1, '0, '0, '0, '0, '0}; // Read word
-             3: `OUTPUT = {RDATA, '1, '0, '0, '0, '0, '0, '0}; // Send data from RG2
-             4: `OUTPUT = {RDATA, '1, '0, '0, '0, '1, '0, '0}; // Write word
             endcase
 
         12: // BTRWR, запись в режиме блочной передачи

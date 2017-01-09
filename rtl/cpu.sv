@@ -689,17 +689,22 @@ always @(posedge clk)
         acc_besm6 <= bus_DB[65];    // бит РЭ тега регистра RG3
 
 // Остальные биты тега командного слова
-assign itag_cmd     = bus_itag[0]; // ПК - признак команд
-assign itag_besm6   = bus_itag[1]; // режим совместимости команды
-assign itag_nofetch = bus_itag[4]; // ЗВП - запрет выборки команды из памяти
-assign itag_nojump  = bus_itag[5]; // ЗПУ - запрет передачи управления на команду
-assign itag_pint    = bus_itag[7]; // ПИНТ - программная интерпретация тега
+assign itag_cmd     = bus_itag[0];  // ПК - признак команд
+assign itag_besm6   = bus_itag[1];  // режим совместимости команды
+assign itag_nofetch = bus_itag[4];  // ЗВП - запрет выборки команды из памяти
+assign itag_nojump  = bus_itag[5];  // ЗПУ - запрет передачи управления на команду
+assign itag_pint    = bus_itag[7];  // ПИНТ - программная интерпретация тега
 
 // Биты тега операнда, извлечённого из памяти
-assign dtag_besm6   = bus_dtag[1]; // режим совместимости операнда
-assign dtag_noload  = bus_dtag[2]; // ЗЧП - запрет чтения операнда из памяти
-assign dtag_nostore = bus_dtag[3]; // ЗЗП - запрет записи операнда в память
-assign dtag_pint    = bus_dtag[7]; // ПИНТ - программная интерпретация тега
+assign dtag_besm6   = bus_dtag[1];  // режим совместимости операнда
+assign dtag_noload  = bus_dtag[2];  // ЗЧП - запрет чтения операнда из памяти
+assign dtag_pint    = bus_dtag[7];  // ПИНТ - программная интерпретация тега
+
+always @(posedge clk)               // ЗЗП - запрет записи операнда в память
+    if (o_wr & (arb_opc == 10) & !o_atomic) // запись данных (DWR)
+        dtag_nostore <= i_tag[3];
+    else if (arb_req)               // новый запрос к арбитру
+        dtag_nostore <= '0;
 
 //--------------------------------------------------------------
 // Триггеры признаков
@@ -992,7 +997,7 @@ always @(posedge clk) begin
     end
 
     // 20 - защита адреса при записи
-    else if (o_wr & i_tag[3] & !o_wforce) begin
+    else if (dtag_nostore & !o_wforce) begin
         g_int <= '1;                // ЗЗП (при БПТЗ=0) при записи в память
         int_vect <= 20;
     end

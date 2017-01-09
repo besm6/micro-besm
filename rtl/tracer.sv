@@ -1103,6 +1103,9 @@ task print_changed_vm();
     logic  [2:0] DDEV;
     logic        WRY, WRD;
 
+    static    logic old_nstore;
+    automatic logic nstore = cpu.dtag_nostore;
+
     assign YDEV = opcode_x[20:18];
     assign DDEV = opcode_x[16:14];
     assign WRY  = opcode_x[17];
@@ -1127,6 +1130,12 @@ task print_changed_vm();
 
     if (WRD && DDEV == 7)                   // ddev=РРМЕМ1, приоритеты страниц 1
         print_pg_prio1(cpu.pg_index);
+
+    // Запрет записи по адресу
+    if (nstore !== old_nstore) begin
+        $fdisplay(fd, "(%1d)               Write dtag_nostore = %h", ctime, nstore);
+        old_nstore = nstore;
+    end
 endtask
 
 //
