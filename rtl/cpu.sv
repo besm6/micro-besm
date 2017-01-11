@@ -564,7 +564,8 @@ always @(posedge clk)
     if (reset)
         exception <= '0;
     else
-        exception <= arb_req & (ARBI != 0) & arb_suspend;
+        exception <= (arb_req & (ARBI != 0) & arb_suspend) |
+                     (o_wr & i_tag[3] & !o_wforce);
 
 //--------------------------------------------------------------
 // Instruction decoder
@@ -998,8 +999,7 @@ always @(posedge clk) begin
 
     // 20 - защита адреса при записи
     else if (dtag_nostore & !o_wforce) begin
-        g_int <= '1;                // ЗЗП (при БПТЗ=0) при записи в память
-        int_vect <= 20;
+        int_vect <= 20;             // ЗЗП (при БПТЗ=0) при записи в память
     end
 
     // 21 - чужой сумматор
