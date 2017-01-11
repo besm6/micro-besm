@@ -908,7 +908,7 @@ UТА
 UTS -SТЕР ; FULL=-1
 UTS LWS ; FULL=LWS
 UTS ; NEW_REG
-UTS ; HALTER
+UTS @777 ; HALTER
 UTS ; ERCNT
 UTS 7
 АТХ -4 ; ОТКР.ПП-МАСКУ
