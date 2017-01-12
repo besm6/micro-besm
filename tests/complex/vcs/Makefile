@@ -22,15 +22,16 @@ INCLUDES        = ../../../microcode/microcode.v \
                   ../../../microcode/constants.v \
                   ../../../microcode/optab.v \
                   ../../../microcode/rwiotab.v \
+                  ../../../microcode/intrtab.v \
                   ../../../microcode/grouptab.v
 
 VCS             = vcs -l vcs.log -sverilog -debug_all
 
 RUNFLAGS        = +hex=../test.hex +clearmem
-RUNFLAGS	+= +limit=5000000	# Limit by a number of cycles
+RUNFLAGS	+= +limit=20000000	# Limit by a number of cycles
 #RUNFLAGS	+= +trace=0		# No trace
-#RUNFLAGS	+= +trace=1		# Print instructions
-RUNFLAGS	+= +trace=2		# Print micro-instructions
+RUNFLAGS	+= +trace=1		# Print instructions
+#RUNFLAGS	+= +trace=2		# Print micro-instructions
 #RUNFLAGS	+= +dump		# Dump waveforms to output.vcd
 
 all:            simv

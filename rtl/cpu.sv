@@ -544,7 +544,7 @@ assign arb_suspend =
      pg_procn != 'hff) |
     (!no_paging &
      !no_pgprot & !pg_valid) |      // защита страницы по обращению
-    (!no_paging &
+    (!no_paging & (ARBI == 10) &
      !no_wprot & !pg_rw) |          // защита страницы по записи
     (!no_paging & !drg &
      !flag_negaddr & vaddr[19]) |   // отрицательный виртуальный адрес
@@ -855,10 +855,11 @@ assign physad = {pg_translated, vaddr[9:0]};
 assign pg_procn = pg_map[pg_virt][7:0];
 
 // Access permit for current page
-assign pg_valid = pg_map[pg_virt][9] | drg;
+// Fetch is always allowed in kernel mode.
+assign pg_valid = pg_map[pg_virt][9] | (drg & (ARBI == 8));
 
 // Write permit for current page
-assign pg_rw = pg_map[pg_virt][8] | drg;
+assign pg_rw = pg_map[pg_virt][8];
 
 // Physical page index
 always @(posedge clk)
@@ -952,7 +953,7 @@ always @(posedge clk) begin
     end
 
     // 17 - защита страницы при записи
-    else if (arb_req & !no_paging & !no_wprot & !pg_rw) begin
+    else if (arb_req & !no_paging & !no_wprot & !pg_rw & (ARBI == 10)) begin
         int_vect <= 17;             // нет бита разрешения записи (при БЗЗ=0 и БП=0)
     end
 
