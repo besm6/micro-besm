@@ -546,7 +546,7 @@ assign arb_suspend =
      !no_pgprot & !pg_valid) |      // защита страницы по обращению
     (!no_paging & (ARBI == 10) &
      !no_wprot & !pg_rw) |          // защита страницы по записи
-    (!no_paging & !drg &
+    (!no_paging &
      !flag_negaddr & vaddr[19]) |   // отрицательный виртуальный адрес
     (vaddr[31:19] != '0 &
      vaddr[31:19] != '1 &
@@ -928,7 +928,7 @@ always @(posedge clk) begin
 
     // 7 - отрицательный номер страницы у команды
     // 8 - отрицательный номер страницы у операнда
-    else if (arb_req & !no_paging & !flag_negaddr & !drg & vaddr[19]) begin
+    else if (arb_req & !no_paging & !flag_negaddr & vaddr[19]) begin
         int_vect <= (ARBI == 8) ?   // РОА=0 (при БП=0) при обращении в память
                     7 : 8;
     end

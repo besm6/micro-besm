@@ -28,7 +28,7 @@ INCLUDES        = ../../../microcode/microcode.v \
 VCS             = vcs -l vcs.log -sverilog -debug_all
 
 RUNFLAGS        = +hex=../test.hex +clearmem
-RUNFLAGS	+= +limit=20000000	# Limit by a number of cycles
+RUNFLAGS	+= +limit=30000000	# Limit by a number of cycles
 #RUNFLAGS	+= +trace=0		# No trace
 RUNFLAGS	+= +trace=1		# Print instructions
 #RUNFLAGS	+= +trace=2		# Print micro-instructions
