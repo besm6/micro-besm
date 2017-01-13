@@ -70,7 +70,6 @@ always @(posedge clk) begin
         'hffffd: o_data = 0;            // error correction mode
         default: begin                  // memory load
                 o_data = mem[waddr];
-
                 o_tag = get_tag(waddr);
 
                 if (! i_atomic)
@@ -84,11 +83,7 @@ always @(posedge clk) begin
         // Tag bit 3 protects the word from write.
         // Signal i_wforce overrides the protection.
         //
-        if (i_atomic)                   // read-modify-write, set bit 55
-            mem[waddr] = {i_ad[63:56], 1'b1, i_ad[54:0]};
-        else
-            mem[waddr] = i_ad;          // memory store
-
+        mem[waddr] = i_ad;              // memory store
         tag[waddr] = i_tag;
 
         if (! i_atomic) begin
