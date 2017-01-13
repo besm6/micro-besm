@@ -34,7 +34,6 @@ module arbiter(
     output logic       ecx,     // busio port enable
     output logic       wrx,     // busio write enable
     output logic       astb,    // memory address strobe
-    output logic       atomic,  // atomic r-m-w operation
     output logic       rd,      // memory read
     output logic       wr,      // memory write
     output logic       iack,    // interrupt acknowledge
@@ -85,17 +84,6 @@ always_ff @(posedge clk)
     else if (!request & done)
         // Raise batch mode flag when BTRWR or BTRRD operation finished
         batch_mode <= (opcode == 12 || opcode == 13);
-
-//
-// Flag of atomic read-modify-write operation (RDMWR)
-//
-always_ff @(posedge clk)
-    if (reset)
-        atomic <= '0;
-    else if (opcode == 11)              // RDMWR
-        atomic <= '1;
-    else if (opcode == 10 & step == 2)  // DWR
-        atomic <= '0;
 
 //
 // Output assignments

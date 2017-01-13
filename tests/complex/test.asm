@@ -6049,6 +6049,9 @@ ltsem:          uta                     ; чистим
 eltsem:     2   vrm     ltsem
             13  vjm     newtest
 ;
+; Конец теста
+;
+                hlt     @888            ; останавливаем симулятор
 ;
 newfin:
                 uta     quant

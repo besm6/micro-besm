@@ -28,7 +28,6 @@ module tmemory(
     input  wire  [63:0] i_ad,           // address/data input
     input  wire   [7:0] i_tag,          // tag bus input
     input  wire         i_astb,         // address strobe
-    input  wire         i_atomic,       // r-m-w transaction
     input  wire         i_rd,           // read op
     input  wire         i_wr,           // write op
     input  wire         i_wforce,       // ignore write protection TODO
@@ -72,8 +71,7 @@ always @(posedge clk) begin
                 o_data = mem[waddr];
                 o_tag = get_tag(waddr);
 
-                if (! i_atomic)
-                    waddr = waddr + 1;  // increment address for batch mode
+                waddr = waddr + 1;      // increment address for batch mode
             end
         endcase
 
@@ -86,10 +84,8 @@ always @(posedge clk) begin
         mem[waddr] = i_ad;              // memory store
         tag[waddr] = i_tag;
 
-        if (! i_atomic) begin
-            waddr = waddr + 1;          // increment address for batch mode
-            o_tag = get_tag(waddr);     // get next tag, for write protection
-        end
+        waddr = waddr + 1;              // increment address for batch mode
+        o_tag = get_tag(waddr);         // get next tag, for write protection
     end
 end
 

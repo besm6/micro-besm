@@ -6044,6 +6044,9 @@ JМР ELTSEM
 ELTSEM:2 VRM LTSEM
 13 VJM NEWTEST
 ;
+; Конец теста
+;
+ hlt @888 ; останавливаем симулятор
 ;
 NEWFIN:
 UТА QUANT

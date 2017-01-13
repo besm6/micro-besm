@@ -196,7 +196,15 @@ task cpu_halted();
     $display("(%0d) *** Halted at %h with code=%h", ctime, pc, code);
     if (fd)
         $fdisplay(fd, "(%0d) *** Halted at %h with code=%h", ctime, pc, code);
-    terminate("Fatal Error!");
+
+    if (code == 'h888) begin
+        // Special stop code: test passed.
+        $display("\n*** Test PASS");
+        if (fd)
+            $fdisplay(fd, "\n*** Test PASS");
+        terminate("");
+    end else
+        terminate("Fatal Error!");
 endtask
 
 //

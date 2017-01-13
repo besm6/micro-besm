@@ -31,7 +31,6 @@ module cpu(
     output logic [63:0] o_ad,       // address/data output
     output logic  [7:0] o_tag,      // tag output
     output logic        o_astb,     // address strobe
-    output logic        o_atomic,   // r-m-w transaction
     output logic        o_rd,       // read op
     output logic        o_wr,       // write op
     output logic        o_wforce,   // ignore write protection bit
@@ -530,7 +529,7 @@ arbiter arb(clk, reset,
     arb_suspend & arb_req,          // input suspend condition
     arb_req ? ARBI : arb_opc,       // input opcode
     bus_ARX, bus_ECX, bus_WRX,      // X bus control
-    o_astb, o_atomic, o_rd, o_wr,   // external memory interface
+    o_astb, o_rd, o_wr,             // external memory interface
     o_iack,                         // external interrupt interface
     arb_ready                       // resulting status
 );
@@ -702,7 +701,7 @@ assign dtag_noload  = bus_dtag[2];  // ЗЧП - запрет чтения опе
 assign dtag_pint    = bus_dtag[7];  // ПИНТ - программная интерпретация тега
 
 always @(posedge clk)               // ЗЗП - запрет записи операнда в память
-    if (o_wr & (arb_opc == 10) & !o_atomic) // запись данных (DWR)
+    if (o_wr)                       // запись данных (DWR)
         dtag_nostore <= i_tag[3];
     else if (arb_req | (YDST == 1)) // новый запрос к арбитру или переключение контекста (MODGN)
         dtag_nostore <= '0;

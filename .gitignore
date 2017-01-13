@@ -1,6 +1,7 @@
 *.o
 *.vcd
 *.log
+*.lst
 *.jou
 *.pb
 *.pyc
@@ -18,10 +19,9 @@ tests/*/vcs/csrc/
 tests/*/vcs/simv
 tests/*/vcs/simv.daidir/
 tests/*/vcs/ucli.key
+tests/*/vcs/vc_hdrs.h
 microcode/*.json
-microcode/*.lst
 microcode/tests/*.json
-microcode/tests/*.lst
 toolchain/as/as
 toolchain/as/dis
 toolchain/ld/ld
