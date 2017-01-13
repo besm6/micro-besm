@@ -16,7 +16,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/i8253.sv \
                   ../../../rtl/tmemory.sv \
                   ../../../rtl/tracer.sv \
-		  ../../cpu/test_cpu.sv
+		  ../../../rtl/testbench.sv
 
 INCLUDES        = ../../../microcode/microcode.v \
                   ../../../microcode/constants.v \
