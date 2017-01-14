@@ -1111,8 +1111,8 @@ task print_changed_vm();
     logic  [2:0] DDEV;
     logic        WRY, WRD;
 
-    static    logic old_nstore;
-    automatic logic nstore = cpu.dtag_nostore;
+    //static    logic old_nstore;
+    //automatic logic nstore = cpu.dtag_nostore;
 
     assign YDEV = opcode_x[20:18];
     assign DDEV = opcode_x[16:14];
@@ -1140,10 +1140,10 @@ task print_changed_vm();
         print_pg_prio1(cpu.pg_index);
 
     // Запрет записи по адресу
-    if (nstore !== old_nstore) begin
-        $fdisplay(fd, "(%1d)               Write dtag_nostore = %h", ctime, nstore);
-        old_nstore = nstore;
-    end
+    //if (nstore !== old_nstore) begin
+    //    $fdisplay(fd, "(%1d)               Write dtag_nostore = %h", ctime, nstore);
+    //    old_nstore = nstore;
+    //end
 endtask
 
 //

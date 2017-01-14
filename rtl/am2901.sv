@@ -39,7 +39,6 @@ module am2901(
     output logic        oQ3,        // --//--
     input  wire         clk,        // Clock
     input  wire         C0,         // Carry input to ALU
-    input  wire         nOE,        // Tri-state driver for Y output
     output logic        C4,         // Carry output from ALU
     output logic        nG,         // Generate term from ALU for carry lookahead
     output logic        nP,         // Propagate term from ALU for carry lookahead
@@ -174,7 +173,7 @@ always @(posedge clk) begin
 end
 
 // Generate data output "Y"
-assign Y = nOE ? 'z : (I[8:6] == 'b010) ? a : f;
+assign Y = (I[8:6] == 'b010) ? a : f;
 
 // Generate bidirectional shifter signals.
 assign oRAM0 = (I[8:7] == 'b10) ? f[0] : '0;

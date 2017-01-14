@@ -251,7 +251,7 @@ wire        MPS   = opcode[1];       // Выбор источника парам
 // всегда равен “0”.
 
 am2910 control(clk,
-    SQI, '0, control_nCC, ~RLD, control_CI, '0,
+    SQI, '0, control_nCC, ~RLD, control_CI,
     control_D, control_Y, , control_nVECT, control_nMAP, );
 
 // Carry-in bit for microprogram counter

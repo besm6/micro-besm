@@ -158,22 +158,22 @@ always @(negedge clk)   // falling edge sensitive!
                  {4{!outX & !nWX & selX3}} & ~nDX;
 
 // Read RGi.
-assign onDA = !outA ? 4'hz :
+assign onDA = !outA ? 4'hf :
               selA0 ? ~RG[0] :
               selA1 ? ~RG[1] :
               selA2 ? ~RG[2] :
               selA3 ? ~RG[3] : 4'hf;
-assign onDB = !outB ? 4'hz :
+assign onDB = !outB ? 4'hf :
               selB0 ? ~RG[0] :
               selB1 ? ~RG[1] :
               selB2 ? ~RG[2] :
               selB3 ? ~RG[3] : 4'hf;
-assign onDC = !outC ? 4'hz :
+assign onDC = !outC ? 4'hf :
               selC0 ? ~RG[0] :
               selC1 ? ~RG[1] :
               selC2 ? ~RG[2] :
               selC3 ? ~RG[3] : 4'hf;
-assign onDX = !outX ? 4'hz :
+assign onDX = !outX ? 4'hf :
               selX0 ? ~RG[0] :
               selX1 ? ~RG[1] :
               selX2 ? ~RG[2] :

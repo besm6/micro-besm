@@ -30,7 +30,6 @@ module am2910(
     input  wire         nCC,        // Conditional Code Bit
     input  wire         nRLD,       // Unconditional load bit for register/counter
     input  wire         CI,         // Carry-in bit for microprogram counter
-    input  wire         nOE,        // Tri-state driver control bit
     input  wire  [11:0] D,          // 12-bit data input to chip
     output logic [11:0] Y,          // 12-bit data output from chip
     output logic        nPL,        // Pipeline register output enable
@@ -63,17 +62,14 @@ reg   [2:0] SP;                 // Stack pointer
 reg  [11:0] stack[5:0];         // Stack: six words
 reg  [11:0] uPC;                // Microprogram PC
 reg  [11:0] Cnt;                // Loop counter
-wire [11:0] Y_out;              // Data output
 
 wire R_sel, D_sel, uPC_sel, stack_sel, decr, load, nonzero, clear, push, pop;
 
-assign Y_out = R_sel ? Cnt :
-               D_sel ? D :
-             uPC_sel ? uPC :
-           stack_sel ? stack[SP] :
-                       '0;
-
-assign Y = nOE ? 'z : Y_out;
+assign Y = R_sel ? Cnt :
+           D_sel ? D :
+         uPC_sel ? uPC :
+       stack_sel ? stack[SP] :
+                   '0;
 
 always @(posedge clk) begin
     if (load | !nRLD)
@@ -88,7 +84,7 @@ always @(posedge clk) begin
     if (clear)
         uPC <= 0;
     else
-        uPC <= Y_out + CI;
+        uPC <= Y + CI;
 end
 
 logic [2:0] write_address;
