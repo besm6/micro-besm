@@ -1,31 +1,29 @@
 #
 # Using Mentor ModelSim
 #
-include ../config.mak
+SOURCES         = ../../../rtl/cpu.sv \
+                  ../../../rtl/datapath.sv \
+                  ../../../rtl/extbus.sv \
+                  ../../../rtl/am2901.sv \
+                  ../../../rtl/am2902.sv \
+                  ../../../rtl/am2904.sv \
+                  ../../../rtl/am2910.sv \
+                  ../../../rtl/k1802bb1.sv \
+                  ../../../rtl/decoder.sv \
+                  ../../../rtl/arbiter.sv \
+                  ../../../rtl/shifter.sv \
+                  ../../../rtl/clz.sv \
+                  ../../../rtl/i8253.sv \
+                  ../../../rtl/tmemory.sv \
+                  ../../../rtl/tracer.sv \
+		  ../../../rtl/testbench.sv
 
-SOURCES         = $(MICROBESM_HOME)/rtl/cpu.sv \
-                  $(MICROBESM_HOME)/rtl/datapath.sv \
-                  $(MICROBESM_HOME)/rtl/extbus.sv \
-                  $(MICROBESM_HOME)/rtl/am2901.sv \
-                  $(MICROBESM_HOME)/rtl/am2902.sv \
-                  $(MICROBESM_HOME)/rtl/am2904.sv \
-                  $(MICROBESM_HOME)/rtl/am2910.sv \
-                  $(MICROBESM_HOME)/rtl/k1802bb1.sv \
-                  $(MICROBESM_HOME)/rtl/decoder.sv \
-                  $(MICROBESM_HOME)/rtl/arbiter.sv \
-                  $(MICROBESM_HOME)/rtl/shifter.sv \
-                  $(MICROBESM_HOME)/rtl/clz.sv \
-                  $(MICROBESM_HOME)/rtl/i8253.sv \
-                  $(MICROBESM_HOME)/rtl/tmemory.sv \
-                  $(MICROBESM_HOME)/rtl/tracer.sv \
-		  $(MICROBESM_HOME)/rtl/testbench.sv
-
-INCLUDES        = $(MICROBESM_HOME)/microcode/microcode.v \
-                  $(MICROBESM_HOME)/microcode/constants.v \
-                  $(MICROBESM_HOME)/microcode/optab.v \
-                  $(MICROBESM_HOME)/microcode/rwiotab.v \
-                  $(MICROBESM_HOME)/microcode/intrtab.v \
-                  $(MICROBESM_HOME)/microcode/grouptab.v
+INCLUDES        = ../../../microcode/microcode.v \
+                  ../../../microcode/constants.v \
+                  ../../../microcode/optab.v \
+                  ../../../microcode/rwiotab.v \
+                  ../../../microcode/intrtab.v \
+                  ../../../microcode/grouptab.v
 
 # Altera Quartus toolchain
 MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
