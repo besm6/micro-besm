@@ -58,19 +58,25 @@ def parse(line):
     word = line.split()
     #print word
 
-    if word[0] == "шифр":
+    if word[0] == ";":
+        return
+
+    if word[0] == "шифр" or word[0] == "ШИФР":
         return
 
     if word[0] == "ЕКОНЕЦ":
         return
 
     if word[0] == "K":
-        if len(word) != 7:
+        if len(word) != 7 and len(word) != 4:
             print >> sys.stderr, "*** Wrong line:", line
             sys.exit (1)
 
         lh = instruction(word[1], word[2], word[3])
-        rh = instruction(word[4], word[5], word[6])
+        if len(word) == 7:
+            rh = instruction(word[4], word[5], word[6])
+        else:
+            rh = 022 << 15
         print_word(paddr, itag, lh, rh)
         paddr += 1
         return

@@ -1,5 +1,7 @@
 include config.mak
 
+#SRC             = whetstone.b6
+SRC             = extracode.b6
 DISPAK          = dispak --input-encoding=utf8
 
 all:            test.hex
@@ -7,9 +9,9 @@ all:            test.hex
 clean:
 		rm -f *.lst
 
-test.hex:       startup.hex b6-to-hex.py whetstone.b6
+test.hex:       startup.hex b6-to-hex.py $(SRC)
 		cat startup.hex > $@
-		./b6-to-hex.py whetstone.b6 >> $@
+		./b6-to-hex.py $(SRC) >> $@
 
 startup.hex:    startup.asm $(MICROBESM_HOME)/tests/complex/hexdump.b6
 		$(MAKE) assembler.lst
