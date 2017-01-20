@@ -1,3 +1,9 @@
+шифр 419999 зс5^
+лен 41(2048)^
+eeв1а3
+*name macro50
+*       no list
+*assembler
  macro50:       ,name,
 
 c   Составлена А.И.Салтыковым (ОИЯИ)
@@ -8,70 +14,29 @@ c   из книги 'Computer Approximations'
 c   (авторы J.F.Hart и дp., издательство
 c   John Wiley and Sons, New York, 1968)
 
- emulat:        ,subp,  .
- errext:        ,subp,
- *errmac:       ,equ,   errext
- nrescall:      ,subp,
- nr/code:       ,subp,
- *27:           ,block, infsqrt, infasin, infalog, infexp, inferr
- *ycы:      lc  ,block, г y c
- smasav:    lc  ,block, savac,savsr,savar
-                ,cont,  savi15,savi14,savi13
-                ,cont,  savmir,savs16
- bit48:         ,equ,   700b
- real1:         ,equ,   exp0
- x:             ,equ,   savac
- arcsin:        ,equ,   savac
- ntr:           ,equ,   savsr
- *cb:       lc  ,block, (13), int0
- bit5:          ,equ,   753b
- k coceдy:      ,subp,
-c
-c---
-c
-                ,atx,   savac
-                ,ita,   14
-                ,asn,   64+3
-                ,u1a,   *error
-                ,xta,   savac
             14  ,uj,    *begin
- macro51:       ,entry,
-            14  ,vzm,   sin*
-                ,uj,    cos*
  *begin:        ,bss,
             14  ,vtm,   *sqrt
                 ,uj,    *sav
- sin*:          ,bss,
-            14  ,vtm,   *sin
+ :          14  ,vtm,   *sin
                 ,uj,    *sav
- macro52:       ,entry,
- cos*:          ,bss,
-            14  ,vtm,   *cos
+ :          14  ,vtm,   *cos
                 ,uj,    *sav
- macro53:       ,entry,
-            14  ,vtm,   *atan
+ :          14  ,vtm,   *atan
                 ,uj,    *sav
- macro54:       ,entry,
-            14  ,vtm,   *asin
+ :          14  ,vtm,   *asin
                 ,uj,    *sav
- macro55:       ,entry,
-            14  ,vtm,   *alog
+ :          14  ,vtm,   *alog
                 ,uj,    *sav
- macro56:       ,entry,
-            14  ,vtm,   *exp
+ :          14  ,vtm,   *exp
                 ,uj,    *sav
- macro57:       ,entry,
-            14  ,vtm,   *entier
+ :          14  ,vtm,   *entier
                 ,uj,    *sav
  *sav:          ,bss,
                 ,atx,   x
                 ,rte,   77b
-                ,atx,   ntr
+                ,atx,   savsr           .TODO
                 ,ntr,
-                ,ita,   13
-                ,atx,   savi13
-                ,ita,   15
-                ,atx,   savi15
                 ,xta,   x
             14  ,uj,
 
@@ -121,8 +86,7 @@ c   x = n**2, гдe 1 <= n < 2**20
                 ,a+x,   y
                 ,e+n,   64-1
             14  ,uj,
- *errsqrt:      ,bss,
-            14  ,vtm,   infsqrt
+ *errsqrt:      ,bss,                   .TODO
                 ,uj,    *errmac
 
 c   Вычисление sin(x)
@@ -266,8 +230,7 @@ c   Макс. отн. погр. = 7.e-12
                 ,amx,
                 ,avx,   arg
                 ,uj,    *end
- *errasin:      ,bss,
-            14  ,vtm,   infasin
+ *errasin:      ,bss,                   .TODO
                 ,uj,    *errmac
 
 c   Вычисление alog(x)
@@ -305,8 +268,7 @@ c   alog(1.) в точности равен 0.
                 ,a*x,   ln2
                 ,a+x,   r
                 ,uj,    *end
- *errlog:       ,bss,
-            14  ,vtm,   infalog
+ *errlog:       ,bss,                   .TODO
                 ,uj,    *errmac
 
 c   Вычисление exp(x)
@@ -344,8 +306,7 @@ c   Макс. отн. погр. = 5.e-12
                 ,uj,    *end
  *czero:        ,xta,
                 ,uj,    *end
- *errexp:       ,bss,
-            14  ,vtm,   infexp
+ *errexp:       ,bss,                   .TODO
                 ,uj,    *errmac
 
 c   Вычисление целой части x
@@ -356,5 +317,65 @@ c   Среднее время счёта = 25 мксек.
                 ,a+x,   int0
                 ,ntr,
                 ,e+n,   64
- *end:          ,xtr,   ntr
-                ,uj,    end*
+
+ *end:          ,xtr,   savsr           .TODO
+                ,mtj,   27b
+            2   ,ij,
+
+ *errmac:       ,bss,
+                ,Z33,                   .TODO
+
+ bit48:         ,log,   4000 0000 0000 0000
+ int0:          ,log,   6400 0000 0000 0000
+ sqrt2:         ,log,   4053 2404 7463 1772
+ sqrt2/2:       ,log,   4013 2404 7463 1772
+ ln2:           ,log,   4013 0562 0577 3722
+ ln2/2:         ,log,   3753 0562 0577 3721
+ *1/ln2:        ,log,   4053 4252 1662 4534
+ *1/pi:         ,log,   3752 1371 4066 7117
+
+c  Коэффициенты для sqrt (Computer Approximations, таблица 130)
+ sq2:           ,log,   3722 7260 1675 0030
+ sq1:           ,log,   4016 1743 6052 7114
+ sq0:           ,log,   3752 0213 6707 6726
+
+c  Коэффициенты для sin (Computer Approximations, таблица 3343)
+ sin6:          ,log,   2416 5166 1513 5220
+ sin1:          ,log,   4025 5242 0614 7334
+ sin0:          ,bss,
+ pi/2:          ,log,   4054 4417 6652 1041
+
+c  Коэффициенты для atan (Computer Approximations, таблица 5096)
+ patan4:        ,log,   3710 7122 3773 3234
+ patan0:        ,log,   4351 2633 7131 4703
+ qatan1:        ,log,   4410 7710 4234 6022
+ qatan0:        ,log,   4351 2633 7131 4705
+
+c  Коэффициенты для asin (Computer Approximations, таблица 4696)
+ pasin3:        ,log,   4262 0677 6731 1156
+ pasin0:        ,log,   4452 4054 0673 1770
+ qasin1:        ,log,   4526 6101 3770 1013
+ qasin0:        ,log,   4452 4054 0673 1770
+
+c  Коэффициенты для alog (Computer Approximations, таблица 2664)
+ alog5:         ,log,   3714 5022 4042 0440
+ alog0:         ,log,   4110 0000 0000 0000
+
+c  Коэффициенты для exp (Computer Approximations, таблица 1024)
+ exp7:          ,log,   3051 4007 7760 5675
+ real1:         ,bss,
+ exp0:          ,log,   4050 0000 0000 0000
+
+ arcsin:        ,bss,
+ x:             ,bss,   1
+ y:             ,bss,   1
+ z:             ,bss,   1
+ z**2:          ,bss,   1
+ r:             ,bss,   1
+ arg:           ,bss,   1
+ savsr:         ,bss,   1
+
+                ,end,
+*end file
+``````
+еконец
