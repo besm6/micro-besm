@@ -2,9 +2,66 @@
 лен 41(2048)^
 eeв1а3
 *name macro50
-*       no list
+*no list
+*call putflag*
+61
 *assembler
- macro50:       ,name,
+ program:       ,name,
+ *end:          ,equ,   arg + 1
+
+с   Печатаем текстовую метку
+            14  ,vtm,   label
+                ,its,   14
+            14  ,utm,   1
+                ,its,   14
+            14  ,vtm,   0
+                ,its,   14
+                ,call,  print8
+
+с   Печатаем начальный адрес
+            14  ,vtm,   macro50
+                ,ita,   14
+                ,atx,   buf
+            14  ,vtm,   buf
+                ,its,   14
+                ,its,   14
+            14  ,vtm,   =i1
+                ,its,   14
+            14  ,vtm,   =i16
+                ,its,   14
+                ,call,  printo
+
+с   Печатаем длину
+            14  ,vtm,   *end
+                ,ita,   14
+                ,ntr,   3
+                ,a-x,   buf
+                ,atx,   buf
+            14  ,vtm,   buf
+                ,its,   14
+                ,its,   14
+            14  ,vtm,   =i1
+                ,its,   14
+            14  ,vtm,   =i16
+                ,its,   14
+                ,call,  printo
+
+с   Печатаем команды в восьмеричном виде
+            14  ,vtm,   macro50
+                ,its,   14
+            14  ,vtm,   *end - 1
+                ,its,   14
+            14  ,vtm,   =i4
+                ,its,   14
+            14  ,vtm,   =i16
+                ,its,   14
+                ,call,  printo
+
+с   Заканчиваем
+                ,call,  stop*
+
+ buf:           ,log,
+ label:         ,iso,   12h---start---
 
 c   Составлена А.И.Салтыковым (ОИЯИ)
 c   с участием Л.Г.Каминского (ИФВЭ)
@@ -14,31 +71,23 @@ c   из книги 'Computer Approximations'
 c   (авторы J.F.Hart и дp., издательство
 c   John Wiley and Sons, New York, 1968)
 
-            14  ,uj,    *begin
- *begin:        ,bss,
-            14  ,vtm,   *sqrt
-                ,uj,    *sav
- :          14  ,vtm,   *sin
-                ,uj,    *sav
- :          14  ,vtm,   *cos
-                ,uj,    *sav
- :          14  ,vtm,   *atan
-                ,uj,    *sav
- :          14  ,vtm,   *asin
-                ,uj,    *sav
- :          14  ,vtm,   *alog
-                ,uj,    *sav
- :          14  ,vtm,   *exp
-                ,uj,    *sav
- :          14  ,vtm,   *entier
-                ,uj,    *sav
- *sav:          ,bss,
-                ,atx,   x
-                ,rte,   77b
-                ,atx,   savsr           .TODO
+ macro50:       ,entry,
+ macro50:       ,bss,
                 ,ntr,
-                ,xta,   x
-            14  ,uj,
+            14  ,uj,    *+1
+
+ :              ,uj,    *sqrt
+ :              ,uj,    *sin
+ :              ,uj,    *cos
+ :              ,uj,    *atan
+ :              ,uj,    *asin
+ :              ,uj,    *alog
+ :              ,uj,    *exp
+ :              ,uj,    *entier
+
+ *ret:          ,ij,    . сюда помещаем команду возврата
+
+ *fatal:        ,z33,   . сюда помещаем команду останова
 
 c   Вычисление sqrt(x)
 c   Среднее время счёта = 60 мксек.
@@ -47,7 +96,7 @@ c   Корень извлекается точно из всех
 c   x = n**2, гдe 1 <= n < 2**20
 
  *sqrt:         ,bss,
-            14  ,vtm,   *end
+            14  ,vtm,   *ret
                 ,e+n,   64
  *sqr:          ,bss,
                 ,atx,   x
@@ -87,7 +136,7 @@ c   x = n**2, гдe 1 <= n < 2**20
                 ,e+n,   64-1
             14  ,uj,
  *errsqrt:      ,bss,                   .TODO
-                ,uj,    *errmac
+                ,uj,    *fatal
 
 c   Вычисление sin(x)
 c   Среднее время счёта = 55 мксек.
@@ -133,7 +182,7 @@ c   Всегда sin(x)**2 + cos(x)**2 <= 1
             14  ,vlm,   *sinl
                 ,a*x,   z
                 ,avx,   x
-                ,uj,    *end
+                ,uj,    *ret
 
 c   Вычисление cos(x)
 c   Среднее время счёта = 55 мксек.
@@ -185,7 +234,7 @@ c   Макс. отн. погр. = 7.e-12
                 ,a-x,   y
                 ,amx,
                 ,avx,   x
-                ,uj,    *end
+                ,uj,    *ret
 
 c   Вычисление asin(x)
 c   Среднее время счёта = 80 мксек.
@@ -229,9 +278,9 @@ c   Макс. отн. погр. = 7.e-12
                 ,a-x,   arcsin
                 ,amx,
                 ,avx,   arg
-                ,uj,    *end
+                ,uj,    *ret
  *errasin:      ,bss,                   .TODO
-                ,uj,    *errmac
+                ,uj,    *fatal
 
 c   Вычисление alog(x)
 c   Среднее время счёта = 60 мксек.
@@ -267,9 +316,9 @@ c   alog(1.) в точности равен 0.
                 ,aex,   =4320 0000 0000 0000
                 ,a*x,   ln2
                 ,a+x,   r
-                ,uj,    *end
+                ,uj,    *ret
  *errlog:       ,bss,                   .TODO
-                ,uj,    *errmac
+                ,uj,    *fatal
 
 c   Вычисление exp(x)
 c   Среднее время счёта = 65 мксек.
@@ -303,11 +352,11 @@ c   Макс. отн. погр. = 5.e-12
                 ,atx,   r
                 ,a*x,   r
                 ,e+x,   z
-                ,uj,    *end
+                ,uj,    *ret
  *czero:        ,xta,
-                ,uj,    *end
+                ,uj,    *ret
  *errexp:       ,bss,                   .TODO
-                ,uj,    *errmac
+                ,uj,    *fatal
 
 c   Вычисление целой части x
 c   Среднее время счёта = 25 мксек.
@@ -317,13 +366,7 @@ c   Среднее время счёта = 25 мксек.
                 ,a+x,   int0
                 ,ntr,
                 ,e+n,   64
-
- *end:          ,xtr,   savsr           .TODO
-                ,mtj,   27b
-            2   ,ij,
-
- *errmac:       ,bss,
-                ,Z33,                   .TODO
+                ,uj,    *ret
 
  bit48:         ,log,   4000 0000 0000 0000
  int0:          ,log,   6400 0000 0000 0000
@@ -367,15 +410,17 @@ c  Коэффициенты для exp (Computer Approximations, таблица 
  exp0:          ,log,   4050 0000 0000 0000
 
  arcsin:        ,bss,
- x:             ,bss,   1
- y:             ,bss,   1
- z:             ,bss,   1
- z**2:          ,bss,   1
- r:             ,bss,   1
- arg:           ,bss,   1
- savsr:         ,bss,   1
+ x:             ,log,
+ y:             ,log,
+ z:             ,log,
+ z**2:          ,log,
+ r:             ,log,
+ arg:           ,log,
 
                 ,end,
+
+*       system load list
+*execute
 *end file
 ``````
 еконец
