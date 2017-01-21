@@ -1,0 +1,46 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Sun Jan  8 04:00:38 2017
+[*]
+[dumpfile] "/home/vak/Project/Besm-6/micro-besm/tests/microcode3-octtest/modelsim/output.vcd"
+[dumpfile_mtime] "Sun Jan  8 03:17:34 2017"
+[dumpfile_size] 187097364
+[savefile] "/home/vak/Project/Besm-6/micro-besm/tests/microcode3-octtest/modelsim/arbiter.gtkw"
+[timestart] 75036650
+[size] 1309 600
+[pos] 0 0
+*-12.865458 75068280 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testbench.
+[treeopen] testbench.cpu.
+[treeopen] testbench.cpu.busio.
+[sst_width] 225
+[signals_width] 183
+[sst_expanded] 1
+[sst_vpaned_height] 159
+@28
+testbench.clk
+@22
+testbench.cpu.D[63:0]
+testbench.cpu.Y[63:0]
+@200
+-
+@28
+testbench.cpu.arb_suspend
+@22
+testbench.cpu.vaddr[31:0]
+@28
+testbench.cpu.no_paging
+testbench.cpu.no_procnm
+@22
+testbench.cpu.procn[7:0]
+testbench.cpu.pg_procn[7:0]
+@28
+testbench.cpu.pg_valid
+testbench.cpu.no_pgprot
+testbench.cpu.no_wprot
+testbench.cpu.pg_rw
+testbench.cpu.drg
+testbench.cpu.flag_negaddr
+testbench.cpu.mode_besm6
+[pattern_trace] 1
+[pattern_trace] 0
