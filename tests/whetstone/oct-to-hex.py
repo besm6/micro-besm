@@ -82,7 +82,7 @@ for line in f.readlines():
     if start_seen == 1:
         # Read start address
         paddr = int(line, 8)
-        #print "Start address: %05o" % paddr
+        print "# Start address: %#05x" % paddr
         start_seen = 2
         continue
 

@@ -7,7 +7,6 @@ eeв1а3
 61
 *assembler
  program:       ,name,
- *end:          ,equ,   arg + 1
 
 с   Печатаем текстовую метку
             14  ,vtm,   label
@@ -71,10 +70,13 @@ c   из книги 'Computer Approximations'
 c   (авторы J.F.Hart и дp., издательство
 c   John Wiley and Sons, New York, 1968)
 
- macro50:       ,entry,
- macro50:       ,bss,
-                ,ntr,
-            14  ,uj,    *+1
+cmacro50:       ,entry,
+ macro50:       ,ntr,
+            14  ,uj,    *+3
+
+ *ret:          ,ij,    . сюда помещаем команду возврата
+
+ *fatal:        ,z33,   . сюда помещаем команду останова
 
  :              ,uj,    *sqrt
  :              ,uj,    *sin
@@ -84,10 +86,6 @@ c   John Wiley and Sons, New York, 1968)
  :              ,uj,    *alog
  :              ,uj,    *exp
  :              ,uj,    *entier
-
- *ret:          ,ij,    . сюда помещаем команду возврата
-
- *fatal:        ,z33,   . сюда помещаем команду останова
 
 c   Вычисление sqrt(x)
 c   Среднее время счёта = 60 мксек.
@@ -417,6 +415,7 @@ c  Коэффициенты для exp (Computer Approximations, таблица 
  r:             ,log,
  arg:           ,log,
 
+ *end:          ,bss,
                 ,end,
 
 *       system load list
