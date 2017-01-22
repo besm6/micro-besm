@@ -1,5 +1,5 @@
-#SRC             = whetstone.b6
-SRC             = extracode.b6
+SRC             = whetstone.b6
+#SRC             = extracode.b6
 DISPAK          = dispak --input-encoding=utf8
 
 all:            test.hex
