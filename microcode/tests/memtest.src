@@ -2756,16 +2756,18 @@ CONT А=B10,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,CEN
 CJP А=RDMM6,МАР=РЕ,COND=СТ,SТОРС=/NZ
 ;
 ;ЧИТАЕМ МОДИФИЦИРОВАННОЕ, INTR=3,4
-CONT А=С1,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС
-RDMM26:CONT ALUS=ZВ,RВ=РС,ALU,YDST=ADRREG
-CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=RDMWR
-CONT А=С2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR
-CONT А=В56,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
-CJS А=CMPDC,МАР=РЕ,YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=RDMWR
-CONT ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
-; (было В18)
-CONT А=B10,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,CEN
-CJP А=RDMM26,МАР=РЕ,COND=СТ,SТОРС=/NZ
+; Проверку бита 56 не делаем.
+; Комментарии смотри в файле memtest.sv.
+;;;CONT А=С1,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=РС
+;;;RDMM26:CONT ALUS=ZВ,RВ=РС,ALU,YDST=ADRREG
+;;;CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=RDMWR
+;;;CONT А=С2,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR
+;;;CONT А=В56,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=DADR
+;;;CJS А=CMPDC,МАР=РЕ,YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=RDMWR
+;;;CONT ALUS=ZВ,RВ=РС,Н,CI,ALUD=В,ALU,YDEV=МРМЕМ,WRY,IОМР,MPADR=3
+;;;; (было В18)
+;;;CONT А=B10,DSRC=PROM,ALUS=DА,RА=РС,FUNC=EXOR,Н,CEN
+;;;CJP А=RDMM26,МАР=РЕ,COND=СТ,SТОРС=/NZ
 %J% А=CONTM6,МАР=РЕ
 ;
 ;
@@ -2816,10 +2818,12 @@ CJS А=CMPDC,МАР=РЕ,ALUS=ZQ,Н,ALUD=В,RВ=DADR
 ;
 ;ЧИТАЕМ ЕЩЕ РАЗ ПО ТОМУ ЖЕ АДРЕСУ (МОДИФИЦИРОВАННОЕ); ФИЗ.АДРЕС - НА ШИНУ СНОВА
 ;ВЫЧИСЛЯЕМ МОДИФИЦИРОВАННУЮ CONST, INTR=5,6
-CONT А=В56,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=OR,Н,ALUD=В,RВ=DADR,YDEV=PHYSAD
->,ЕСВ,WRB,BRA=RG0,ARBI=RDMWR
-CONT А=С4,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR
-CJS А=CMPDC,МАР=РЕ,%TIK3%
+; Проверку бита 56 не делаем.
+; Комментарии смотри в файле memtest.sv.
+;;;CONT А=В56,DSRC=PROM,ALUS=DА,RА=DADR,FUNC=OR,Н,ALUD=В,RВ=DADR,YDEV=PHYSAD
+;;;>,ЕСВ,WRB,BRA=RG0,ARBI=RDMWR
+;;;CONT А=С4,DSRC=PROM,ALUS=DZ,Н,ALUD=В,RВ=INTR
+;;;CJS А=CMPDC,МАР=РЕ,%TIK3%
 ;ИНВЕРТИРУЕМ CONST ДЛЯ СЛЕД.ЦИКЛА
 RFCT ALUS=ZВ,RВ=HALF,FUNC=EXNOR,Н,ALUD=В
 %J% А=CONTM7,МАР=РЕ

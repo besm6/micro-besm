@@ -230,16 +230,16 @@ localparam LABEL_CONTB4 = 1287;
 localparam LABEL_CCB4   = 1292;
 localparam LABEL_CONTB5 = 1317;
 localparam LABEL_CONTM6 = 1356;
-localparam LABEL_CONTM7 = 1385;
-localparam LABEL_CONTX8 = 1413;
-localparam LABEL_CX9    = 1438;
-localparam LABEL_CNTXA  = 1479;
-localparam LABEL_CICLW  = 1550;
-localparam LABEL_WATER3 = 1613;
-localparam LABEL_ERRTST = 1764;
-localparam LABEL_ERRINH = 1768;
-localparam LABEL_ERRDAF = 1772;
-localparam LABEL_ERRDAT = 1839;
+localparam LABEL_CONTM7 = 1376;
+localparam LABEL_CONTX8 = 1401;
+localparam LABEL_CX9    = 1426;
+localparam LABEL_CNTXA  = 1467;
+localparam LABEL_CICLW  = 1538;
+localparam LABEL_WATER3 = 1601;
+localparam LABEL_ERRTST = 1752;
+localparam LABEL_ERRINH = 1756;
+localparam LABEL_ERRDAF = 1760;
+localparam LABEL_ERRDAT = 1827;
 
 // Get time at the rising edge of the clock.
 always @(posedge clk) begin
@@ -308,6 +308,16 @@ always @(tr.instruction_retired) begin
 
     //
     // Чтение - модификация - запись
+    //
+    // Проверяется операция арбитра RDMWR.
+    // Она используется для реализации машинных команд SEMR и SMON.
+    // Данные тесты предполагают, что операция RDMWR выполняет
+    // чтение, установку бита 56 в единицу и запись обратно.
+    // На самом деле, микрокод команд SEMR и SMON считает, что
+    // RDMWR выполняет просто чтение, без записи.
+    // Поэтому эти два теста не проходят.
+    //
+    // Тесты были изменены: проверка записи не делается.
     //
     check_pass(LABEL_CONTM6, "Test CONTM6 pass");
     check_pass(LABEL_CONTM7, "Test CONTM7 pass");
