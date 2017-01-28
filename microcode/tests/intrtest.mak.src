@@ -544,7 +544,10 @@ INTAW:ENTRY
 ;П/П ПРОВЕРКИ INT ПРИ ЗАПИСИ ОПЕРАНДА, КОГДА З.А НЕ БЛОКИРУЕТСЯ
 CONT YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 WAPSW:CJP А=WAPSW,МАР=РЕ,COND=ARBRDY,IСС
-CJS А=INTMAS,МАР=РЕ,ISE
+; Было: CJS А=INTMAS,МАР=РЕ,ISE
+; Прерывание по защите записи обрабатываем как внутреннее, а не как
+; внешнее. Оно не устанавливает признак внешнего прерывания (COND=INT).
+CJP А=INTMAS1,МАР=РЕ,ISE
 INTMWN:ENTRY
 CJP А=WTNI,МАР=РЕ,YDEV=PHYSAD,ЕСВ,WRB,BRA=RG0,ARBI=DWR
 >,ALUS=DZ,FUNC=AND,Н,ALUD=В,RВ=WR2
