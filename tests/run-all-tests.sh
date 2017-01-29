@@ -4,11 +4,13 @@
 # Select: modelsim, xsim, vcs
 #
 
-# Mentor ModelSim Starter Edition from Altera Quartus Prime Lite toolchain.
+# Mentor ModelSim Starter Edition from Altera Quartus Prime Lite toolchain,
+# installed as /opt/Altera/16.0/modelsim_ase/linuxaloem
 engine=modelsim
 
 # Xilinx Vivado Simulator (essentially a licensed Cadence IUS)
-# from Xilinx Vivado Design Suite HL WebPACK toolchain.
+# from Xilinx Vivado Design Suite HL WebPACK toolchain,
+# installed in /opt/Xilinx/Vivado/2016.2/bin directory.
 #engine=xsim
 
 # Synopsys VCS.
@@ -19,10 +21,9 @@ engine=modelsim
 #
 tests="initest intrtest startup sectest octtest memtest complex"
 
-# Delete log files from previous run.
-rm -f build-*.log run-*.log
-
+#
 # Identify the simulator engine.
+#
 case $engine in
 modelsim) echo "Use Altera Modelsim";;
 xsim)     echo "Use Xilinx Vivado simulator";;
@@ -30,6 +31,11 @@ vcs)      echo "Use Synopsys VCS";;
 *)        echo "Unknown simulator: $engine"
           exit 1;;
 esac
+
+#
+# Delete log files from previous run.
+#
+rm -f build-*.log run-*.log
 
 #
 # Build all tests.
