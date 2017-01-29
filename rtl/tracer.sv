@@ -247,8 +247,6 @@ task terminate(input string message);
                 1000000.0 * uinstr_count / usec);
     end
 
-    if (message != "")
-        $finish(1);
     $finish;
 endtask
 
