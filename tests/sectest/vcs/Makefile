@@ -15,9 +15,9 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/clz.sv \
                   ../../../rtl/i8253.sv \
                   ../../../rtl/tracer.sv \
-                  ../initest.sv
+                  ../sectest.sv
 
-INCLUDES        = ../../../microcode/tests/initest.v \
+INCLUDES        = ../../../microcode/tests/sectest.v \
                   ../../../microcode/constants.v \
                   ../../../microcode/optab.v
 
@@ -33,7 +33,7 @@ simv:           $(SOURCES) $(INCLUDES)
 		$(VCS) +incdir+..+../../../rtl $(SOURCES)
 
 run:            simv
-		./simv +limit=200000 2>&1 | tee run.log
+		./simv +limit=600000 2>&1 | tee run.log
 
 view:
 		gtkwave output.vcd test.gtkw &
