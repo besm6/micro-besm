@@ -5,7 +5,7 @@ SOURCES         = ../../../rtl/k1802bb1.sv \
 		  ../test_k1802bb1.sv
 
 # Altera Quartus toolchain
-MODELSIM        = /opt/Altera/16.1/modelsim_ase/linuxaloem
+MODELSIM        = /opt/Altera/17.0/modelsim_ase/linuxaloem
 
 all:            work
 
