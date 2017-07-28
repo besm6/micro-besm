@@ -6,7 +6,7 @@ SOURCES         = ../../../rtl/am2904.sv \
 
 # Xilinx Vivado toolchain
 NC              = x
-NCSIM           = /opt/Xilinx/Vivado/2016.2/bin/$(NC)
+NCSIM           = /opt/Xilinx/Vivado/2017.2/bin/$(NC)
 
 all:            $(NC)sim.dir
 

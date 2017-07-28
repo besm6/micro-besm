@@ -4,13 +4,11 @@
 # Select: modelsim, xsim, vcs
 #
 
-# Mentor ModelSim Starter Edition from Altera Quartus Prime Lite toolchain,
-# installed as /opt/Altera/16.0/modelsim_ase/linuxaloem
+# Mentor ModelSim Starter Edition from Altera Quartus Prime Lite toolchain.
 engine=modelsim
 
 # Xilinx Vivado Simulator (essentially a licensed Cadence IUS)
-# from Xilinx Vivado Design Suite HL WebPACK toolchain,
-# installed in /opt/Xilinx/Vivado/2016.2/bin directory.
+# from Xilinx Vivado Design Suite HL WebPACK toolchain.
 #engine=xsim
 
 # Synopsys VCS.

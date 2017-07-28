@@ -5,7 +5,7 @@ SOURCES         = ../../../rtl/i8253.sv \
                   ../test_8253.sv
 
 # Altera Quartus toolchain
-MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
+MODELSIM        = /opt/Altera/16.1/modelsim_ase/linuxaloem
 
 all:            work
 

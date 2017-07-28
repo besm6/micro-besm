@@ -26,7 +26,7 @@ INCLUDES        = ../../../microcode/microcode.v \
                   ../../../microcode/grouptab.v
 
 # Altera Quartus toolchain
-MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
+MODELSIM        = /opt/Altera/16.1/modelsim_ase/linuxaloem
 
 RUNFLAGS        = +hex=../test.hex +clearmem
 RUNFLAGS	+= +limit=30000000	# Limit by a number of cycles

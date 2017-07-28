@@ -27,7 +27,7 @@ INCLUDES        = ../../../microcode/microcode.v \
 
 # Xilinx Vivado toolchain
 NC              = x
-NCSIM           = /opt/Xilinx/Vivado/2016.2/bin/$(NC)
+NCSIM           = /opt/Xilinx/Vivado/2017.2/bin/$(NC)
 PROG            = $(NC)sim.dir/work.testbench/xsimk
 
 RUNFLAGS        = --testplusarg hex=../test.hex

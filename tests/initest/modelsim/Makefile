@@ -22,7 +22,7 @@ INCLUDES        = ../../../microcode/tests/initest.v \
                   ../../../microcode/optab.v
 
 # Altera Quartus toolchain
-MODELSIM        = /opt/Altera/16.0/modelsim_ase/linuxaloem
+MODELSIM        = /opt/Altera/16.1/modelsim_ase/linuxaloem
 
 all:            work
 
