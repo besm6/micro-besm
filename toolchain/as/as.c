@@ -122,7 +122,7 @@ int getlex(int *val);
 long getexpr(int *s);
 
 /* на втором проходе hashtab не нужна, используем ее под именем
-/* newindex для переиндексации настройки в случае флагов x или X */
+ * newindex для переиндексации настройки в случае флагов x или X */
 
 #define newindex hashtab
 
@@ -743,7 +743,8 @@ int chash(char *s)
     register short h, c;
 
     h = 12345;
-    while (c = *s++) h += h + c;
+    while ((c = *s++))
+        h += h + c;
     return SUPERHASH(h, HCMDSZ-1);
 }
 
@@ -1051,7 +1052,8 @@ int hash(char *s)
     register short h, c;
 
     h = 12345;
-    while (c = *s++) h += h + c;
+    while ((c = *s++))
+        h += h + c;
     return SUPERHASH(h, HASHSZ-1);
 }
 
@@ -1155,7 +1157,7 @@ skiptoeol:
     case '<':       case '>':       case '=':       case ':':
         return c;
     case '\'':
-        getlhex(c);
+        getlhex();
         return LNUM;
     case '0':
         if ((c = getchar()) == 'x' || c=='X') {
@@ -1546,11 +1548,11 @@ void makecmd(long val, int type)
         ungetlex(clex, cval);
 putcom:
     if (type & TLONG) {
-        if (reltype & REXT == REXT &&
+        if ((reltype & REXT) == REXT &&
             stab[RGETIX(reltype)].n_type == N_EXT+N_ACOMM)
         {
             /* если команда ссылается на ACOMM,
-            /* вставляем перед нею utc */
+             * вставляем перед нею utc */
             puthr((long) index<<28 | UTCCOM | addr>>12 & 0xfffff,
                 reltype | RSHIFT);
             puthr(val | addr&07777, (long) RABS | RTRUNC);
@@ -1802,9 +1804,11 @@ void pass1()
         default:
             uerror("bad syntax");
         }
-        if ((clex = getlex(&cval)) != LEOL)
-            if (clex == LEOF) return;
-            else uerror("bad command end");
+        if ((clex = getlex(&cval)) != LEOL) {
+            if (clex == LEOF)
+                return;
+            uerror("bad command end");
+        }
         regleft = 0;
     }
 }
@@ -1819,11 +1823,13 @@ void middle()
     stlength = 0;
     for (snum=0, i=0; i<stabfree; i++) {
         /* если не установлен флаг uflag,
-        /* неопределенное имя считается внешним */
-        if (stab[i].n_type == N_UNDF)
+         * неопределенное имя считается внешним */
+        if (stab[i].n_type == N_UNDF) {
             if (uflag)
                 uerror("name undefined", stab[i].n_name);
-            else stab[i].n_type |= N_EXT;
+            else
+                stab[i].n_type |= N_EXT;
+        }
         if (xflags) newindex[i] = snum;
         if (!xflags || (stab[i].n_type & N_EXT) || Xflag &&
             stab[i].n_name[0] != 'L')
@@ -1992,8 +1998,7 @@ int typerel(int t)
     }
 }
 
-long relhalf(hr)
-register long hr;
+long relhalf(long hr)
 {
     register short i;
 
