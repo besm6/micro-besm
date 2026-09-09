@@ -79,7 +79,16 @@ typedef struct { longint sec, usec; } timeval_t;
 typedef struct { int sec, usec; } timeval_t;
 `endif
 
+`ifdef VERILATOR
+// Struct-typed DPI-C arguments are unsupported here (as of Verilator 5.032).
+// Stand in with a no-op: simulation speed is simply not reported.
+function automatic void gettimeofday(inout timeval_t tv, input chandle tz);
+    tv.sec = 0;
+    tv.usec = 0;
+endfunction
+`else
 import "DPI-C" function void gettimeofday(inout timeval_t tv, input chandle tz);
+`endif
 
 bit old_reset = 0;                      // Previous state of reset
 logic [63:0] const_value;               // Constant value

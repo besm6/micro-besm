@@ -142,7 +142,10 @@ initial begin
     irq_pending = '0;
 
     // Hold reset for a while.
-    #2 reset = 0;
+    // Note: must not land exactly on a clock edge (#2), which races
+    // against the synchronous reset in cpu.sv depending on simulator
+    // event ordering.
+    #2.1 reset = 0;
 
     // Run until limit.
     tr.start();
