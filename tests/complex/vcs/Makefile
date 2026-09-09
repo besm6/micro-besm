@@ -16,6 +16,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/i8253.sv \
                   ../../../rtl/tmemory.sv \
                   ../../../rtl/tracer.sv \
+                  ../../../rtl/gettimeofday_dpi.c \
 		  ../../../rtl/testbench.sv
 
 INCLUDES        = ../../../microcode/microcode.v \

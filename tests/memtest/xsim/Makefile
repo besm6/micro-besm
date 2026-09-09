@@ -22,6 +22,7 @@ SOURCES         = ../../../rtl/cpu.sv \
 NC              = x
 NCSIM           = /opt/Xilinx/Vivado/2017.2/bin/$(NC)
 PROG            = $(NC)sim.dir/work.testbench/xsimk
+DPI_SOURCES     = ../../../rtl/gettimeofday_dpi.c
 
 all:            $(PROG)
 
@@ -29,9 +30,9 @@ clean:
 		rm -rf $(NC)sim.dir .Xil
 		rm -f *.o *.vcd $(NC)vhdl.pb $(NC)vlog.pb $(NC)elab.pb $(NC)sim*.jou webtalk*.jou webtalk*.log run_*.log
 
-$(PROG):        $(SOURCES)
+$(PROG):        $(SOURCES) $(DPI_SOURCES)
 		$(NCSIM)vlog --nolog --sv $(SOURCES)
-		$(NCSIM)elab --nolog -O3 -cc gcc testbench
+		$(NCSIM)elab --nolog -O3 -cc gcc testbench $(DPI_SOURCES)
 
 run:            $(PROG)
 		$(NCSIM)sim --R --log run.log testbench --testplusarg limit=400000

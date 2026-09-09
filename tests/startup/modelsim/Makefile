@@ -28,6 +28,11 @@ INCLUDES        = ../../../microcode/microcode.v \
 # Altera Quartus toolchain
 MODELSIM        = /opt/Altera/17.0/modelsim_ase/linuxaloem
 
+DPI_LIB         = gettimeofday_dpi
+
+lib$(DPI_LIB).so: ../../../rtl/gettimeofday_dpi.c
+		gcc -shared -fPIC -o $@ $<
+
 RUNFLAGS        = +hex=../test.hex
 RUNFLAGS	+= +limit=40000		# Limit by a number of cycles
 #RUNFLAGS	+= +trace=0		# No trace
@@ -38,14 +43,14 @@ RUNFLAGS	+= +trace=2		# Print micro-instructions
 all:            work
 
 clean:
-		rm -rf *.o *.vcd work
+		rm -rf *.o *.vcd work lib$(DPI_LIB).so
 
 work:           $(SOURCES) $(INCLUDES)
 		[ -d word ] || $(MODELSIM)/vlib work
 		$(MODELSIM)/vlog -sv -nologo $(SOURCES)
 
-run:            work
-		$(MODELSIM)/vsim -c -l run.log -do 'run 1ms;quit' testbench $(RUNFLAGS)
+run:            work lib$(DPI_LIB).so
+		$(MODELSIM)/vsim -c -l run.log -sv_lib $(DPI_LIB) -do 'run 1ms;quit' testbench $(RUNFLAGS)
 
 view:
 		gtkwave output.vcd test.gtkw &

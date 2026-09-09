@@ -29,6 +29,7 @@ INCLUDES        = ../../../microcode/microcode.v \
 NC              = x
 NCSIM           = /opt/Xilinx/Vivado/2017.2/bin/$(NC)
 PROG            = $(NC)sim.dir/work.testbench/xsimk
+DPI_SOURCES     = ../../../rtl/gettimeofday_dpi.c
 
 RUNFLAGS        = --testplusarg hex=../test.hex
 RUNFLAGS	+= --testplusarg limit=40000	# Limit by a number of cycles
@@ -42,9 +43,9 @@ clean:
 		rm -rf $(NC)sim.dir .Xil
 		rm -f *.o *.vcd $(NC)vhdl.pb $(NC)vlog.pb $(NC)elab.pb $(NC)sim*.jou webtalk*.jou webtalk*.log run_*.log
 
-$(PROG):        $(SOURCES) $(INCLUDES)
+$(PROG):        $(SOURCES) $(INCLUDES) $(DPI_SOURCES)
 		$(NCSIM)vlog --nolog --sv $(SOURCES)
-		$(NCSIM)elab --nolog -O3 -cc gcc testbench
+		$(NCSIM)elab --nolog -O3 -cc gcc testbench $(DPI_SOURCES)
 
 run:            $(PROG)
 		$(NCSIM)sim --R --log run.log testbench $(RUNFLAGS)

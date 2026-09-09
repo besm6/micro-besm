@@ -15,6 +15,7 @@ SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/clz.sv \
                   ../../../rtl/i8253.sv \
                   ../../../rtl/tracer.sv \
+                  ../../../rtl/gettimeofday_dpi.c \
                   ../sectest.sv
 
 INCLUDES        = ../../../microcode/tests/sectest.v \

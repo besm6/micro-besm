@@ -71,29 +71,15 @@ longint uinstr_count;
 event instruction_retired;
 
 //
-// Import standard C function gettimeofday().
+// Import the C helper besm6_gettimeofday() (see gettimeofday_dpi.c), which
+// wraps the standard gettimeofday() using plain scalar arguments only.
 //
-`ifdef XILINX_SIMULATOR
-typedef struct { longint sec, usec; } timeval_t;
-`else
-typedef struct { int sec, usec; } timeval_t;
-`endif
-
-`ifdef VERILATOR
-// Struct-typed DPI-C arguments are unsupported here (as of Verilator 5.032).
-// Stand in with a no-op: simulation speed is simply not reported.
-function automatic void gettimeofday(inout timeval_t tv, input chandle tz);
-    tv.sec = 0;
-    tv.usec = 0;
-endfunction
-`else
-import "DPI-C" function void gettimeofday(inout timeval_t tv, input chandle tz);
-`endif
+import "DPI-C" function void besm6_gettimeofday(output longint sec, output longint usec);
 
 bit old_reset = 0;                      // Previous state of reset
 logic [63:0] const_value;               // Constant value
 logic [8:0] const_addr;                 // Constant address
-timeval_t t0;                           // Start time of simulation
+longint t0_sec, t0_usec;                // Start time of simulation
 
 // Get time at the rising edge of the clock.
 always @(posedge clk) begin
@@ -220,24 +206,24 @@ endtask
 // Fix the starting time.
 //
 task start();
-    gettimeofday(t0, null);
+    besm6_gettimeofday(t0_sec, t0_usec);
 endtask
 
 //
 // Print statistics and finish the simulation.
 //
 task terminate(input string message);
-    timeval_t t1;
+    longint t1_sec, t1_usec;
     longint usec;
 
-    gettimeofday(t1, null);
+    besm6_gettimeofday(t1_sec, t1_usec);
 
     if (message != "")
         $display("\n----- %s -----", message);
     if (fd)
         $fdisplay(fd, "\n----- %s -----", message);
 
-    usec = (t1.usec - t0.usec) + (t1.sec - t0.sec) * 1000000;
+    usec = (t1_usec - t0_usec) + (t1_sec - t0_sec) * 1000000;
     $display("   Elapsed time: %0d seconds", usec / 1000000);
     $display("      Simulated: %0d instructions, %0d micro-instructions",
         instr_count, uinstr_count);
