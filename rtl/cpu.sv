@@ -128,6 +128,7 @@ logic instr_ir15;               // stack mode flag
 logic tkk;                      // признак правой команды стандартизатора (TKK)
 logic halt;                     // триггер "Останов", сбрасывается только из пультового процессора
 logic run;                      // триггер "Пуск", устанавливается только из пультового процессора
+logic run_valid;                // 1 once `run` holds a defined value (set by the first clock edge)
 logic acc_besm6;                // тег РЭ сумматора
 
 // Signals for arbiter
@@ -748,11 +749,13 @@ always @(posedge clk)
         halt <= '1;                 // установка триггера "Останов" (Halt)
 
 // Триггер "Пуск"
-always @(posedge clk)
+always @(posedge clk) begin
+    run_valid <= '1;                // become defined on the very first clock edge
     if (reset)
         run <= '1;
     else if (!IOMP && FFCNT == 26)  // ffcnt=CLRRUN
         run <= '0;                  // сброс триггера "Пуск"
+end
 
 // Признак изменения адресом (ПИА) устанавливается и сбрасывается разными путями
 // Если команда прервана, флаг ПИА не должен изменяться

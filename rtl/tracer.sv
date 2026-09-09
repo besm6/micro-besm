@@ -163,7 +163,7 @@ always @(negedge clk) begin
         terminate("Fatal Error!");
     end
 
-    if (!cpu.run) begin
+    if (cpu.run_valid && !cpu.run) begin
         cpu_halted();
     end
 end
