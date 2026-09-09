@@ -1,15 +1,17 @@
 #
 # Using Verilator (open source: apt install verilator)
 #
-# NOTE: this test's local testbench (../intrtest.sv) pokes DUT-internal
-# registers (uPC, opcode, no_intr) with blocking assignments to
-# fast-forward past already-verified microcode, while cpu.sv/am2910.sv
-# drive those same signals with non-blocking assignments elsewhere.
+# ../intrtest.sv originally force-wrote DUT-internal registers (uPC, opcode,
+# and a few test-specific signals) with blocking assignments, while the
+# RTL drives the same signals with non-blocking assignments elsewhere --
 # Verilator refuses to schedule a signal driven both ways
-# (%Error-BLKANDNBLK) and this can't be worked around with flags -- it
-# would need the accelerator hack in ../intrtest.sv re-engineered.
-# Kept here for consistency with the other simulator directories, but
-# `make` currently fails during Verilation. Not yet attempted.
+# (%Error-BLKANDNBLK). Fixed by switching those writes to non-blocking
+# (matching the RTL) in ../intrtest.sv, and by delaying reset deassertion off
+# the clock edge (#2.1 instead of #2, to avoid a separate event-ordering
+# race with cpu.sv's synchronous reset).
+#
+# Verified: `make && make run` passes (Test PASS) under Verilator 5.032
+# as of this writing.
 #
 SOURCES         = ../../../rtl/cpu.sv \
                   ../../../rtl/datapath.sv \

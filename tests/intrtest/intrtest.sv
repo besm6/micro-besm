@@ -103,7 +103,10 @@ initial begin
     i_irq = 0;
 
     // Hold reset for a while.
-    #2 reset = 0;
+    // Note: must not land exactly on a clock edge (#2), which races
+    // against the synchronous reset in cpu.sv depending on simulator
+    // event ordering.
+    #2.1 reset = 0;
 
     // Run until limit.
     tr.start();
@@ -153,9 +156,9 @@ endtask
 //
 task jump(input int target);
     tr.pc_x = target;
-    cpu.control.uPC = target;
-    cpu.opcode = cpu.memory[target];
-    tr.opcode_x = cpu.opcode;
+    cpu.control.uPC <= target;
+    cpu.opcode <= cpu.memory[target];
+    tr.opcode_x = cpu.memory[target];
 endtask
 
 //
@@ -424,8 +427,8 @@ always @(tr.instruction_retired) begin
     check_jump(LABEL_CONT27-2, LABEL_CC26, LABEL_CONT27, "Test INT26 pass");
     if (pc_x == LABEL_CONT27-2) begin
         // Stop timer
-        cpu.timer.c2.counter = 'x;
-        cpu.timer_int = '0;
+        cpu.timer.c2.counter <= 'x;
+        cpu.timer_int <= '0;
     end
 
     // int27 - "time-out при блокировке внешних прерываний"
@@ -444,7 +447,7 @@ always @(tr.instruction_retired) begin
     check_jump(LABEL_CONT30-2, LABEL_CC29, LABEL_CONT30, "Test INT29 pass");
     if (pc_x == LABEL_CONT30-2) begin
         // Stop single-stepping
-        cpu.single_step = '0;
+        cpu.single_step <= '0;
     end
 
     // int30 - "внешние прерывания"

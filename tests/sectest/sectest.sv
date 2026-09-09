@@ -87,7 +87,10 @@ initial begin
     reset = 1;
 
     // Hold reset for a while.
-    #2 reset = 0;
+    // Note: must not land exactly on a clock edge (#2), which races
+    // against the synchronous reset in cpu.sv depending on simulator
+    // event ordering.
+    #2.1 reset = 0;
 
     // Run until limit.
     tr.start();
@@ -118,9 +121,9 @@ endtask
 //
 task jump(input int target);
     tr.pc_x = target;
-    cpu.control.uPC = target;
-    cpu.opcode = cpu.memory[target];
-    tr.opcode_x = cpu.opcode;
+    cpu.control.uPC <= target;
+    cpu.opcode <= cpu.memory[target];
+    tr.opcode_x = cpu.memory[target];
 endtask
 
 //

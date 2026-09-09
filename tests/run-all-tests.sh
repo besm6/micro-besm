@@ -14,10 +14,10 @@ engine=modelsim
 # Synopsys VCS.
 #engine=vcs
 
-# Verilator (open source: apt install verilator). Note: initest, intrtest,
-# sectest, octtest and memtest do not build under Verilator yet -- see
-# tests/*/verilator/Makefile for why -- so a full run currently fails on
-# the first of those it reaches.
+# Verilator (open source: apt install verilator). initest, intrtest,
+# startup, sectest, octtest and memtest are verified passing; complex
+# is a long run (see tests/README.txt) and hasn't been run to
+# completion under Verilator.
 #engine=verilator
 
 #

@@ -20,6 +20,7 @@ tests/*/vcs/simv
 tests/*/vcs/simv.daidir/
 tests/*/vcs/ucli.key
 tests/*/vcs/vc_hdrs.h
+tests/*/verilator/obj_dir/
 microcode/*.json
 microcode/tests/*.json
 toolchain/as/as

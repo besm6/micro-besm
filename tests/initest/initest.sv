@@ -94,7 +94,10 @@ initial begin
     reset = 1;
 
     // Hold reset for a while.
-    #2 reset = 0;
+    // Note: must not land exactly on a clock edge (#2), which races
+    // against the synchronous reset in cpu.sv depending on simulator
+    // event ordering.
+    #2.1 reset = 0;
 
     // Run until limit.
     tr.start();
@@ -137,9 +140,9 @@ task check_jump(
     if (pc_x == label_from && tr.pc_f == label_to) begin
         message(msg);
         tr.pc_x = target;
-        cpu.control.uPC = target;
-        cpu.opcode = cpu.memory[target];
-        tr.opcode_x = cpu.opcode;
+        cpu.control.uPC <= target;
+        cpu.opcode <= cpu.memory[target];
+        tr.opcode_x = cpu.memory[target];
     end
 endtask
 
@@ -302,7 +305,7 @@ end
 
 // Keep interrupts disabled.
 always @(posedge clk)
-    cpu.no_intr = 1;
+    cpu.no_intr <= 1;
 
 // At negative clock edge, when all the signals are quiet,
 // analyze the state of the processor.

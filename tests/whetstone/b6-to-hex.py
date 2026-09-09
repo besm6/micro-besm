@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 #
 # Convert dispak input package into test.hex file.
@@ -7,7 +7,7 @@
 import sys, string
 
 if len(sys.argv) != 2:
-    print "Usage: b6-to-hex input.b6"
+    print("Usage: b6-to-hex input.b6")
     sys.exit (1)
 
 #
@@ -30,8 +30,8 @@ def print_word(addr, tag, lh, rh):
     else:
         w += 0xF << 59
 
-    print "%05x %02x %04x_%04x_%04x_%04x" % (addr, tag,
-        w>>48&0xffff, w>>32&0xffff, w>>16&0xffff, w&0xffff)
+    print("%05x %02x %04x_%04x_%04x_%04x" % (addr, tag,
+        w>>48&0xffff, w>>32&0xffff, w>>16&0xffff, w&0xffff))
 
 #
 # Build instruction opcode.
@@ -69,21 +69,21 @@ def parse(line):
 
     if word[0] == "K":
         if len(word) != 7 and len(word) != 4:
-            print >> sys.stderr, "*** Wrong line:", line
+            print("*** Wrong line:", line, file=sys.stderr)
             sys.exit (1)
 
         lh = instruction(word[1], word[2], word[3])
         if len(word) == 7:
             rh = instruction(word[4], word[5], word[6])
         else:
-            rh = 022 << 15
+            rh = 0o22 << 15
         print_word(paddr, itag, lh, rh)
         paddr += 1
         return
 
     if word[0] == "C":
         if len(word) != 5:
-            print >> sys.stderr, "*** Wrong line:", line
+            print("*** Wrong line:", line, file=sys.stderr)
             sys.exit (1)
 
         lh = int(word[1], 8) << 12 | int(word[2], 8)
@@ -92,7 +92,7 @@ def parse(line):
         paddr += 1
         return
 
-    print >> sys.stderr, "*** Unrecognized line:", line
+    print("*** Unrecognized line:", line, file=sys.stderr)
     sys.exit (1)
 
 #
